@@ -5,7 +5,11 @@ import { StatusBar } from "expo-status-bar";
 export default function App() {
   const rotation = useRef(new Animated.Value(0)).current;
 
+  // RideGo logo animation
+  const logoScale = useRef(new Animated.Value(0.5)).current;
+
   useEffect(() => {
+    // Original car orbit animation
     Animated.loop(
       Animated.timing(rotation, {
         toValue: 1,
@@ -13,7 +17,15 @@ export default function App() {
         useNativeDriver: true,
       }),
     ).start();
-  }, [rotation]);
+
+    // RideGo pops in and stays
+    Animated.spring(logoScale, {
+      toValue: 1,
+      friction: 5,
+      tension: 80,
+      useNativeDriver: true,
+    }).start();
+  }, [rotation, logoScale]);
 
   const rotate = rotation.interpolate({
     inputRange: [0, 1],
@@ -24,9 +36,20 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="light" />
 
-      <Text style={styles.logo}>RideGo</Text>
+      {/* RideGo logo - pops in and stays */}
+      <Animated.Text
+        style={[
+          styles.logo,
+          {
+            transform: [{ scale: logoScale }],
+          },
+        ]}
+      >
+        RideGo
+      </Animated.Text>
 
       <View style={styles.road}>
+        {/* Original orbit */}
         <Animated.View
           style={[
             styles.orbit,
@@ -35,6 +58,7 @@ export default function App() {
             },
           ]}
         >
+          {/* Original blue car */}
           <View style={styles.car}>
             <View style={styles.carBody}>
               <View style={styles.carWindow} />
@@ -44,6 +68,7 @@ export default function App() {
           </View>
         </Animated.View>
 
+        {/* Original center */}
         <View style={styles.innerCircle} />
       </View>
 
