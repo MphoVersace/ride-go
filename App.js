@@ -27,7 +27,6 @@ export default function App() {
       <Text style={styles.logo}>RideGo</Text>
 
       <View style={styles.road}>
-        {/* Orbit */}
         <Animated.View
           style={[
             styles.orbit,
@@ -36,10 +35,15 @@ export default function App() {
             },
           ]}
         >
-          <Text style={styles.car}>🚗</Text>
+          <View style={styles.car}>
+            <View style={styles.carBody}>
+              <View style={styles.carWindow} />
+              <View style={styles.wheelLeft} />
+              <View style={styles.wheelRight} />
+            </View>
+          </View>
         </Animated.View>
 
-        {/* Centre of the road */}
         <View style={styles.innerCircle} />
       </View>
 
@@ -75,15 +79,56 @@ const styles = StyleSheet.create({
 
   orbit: {
     position: "absolute",
-    width: 220,
-    height: 220,
+    width: 192,
+    height: 192,
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
 
   car: {
-    fontSize: 32,
-    marginTop: -16,
+    width: 42,
+    height: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: -14,
+  },
+
+  carBody: {
+    width: 42,
+    height: 20,
+    backgroundColor: "#5BC0FF",
+    borderRadius: 6,
+    position: "relative",
+  },
+
+  carWindow: {
+    position: "absolute",
+    width: 20,
+    height: 8,
+    backgroundColor: "#071A3D",
+    borderRadius: 3,
+    top: 3,
+    left: 11,
+  },
+
+  wheelLeft: {
+    position: "absolute",
+    width: 7,
+    height: 7,
+    backgroundColor: "#111827",
+    borderRadius: 4,
+    bottom: -4,
+    left: 5,
+  },
+
+  wheelRight: {
+    position: "absolute",
+    width: 7,
+    height: 7,
+    backgroundColor: "#111827",
+    borderRadius: 4,
+    bottom: -4,
+    right: 5,
   },
 
   innerCircle: {
