@@ -1,7 +1,25 @@
+import { useEffect, useRef } from "react";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 
 export default function App() {
+  const rotation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(rotation, {
+        toValue: 1,
+        duration: 5000,
+        useNativeDriver: true,
+      }),
+    ).start();
+  }, [rotation]);
+
+  const rotate = rotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -9,7 +27,19 @@ export default function App() {
       <Text style={styles.logo}>RideGo</Text>
 
       <View style={styles.road}>
-        <Text style={styles.car}>🚗</Text>
+        {/* Orbit */}
+        <Animated.View
+          style={[
+            styles.orbit,
+            {
+              transform: [{ rotate }],
+            },
+          ]}
+        >
+          <Text style={styles.car}>🚗</Text>
+        </Animated.View>
+
+        {/* Centre of the road */}
         <View style={styles.innerCircle} />
       </View>
 
@@ -43,10 +73,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  car: {
+  orbit: {
     position: "absolute",
-    top: -32,
+    width: 220,
+    height: 220,
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+
+  car: {
     fontSize: 32,
+    marginTop: -16,
   },
 
   innerCircle: {
