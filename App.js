@@ -1,15 +1,20 @@
-import { useEffect, useRef } from "react";
-import { Animated, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
-  const rotation = useRef(new Animated.Value(0)).current;
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
-  // RideGo logo animation
+  const rotation = useRef(new Animated.Value(0)).current;
   const logoScale = useRef(new Animated.Value(0.5)).current;
 
   useEffect(() => {
-    // Original car orbit animation
     Animated.loop(
       Animated.timing(rotation, {
         toValue: 1,
@@ -18,13 +23,18 @@ export default function App() {
       }),
     ).start();
 
-    // RideGo pops in and stays
     Animated.spring(logoScale, {
       toValue: 1,
       friction: 5,
       tension: 80,
       useNativeDriver: true,
     }).start();
+
+    const splashTimer = setTimeout(() => {
+      setShowOnboarding(true);
+    }, 3000);
+
+    return () => clearTimeout(splashTimer);
   }, [rotation, logoScale]);
 
   const rotate = rotation.interpolate({
@@ -32,11 +42,52 @@ export default function App() {
     outputRange: ["0deg", "360deg"],
   });
 
+  if (showOnboarding) {
+    return (
+      <View style={styles.container}>
+        <StatusBar style="light" />
+
+        <Text style={styles.onboardingLogo}>RideGo</Text>
+
+        <View style={styles.visualContainer}>
+          <View style={styles.visualCircle}>
+            <View style={styles.shield}>
+              <View style={styles.shieldCheck} />
+            </View>
+
+            <View style={styles.onboardingCar}>
+              <View style={styles.carBody}>
+                <View style={styles.carWindow} />
+                <View style={styles.wheelLeft} />
+                <View style={styles.wheelRight} />
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <Text style={styles.heading}>Ride with confidence</Text>
+
+        <Text style={styles.description}>
+          Safe, reliable rides from trusted drivers.
+        </Text>
+
+        <View style={styles.bottomSection}>
+          <TouchableOpacity style={styles.getStartedButton} activeOpacity={0.8}>
+            <Text style={styles.getStartedText}>Get Started →</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.7}>
+            <Text style={styles.skipText}>Skip</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
 
-      {/* RideGo logo - pops in and stays */}
       <Animated.Text
         style={[
           styles.logo,
@@ -49,7 +100,6 @@ export default function App() {
       </Animated.Text>
 
       <View style={styles.road}>
-        {/* Original orbit */}
         <Animated.View
           style={[
             styles.orbit,
@@ -58,7 +108,6 @@ export default function App() {
             },
           ]}
         >
-          {/* Original blue car */}
           <View style={styles.car}>
             <View style={styles.carBody}>
               <View style={styles.carWindow} />
@@ -68,7 +117,6 @@ export default function App() {
           </View>
         </Animated.View>
 
-        {/* Original center */}
         <View style={styles.innerCircle} />
       </View>
 
@@ -83,6 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#071A3D",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 30,
   },
 
   logo: {
@@ -167,5 +216,100 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#FFFFFF",
     marginTop: 35,
+  },
+
+  onboardingLogo: {
+    position: "absolute",
+    top: 70,
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#5BC0FF",
+  },
+
+  visualContainer: {
+    marginBottom: 45,
+  },
+
+  visualCircle: {
+    width: 230,
+    height: 230,
+    borderRadius: 115,
+    backgroundColor: "#102A52",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  shield: {
+    position: "absolute",
+    width: 75,
+    height: 85,
+    backgroundColor: "#5BC0FF",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    top: 35,
+  },
+
+  shieldCheck: {
+    width: 25,
+    height: 13,
+    borderLeftWidth: 4,
+    borderBottomWidth: 4,
+    borderColor: "#071A3D",
+    transform: [{ rotate: "-45deg" }],
+    marginTop: -5,
+  },
+
+  onboardingCar: {
+    position: "absolute",
+    bottom: 50,
+    width: 85,
+    height: 42,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  heading: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    textAlign: "center",
+    marginBottom: 12,
+  },
+
+  description: {
+    fontSize: 17,
+    lineHeight: 25,
+    color: "#C9D6E8",
+    textAlign: "center",
+    maxWidth: 320,
+  },
+
+  bottomSection: {
+    position: "absolute",
+    bottom: 55,
+    width: "100%",
+    alignItems: "center",
+  },
+
+  getStartedButton: {
+    width: "100%",
+    height: 55,
+    backgroundColor: "#5BC0FF",
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 18,
+  },
+
+  getStartedText: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#071A3D",
+  },
+
+  skipText: {
+    fontSize: 16,
+    color: "#C9D6E8",
   },
 });
