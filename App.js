@@ -18,6 +18,7 @@ import DestinationSearchScreen from "./screens/DestinationSearchScreen";
 import DestinationResultsScreen from "./screens/DestinationResultsScreen";
 import RideOptionsScreen from "./screens/RideOptionsScreen";
 import RideSearchingScreen from "./screens/RideSearchingScreen";
+import DriverFoundScreen from "./screens/DriverFoundScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -180,6 +181,8 @@ export default function App() {
         <Stack.Screen name="RideOptions" component={RideOptionsScreen} />
 
         <Stack.Screen name="RideSearching" component={RideSearchingScreen} />
+        
+        <Stack.Screen name="DriverFound" component={DriverFoundScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

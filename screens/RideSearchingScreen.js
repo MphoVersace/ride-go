@@ -1,92 +1,90 @@
+import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 export default function RideSearchingScreen({ navigation }) {
+  useEffect(() => {
+    const driverSearchTimer = setTimeout(() => {
+      navigation.replace("DriverFound");
+    }, 2500);
+
+    return () => clearTimeout(driverSearchTimer);
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
 
-      <View style={styles.topSection}>
-        <TouchableOpacity
-          style={styles.backButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backIcon}>‹</Text>
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <Text style={styles.logo}>RideGo</Text>
+
+        <Text style={styles.title}>Ride confirmed</Text>
+
+        <Text style={styles.subtitle}>
+          We’re looking for a driver near you.
+        </Text>
       </View>
 
       <View style={styles.content}>
-        <View style={styles.successCircle}>
-          <View style={styles.innerCircle}>
-            <Text style={styles.checkmark}>✓</Text>
-          </View>
-        </View>
-
-        <Text style={styles.heading}>Ride confirmed</Text>
-
-        <Text style={styles.description}>
-          We're looking for a driver near you.
-        </Text>
-
-        <View style={styles.searchingCard}>
+        <View style={styles.searchCard}>
           <View style={styles.loadingCircle}>
             <View style={styles.loadingDot} />
           </View>
 
-          <View style={styles.searchingText}>
-            <Text style={styles.searchingTitle}>Finding your driver</Text>
+          <Text style={styles.searchTitle}>Finding your driver</Text>
 
-            <Text style={styles.searchingSubtitle}>This may take a moment</Text>
-          </View>
+          <Text style={styles.searchText}>
+            Please wait while we find the best available driver for your ride.
+          </Text>
         </View>
 
         <View style={styles.tripCard}>
-          <View style={styles.tripRow}>
-            <View style={styles.pickupDot} />
+          <View style={styles.locationRow}>
+            <View style={styles.dot} />
 
-            <View style={styles.tripText}>
-              <Text style={styles.tripLabel}>Pickup</Text>
+            <View style={styles.locationTextContainer}>
+              <Text style={styles.locationLabel}>Pickup</Text>
 
-              <Text style={styles.tripValue}>Your current location</Text>
+              <Text style={styles.locationText}>Your current location</Text>
             </View>
           </View>
 
-          <View style={styles.tripLine} />
+          <View style={styles.connector} />
 
-          <View style={styles.tripRow}>
+          <View style={styles.locationRow}>
             <View style={styles.destinationDot} />
 
-            <View style={styles.tripText}>
-              <Text style={styles.tripLabel}>Destination</Text>
+            <View style={styles.locationTextContainer}>
+              <Text style={styles.locationLabel}>Destination</Text>
 
-              <Text style={styles.tripValue}>Rosebank Mall</Text>
+              <Text style={styles.locationText}>Rosebank Mall</Text>
             </View>
           </View>
         </View>
 
-        <View style={styles.rideSummary}>
-          <View>
-            <Text style={styles.summaryLabel}>Your ride</Text>
-
-            <Text style={styles.summaryRide}>Economy</Text>
+        <View style={styles.rideCard}>
+          <View style={styles.rideIcon}>
+            <Text style={styles.rideEmoji}>🚗</Text>
           </View>
 
-          <View style={styles.summaryPriceContainer}>
-            <Text style={styles.summaryPrice}>R45</Text>
+          <View style={styles.rideInfo}>
+            <Text style={styles.rideName}>Economy</Text>
 
-            <Text style={styles.summaryEstimated}>estimated</Text>
+            <Text style={styles.rideDescription}>
+              Affordable everyday rides
+            </Text>
           </View>
+
+          <Text style={styles.price}>R45</Text>
         </View>
       </View>
 
       <View style={styles.bottomSection}>
         <TouchableOpacity
           style={styles.cancelButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("RiderHome")}
         >
-          <Text style={styles.cancelButtonText}>Cancel ride</Text>
+          <Text style={styles.cancelText}>Cancel ride</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -97,145 +95,99 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#071A3D",
-    paddingHorizontal: 20,
   },
 
-  topSection: {
-    width: "100%",
-    paddingTop: 55,
-  },
-
-  backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#102A52",
-    borderWidth: 1,
-    borderColor: "#1D4775",
+  header: {
+    paddingTop: 65,
+    paddingHorizontal: 24,
     alignItems: "center",
-    justifyContent: "center",
   },
 
-  backIcon: {
-    fontSize: 34,
+  logo: {
+    color: "#5BC0FF",
+    fontSize: 28,
+    fontWeight: "800",
+    marginBottom: 30,
+  },
+
+  title: {
     color: "#FFFFFF",
-    marginTop: -4,
+    fontSize: 28,
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+
+  subtitle: {
+    color: "#B8C7E0",
+    fontSize: 15,
+    textAlign: "center",
+    lineHeight: 22,
   },
 
   content: {
     flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 30,
+  },
+
+  searchCard: {
+    backgroundColor: "#102A55",
+    borderRadius: 22,
+    padding: 25,
     alignItems: "center",
-    paddingTop: 38,
-  },
-
-  successCircle: {
-    width: 94,
-    height: 94,
-    borderRadius: 47,
-    backgroundColor: "#12345F",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 22,
-  },
-
-  innerCircle: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  checkmark: {
-    fontSize: 38,
-    fontWeight: "bold",
-    color: "#071A3D",
-    marginTop: -3,
-  },
-
-  heading: {
-    fontSize: 29,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 8,
-  },
-
-  description: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: "#C9D6E8",
-    textAlign: "center",
-    marginBottom: 25,
-  },
-
-  searchingCard: {
-    width: "100%",
-    minHeight: 76,
-    backgroundColor: "#102A52",
-    borderWidth: 1,
-    borderColor: "#1D4775",
-    borderRadius: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    marginBottom: 13,
+    marginBottom: 18,
   },
 
   loadingCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#071A3D",
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    borderWidth: 4,
+    borderColor: "#5BC0FF",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 13,
+    marginBottom: 18,
   },
 
   loadingDot: {
-    width: 13,
-    height: 13,
+    width: 14,
+    height: 14,
     borderRadius: 7,
     backgroundColor: "#5BC0FF",
   },
 
-  searchingText: {
-    flex: 1,
-  },
-
-  searchingTitle: {
-    fontSize: 15,
-    fontWeight: "bold",
+  searchTitle: {
     color: "#FFFFFF",
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 8,
   },
 
-  searchingSubtitle: {
-    fontSize: 12,
-    color: "#8FA5C1",
+  searchText: {
+    color: "#B8C7E0",
+    fontSize: 14,
+    textAlign: "center",
+    lineHeight: 21,
   },
 
   tripCard: {
-    width: "100%",
-    backgroundColor: "#102A52",
-    borderWidth: 1,
-    borderColor: "#1D4775",
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 13,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 15,
   },
 
-  tripRow: {
+  locationRow: {
     flexDirection: "row",
     alignItems: "center",
   },
 
-  pickupDot: {
+  dot: {
     width: 12,
     height: 12,
     borderRadius: 6,
     backgroundColor: "#5BC0FF",
-    marginHorizontal: 4,
     marginRight: 14,
   },
 
@@ -243,97 +195,94 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 3,
-    borderColor: "#5BC0FF",
-    marginHorizontal: 4,
+    backgroundColor: "#071A3D",
     marginRight: 14,
   },
 
-  tripText: {
+  connector: {
+    width: 2,
+    height: 25,
+    backgroundColor: "#D7DFEA",
+    marginLeft: 5,
+  },
+
+  locationTextContainer: {
     flex: 1,
   },
 
-  tripLabel: {
-    fontSize: 11,
-    color: "#8FA5C1",
+  locationLabel: {
+    color: "#7A8799",
+    fontSize: 12,
     marginBottom: 3,
   },
 
-  tripValue: {
-    fontSize: 14,
+  locationText: {
+    color: "#071A3D",
+    fontSize: 15,
     fontWeight: "600",
-    color: "#FFFFFF",
   },
 
-  tripLine: {
-    width: 2,
-    height: 18,
-    backgroundColor: "#1D4775",
-    marginLeft: 9,
-    marginVertical: 2,
-  },
-
-  rideSummary: {
-    width: "100%",
-    backgroundColor: "#102A52",
-    borderWidth: 1,
-    borderColor: "#1D4775",
-    borderRadius: 18,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+  rideCard: {
+    backgroundColor: "#102A55",
+    borderRadius: 20,
+    padding: 18,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
   },
 
-  summaryLabel: {
-    fontSize: 10,
-    color: "#8FA5C1",
+  rideIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#183B70",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 13,
+  },
+
+  rideEmoji: {
+    fontSize: 23,
+  },
+
+  rideInfo: {
+    flex: 1,
+  },
+
+  rideName: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
     marginBottom: 3,
   },
 
-  summaryRide: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+  rideDescription: {
+    color: "#AFC0D9",
+    fontSize: 12,
   },
 
-  summaryPriceContainer: {
-    alignItems: "flex-end",
-  },
-
-  summaryPrice: {
-    fontSize: 18,
-    fontWeight: "bold",
+  price: {
     color: "#5BC0FF",
-  },
-
-  summaryEstimated: {
-    fontSize: 9,
-    color: "#8FA5C1",
+    fontSize: 18,
+    fontWeight: "800",
   },
 
   bottomSection: {
-    width: "100%",
-    paddingBottom: 25,
-    paddingTop: 12,
+    paddingHorizontal: 20,
+    paddingBottom: 30,
   },
 
   cancelButton: {
-    width: "100%",
-    height: 55,
-    borderRadius: 28,
-    backgroundColor: "#102A52",
+    height: 54,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: "#496487",
     alignItems: "center",
     justifyContent: "center",
   },
 
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
+  cancelText: {
     color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
   },
 });
