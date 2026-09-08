@@ -12,6 +12,12 @@ import { StatusBar } from "expo-status-bar";
 
 import AccountScreen from "./screens/AccountScreen";
 import AccountTypeScreen from "./screens/AccountTypeScreen";
+import RiderRegistrationScreen from "./screens/RiderRegistrationScreen";
+import RiderHomeScreen from "./screens/RiderHomeScreen";
+import DestinationSearchScreen from "./screens/DestinationSearchScreen";
+import DestinationResultsScreen from "./screens/DestinationResultsScreen";
+import RideOptionsScreen from "./screens/RideOptionsScreen";
+import RideSearchingScreen from "./screens/RideSearchingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -150,15 +156,30 @@ export default function App() {
           component={SplashOnboardingScreen}
         />
 
+        <Stack.Screen name="Account" component={AccountScreen} />
+
+        <Stack.Screen name="AccountType" component={AccountTypeScreen} />
+
         <Stack.Screen
-          name="Account"
-          component={AccountScreen}
+          name="RiderRegistration"
+          component={RiderRegistrationScreen}
+        />
+
+        <Stack.Screen name="RiderHome" component={RiderHomeScreen} />
+
+        <Stack.Screen
+          name="DestinationSearch"
+          component={DestinationSearchScreen}
         />
 
         <Stack.Screen
-          name="AccountType"
-          component={AccountTypeScreen}
+          name="DestinationResults"
+          component={DestinationResultsScreen}
         />
+
+        <Stack.Screen name="RideOptions" component={RideOptionsScreen} />
+
+        <Stack.Screen name="RideSearching" component={RideSearchingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
