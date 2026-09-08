@@ -16,11 +16,18 @@ export default function AccountScreen({ navigation }) {
         </Text>
 
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.createButton} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={styles.createButton}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("AccountType")}
+          >
             <Text style={styles.createButtonText}>Create an account</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.loginButton} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={styles.loginButton}
+            activeOpacity={0.8}
+          >
             <Text style={styles.loginButtonText}>Log in</Text>
           </TouchableOpacity>
         </View>

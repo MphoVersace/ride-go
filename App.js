@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 
 import AccountScreen from "./screens/AccountScreen";
+import AccountTypeScreen from "./screens/AccountTypeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -149,7 +150,15 @@ export default function App() {
           component={SplashOnboardingScreen}
         />
 
-        <Stack.Screen name="Account" component={AccountScreen} />
+        <Stack.Screen
+          name="Account"
+          component={AccountScreen}
+        />
+
+        <Stack.Screen
+          name="AccountType"
+          component={AccountTypeScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
