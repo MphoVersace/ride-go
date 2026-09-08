@@ -153,6 +153,18 @@ export default function DriverFoundScreen({ navigation, route }) {
         </View>
 
         <TouchableOpacity
+          style={styles.startRideButton}
+          onPress={() =>
+            navigation.navigate("RideInProgress", {
+              selectedRide: selectedRide,
+            })
+          }
+          activeOpacity={0.8}
+        >
+          <Text style={styles.startRideButtonText}>Start ride</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={styles.cancelButton}
           onPress={() => navigation.navigate("RiderHome")}
           activeOpacity={0.8}
@@ -564,6 +576,30 @@ const styles = StyleSheet.create({
     borderColor: "#415779",
     justifyContent: "center",
     alignItems: "center",
+  },
+  startRideButton: {
+    height: 58,
+    borderRadius: 18,
+    backgroundColor: "#5BC0FF",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 4,
+    marginBottom: 12,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+
+  startRideButtonText: {
+    color: "#071A3D",
+    fontSize: 16,
+    fontWeight: "800",
+    letterSpacing: 0.2,
   },
 
   cancelButtonText: {
