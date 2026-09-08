@@ -6,9 +6,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 
-export default function App() {
+import AccountScreen from "./screens/AccountScreen";
+
+const Stack = createNativeStackNavigator();
+
+function SplashOnboardingScreen({ navigation }) {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   const rotation = useRef(new Animated.Value(0)).current;
@@ -72,7 +78,11 @@ export default function App() {
         </Text>
 
         <View style={styles.bottomSection}>
-          <TouchableOpacity style={styles.getStartedButton} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={styles.getStartedButton}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("Account")}
+          >
             <Text style={styles.getStartedText}>Get Started →</Text>
           </TouchableOpacity>
 
@@ -122,6 +132,26 @@ export default function App() {
 
       <Text style={styles.tagline}>Fast. Safe. Reliable.</Text>
     </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="SplashOnboarding"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen
+          name="SplashOnboarding"
+          component={SplashOnboardingScreen}
+        />
+
+        <Stack.Screen name="Account" component={AccountScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
