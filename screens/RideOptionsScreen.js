@@ -198,7 +198,11 @@ export default function RideOptionsScreen({ navigation }) {
         <TouchableOpacity
           style={styles.confirmButton}
           activeOpacity={0.8}
-          onPress={() => navigation.navigate("RideSearching")}
+          onPress={() =>
+            navigation.navigate("RideSearching", {
+              selectedRide: selectedRide,
+            })
+          }
         >
           <Text style={styles.confirmButtonText}>Confirm Ride →</Text>
         </TouchableOpacity>

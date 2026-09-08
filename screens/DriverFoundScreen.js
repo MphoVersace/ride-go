@@ -1,131 +1,165 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import React from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  StatusBar,
+} from "react-native";
 
-export default function DriverFoundScreen({ navigation }) {
+export default function DriverFoundScreen({ navigation, route }) {
+  const selectedRide = route?.params?.selectedRide || {
+    id: "economy",
+    name: "Economy",
+    description: "Affordable everyday rides",
+    eta: "3–5 min",
+    price: "R45",
+    icon: "🚗",
+  };
+
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
 
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backIcon}>‹</Text>
-        </TouchableOpacity>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>Your driver is on the way</Text>
 
-        <Text style={styles.headerTitle}>Your driver is on the way</Text>
+        <Text style={styles.subtitle}>
+          Your ride has been matched with a nearby driver.
+        </Text>
 
-        <View style={styles.headerSpacer} />
-      </View>
+        {/* Map */}
+        <View style={styles.mapContainer}>
+          <View style={styles.mapRoadOne} />
+          <View style={styles.mapRoadTwo} />
+          <View style={styles.mapRoadThree} />
 
-      <View style={styles.mapCard}>
-        <View style={styles.routeLine} />
+          <View style={styles.routeLine} />
 
-        <View style={styles.pickupPin}>
-          <Text style={styles.pinText}>●</Text>
+          <View style={styles.pickupPin}>
+            <View style={styles.pickupPinInner} />
+          </View>
+
+          <View style={styles.driverMarker}>
+            <Text style={styles.driverMarkerText}>🚗</Text>
+          </View>
+
+          <View style={styles.destinationPin}>
+            <View style={styles.destinationPinInner} />
+          </View>
+
+          <View style={styles.etaBubble}>
+            <Text style={styles.etaText}>3 min away</Text>
+          </View>
+
+          <Text style={styles.mapHint}>
+            Driver approaching your pickup point
+          </Text>
         </View>
 
-        <View style={styles.driverMarker}>
-          <Text style={styles.carEmoji}>🚗</Text>
-        </View>
-
-        <View style={styles.destinationPin}>
-          <Text style={styles.pinText}>📍</Text>
-        </View>
-
-        <View style={styles.etaBubble}>
-          <Text style={styles.etaNumber}>3 min</Text>
-          <Text style={styles.etaLabel}>away</Text>
-        </View>
-
-        <Text style={styles.mapHint}>Driver approaching your pickup point</Text>
-      </View>
-
-      <View style={styles.content}>
+        {/* Arrival Card */}
         <View style={styles.arrivalCard}>
-          <View>
-            <Text style={styles.arrivalLabel}>ARRIVING IN</Text>
-            <Text style={styles.arrivalTime}>3 minutes</Text>
-          </View>
-
-          <View style={styles.arrivalIcon}>
-            <Text style={styles.arrivalIconText}>⌚</Text>
-          </View>
+          <Text style={styles.arrivalLabel}>ARRIVING IN</Text>
+          <Text style={styles.arrivalTime}>3 minutes</Text>
         </View>
 
+        {/* Driver Card */}
         <View style={styles.driverCard}>
           <View style={styles.driverTopRow}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>TM</Text>
+            <View style={styles.driverAvatar}>
+              <Text style={styles.driverAvatarText}>TM</Text>
             </View>
 
             <View style={styles.driverInfo}>
               <Text style={styles.driverName}>Thabo M.</Text>
 
-              <View style={styles.ratingRow}>
-                <Text style={styles.star}>★</Text>
-                <Text style={styles.rating}>4.9</Text>
-                <Text style={styles.tripCount}>• 1,240 trips</Text>
-              </View>
+              <Text style={styles.driverRating}>★ 4.9 • 1,240 trips</Text>
             </View>
 
             <View style={styles.rideBadge}>
-              <Text style={styles.rideBadgeText}>Economy</Text>
+              <Text style={styles.rideBadgeText}>{selectedRide.name}</Text>
             </View>
           </View>
 
-          <View style={styles.divider} />
+          <View style={styles.vehicleDivider} />
 
-          <View style={styles.vehicleRow}>
-            <View style={styles.vehicleIcon}>
-              <Text style={styles.vehicleEmoji}>🚘</Text>
+          <View style={styles.vehicleInfoRow}>
+            <View>
+              <Text style={styles.vehicleLabel}>VEHICLE</Text>
+              <Text style={styles.vehicleText}>Toyota Corolla</Text>
             </View>
 
-            <View style={styles.vehicleInfo}>
-              <Text style={styles.vehicleName}>Toyota Corolla</Text>
-              <Text style={styles.vehicleColour}>Silver</Text>
+            <View style={styles.vehicleDetails}>
+              <Text style={styles.vehicleLabel}>COLOUR</Text>
+              <Text style={styles.vehicleText}>Silver</Text>
             </View>
+          </View>
 
-            <View style={styles.plate}>
-              <Text style={styles.plateText}>KDF 482 GP</Text>
-            </View>
+          <View style={styles.plateContainer}>
+            <Text style={styles.plateText}>KDF 482 GP</Text>
           </View>
         </View>
 
+        {/* Trip Card */}
         <View style={styles.tripCard}>
-          <Text style={styles.tripLabel}>PICKUP</Text>
-          <Text style={styles.tripValue}>Your current location</Text>
+          <View style={styles.locationRow}>
+            <View style={[styles.locationDot, styles.pickupDot]} />
 
-          <View style={styles.tripDivider} />
+            <View style={styles.locationTextContainer}>
+              <Text style={styles.locationLabel}>PICKUP</Text>
+              <Text style={styles.locationText}>Your current location</Text>
+            </View>
+          </View>
 
-          <Text style={styles.tripLabel}>DESTINATION</Text>
-          <Text style={styles.tripValue}>Rosebank Mall</Text>
+          <View style={styles.routeConnector} />
+
+          <View style={styles.locationRow}>
+            <View style={[styles.locationDot, styles.destinationDot]} />
+
+            <View style={styles.locationTextContainer}>
+              <Text style={styles.locationLabel}>DESTINATION</Text>
+              <Text style={styles.locationText}>Rosebank Mall</Text>
+            </View>
+          </View>
+
+          <View style={styles.tripSummary}>
+            <View>
+              <Text style={styles.tripSummaryLabel}>RIDE TYPE</Text>
+              <Text style={styles.tripSummaryValue}>{selectedRide.name}</Text>
+            </View>
+
+            <View style={styles.tripSummaryRight}>
+              <Text style={styles.tripSummaryLabel}>ESTIMATED FARE</Text>
+              <Text style={styles.tripSummaryValue}>{selectedRide.price}</Text>
+            </View>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.bottomSection}>
-        <View style={styles.actionRow}>
+        {/* Action Buttons */}
+        <View style={styles.actionsRow}>
           <TouchableOpacity style={styles.actionButton} activeOpacity={0.8}>
             <Text style={styles.actionIcon}>☎</Text>
             <Text style={styles.actionText}>Call</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.actionButton} activeOpacity={0.8}>
-            <Text style={styles.actionIcon}>✉</Text>
+            <Text style={styles.actionIcon}>💬</Text>
             <Text style={styles.actionText}>Message</Text>
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity
           style={styles.cancelButton}
-          activeOpacity={0.8}
           onPress={() => navigation.navigate("RiderHome")}
+          activeOpacity={0.8}
         >
           <Text style={styles.cancelButtonText}>Cancel ride</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -136,257 +170,232 @@ const styles = StyleSheet.create({
     backgroundColor: "#071A3D",
   },
 
-  header: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingTop: 55,
-    paddingBottom: 18,
+  scrollContent: {
+    paddingHorizontal: 24,
+    paddingTop: 64,
+    paddingBottom: 36,
   },
 
-  backButton: {
-    alignItems: "center",
-    backgroundColor: "#102A52",
-    borderColor: "#1D4775",
-    borderRadius: 22,
-    borderWidth: 1,
-    height: 44,
-    justifyContent: "center",
-    width: 44,
-  },
-
-  backIcon: {
+  title: {
     color: "#FFFFFF",
-    fontSize: 34,
-    marginTop: -4,
-  },
-
-  headerTitle: {
-    color: "#FFFFFF",
-    fontSize: 17,
+    fontSize: 28,
     fontWeight: "700",
+    marginBottom: 8,
   },
 
-  headerSpacer: {
-    width: 44,
+  subtitle: {
+    color: "#AEBBD4",
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 24,
   },
 
-  mapCard: {
-    backgroundColor: "#0D2A52",
-    height: 210,
-    marginHorizontal: 20,
+  mapContainer: {
+    height: 250,
+    borderRadius: 22,
+    backgroundColor: "#DCE7E2",
     overflow: "hidden",
     position: "relative",
+    marginBottom: 16,
+  },
+
+  mapRoadOne: {
+    position: "absolute",
+    width: 380,
+    height: 38,
+    backgroundColor: "#FFFFFF",
+    transform: [{ rotate: "25deg" }],
+    top: 70,
+    left: -80,
+  },
+
+  mapRoadTwo: {
+    position: "absolute",
+    width: 380,
+    height: 34,
+    backgroundColor: "#FFFFFF",
+    transform: [{ rotate: "-38deg" }],
+    top: 125,
+    left: -30,
+  },
+
+  mapRoadThree: {
+    position: "absolute",
+    width: 320,
+    height: 30,
+    backgroundColor: "#FFFFFF",
+    transform: [{ rotate: "65deg" }],
+    top: 90,
+    left: 120,
   },
 
   routeLine: {
-    backgroundColor: "#5BC0FF",
-    height: 3,
-    left: 55,
     position: "absolute",
-    top: 107,
-    transform: [{ rotate: "-18deg" }],
-    width: 250,
+    width: 155,
+    height: 4,
+    backgroundColor: "#5BC0FF",
+    transform: [{ rotate: "-24deg" }],
+    top: 125,
+    left: 72,
+    borderRadius: 2,
   },
 
   pickupPin: {
-    alignItems: "center",
-    backgroundColor: "#19C37D",
-    borderColor: "#FFFFFF",
-    borderRadius: 18,
-    borderWidth: 3,
-    height: 36,
-    justifyContent: "center",
-    left: 45,
     position: "absolute",
-    top: 126,
-    width: 36,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#071A3D",
+    justifyContent: "center",
+    alignItems: "center",
+    left: 52,
+    bottom: 48,
   },
 
-  destinationPin: {
-    alignItems: "center",
-    backgroundColor: "#EF476F",
-    borderColor: "#FFFFFF",
-    borderRadius: 18,
-    borderWidth: 3,
-    height: 36,
-    justifyContent: "center",
-    position: "absolute",
-    right: 38,
-    top: 52,
-    width: 36,
-  },
-
-  pinText: {
-    color: "#FFFFFF",
-    fontSize: 15,
+  pickupPinInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#5BC0FF",
   },
 
   driverMarker: {
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#5BC0FF",
-    borderRadius: 25,
-    borderWidth: 3,
-    height: 50,
-    justifyContent: "center",
-    left: "43%",
     position: "absolute",
-    top: 82,
-    width: 50,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: "#5BC0FF",
+    justifyContent: "center",
+    alignItems: "center",
+    left: 126,
+    top: 100,
+    borderWidth: 3,
+    borderColor: "#FFFFFF",
   },
 
-  carEmoji: {
-    fontSize: 25,
+  driverMarkerText: {
+    fontSize: 22,
+  },
+
+  destinationPin: {
+    position: "absolute",
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    right: 48,
+    top: 52,
+  },
+
+  destinationPinInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#071A3D",
   },
 
   etaBubble: {
-    alignItems: "center",
-    backgroundColor: "#071A3D",
-    borderRadius: 10,
-    paddingHorizontal: 11,
-    paddingVertical: 7,
     position: "absolute",
-    right: 22,
-    top: 15,
+    top: 22,
+    left: 22,
+    backgroundColor: "#071A3D",
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 14,
   },
 
-  etaNumber: {
-    color: "#5BC0FF",
-    fontSize: 14,
-    fontWeight: "800",
-  },
-
-  etaLabel: {
-    color: "#A9BFDC",
-    fontSize: 11,
+  etaText: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "700",
   },
 
   mapHint: {
-    bottom: 14,
-    color: "#A9BFDC",
-    fontSize: 12,
-    left: 0,
     position: "absolute",
-    right: 0,
-    textAlign: "center",
-  },
-
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 18,
+    bottom: 14,
+    alignSelf: "center",
+    backgroundColor: "rgba(255,255,255,0.92)",
+    color: "#071A3D",
+    fontSize: 11,
+    fontWeight: "600",
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 12,
   },
 
   arrivalCard: {
+    backgroundColor: "#5BC0FF",
+    borderRadius: 18,
+    paddingVertical: 18,
     alignItems: "center",
-    backgroundColor: "#102A52",
-    borderColor: "#1D4775",
-    borderRadius: 16,
-    borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 16,
+    marginBottom: 16,
   },
 
   arrivalLabel: {
-    color: "#8FA5C1",
+    color: "#071A3D",
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "800",
     letterSpacing: 1,
+    marginBottom: 3,
   },
 
   arrivalTime: {
-    color: "#FFFFFF",
-    fontSize: 20,
+    color: "#071A3D",
+    fontSize: 24,
     fontWeight: "800",
-    marginTop: 4,
-  },
-
-  arrivalIcon: {
-    alignItems: "center",
-    backgroundColor: "#173D6D",
-    borderRadius: 20,
-    height: 40,
-    justifyContent: "center",
-    width: 40,
-  },
-
-  arrivalIconText: {
-    color: "#5BC0FF",
-    fontSize: 20,
   },
 
   driverCard: {
-    backgroundColor: "#102A52",
-    borderColor: "#1D4775",
-    borderRadius: 16,
-    borderWidth: 1,
-    marginTop: 14,
-    padding: 16,
+    backgroundColor: "#102A55",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
   },
 
   driverTopRow: {
-    alignItems: "center",
     flexDirection: "row",
-  },
-
-  avatar: {
     alignItems: "center",
-    backgroundColor: "#5BC0FF",
-    borderRadius: 28,
-    height: 56,
-    justifyContent: "center",
-    width: 56,
   },
 
-  avatarText: {
+  driverAvatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: "#5BC0FF",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 14,
+  },
+
+  driverAvatarText: {
     color: "#071A3D",
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: "800",
   },
 
   driverInfo: {
     flex: 1,
-    marginLeft: 12,
   },
 
   driverName: {
     color: "#FFFFFF",
     fontSize: 17,
-    fontWeight: "800",
-  },
-
-  ratingRow: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginTop: 5,
-  },
-
-  star: {
-    color: "#FFC857",
-    fontSize: 15,
-  },
-
-  rating: {
-    color: "#FFFFFF",
-    fontSize: 13,
     fontWeight: "700",
-    marginLeft: 4,
+    marginBottom: 4,
   },
 
-  tripCount: {
-    color: "#8FA5C1",
+  driverRating: {
+    color: "#AEBBD4",
     fontSize: 12,
-    marginLeft: 5,
   },
 
   rideBadge: {
-    backgroundColor: "#173D6D",
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+    backgroundColor: "#18396B",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
   },
 
   rideBadgeText: {
@@ -395,132 +404,171 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  divider: {
-    backgroundColor: "#1D4775",
+  vehicleDivider: {
     height: 1,
-    marginVertical: 15,
+    backgroundColor: "#29446E",
+    marginVertical: 18,
   },
 
-  vehicleRow: {
-    alignItems: "center",
+  vehicleInfoRow: {
     flexDirection: "row",
+    justifyContent: "space-between",
   },
 
-  vehicleIcon: {
-    alignItems: "center",
-    backgroundColor: "#173D6D",
-    borderRadius: 18,
-    height: 36,
-    justifyContent: "center",
-    width: 36,
+  vehicleDetails: {
+    alignItems: "flex-end",
   },
 
-  vehicleEmoji: {
-    fontSize: 19,
+  vehicleLabel: {
+    color: "#7185A8",
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 1,
+    marginBottom: 4,
   },
 
-  vehicleInfo: {
-    flex: 1,
-    marginLeft: 10,
-  },
-
-  vehicleName: {
+  vehicleText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: "600",
   },
 
-  vehicleColour: {
-    color: "#8FA5C1",
-    fontSize: 12,
-    marginTop: 2,
-  },
-
-  plate: {
-    backgroundColor: "#F5F7FA",
-    borderRadius: 5,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+  plateContainer: {
+    alignSelf: "flex-start",
+    marginTop: 16,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 6,
   },
 
   plateText: {
     color: "#071A3D",
-    fontSize: 11,
+    fontSize: 14,
     fontWeight: "800",
-  },
-
-  tripCard: {
-    backgroundColor: "#102A52",
-    borderColor: "#1D4775",
-    borderRadius: 16,
-    borderWidth: 1,
-    marginTop: 14,
-    padding: 16,
-  },
-
-  tripLabel: {
-    color: "#8FA5C1",
-    fontSize: 10,
-    fontWeight: "700",
     letterSpacing: 1,
   },
 
-  tripValue: {
+  tripCard: {
+    backgroundColor: "#102A55",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+  },
+
+  locationRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  locationDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 14,
+  },
+
+  pickupDot: {
+    backgroundColor: "#5BC0FF",
+  },
+
+  destinationDot: {
+    backgroundColor: "#FFFFFF",
+  },
+
+  locationTextContainer: {
+    flex: 1,
+  },
+
+  locationLabel: {
+    color: "#7185A8",
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+
+  locationText: {
     color: "#FFFFFF",
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "600",
-    marginTop: 5,
   },
 
-  tripDivider: {
-    backgroundColor: "#1D4775",
-    height: 1,
-    marginVertical: 13,
+  routeConnector: {
+    width: 1,
+    height: 24,
+    backgroundColor: "#415779",
+    marginLeft: 5.5,
+    marginVertical: 4,
   },
 
-  bottomSection: {
-    paddingHorizontal: 20,
-    paddingBottom: 28,
+  tripSummary: {
+    marginTop: 20,
+    paddingTop: 18,
+    borderTopWidth: 1,
+    borderTopColor: "#29446E",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 
-  actionRow: {
+  tripSummaryRight: {
+    alignItems: "flex-end",
+  },
+
+  tripSummaryLabel: {
+    color: "#7185A8",
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+
+  tripSummaryValue: {
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+
+  actionsRow: {
     flexDirection: "row",
     gap: 12,
+    marginBottom: 16,
   },
 
   actionButton: {
-    alignItems: "center",
-    backgroundColor: "#102A52",
-    borderColor: "#1D4775",
-    borderRadius: 12,
-    borderWidth: 1,
     flex: 1,
-    flexDirection: "row",
+    height: 54,
+    borderRadius: 16,
+    backgroundColor: "#102A55",
     justifyContent: "center",
-    paddingVertical: 13,
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
   },
 
   actionIcon: {
+    fontSize: 17,
     color: "#5BC0FF",
-    fontSize: 18,
-    marginRight: 8,
   },
 
   actionText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: "600",
   },
 
   cancelButton: {
+    height: 54,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#415779",
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 14,
-    paddingVertical: 12,
   },
 
   cancelButtonText: {
-    color: "#FF8FA3",
-    fontSize: 14,
-    fontWeight: "700",
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontWeight: "600",
   },
 });
