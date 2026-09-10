@@ -12,7 +12,11 @@ export default function RiderHomeScreen({ navigation }) {
           <Text style={styles.subtitle}>Where are you going?</Text>
         </View>
 
-        <TouchableOpacity style={styles.profileButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.profileButton}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("RiderProfile")}
+        >
           <Text style={styles.profileIcon}>👤</Text>
         </TouchableOpacity>
       </View>
@@ -97,7 +101,11 @@ export default function RiderHomeScreen({ navigation }) {
           <Text style={styles.navText}>Activity</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.navItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("RiderProfile")}
+        >
           <Text style={styles.navIcon}>👤</Text>
           <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>

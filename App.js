@@ -14,6 +14,7 @@ import AccountScreen from "./screens/AccountScreen";
 import AccountTypeScreen from "./screens/AccountTypeScreen";
 import RiderRegistrationScreen from "./screens/RiderRegistrationScreen";
 import RiderHomeScreen from "./screens/RiderHomeScreen";
+import RiderProfileScreen from "./screens/RiderProfileScreen";
 import DestinationSearchScreen from "./screens/DestinationSearchScreen";
 import DestinationResultsScreen from "./screens/DestinationResultsScreen";
 import RideOptionsScreen from "./screens/RideOptionsScreen";
@@ -170,6 +171,8 @@ export default function App() {
         />
 
         <Stack.Screen name="RiderHome" component={RiderHomeScreen} />
+
+        <Stack.Screen name="RiderProfile" component={RiderProfileScreen} />
 
         <Stack.Screen
           name="DestinationSearch"
