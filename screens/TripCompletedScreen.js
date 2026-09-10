@@ -173,7 +173,15 @@ export default function TripCompletedScreen({ navigation, route }) {
           <Text style={styles.doneButtonText}>Back to home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.receiptButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.receiptButton}
+          onPress={() =>
+            navigation.navigate("TripReceipt", {
+              selectedRide: selectedRide,
+            })
+          }
+          activeOpacity={0.8}
+        >
           <Text style={styles.receiptButtonText}>View trip receipt</Text>
         </TouchableOpacity>
       </ScrollView>
