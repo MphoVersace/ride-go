@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -11,6 +12,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 
 import SavedPlacesScreen from "./screens/SavedPlacesScreen";
+import PaymentMethodsScreen from "./screens/PaymentMethodsScreen";
 import TripDetailsScreen from "./screens/TripDetailsScreen";
 import RideHistoryScreen from "./screens/RideHistoryScreen";
 import AccountScreen from "./screens/AccountScreen";
@@ -185,6 +187,12 @@ export default function App() {
         <Stack.Screen name="TripDetails" component={TripDetailsScreen} />
 
         <Stack.Screen name="SavedPlaces" component={SavedPlacesScreen} />
+
+        <Stack.Screen
+          name="PaymentMethods"
+          component={PaymentMethodsScreen}
+        />
+
         <Stack.Screen
           name="DestinationSearch"
           component={DestinationSearchScreen}
