@@ -10,6 +10,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 
+import TripDetailsScreen from "./screens/TripDetailsScreen";
 import RideHistoryScreen from "./screens/RideHistoryScreen";
 import AccountScreen from "./screens/AccountScreen";
 import AccountTypeScreen from "./screens/AccountTypeScreen";
@@ -180,6 +181,7 @@ export default function App() {
 
         <Stack.Screen name="RideHistory" component={RideHistoryScreen} />
 
+        <Stack.Screen name="TripDetails" component={TripDetailsScreen} />
         <Stack.Screen
           name="DestinationSearch"
           component={DestinationSearchScreen}

@@ -110,6 +110,11 @@ export default function RideHistoryScreen({ navigation }) {
             key={ride.id}
             style={styles.rideCard}
             activeOpacity={0.85}
+            onPress={() =>
+              navigation.navigate("TripDetails", {
+                ride: ride,
+              })
+            }
           >
             <View style={styles.rideTopRow}>
               <View style={styles.rideIcon}>
