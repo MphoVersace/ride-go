@@ -15,6 +15,7 @@ import PaymentMethodsScreen from "./screens/PaymentMethodsScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import SafetyCentreScreen from "./screens/SafetyCentreScreen";
 import HelpSupportScreen from "./screens/HelpSupportScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 import TripDetailsScreen from "./screens/TripDetailsScreen";
 import RideHistoryScreen from "./screens/RideHistoryScreen";
 import AccountScreen from "./screens/AccountScreen";
@@ -197,6 +198,8 @@ export default function App() {
         <Stack.Screen name="SafetyCentre" component={SafetyCentreScreen} />
 
         <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
+
+        <Stack.Screen name="Settings" component={SettingsScreen} />
 
         <Stack.Screen
           name="DestinationSearch"
