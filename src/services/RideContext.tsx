@@ -41,6 +41,33 @@ export interface CompletedTrip {
   distance: string;
 }
 
+export interface SavedPlace {
+  id: string;
+  type: "home" | "work" | "favorite" | "airport";
+  title: string;
+  address: string;
+  distance?: string;
+}
+
+export interface UserProfile {
+  name: string;
+  phone: string;
+  email: string;
+  avatar: string;
+  rating: number;
+  completedRides: number;
+  totalDistance: string;
+  memberSince: string;
+}
+
+export interface PaymentMethodItem {
+  id: string;
+  type: "wallet" | "card" | "cash";
+  title: string;
+  subtitle: string;
+  isDefault?: boolean;
+}
+
 interface LocationDetails {
   title: string;
   address: string;
@@ -57,6 +84,11 @@ interface RideContextType {
   chatMessages: ChatMessage[];
   rideHistory: CompletedTrip[];
   tierFares: Record<RideTier, number>;
+  walletBalance: number;
+  savedPlaces: SavedPlace[];
+  userProfile: UserProfile;
+  paymentMethods: PaymentMethodItem[];
+  selectedPaymentMethod: string;
   setPickupLocation: (title: string, address: string) => void;
   setDestinationLocation: (title: string, address: string, distance?: string) => void;
   selectTier: (tier: RideTier) => void;
@@ -66,6 +98,11 @@ interface RideContextType {
   completeTrip: (rating: number, tip: number, comment?: string) => void;
   sendChatMessage: (text: string) => void;
   resetRide: () => void;
+  topUpWallet: (amount: number) => void;
+  addSavedPlace: (place: Omit<SavedPlace, "id">) => void;
+  deleteSavedPlace: (id: string) => void;
+  updateUserProfile: (profile: Partial<UserProfile>) => void;
+  selectPaymentMethod: (id: string) => void;
 }
 
 const defaultDriver: DriverProfile = {
@@ -108,6 +145,76 @@ const initialHistory: CompletedTrip[] = [
   },
 ];
 
+const initialSavedPlaces: SavedPlace[] = [
+  {
+    id: "place-1",
+    type: "home",
+    title: "Home",
+    address: "14 Long St, Cape Town City Centre, 8001",
+    distance: "0.0 km",
+  },
+  {
+    id: "place-2",
+    type: "work",
+    title: "Work (Waterfront Office)",
+    address: "19 Dock Rd, V&A Waterfront, 8001",
+    distance: "2.4 km",
+  },
+  {
+    id: "place-3",
+    type: "airport",
+    title: "Cape Town Int. Airport (CPT)",
+    address: "Matroosfontein, Cape Town, 7490",
+    distance: "19.5 km",
+  },
+  {
+    id: "place-4",
+    type: "favorite",
+    title: "Camps Bay Promenade",
+    address: "Victoria Rd, Camps Bay, Cape Town",
+    distance: "7.8 km",
+  },
+];
+
+const initialUserProfile: UserProfile = {
+  name: "Mpho Versace",
+  phone: "+27 71 234 5678",
+  email: "mpho@ridego.co.za",
+  avatar: "MV",
+  rating: 4.95,
+  completedRides: 28,
+  totalDistance: "142 km",
+  memberSince: "January 2026",
+};
+
+const initialPaymentMethods: PaymentMethodItem[] = [
+  {
+    id: "wallet",
+    type: "wallet",
+    title: "RideGo Wallet",
+    subtitle: "Instant payment with in-app balance",
+    isDefault: true,
+  },
+  {
+    id: "card-1",
+    type: "card",
+    title: "Visa Debit",
+    subtitle: "•••• 4821 • Exp 08/29",
+  },
+  {
+    id: "card-2",
+    type: "card",
+    title: "Mastercard",
+    subtitle: "•••• 9012 • Exp 12/28",
+  },
+  {
+    id: "cash",
+    type: "cash",
+    title: "Cash to Driver",
+    subtitle: "Pay directly upon arrival",
+  },
+];
+
 const RideContext = createContext<RideContextType | undefined>(undefined);
 
 export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -135,6 +242,11 @@ export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
     },
   ]);
   const [rideHistory, setRideHistory] = useState<CompletedTrip[]>(initialHistory);
+  const [walletBalance, setWalletBalance] = useState<number>(250);
+  const [savedPlaces, setSavedPlaces] = useState<SavedPlace[]>(initialSavedPlaces);
+  const [userProfile, setUserProfile] = useState<UserProfile>(initialUserProfile);
+  const [paymentMethods] = useState<PaymentMethodItem[]>(initialPaymentMethods);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>("wallet");
 
   const tierFares: Record<RideTier, number> = {
     standard: 45,
@@ -173,6 +285,8 @@ export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const completeTrip = (rating: number, tip: number, _comment?: string) => {
     const baseFare = tierFares[tier];
+    const tripTotal = baseFare + tip;
+
     const newTrip: CompletedTrip = {
       id: `TRIP-${Math.floor(1000 + Math.random() * 9000)}`,
       date: "Today, just now",
@@ -180,13 +294,26 @@ export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
       destination: destination.title,
       fare: baseFare,
       tip,
-      total: baseFare + tip,
+      total: tripTotal,
       tier,
       driverName: driver.name,
       rating,
       distance: destination.distance || "3.5 km",
     };
+
     setRideHistory((prev) => [newTrip, ...prev]);
+
+    // Deduct from wallet if wallet is selected
+    if (selectedPaymentMethod === "wallet") {
+      setWalletBalance((prev) => Math.max(0, prev - tripTotal));
+    }
+
+    // Update profile stats
+    setUserProfile((prev) => ({
+      ...prev,
+      completedRides: prev.completedRides + 1,
+    }));
+
     setStatus("completed");
   };
 
@@ -200,7 +327,6 @@ export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setChatMessages((prev) => [...prev, userMsg]);
 
-    // Simulated driver contextual response
     setTimeout(() => {
       const driverReplies = [
         "Got it! I am right outside in the black CR-V.",
@@ -233,6 +359,44 @@ export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
     ]);
   };
 
+  const topUpWallet = (amount: number) => {
+    setWalletBalance((prev) => prev + amount);
+  };
+
+  const addSavedPlace = (place: Omit<SavedPlace, "id">) => {
+    const newPlace: SavedPlace = {
+      ...place,
+      id: `place-${Date.now()}`,
+    };
+    setSavedPlaces((prev) => [newPlace, ...prev]);
+  };
+
+  const deleteSavedPlace = (id: string) => {
+    setSavedPlaces((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const updateUserProfile = (updated: Partial<UserProfile>) => {
+    setUserProfile((prev) => {
+      const nextName = updated.name ?? prev.name;
+      const initials = nextName
+        .split(" ")
+        .map((p) => p[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+
+      return {
+        ...prev,
+        ...updated,
+        avatar: initials || prev.avatar,
+      };
+    });
+  };
+
+  const selectPaymentMethod = (id: string) => {
+    setSelectedPaymentMethod(id);
+  };
+
   return (
     <RideContext.Provider
       value={{
@@ -245,6 +409,11 @@ export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
         chatMessages,
         rideHistory,
         tierFares,
+        walletBalance,
+        savedPlaces,
+        userProfile,
+        paymentMethods,
+        selectedPaymentMethod,
         setPickupLocation,
         setDestinationLocation,
         selectTier,
@@ -254,6 +423,11 @@ export const RideProvider: React.FC<{ children: React.ReactNode }> = ({
         completeTrip,
         sendChatMessage,
         resetRide,
+        topUpWallet,
+        addSavedPlace,
+        deleteSavedPlace,
+        updateUserProfile,
+        selectPaymentMethod,
       }}
     >
       {children}

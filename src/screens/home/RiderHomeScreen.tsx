@@ -29,8 +29,15 @@ import { useRide } from "../../services/RideContext";
 export default function RiderHomeScreen({
   navigation,
 }: RootStackScreenProps<"RiderHome">) {
-  const { pickup, destination, tier, selectTier, tierFares, startSearch } =
-    useRide();
+  const {
+    pickup,
+    destination,
+    tier,
+    selectTier,
+    tierFares,
+    startSearch,
+    userProfile,
+  } = useRide();
   const [selectedService, setSelectedService] = useState<"driver" | "package">(
     "driver"
   );
@@ -57,7 +64,7 @@ export default function RiderHomeScreen({
           onPress={() => navigation.navigate("RiderProfile")}
         >
           <View style={styles.profileAvatar}>
-            <Text style={styles.avatarInitial}>T</Text>
+            <Text style={styles.avatarInitial}>{userProfile.avatar}</Text>
           </View>
         </TouchableOpacity>
       </View>
