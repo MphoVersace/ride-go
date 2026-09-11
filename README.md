@@ -60,20 +60,25 @@ All margins, paddings, and dimensional gaps strictly use multiples of **8px**:
 ```
 ride-go/
 ├── .expo/                        # Expo cache & dev metadata
-├── assets/                       # Application branding & icon assets
+├── assets/                       # Application branding & vehicle assets
 │   ├── android-icon-background.png
 │   ├── android-icon-foreground.png
 │   ├── android-icon-monochrome.png
 │   ├── favicon.png
 │   ├── icon.png
-│   └── splash-icon.png
+│   ├── splash-icon.png
+│   └── vehicles/                 # Photorealistic 3D vehicle assets
+│       ├── car_perspective.jpg   # 3D perspective sedan render
+│       └── car_top_down.jpg      # Top-down vehicle inspection render
 ├── src/                          # Application source code
 │   ├── assets/
-│   │   ├── icons/                # SVG vector icons (svgrepo.com standard)
+│   │   ├── icons/                # SVG vector assets
 │   │   └── .gitkeep
 │   ├── components/
-│   │   ├── common/               # Reusable UI primitives (buttons, cards, headers)
-│   │   └── .gitkeep
+│   │   ├── common/               # Reusable UI primitives
+│   │   │   ├── DarkRouteMap.tsx  # Vector dark map with glowing cyan route polyline
+│   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, seats)
+│   │   │   └── .gitkeep
 │   ├── constants/
 │   │   ├── colors.ts             # 60-30-10 color palette tokens
 │   │   ├── metrics.ts            # 8px spacing grid & platform specs (Android & iOS)
@@ -88,7 +93,7 @@ ride-go/
 │   │   │   ├── AccountTypeScreen.js
 │   │   │   └── RiderRegistrationScreen.js
 │   │   ├── home/                 # Main home experience
-│   │   │   └── RiderHomeScreen.js
+│   │   │   └── RiderHomeScreen.tsx # Dark map, pill inputs, service tabs, Rand tiers
 │   │   ├── onboarding/           # Animated splash & introduction
 │   │   │   └── SplashOnboardingScreen.tsx
 │   │   ├── profile/              # Profile, settings, and support
@@ -102,13 +107,13 @@ ride-go/
 │   │   │   └── SettingsScreen.js
 │   │   ├── rides/                # Ride booking, search, live tracking, receipts
 │   │   │   ├── DestinationResultsScreen.js
-│   │   │   ├── DestinationSearchScreen.js
-│   │   │   ├── DriverFoundScreen.js
+│   │   │   ├── DestinationSearchScreen.tsx # Stacked pill inputs & Cape Town suggestions
+│   │   │   ├── DriverFoundScreen.tsx     # ETA banner, top-down 3D vehicle card, chat CTA
 │   │   │   ├── RideHistoryScreen.js
-│   │   │   ├── RideInProgressScreen.js
+│   │   │   ├── RideInProgressScreen.tsx  # Live route ticker & emergency trigger
 │   │   │   ├── RideOptionsScreen.js
 │   │   │   ├── RideSearchingScreen.js
-│   │   │   ├── TripCompletedScreen.js
+│   │   │   ├── TripCompletedScreen.tsx   # 5-star rating, Rand tip chips (R10, R20, R50)
 │   │   │   ├── TripDetailsScreen.js
 │   │   │   └── TripReceiptScreen.js
 │   │   └── index.ts              # Screen registry re-export
