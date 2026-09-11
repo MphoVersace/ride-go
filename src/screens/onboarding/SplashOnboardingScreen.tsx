@@ -6,36 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
+import { RootStackScreenProps } from "../../navigation/types";
+import { colors } from "../../constants/colors";
 
-import SavedPlacesScreen from "./screens/SavedPlacesScreen";
-import PaymentMethodsScreen from "./screens/PaymentMethodsScreen";
-import NotificationsScreen from "./screens/NotificationsScreen";
-import SafetyCentreScreen from "./screens/SafetyCentreScreen";
-import HelpSupportScreen from "./screens/HelpSupportScreen";
-import SettingsScreen from "./screens/SettingsScreen";
-import TripDetailsScreen from "./screens/TripDetailsScreen";
-import RideHistoryScreen from "./screens/RideHistoryScreen";
-import AccountScreen from "./screens/AccountScreen";
-import AccountTypeScreen from "./screens/AccountTypeScreen";
-import RiderRegistrationScreen from "./screens/RiderRegistrationScreen";
-import RiderHomeScreen from "./screens/RiderHomeScreen";
-import RiderProfileScreen from "./screens/RiderProfileScreen";
-import EditProfileScreen from "./screens/EditProfileScreen";
-import DestinationSearchScreen from "./screens/DestinationSearchScreen";
-import DestinationResultsScreen from "./screens/DestinationResultsScreen";
-import RideOptionsScreen from "./screens/RideOptionsScreen";
-import RideSearchingScreen from "./screens/RideSearchingScreen";
-import DriverFoundScreen from "./screens/DriverFoundScreen";
-import RideInProgressScreen from "./screens/RideInProgressScreen";
-import TripCompletedScreen from "./screens/TripCompletedScreen";
-import TripReceiptScreen from "./screens/TripReceiptScreen";
-
-const Stack = createNativeStackNavigator();
-
-function SplashOnboardingScreen({ navigation }) {
+export default function SplashOnboardingScreen({
+  navigation,
+}: RootStackScreenProps<"SplashOnboarding">) {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   const rotation = useRef(new Animated.Value(0)).current;
@@ -156,81 +133,10 @@ function SplashOnboardingScreen({ navigation }) {
   );
 }
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="SplashOnboarding"
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen
-          name="SplashOnboarding"
-          component={SplashOnboardingScreen}
-        />
-
-        <Stack.Screen name="Account" component={AccountScreen} />
-
-        <Stack.Screen name="AccountType" component={AccountTypeScreen} />
-
-        <Stack.Screen
-          name="RiderRegistration"
-          component={RiderRegistrationScreen}
-        />
-
-        <Stack.Screen name="RiderHome" component={RiderHomeScreen} />
-
-        <Stack.Screen name="RiderProfile" component={RiderProfileScreen} />
-
-        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-
-        <Stack.Screen name="RideHistory" component={RideHistoryScreen} />
-
-        <Stack.Screen name="TripDetails" component={TripDetailsScreen} />
-
-        <Stack.Screen name="SavedPlaces" component={SavedPlacesScreen} />
-
-        <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} />
-
-        <Stack.Screen name="Notifications" component={NotificationsScreen} />
-
-        <Stack.Screen name="SafetyCentre" component={SafetyCentreScreen} />
-
-        <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
-
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-
-        <Stack.Screen
-          name="DestinationSearch"
-          component={DestinationSearchScreen}
-        />
-
-        <Stack.Screen
-          name="DestinationResults"
-          component={DestinationResultsScreen}
-        />
-
-        <Stack.Screen name="RideOptions" component={RideOptionsScreen} />
-
-        <Stack.Screen name="RideSearching" component={RideSearchingScreen} />
-
-        <Stack.Screen name="DriverFound" component={DriverFoundScreen} />
-
-        <Stack.Screen name="RideInProgress" component={RideInProgressScreen} />
-
-        <Stack.Screen name="TripCompleted" component={TripCompletedScreen} />
-
-        <Stack.Screen name="TripReceipt" component={TripReceiptScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.background.primary,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 30,
@@ -239,7 +145,7 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 48,
     fontWeight: "bold",
-    color: "#5BC0FF",
+    color: colors.accent.primary,
     marginBottom: 35,
   },
 
@@ -248,7 +154,7 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 110,
     borderWidth: 28,
-    borderColor: "#1D3557",
+    borderColor: colors.surface.border,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -272,7 +178,7 @@ const styles = StyleSheet.create({
   carBody: {
     width: 42,
     height: 20,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.accent.primary,
     borderRadius: 6,
     position: "relative",
   },
@@ -281,7 +187,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 20,
     height: 8,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.background.primary,
     borderRadius: 3,
     top: 3,
     left: 11,
@@ -311,12 +217,12 @@ const styles = StyleSheet.create({
     width: 164,
     height: 164,
     borderRadius: 82,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.background.primary,
   },
 
   tagline: {
     fontSize: 18,
-    color: "#FFFFFF",
+    color: colors.text.primary,
     marginTop: 35,
   },
 
@@ -325,7 +231,7 @@ const styles = StyleSheet.create({
     top: 70,
     fontSize: 30,
     fontWeight: "bold",
-    color: "#5BC0FF",
+    color: colors.accent.primary,
   },
 
   visualContainer: {
@@ -336,7 +242,7 @@ const styles = StyleSheet.create({
     width: 230,
     height: 230,
     borderRadius: 115,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.surface.card,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -345,7 +251,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 75,
     height: 85,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.accent.primary,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 20,
@@ -357,7 +263,7 @@ const styles = StyleSheet.create({
     height: 13,
     borderLeftWidth: 4,
     borderBottomWidth: 4,
-    borderColor: "#071A3D",
+    borderColor: colors.background.primary,
     transform: [{ rotate: "-45deg" }],
     marginTop: -5,
   },
@@ -374,7 +280,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.text.primary,
     textAlign: "center",
     marginBottom: 12,
   },
@@ -382,7 +288,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 17,
     lineHeight: 25,
-    color: "#C9D6E8",
+    color: colors.text.secondary,
     textAlign: "center",
     maxWidth: 320,
   },
@@ -397,7 +303,7 @@ const styles = StyleSheet.create({
   getStartedButton: {
     width: "100%",
     height: 55,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.accent.primary,
     borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
@@ -407,11 +313,11 @@ const styles = StyleSheet.create({
   getStartedText: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#071A3D",
+    color: colors.accent.contrast,
   },
 
   skipText: {
     fontSize: 16,
-    color: "#C9D6E8",
+    color: colors.text.secondary,
   },
 });
