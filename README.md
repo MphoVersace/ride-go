@@ -76,10 +76,11 @@ ride-go/
 │   │   └── .gitkeep
 │   ├── components/
 │   │   ├── common/               # Reusable UI primitives
-│   │   │   ├── DarkRouteMap.tsx  # Vector dark map with glowing cyan route polyline
+│   │   │   ├── BottomTabBar.tsx  # Floating 4-tab navigation bar (Home, Trips, Wallet, Profile)
+│   │   │   ├── DarkRouteMap.tsx  # Vector dark map with interpolated vehicle motion along path & ETA bubble
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
 │   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
-│   │   │   ├── VehicleSvgs.tsx   # Top-down & side vector vehicle SVGs
+│   │   │   ├── VehicleSvgs.tsx   # Top-down & side vector vehicle SVGs (Sedan, Bike, Bakkie, Truck)
 │   │   │   └── .gitkeep
 │   ├── constants/
 │   │   ├── colors.ts             # 60-30-10 color palette tokens
@@ -145,13 +146,13 @@ ride-go/
 | **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
-| **Home** | `RiderHome` | Main dashboard with map view, current location, quick actions |
+| **Home** | `RiderHome` | Dual mode (Rides & Parcel Delivery), moving hero promo, map, and floating bottom tab bar |
 | **Rides** | `DestinationSearch` | Destination query input and suggested places |
 | **Rides** | `DestinationResults` | Geocoded destination results and pin selection |
-| **Rides** | `RideOptions` | Ride tier selection (Standard, Comfort, XL) with fare quotes |
+| **Rides** | `RideOptions` | Ride tier selection (Standard, Comfort, Luxury) with fare quotes |
 | **Rides** | `RideSearching` | Dynamic radar/searching state locating nearby drivers |
 | **Rides** | `DriverFound` | Matched driver info, vehicle details, ETA, plate number |
-| **Rides** | `RideInProgress` | Live route tracking, turn-by-turn simulation, SOS trigger |
+| **Rides** | `RideInProgress` | Real-time animated vector map tracking, countdown bubble, route scrubber, distance ticker |
 | **Rides** | `TripCompleted` | Destination reached summary and star rating submission |
 | **Rides** | `TripReceipt` | Itemized invoice breakdown, payment verification |
 | **Rides** | `RideHistory` | List of past trips with dates, routes, and amounts |

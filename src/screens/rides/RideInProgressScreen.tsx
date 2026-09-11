@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,6 +17,8 @@ import {
   PhoneIcon,
   ShieldCheckIcon,
   PinIcon,
+  TargetIcon,
+  StarIcon,
   ArrowRightIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
@@ -25,14 +28,31 @@ import { useRide } from "../../services/RideContext";
 export default function RideInProgressScreen({
   navigation,
 }: RootStackScreenProps<"RideInProgress">) {
-  const { pickup, destination, driver } = useRide();
-  const [etaMinutes, setEtaMinutes] = useState(8);
+  const { pickup, destination, driver, tier, tierFares } = useRide();
+
+  // Progress simulation (0.0 to 1.0)
+  const [progress, setProgress] = useState(0.2);
+  const [etaMinutes, setEtaMinutes] = useState(12);
+  const [distanceKm, setDistanceKm] = useState(3.2);
   const [chatVisible, setChatVisible] = useState(false);
 
+  const baseFare = tierFares[tier];
+  const tierName = tier.charAt(0).toUpperCase() + tier.slice(1);
+
+  // Live timer counting down ETA and advancing the moving vehicle along the route
   useEffect(() => {
     const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 0.95) {
+          return 0.95;
+        }
+        return prev + 0.08;
+      });
+
       setEtaMinutes((prev) => (prev > 1 ? prev - 1 : 1));
-    }, 10000);
+      setDistanceKm((prev) => (prev > 0.3 ? Number((prev - 0.3).toFixed(1)) : 0.1));
+    }, 4000);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -40,7 +60,7 @@ export default function RideInProgressScreen({
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
 
-      {/* Top Header */}
+      {/* Top App Bar */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -50,9 +70,9 @@ export default function RideInProgressScreen({
           <ArrowLeftIcon size={20} color={colors.text.primary} />
         </TouchableOpacity>
 
-        <View style={styles.statusPill}>
-          <View style={styles.pulsingDot} />
-          <Text style={styles.statusText}>On Route</Text>
+        <View style={styles.headerTitleWrap}>
+          <Text style={styles.headerTitle}>Live Trip Tracking</Text>
+          <Text style={styles.headerSubtitle}>Booking #RG-908124</Text>
         </View>
 
         <TouchableOpacity
@@ -64,56 +84,58 @@ export default function RideInProgressScreen({
         </TouchableOpacity>
       </View>
 
-      {/* Main Vector Dark Map View */}
-      <View style={styles.mapWrap}>
-        <DarkRouteMap height={280} showRoute={true} driverEta={`${etaMinutes} min`} />
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Realtime Moving Vector Map with Destination Callout */}
+        <View style={styles.mapWrap}>
+          <DarkRouteMap
+            height={260}
+            showRoute={true}
+            driverEta={`${etaMinutes} min`}
+            progress={progress}
+          />
+        </View>
 
-      {/* Active Trip Dashboard Sheet */}
-      <View style={styles.tripSheet}>
-        {/* Navigation Instruction Pill */}
-        <View style={styles.navTicker}>
-          <View style={styles.navTurnIcon}>
-            <Text style={styles.navTurnArrow}>↰</Text>
+        {/* Live Status Bar matching video reference */}
+        <View style={styles.liveStatusRow}>
+          <View style={styles.statusIndicatorPill}>
+            <View style={styles.pulsingDot} />
+            <Text style={styles.statusText}>
+              In transit • arriving in {etaMinutes} min
+            </Text>
           </View>
-          <View style={styles.navTickerTextWrap}>
-            <Text style={styles.navTurnDistance}>In 250m</Text>
-            <Text style={styles.navTurnStreet}>Turn left onto Strand Street</Text>
+          <View style={styles.distanceBadge}>
+            <Text style={styles.distanceBadgeText}>{distanceKm} km left</Text>
           </View>
         </View>
 
-        {/* Route Details */}
-        <View style={styles.routePoints}>
-          <View style={styles.routeItem}>
-            <PinIcon size={16} color={colors.accent.primary} />
-            <Text style={styles.routeText} numberOfLines={1}>
-              {pickup.title}
-            </Text>
-          </View>
-          <View style={styles.routeDivider} />
-          <View style={styles.routeItem}>
-            <PinIcon size={16} color={colors.text.secondary} />
-            <Text style={styles.routeText} numberOfLines={1}>
-              {destination.title}
-            </Text>
-          </View>
-        </View>
-
-        {/* Driver Quick Bar */}
-        <View style={styles.driverBar}>
+        {/* Driver Header Card with Call/Chat Triggers */}
+        <View style={styles.driverCard}>
           <View style={styles.driverAvatar}>
             <Text style={styles.driverAvatarText}>{driver.avatar}</Text>
           </View>
+
           <View style={styles.driverInfo}>
             <Text style={styles.driverName}>{driver.name}</Text>
-            <Text style={styles.carPlate}>{driver.carModel} • {driver.licensePlate}</Text>
+            <View style={styles.driverRatingRow}>
+              <StarIcon size={14} color={colors.accent.primary} filled />
+              <Text style={styles.driverRatingText}>
+                {driver.rating} • {driver.carModel}
+              </Text>
+            </View>
+            <Text style={styles.plateNumber}>{driver.licensePlate}</Text>
           </View>
-          <View style={styles.actionRow}>
-            <TouchableOpacity style={styles.circleAction}>
+
+          <View style={styles.actionButtonsRow}>
+            <TouchableOpacity style={styles.actionCircle} activeOpacity={0.8}>
               <PhoneIcon size={18} color={colors.text.primary} />
             </TouchableOpacity>
+
             <TouchableOpacity
-              style={styles.circleAction}
+              style={[styles.actionCircle, styles.chatCircleActive]}
+              activeOpacity={0.8}
               onPress={() => setChatVisible(true)}
             >
               <ChatBubbleIcon size={18} color={colors.accent.primary} />
@@ -121,16 +143,71 @@ export default function RideInProgressScreen({
           </View>
         </View>
 
-        {/* Complete Trip Simulation Button */}
+        {/* Route Scrubber Timeline Card matching video reference */}
+        <View style={styles.timelineCard}>
+          <View style={styles.timelineHeader}>
+            <Text style={styles.bookingNumber}>TRIP DETAILS ({tierName.toUpperCase()})</Text>
+            <Text style={styles.fareAmount}>R{baseFare}.00</Text>
+          </View>
+
+          {/* Animated Timeline Scrubber */}
+          <View style={styles.scrubberContainer}>
+            <View style={styles.scrubberTrack}>
+              <View
+                style={[
+                  styles.scrubberProgress,
+                  { width: `${Math.min(100, Math.max(8, progress * 100))}%` },
+                ]}
+              />
+            </View>
+            <View
+              style={[
+                styles.scrubberThumb,
+                { left: `${Math.min(94, Math.max(4, progress * 100))}%` },
+              ]}
+            >
+              <View style={styles.scrubberThumbDot} />
+            </View>
+          </View>
+
+          {/* Origin & Destination Labels */}
+          <View style={styles.routeLocationsRow}>
+            <View style={styles.locationItem}>
+              <View style={styles.originIndicator}>
+                <PinIcon size={14} color={colors.accent.primary} />
+              </View>
+              <View style={styles.locationTextWrap}>
+                <Text style={styles.locationLabel}>PICKUP</Text>
+                <Text style={styles.locationName} numberOfLines={1}>
+                  {pickup.title}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.locationItem}>
+              <View style={styles.destIndicator}>
+                <TargetIcon size={14} color={colors.accent.secondary} />
+              </View>
+              <View style={styles.locationTextWrap}>
+                <Text style={styles.locationLabel}>DESTINATION</Text>
+                <Text style={styles.locationName} numberOfLines={1}>
+                  {destination.title}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Complete Trip CTA */}
         <TouchableOpacity
           style={styles.arriveButton}
           activeOpacity={0.85}
           onPress={() => navigation.replace("TripCompleted")}
         >
           <Text style={styles.arriveButtonText}>Arrived at Destination</Text>
-          <ArrowRightIcon size={20} color={colors.accent.contrast} />
+          <ArrowRightIcon size={18} color={colors.accent.contrast} />
         </TouchableOpacity>
-      </View>
+      </ScrollView>
 
       {/* Driver Chat Modal */}
       <DriverChatModal
@@ -147,31 +224,67 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background.primary,
   },
   header: {
+    height: 56,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.surface.card,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.surface.border,
   },
-  statusPill: {
+  headerTitleWrap: {
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: colors.text.primary,
+  },
+  headerSubtitle: {
+    fontSize: 11,
+    color: colors.text.muted,
+    marginTop: 1,
+  },
+  safetyButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.surface.card,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.xxl,
+  },
+  mapWrap: {
+    marginVertical: spacing.sm,
+  },
+  liveStatusRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: spacing.xs,
+  },
+  statusIndicatorPill: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.surface.card,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 6,
     borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderWidth: 1,
-    borderColor: colors.accent.primary,
+    borderColor: colors.surface.border,
     gap: 8,
   },
   pulsingDot: {
@@ -181,147 +294,197 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent.primary,
   },
   statusText: {
-    color: colors.accent.primary,
-    fontWeight: "bold",
-    fontSize: 13,
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.text.primary,
   },
-  safetyButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surface.card,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
-    alignItems: "center",
-    justifyContent: "center",
+  distanceBadge: {
+    backgroundColor: colors.surface.cardAlt,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
   },
-  mapWrap: {
-    flex: 1,
-    paddingHorizontal: spacing.md,
-  },
-  tripSheet: {
-    backgroundColor: colors.surface.card,
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    padding: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
-    gap: spacing.sm,
-  },
-  navTicker: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.surface.elevated,
-    borderRadius: 20,
-    padding: spacing.sm,
-    gap: spacing.sm,
-  },
-  navTurnIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.accent.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  navTurnArrow: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: colors.accent.contrast,
-  },
-  navTickerTextWrap: {
-    flex: 1,
-  },
-  navTurnDistance: {
-    color: colors.accent.primary,
+  distanceBadgeText: {
     fontSize: 12,
     fontWeight: "bold",
+    color: colors.accent.primary,
   },
-  navTurnStreet: {
-    color: colors.text.primary,
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  routePoints: {
-    backgroundColor: colors.surface.subtle,
-    borderRadius: 18,
-    padding: spacing.sm,
-  },
-  routeItem: {
+  driverCard: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xs,
-  },
-  routeDivider: {
-    height: 12,
-    width: 1,
-    backgroundColor: colors.surface.border,
-    marginLeft: 7,
-    marginVertical: 2,
-  },
-  routeText: {
-    fontSize: 13,
-    color: colors.text.primary,
-    fontWeight: "500",
-  },
-  driverBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.surface.elevated,
-    borderRadius: 20,
-    padding: spacing.sm,
+    backgroundColor: colors.surface.card,
+    borderRadius: 22,
+    padding: spacing.md,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
+    marginVertical: spacing.xs,
+    gap: spacing.sm,
   },
   driverAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surface.subtle,
-    borderWidth: 1,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: colors.surface.cardAlt,
+    borderWidth: 2,
     borderColor: colors.accent.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: spacing.sm,
   },
   driverAvatarText: {
-    color: colors.accent.primary,
+    fontSize: 18,
     fontWeight: "bold",
-    fontSize: 14,
+    color: colors.accent.primary,
   },
   driverInfo: {
     flex: 1,
   },
   driverName: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
     color: colors.text.primary,
   },
-  carPlate: {
-    fontSize: 12,
-    color: colors.text.muted,
+  driverRatingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: 2,
   },
-  actionRow: {
+  driverRatingText: {
+    fontSize: 12,
+    color: colors.text.secondary,
+  },
+  plateNumber: {
+    fontSize: 11,
+    color: colors.text.muted,
+    fontWeight: "600",
+    marginTop: 2,
+  },
+  actionButtonsRow: {
     flexDirection: "row",
     gap: 8,
   },
-  circleAction: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.surface.card,
+  actionCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: colors.surface.cardAlt,
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
     borderColor: colors.surface.border,
+  },
+  chatCircleActive: {
+    borderColor: colors.accent.primary,
+  },
+  timelineCard: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 22,
+    padding: spacing.md,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
+    marginVertical: spacing.xs,
+  },
+  timelineHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: spacing.md,
+  },
+  bookingNumber: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: colors.text.muted,
+    letterSpacing: 0.5,
+  },
+  fareAmount: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: colors.accent.primary,
+  },
+  scrubberContainer: {
+    height: 20,
+    justifyContent: "center",
+    position: "relative",
+    marginBottom: spacing.md,
+  },
+  scrubberTrack: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.surface.cardAlt,
+    overflow: "hidden",
+  },
+  scrubberProgress: {
+    height: "100%",
+    backgroundColor: colors.accent.primary,
+  },
+  scrubberThumb: {
+    position: "absolute",
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: colors.accent.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: -9,
+    borderWidth: 2,
+    borderColor: colors.surface.card,
+  },
+  scrubberThumbDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.background.primary,
+  },
+  routeLocationsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: spacing.sm,
+  },
+  locationItem: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  originIndicator: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.surface.cardAlt,
     alignItems: "center",
     justifyContent: "center",
   },
+  destIndicator: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.surface.cardAlt,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  locationTextWrap: {
+    flex: 1,
+  },
+  locationLabel: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: colors.text.muted,
+  },
+  locationName: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: colors.text.primary,
+    marginTop: 1,
+  },
   arriveButton: {
-    backgroundColor: colors.accent.primary,
-    height: 52,
-    borderRadius: 26,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.sm,
-    marginTop: spacing.xs,
+    backgroundColor: colors.accent.primary,
+    height: 54,
+    borderRadius: 27,
+    marginTop: spacing.sm,
+    gap: 8,
   },
   arriveButtonText: {
     fontSize: 16,

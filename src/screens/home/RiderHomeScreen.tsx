@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,8 +22,48 @@ import {
   ArrowRightIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
-import { VehicleSideSvg } from "../../components/common/VehicleSvgs";
+import {
+  VehicleSideSvg,
+  CourierBikeSvg,
+  DeliveryBakkieSvg,
+  MovingTruckSvg,
+} from "../../components/common/VehicleSvgs";
+import BottomTabBar, { TabKey } from "../../components/common/BottomTabBar";
 import { useRide } from "../../services/RideContext";
+
+type ParcelTierKey = "courier" | "bakkie" | "truck";
+
+interface ParcelTierInfo {
+  key: ParcelTierKey;
+  title: string;
+  eta: string;
+  price: number;
+  capacity: string;
+}
+
+const PARCEL_TIERS: ParcelTierInfo[] = [
+  {
+    key: "courier",
+    title: "Courier Bike",
+    eta: "15 min",
+    price: 35,
+    capacity: "10 kg max",
+  },
+  {
+    key: "bakkie",
+    title: "Delivery Bakkie",
+    eta: "25 min",
+    price: 85,
+    capacity: "500 kg max",
+  },
+  {
+    key: "truck",
+    title: "Moving Truck",
+    eta: "45 min",
+    price: 195,
+    capacity: "2.5 Ton max",
+  },
+];
 
 export default function RiderHomeScreen({
   navigation,
@@ -38,9 +77,36 @@ export default function RiderHomeScreen({
     startSearch,
     userProfile,
   } = useRide();
+
   const [selectedService, setSelectedService] = useState<"driver" | "package">(
     "driver"
   );
+  const [selectedParcelTier, setSelectedParcelTier] =
+    useState<ParcelTierKey>("courier");
+
+  const currentParcel =
+    PARCEL_TIERS.find((p) => p.key === selectedParcelTier) || PARCEL_TIERS[0];
+
+  const handleTabPress = (tab: TabKey) => {
+    if (tab === "trips") {
+      navigation.navigate("RideHistory");
+    } else if (tab === "wallet") {
+      navigation.navigate("PaymentMethods");
+    } else if (tab === "profile") {
+      navigation.navigate("RiderProfile");
+    }
+  };
+
+  const handleConfirmAction = () => {
+    startSearch();
+    if (selectedService === "driver") {
+      navigation.navigate("RideSearching");
+    } else {
+      navigation.navigate("RideSearching", {
+        rideType: currentParcel.title,
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -74,27 +140,54 @@ export default function RiderHomeScreen({
         contentContainerStyle={styles.scrollContent}
       >
         {/* Title Headline */}
-        <Text style={styles.title}>Where do you{"\n"}want to go?</Text>
+        <Text style={styles.title}>
+          {selectedService === "driver"
+            ? "Where do you\nwant to go?"
+            : "Send & Deliver\nany package"}
+        </Text>
 
         {/* Favorite Driver / Top Match Chip */}
-        <TouchableOpacity
-          style={styles.driverHighlightChip}
-          activeOpacity={0.85}
-          onPress={() => navigation.navigate("DriverFound")}
-        >
-          <View style={styles.highlightAvatar}>
-            <Text style={styles.highlightAvatarText}>UB</Text>
-          </View>
-          <View style={styles.highlightInfo}>
-            <Text style={styles.highlightName}>Ucok Behel</Text>
-            <Text style={styles.highlightVehicle}>Honda CR-V • AB6299ZG</Text>
-          </View>
-          <View style={styles.ratingStars}>
-            {[1, 2, 3, 4, 5].map((i) => (
-              <StarIcon key={i} size={14} color={colors.accent.primary} />
-            ))}
-          </View>
-        </TouchableOpacity>
+        {selectedService === "driver" ? (
+          <TouchableOpacity
+            style={styles.driverHighlightChip}
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate("DriverFound")}
+          >
+            <View style={styles.highlightAvatar}>
+              <Text style={styles.highlightAvatarText}>UB</Text>
+            </View>
+            <View style={styles.highlightInfo}>
+              <Text style={styles.highlightName}>Ucok Behel</Text>
+              <Text style={styles.highlightVehicle}>Honda CR-V • AB6299ZG</Text>
+            </View>
+            <View style={styles.ratingStars}>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <StarIcon key={i} size={14} color={colors.accent.primary} />
+              ))}
+            </View>
+          </TouchableOpacity>
+        ) : (
+          /* Promo Hero Banner Card for Parcel / Moving Day */
+          <TouchableOpacity
+            style={styles.promoBannerCard}
+            activeOpacity={0.85}
+            onPress={() => setSelectedParcelTier("truck")}
+          >
+            <View style={styles.promoInfo}>
+              <Text style={styles.promoHeading}>Moving day made simple</Text>
+              <Text style={styles.promoSubtext}>
+                Book a heavy bakkie or truck with verified movers
+              </Text>
+              <View style={styles.promoActionRow}>
+                <Text style={styles.promoActionText}>Book Moving Truck</Text>
+                <ArrowRightIcon size={14} color={colors.accent.primary} />
+              </View>
+            </View>
+            <View style={styles.promoIllustration}>
+              <MovingTruckSvg width={72} height={36} color={colors.accent.primary} />
+            </View>
+          </TouchableOpacity>
+        )}
 
         {/* Stacked Location Pill Cards */}
         <View style={styles.locationCardGroup}>
@@ -106,7 +199,9 @@ export default function RiderHomeScreen({
             <View style={styles.pillIconWrap}>
               <PinIcon size={18} color={colors.accent.primary} />
             </View>
-            <Text style={styles.locationPillText}>{pickup.title}</Text>
+            <Text style={styles.locationPillText}>
+              {selectedService === "driver" ? pickup.title : `Pickup: ${pickup.title}`}
+            </Text>
           </TouchableOpacity>
 
           {/* Inline Flip/Swap Button */}
@@ -132,7 +227,13 @@ export default function RiderHomeScreen({
                   : styles.locationPlaceholderText
               }
             >
-              {destination.title || "Add your destination"}
+              {destination.title
+                ? selectedService === "driver"
+                  ? destination.title
+                  : `Drop-off: ${destination.title}`
+                : selectedService === "driver"
+                ? "Add your destination"
+                : "Add recipient address"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -194,184 +295,353 @@ export default function RiderHomeScreen({
 
         {/* Interactive Map Visual */}
         <View style={styles.mapSection}>
-          <DarkRouteMap height={160} showRoute={true} driverEta="3 min" />
+          <DarkRouteMap
+            height={160}
+            showRoute={true}
+            driverEta={selectedService === "driver" ? "3 min" : currentParcel.eta}
+          />
         </View>
 
-        {/* Ride Tier Cards (Standard, Comfort, Luxury) in Rands */}
-        <View style={styles.tierSection}>
-          <Text style={styles.sectionHeader}>Available Rides</Text>
+        {/* Service Options: Driver Rides OR Parcel Fleet */}
+        {selectedService === "driver" ? (
+          /* Ride Tier Cards (Standard, Comfort, Luxury) in Rands */
+          <View style={styles.tierSection}>
+            <Text style={styles.sectionHeader}>Available Rides</Text>
 
-          <View style={styles.tierRow}>
-            {/* Standard Tier */}
-            <TouchableOpacity
-              style={[
-                styles.tierCard,
-                tier === "standard" && styles.tierCardActive,
-              ]}
-              activeOpacity={0.85}
-              onPress={() => selectTier("standard")}
-            >
-              <Text
+            <View style={styles.tierRow}>
+              {/* Standard Tier */}
+              <TouchableOpacity
                 style={[
-                  styles.tierTitle,
-                  tier === "standard" && styles.tierTitleActive,
+                  styles.tierCard,
+                  tier === "standard" && styles.tierCardActive,
                 ]}
+                activeOpacity={0.85}
+                onPress={() => selectTier("standard")}
               >
-                Standard
-              </Text>
-              <Text style={styles.tierEta}>3 min</Text>
+                <Text
+                  style={[
+                    styles.tierTitle,
+                    tier === "standard" && styles.tierTitleActive,
+                  ]}
+                >
+                  Standard
+                </Text>
+                <Text style={styles.tierEta}>3 min</Text>
 
-              <View style={styles.tierCarPreview}>
-                <VehicleSideSvg
-                  width={54}
-                  height={24}
-                  color={
-                    tier === "standard"
-                      ? colors.accent.primary
-                      : colors.text.muted
-                  }
-                />
-              </View>
-
-              <View style={styles.tierSpecs}>
-                <SeatIcon size={14} color={colors.text.secondary} />
-                <Text style={styles.tierSeatCount}>4</Text>
-              </View>
-
-              <View style={styles.tierBottomRow}>
-                <View style={styles.tierIconBadge}>
-                  <SteeringWheelIcon
-                    size={16}
+                <View style={styles.tierCarPreview}>
+                  <VehicleSideSvg
+                    width={54}
+                    height={24}
                     color={
                       tier === "standard"
-                        ? colors.accent.contrast
-                        : colors.accent.primary
+                        ? colors.accent.primary
+                        : colors.text.muted
                     }
                   />
                 </View>
-                <Text style={styles.tierPrice}>R{tierFares.standard}</Text>
-              </View>
-            </TouchableOpacity>
 
-            {/* Comfort Tier */}
-            <TouchableOpacity
-              style={[
-                styles.tierCard,
-                tier === "comfort" && styles.tierCardActive,
-              ]}
-              activeOpacity={0.85}
-              onPress={() => selectTier("comfort")}
-            >
-              <Text
+                <View style={styles.tierSpecs}>
+                  <SeatIcon size={14} color={colors.text.secondary} />
+                  <Text style={styles.tierSeatCount}>4</Text>
+                </View>
+
+                <View style={styles.tierBottomRow}>
+                  <View style={styles.tierIconBadge}>
+                    <SteeringWheelIcon
+                      size={16}
+                      color={
+                        tier === "standard"
+                          ? colors.accent.contrast
+                          : colors.accent.primary
+                      }
+                    />
+                  </View>
+                  <Text style={styles.tierPrice}>R{tierFares.standard}</Text>
+                </View>
+              </TouchableOpacity>
+
+              {/* Comfort Tier */}
+              <TouchableOpacity
                 style={[
-                  styles.tierTitle,
-                  tier === "comfort" && styles.tierTitleActive,
+                  styles.tierCard,
+                  tier === "comfort" && styles.tierCardActive,
                 ]}
+                activeOpacity={0.85}
+                onPress={() => selectTier("comfort")}
               >
-                Comfort
-              </Text>
-              <Text style={styles.tierEta}>4 min</Text>
+                <Text
+                  style={[
+                    styles.tierTitle,
+                    tier === "comfort" && styles.tierTitleActive,
+                  ]}
+                >
+                  Comfort
+                </Text>
+                <Text style={styles.tierEta}>4 min</Text>
 
-              <View style={styles.tierCarPreview}>
-                <VehicleSideSvg
-                  width={54}
-                  height={24}
-                  color={
-                    tier === "comfort"
-                      ? colors.accent.primary
-                      : colors.text.muted
-                  }
-                />
-              </View>
-
-              <View style={styles.tierSpecs}>
-                <SeatIcon size={14} color={colors.text.secondary} />
-                <Text style={styles.tierSeatCount}>4</Text>
-              </View>
-
-              <View style={styles.tierBottomRow}>
-                <View style={styles.tierIconBadge}>
-                  <SteeringWheelIcon
-                    size={16}
+                <View style={styles.tierCarPreview}>
+                  <VehicleSideSvg
+                    width={54}
+                    height={24}
                     color={
                       tier === "comfort"
-                        ? colors.accent.contrast
-                        : colors.accent.primary
+                        ? colors.accent.primary
+                        : colors.text.muted
                     }
                   />
                 </View>
-                <Text style={styles.tierPrice}>R{tierFares.comfort}</Text>
-              </View>
-            </TouchableOpacity>
 
-            {/* Luxury Tier */}
-            <TouchableOpacity
-              style={[
-                styles.tierCard,
-                tier === "luxury" && styles.tierCardActive,
-              ]}
-              activeOpacity={0.85}
-              onPress={() => selectTier("luxury")}
-            >
-              <Text
+                <View style={styles.tierSpecs}>
+                  <SeatIcon size={14} color={colors.text.secondary} />
+                  <Text style={styles.tierSeatCount}>4</Text>
+                </View>
+
+                <View style={styles.tierBottomRow}>
+                  <View style={styles.tierIconBadge}>
+                    <SteeringWheelIcon
+                      size={16}
+                      color={
+                        tier === "comfort"
+                          ? colors.accent.contrast
+                          : colors.accent.primary
+                      }
+                    />
+                  </View>
+                  <Text style={styles.tierPrice}>R{tierFares.comfort}</Text>
+                </View>
+              </TouchableOpacity>
+
+              {/* Luxury Tier */}
+              <TouchableOpacity
                 style={[
-                  styles.tierTitle,
-                  tier === "luxury" && styles.tierTitleActive,
+                  styles.tierCard,
+                  tier === "luxury" && styles.tierCardActive,
                 ]}
+                activeOpacity={0.85}
+                onPress={() => selectTier("luxury")}
               >
-                Luxury
-              </Text>
-              <Text style={styles.tierEta}>6 min</Text>
+                <Text
+                  style={[
+                    styles.tierTitle,
+                    tier === "luxury" && styles.tierTitleActive,
+                  ]}
+                >
+                  Luxury
+                </Text>
+                <Text style={styles.tierEta}>6 min</Text>
 
-              <View style={styles.tierCarPreview}>
-                <VehicleSideSvg
-                  width={54}
-                  height={24}
-                  color={
-                    tier === "luxury"
-                      ? colors.accent.primary
-                      : colors.text.muted
-                  }
-                />
-              </View>
-
-              <View style={styles.tierSpecs}>
-                <SeatIcon size={14} color={colors.text.secondary} />
-                <Text style={styles.tierSeatCount}>4</Text>
-              </View>
-
-              <View style={styles.tierBottomRow}>
-                <View style={styles.tierIconBadge}>
-                  <SteeringWheelIcon
-                    size={16}
+                <View style={styles.tierCarPreview}>
+                  <VehicleSideSvg
+                    width={54}
+                    height={24}
                     color={
                       tier === "luxury"
-                        ? colors.accent.contrast
-                        : colors.accent.primary
+                        ? colors.accent.primary
+                        : colors.text.muted
                     }
                   />
                 </View>
-                <Text style={styles.tierPrice}>R{tierFares.luxury}</Text>
-              </View>
-            </TouchableOpacity>
+
+                <View style={styles.tierSpecs}>
+                  <SeatIcon size={14} color={colors.text.secondary} />
+                  <Text style={styles.tierSeatCount}>4</Text>
+                </View>
+
+                <View style={styles.tierBottomRow}>
+                  <View style={styles.tierIconBadge}>
+                    <SteeringWheelIcon
+                      size={16}
+                      color={
+                        tier === "luxury"
+                          ? colors.accent.contrast
+                          : colors.accent.primary
+                      }
+                    />
+                  </View>
+                  <Text style={styles.tierPrice}>R{tierFares.luxury}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        ) : (
+          /* Parcel Delivery Tier Options (Courier, Bakkie, Moving Truck) */
+          <View style={styles.tierSection}>
+            <Text style={styles.sectionHeader}>Available Delivery Fleet</Text>
+
+            <View style={styles.tierRow}>
+              {/* Courier Bike */}
+              <TouchableOpacity
+                style={[
+                  styles.tierCard,
+                  selectedParcelTier === "courier" && styles.tierCardActive,
+                ]}
+                activeOpacity={0.85}
+                onPress={() => setSelectedParcelTier("courier")}
+              >
+                <Text
+                  style={[
+                    styles.tierTitle,
+                    selectedParcelTier === "courier" && styles.tierTitleActive,
+                  ]}
+                >
+                  Courier
+                </Text>
+                <Text style={styles.tierEta}>15 min</Text>
+
+                <View style={styles.tierCarPreview}>
+                  <CourierBikeSvg
+                    width={50}
+                    height={24}
+                    color={
+                      selectedParcelTier === "courier"
+                        ? colors.accent.primary
+                        : colors.text.muted
+                    }
+                  />
+                </View>
+
+                <View style={styles.tierSpecs}>
+                  <PackageIcon size={13} color={colors.text.secondary} />
+                  <Text style={styles.tierSeatCount}>10 kg</Text>
+                </View>
+
+                <View style={styles.tierBottomRow}>
+                  <View style={styles.tierIconBadge}>
+                    <PackageIcon
+                      size={14}
+                      color={
+                        selectedParcelTier === "courier"
+                          ? colors.accent.contrast
+                          : colors.accent.primary
+                      }
+                    />
+                  </View>
+                  <Text style={styles.tierPrice}>R35</Text>
+                </View>
+              </TouchableOpacity>
+
+              {/* Delivery Bakkie */}
+              <TouchableOpacity
+                style={[
+                  styles.tierCard,
+                  selectedParcelTier === "bakkie" && styles.tierCardActive,
+                ]}
+                activeOpacity={0.85}
+                onPress={() => setSelectedParcelTier("bakkie")}
+              >
+                <Text
+                  style={[
+                    styles.tierTitle,
+                    selectedParcelTier === "bakkie" && styles.tierTitleActive,
+                  ]}
+                >
+                  Bakkie
+                </Text>
+                <Text style={styles.tierEta}>25 min</Text>
+
+                <View style={styles.tierCarPreview}>
+                  <DeliveryBakkieSvg
+                    width={54}
+                    height={24}
+                    color={
+                      selectedParcelTier === "bakkie"
+                        ? colors.accent.primary
+                        : colors.text.muted
+                    }
+                  />
+                </View>
+
+                <View style={styles.tierSpecs}>
+                  <PackageIcon size={13} color={colors.text.secondary} />
+                  <Text style={styles.tierSeatCount}>500 kg</Text>
+                </View>
+
+                <View style={styles.tierBottomRow}>
+                  <View style={styles.tierIconBadge}>
+                    <PackageIcon
+                      size={14}
+                      color={
+                        selectedParcelTier === "bakkie"
+                          ? colors.accent.contrast
+                          : colors.accent.primary
+                      }
+                    />
+                  </View>
+                  <Text style={styles.tierPrice}>R85</Text>
+                </View>
+              </TouchableOpacity>
+
+              {/* Moving Truck */}
+              <TouchableOpacity
+                style={[
+                  styles.tierCard,
+                  selectedParcelTier === "truck" && styles.tierCardActive,
+                ]}
+                activeOpacity={0.85}
+                onPress={() => setSelectedParcelTier("truck")}
+              >
+                <Text
+                  style={[
+                    styles.tierTitle,
+                    selectedParcelTier === "truck" && styles.tierTitleActive,
+                  ]}
+                >
+                  Truck
+                </Text>
+                <Text style={styles.tierEta}>45 min</Text>
+
+                <View style={styles.tierCarPreview}>
+                  <MovingTruckSvg
+                    width={54}
+                    height={24}
+                    color={
+                      selectedParcelTier === "truck"
+                        ? colors.accent.primary
+                        : colors.text.muted
+                    }
+                  />
+                </View>
+
+                <View style={styles.tierSpecs}>
+                  <PackageIcon size={13} color={colors.text.secondary} />
+                  <Text style={styles.tierSeatCount}>2.5 Ton</Text>
+                </View>
+
+                <View style={styles.tierBottomRow}>
+                  <View style={styles.tierIconBadge}>
+                    <PackageIcon
+                      size={14}
+                      color={
+                        selectedParcelTier === "truck"
+                          ? colors.accent.contrast
+                          : colors.accent.primary
+                      }
+                    />
+                  </View>
+                  <Text style={styles.tierPrice}>R195</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
 
         {/* Primary Action Button */}
         <TouchableOpacity
           style={styles.requestRideButton}
           activeOpacity={0.85}
-          onPress={() => {
-            startSearch();
-            navigation.navigate("RideSearching");
-          }}
+          onPress={handleConfirmAction}
         >
           <Text style={styles.requestRideText}>
-            Confirm {tier.toUpperCase()} • R{tierFares[tier]}
+            {selectedService === "driver"
+              ? `Confirm ${tier.toUpperCase()} • R${tierFares[tier]}`
+              : `Confirm ${currentParcel.title} • R${currentParcel.price}`}
           </Text>
           <ArrowRightIcon size={20} color={colors.accent.contrast} />
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Floating Bottom Navigation Bar */}
+      <BottomTabBar activeTab="home" onSelectTab={handleTabPress} />
     </SafeAreaView>
   );
 }
@@ -423,14 +693,14 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: spacing.md,
-    paddingBottom: spacing.xl,
+    paddingBottom: 88,
   },
   title: {
-    fontSize: 34,
+    fontSize: 32,
     fontWeight: "bold",
     color: colors.text.primary,
-    lineHeight: 40,
-    marginTop: spacing.sm,
+    lineHeight: 38,
+    marginTop: spacing.xs,
     marginBottom: spacing.md,
   },
   driverHighlightChip: {
@@ -475,6 +745,53 @@ const styles = StyleSheet.create({
   ratingStars: {
     flexDirection: "row",
     gap: 3,
+  },
+  promoBannerCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: colors.surface.card,
+    borderRadius: 20,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+    marginBottom: spacing.md,
+  },
+  promoInfo: {
+    flex: 1,
+    paddingRight: spacing.sm,
+  },
+  promoHeading: {
+    color: colors.text.primary,
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  promoSubtext: {
+    color: colors.text.secondary,
+    fontSize: 12,
+    lineHeight: 16,
+    marginBottom: 8,
+  },
+  promoActionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  promoActionText: {
+    color: colors.accent.primary,
+    fontSize: 13,
+    fontWeight: "bold",
+  },
+  promoIllustration: {
+    width: 76,
+    height: 50,
+    backgroundColor: colors.surface.elevated,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.surface.border,
   },
   locationCardGroup: {
     position: "relative",
@@ -576,7 +893,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   tierTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "bold",
     color: colors.text.primary,
   },
@@ -584,7 +901,7 @@ const styles = StyleSheet.create({
     color: colors.accent.primary,
   },
   tierEta: {
-    fontSize: 12,
+    fontSize: 11,
     color: colors.text.muted,
     marginTop: 2,
     marginBottom: 4,
@@ -599,10 +916,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    marginBottom: 10,
+    marginBottom: 8,
   },
   tierSeatCount: {
-    fontSize: 12,
+    fontSize: 11,
     color: colors.text.secondary,
   },
   tierBottomRow: {
@@ -611,15 +928,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tierIconBadge: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     backgroundColor: colors.surface.subtle,
     alignItems: "center",
     justifyContent: "center",
   },
   tierPrice: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "bold",
     color: colors.text.primary,
   },
