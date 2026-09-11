@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Svg, { Path, Circle, Rect, Line, G } from "react-native-svg";
 import { colors } from "../../constants/colors";
+import { VehicleTopDownSvg } from "./VehicleSvgs";
 
 interface DarkRouteMapProps {
   height?: number;
@@ -72,16 +73,19 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
             <Circle cx="70" cy="180" r="10" fill={colors.background.primary} stroke={colors.accent.primary} strokeWidth="3" />
             <Circle cx="70" cy="180" r="4" fill={colors.accent.primary} />
 
-            {/* In-Transit Vehicle Position */}
-            <Circle cx="180" cy="80" r="14" fill={colors.surface.card} stroke={colors.accent.primary} strokeWidth="2" />
-            <Circle cx="180" cy="80" r="6" fill={colors.accent.primary} />
-
             {/* Destination Marker */}
             <Circle cx="280" cy="140" r="10" fill={colors.background.primary} stroke={colors.text.primary} strokeWidth="3" />
             <Circle cx="280" cy="140" r="4" fill={colors.text.primary} />
           </G>
         )}
       </Svg>
+
+      {/* Realtime Moving Vector Vehicle Marker (Top-down Prius) */}
+      {showRoute && (
+        <View style={styles.vehicleMarkerContainer}>
+          <VehicleTopDownSvg width={22} height={44} rotation={70} />
+        </View>
+      )}
 
       {/* Street Name Watermarks */}
       <Text style={styles.streetLabelLeft}>KINGS WAY</Text>
@@ -122,6 +126,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#1B3B68",
     letterSpacing: 1.5,
+  },
+  vehicleMarkerContainer: {
+    position: "absolute",
+    left: 170,
+    top: 60,
+    alignItems: "center",
+    justifyContent: "center",
   },
   etaPill: {
     position: "absolute",

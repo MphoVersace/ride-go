@@ -196,3 +196,12 @@ This repository is maintained collaboratively under strict workflow constraints:
 1. **Never push directly to `main`**: All commits are made on dedicated feature branches (`feature/<task-name>`).
 2. **Target Secondary Collaboration Branch (`dev`)**: Pull requests must target and merge into `dev`, never directly into `main`.
 3. **Issue Tracking**: Every unit of work opens and resolves 3 to 4 tracked GitHub issues.
+
+---
+
+## 8. Vehicle Graphics & Asset Attribution
+
+RideGo employs a **hybrid vehicle visualization pipeline**:
+- **Photorealistic 3D Renders**: Hero vehicle showcase cards in `assets/vehicles/` generated for inspection views and driver matching.
+- **Scalable Vector SVGs (`VehicleSvgs.tsx`)**: High-performance vector vehicle components (`VehicleTopDownSvg` and `VehicleSideSvg`) used for realtime route tracking on `DarkRouteMap` and ride tier selection cards.
+- **Attribution**: Vector vehicle blueprints derived and adapted from Vecteezy (*Toyota Prius illustration collection via Vecteezy.com* under standard attribution license).
