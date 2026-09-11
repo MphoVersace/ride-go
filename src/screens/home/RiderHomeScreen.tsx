@@ -23,6 +23,7 @@ import {
   ArrowRightIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
+import { VehicleSideSvg } from "../../components/common/VehicleSvgs";
 
 export default function RiderHomeScreen({
   navigation,
@@ -207,6 +208,18 @@ export default function RiderHomeScreen({
               </Text>
               <Text style={styles.tierEta}>3 min</Text>
 
+              <View style={styles.tierCarPreview}>
+                <VehicleSideSvg
+                  width={54}
+                  height={24}
+                  color={
+                    selectedTier === "standard"
+                      ? colors.accent.primary
+                      : colors.text.muted
+                  }
+                />
+              </View>
+
               <View style={styles.tierSpecs}>
                 <SeatIcon size={14} color={colors.text.secondary} />
                 <Text style={styles.tierSeatCount}>4</Text>
@@ -246,6 +259,18 @@ export default function RiderHomeScreen({
               </Text>
               <Text style={styles.tierEta}>4 min</Text>
 
+              <View style={styles.tierCarPreview}>
+                <VehicleSideSvg
+                  width={54}
+                  height={24}
+                  color={
+                    selectedTier === "comfort"
+                      ? colors.accent.primary
+                      : colors.text.muted
+                  }
+                />
+              </View>
+
               <View style={styles.tierSpecs}>
                 <SeatIcon size={14} color={colors.text.secondary} />
                 <Text style={styles.tierSeatCount}>4</Text>
@@ -284,6 +309,18 @@ export default function RiderHomeScreen({
                 Luxury
               </Text>
               <Text style={styles.tierEta}>6 min</Text>
+
+              <View style={styles.tierCarPreview}>
+                <VehicleSideSvg
+                  width={54}
+                  height={24}
+                  color={
+                    selectedTier === "luxury"
+                      ? colors.accent.primary
+                      : colors.text.muted
+                  }
+                />
+              </View>
 
               <View style={styles.tierSpecs}>
                 <SeatIcon size={14} color={colors.text.secondary} />
@@ -534,13 +571,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.text.muted,
     marginTop: 2,
-    marginBottom: 8,
+    marginBottom: 4,
+  },
+  tierCarPreview: {
+    height: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 4,
   },
   tierSpecs: {
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   tierSeatCount: {
     fontSize: 12,
