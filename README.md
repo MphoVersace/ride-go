@@ -100,13 +100,13 @@ ride-go/
 │   │   │   └── SplashOnboardingScreen.tsx
 │   │   ├── profile/              # Profile, settings, and support
 │   │   │   ├── EditProfileScreen.tsx    # Live name/email/phone editing with avatar generation
-│   │   │   ├── HelpSupportScreen.js
-│   │   │   ├── NotificationsScreen.js
+│   │   │   ├── HelpSupportScreen.tsx    # Interactive FAQ accordion & ticket submission
+│   │   │   ├── NotificationsScreen.tsx  # Unread filter tabs & trip/wallet alerts
 │   │   │   ├── PaymentMethodsScreen.tsx # RideGo Wallet in Rands, top-up chips, card selection
 │   │   │   ├── RiderProfileScreen.tsx   # Dark 60-30-10 user card, trip stats, account shortcuts
-│   │   │   ├── SafetyCentreScreen.js
+│   │   │   ├── SafetyCentreScreen.tsx   # SAPS 10111 / 112 dispatch & trusted contacts
 │   │   │   ├── SavedPlacesScreen.tsx    # Home, Work & favorite destination presets
-│   │   │   └── SettingsScreen.js
+│   │   │   └── SettingsScreen.tsx       # Push/SMS toggles, biometrics & South Africa region
 │   │   ├── rides/                # Interactive ride booking, tracking, and receipts
 │   │   │   ├── DestinationResultsScreen.tsx # Geocoded results & distance tags
 │   │   │   ├── DestinationSearchScreen.tsx  # Stacked pill inputs & SA suggestions
@@ -246,5 +246,24 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
    - Dark 60-30-10 user card displaying rating (`4.95★`), trips count, and member longevity.
    - Dynamic avatar initials updating automatically upon name changes.
    - Central navigation hub providing direct access to Trip History, Wallet, Saved Places, and Safety Centre.
+
+---
+
+## 11. Safety Centre, Notifications & App Preferences
+
+1. **Safety Centre & Emergency Dispatch ([SafetyCentreScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/SafetyCentreScreen.tsx))**:
+   - South African Police Service (SAPS 10111) and National Cellular Emergency (112) quick-dial integration.
+   - Toll-free RideGo 24/7 incident response hotline (`0800 902 435`).
+   - Trusted emergency contacts and toggleable live telemetry trip sharing.
+2. **Notifications & Trip Alerts ([NotificationsScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/NotificationsScreen.tsx))**:
+   - Filter tabs for All vs Unread notifications with mark-all-read action.
+   - Real-time alerts for driver matching, trip completion, and wallet credit confirmations.
+3. **Settings & Legal Governance ([SettingsScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/SettingsScreen.tsx))**:
+   - Interactive toggles for push alerts, SMS receipts, and biometric security.
+   - South African POPIA privacy compliance documentation and Terms of Service.
+4. **Help & Support Knowledge Base ([HelpSupportScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/HelpSupportScreen.tsx))**:
+   - Expandable FAQ accordion addressing Rand pricing, lost property, and safety.
+   - Direct support ticket creation and agent callback triggers.
+
 
 

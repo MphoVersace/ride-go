@@ -385,4 +385,61 @@ export const TrashIcon: React.FC<IconProps> = ({
   </Svg>
 );
 
+export const AlertTriangleIcon: React.FC<IconProps> = ({
+  size = 22,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M10.29 3.86L1.82 18C1.64537 18.3024 1.55296 18.6453 1.55199 18.9945C1.55101 19.3437 1.6415 19.6871 1.81442 19.9905C1.98734 20.2939 2.23674 20.5467 2.53771 20.7239C2.83868 20.9012 3.18082 20.9967 3.53 21H20.47C20.8192 20.9967 21.1613 20.9012 21.4623 20.7239C21.7633 20.5467 22.0127 20.2939 22.1856 19.9905C22.3585 19.6871 22.449 19.3437 22.448 18.9945C22.447 18.6453 22.3546 18.3024 22.18 18L13.71 3.86C13.5317 3.56611 13.2807 3.32312 12.9812 3.15449C12.6817 2.98587 12.3438 2.89746 12 2.89746C11.6562 2.89746 11.3183 2.98587 11.0188 3.15449C10.7193 3.32312 10.4683 3.56611 10.29 3.86Z"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path d="M12 9V13M12 17H12.01" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+  </Svg>
+);
+
+export const LockIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.text.secondary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Rect x="3" y="11" width="18" height="11" rx="2" stroke={color} strokeWidth={2} />
+    <Path d="M7 11V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V11" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+  </Svg>
+);
+
+export const ChevronDownIcon: React.FC<IconProps> = ({
+  size = 18,
+  color = colors.text.secondary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path d="M6 9L12 15L18 9" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+  </Svg>
+);
+
+export const ChevronUpIcon: React.FC<IconProps> = ({
+  size = 18,
+  color = colors.text.secondary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path d="M18 15L12 9L6 15" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+  </Svg>
+);
+
+export const ShareIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Circle cx="18" cy="5" r="3" stroke={color} strokeWidth={2} />
+    <Circle cx="6" cy="12" r="3" stroke={color} strokeWidth={2} />
+    <Circle cx="18" cy="19" r="3" stroke={color} strokeWidth={2} />
+    <Path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke={color} strokeWidth={2} />
+  </Svg>
+);
+
+
 
