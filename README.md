@@ -99,13 +99,13 @@ ride-go/
 │   │   ├── onboarding/           # Animated splash & introduction
 │   │   │   └── SplashOnboardingScreen.tsx
 │   │   ├── profile/              # Profile, settings, and support
-│   │   │   ├── EditProfileScreen.js
+│   │   │   ├── EditProfileScreen.tsx    # Live name/email/phone editing with avatar generation
 │   │   │   ├── HelpSupportScreen.js
 │   │   │   ├── NotificationsScreen.js
-│   │   │   ├── PaymentMethodsScreen.js
-│   │   │   ├── RiderProfileScreen.js
+│   │   │   ├── PaymentMethodsScreen.tsx # RideGo Wallet in Rands, top-up chips, card selection
+│   │   │   ├── RiderProfileScreen.tsx   # Dark 60-30-10 user card, trip stats, account shortcuts
 │   │   │   ├── SafetyCentreScreen.js
-│   │   │   ├── SavedPlacesScreen.js
+│   │   │   ├── SavedPlacesScreen.tsx    # Home, Work & favorite destination presets
 │   │   │   └── SettingsScreen.js
 │   │   ├── rides/                # Interactive ride booking, tracking, and receipts
 │   │   │   ├── DestinationResultsScreen.tsx # Geocoded results & distance tags
@@ -230,4 +230,21 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
    - `DriverChatModal.tsx` provides instant two-way chat with preset quick-reply chips and simulated automated driver responses.
 4. **Persistent Ride History**:
    - Completed rides are automatically logged to `rideHistory`, allowing riders to re-inspect full route receipts or re-book past routes with one tap.
+
+---
+
+## 10. Wallet, Saved Places & Rider Profile Hub
+
+1. **RideGo Wallet & Payments ([PaymentMethodsScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/PaymentMethodsScreen.tsx))**:
+   - Live South African Rand balance with auto-deduction upon ride completion.
+   - Quick Top-Up chips (`+R50`, `+R100`, `+R200`, `+R500`) with instant balance refresh.
+   - Payment method selector: RideGo Wallet (Default), Visa Debit, Mastercard, Cash to Driver.
+2. **Saved Places ([SavedPlacesScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/SavedPlacesScreen.tsx))**:
+   - Home, Work, and Airport preset destinations with one-tap route configuration.
+   - Custom favorite places with instant address addition and distance indicators.
+3. **Rider Profile & Editing ([RiderProfileScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/RiderProfileScreen.tsx) & [EditProfileScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/EditProfileScreen.tsx))**:
+   - Dark 60-30-10 user card displaying rating (`4.95★`), trips count, and member longevity.
+   - Dynamic avatar initials updating automatically upon name changes.
+   - Central navigation hub providing direct access to Trip History, Wallet, Saved Places, and Safety Centre.
+
 
