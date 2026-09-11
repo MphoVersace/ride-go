@@ -235,3 +235,31 @@ export const PhoneIcon: React.FC<IconProps> = ({
     />
   </Svg>
 );
+
+export const CheckCircleIcon: React.FC<IconProps> = ({
+  size = 24,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Circle cx="12" cy="12" r="10" stroke={color} strokeWidth={2} />
+    <Path
+      d="M8 12.5L10.5 15L16 9.5"
+      stroke={color}
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const CreditCardIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.text.secondary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Rect x="2" y="5" width="20" height="14" rx="2" stroke={color} strokeWidth={2} />
+    <Path d="M2 10H22" stroke={color} strokeWidth={2} strokeLinecap="round" />
+    <Path d="M6 15H10" stroke={color} strokeWidth={2} strokeLinecap="round" />
+  </Svg>
+);
+

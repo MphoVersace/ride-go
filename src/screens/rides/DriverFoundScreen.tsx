@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   ScrollView,
@@ -22,10 +22,22 @@ import {
   SteeringWheelIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
+import DriverChatModal from "../../components/common/DriverChatModal";
+import { useRide } from "../../services/RideContext";
 
 export default function DriverFoundScreen({
   navigation,
 }: RootStackScreenProps<"DriverFound">) {
+  const { driver, tier, tierFares, startRide } = useRide();
+  const [chatVisible, setChatVisible] = useState(false);
+  const [countdown, setCountdown] = useState(3);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown((prev: number) => (prev > 1 ? prev - 1 : 1));
+    }, 15000);
+    return () => clearInterval(timer);
+  }, []);
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
@@ -56,7 +68,11 @@ export default function DriverFoundScreen({
       >
         {/* Route Preview on Dark Vector Map */}
         <View style={styles.mapContainer}>
-          <DarkRouteMap height={180} showRoute={true} driverEta="Arriving in 3 min" />
+          <DarkRouteMap
+            height={180}
+            showRoute={true}
+            driverEta={`Arriving in ${countdown} min`}
+          />
         </View>
 
         {/* Floating Bottom Sheet Container */}
@@ -65,28 +81,28 @@ export default function DriverFoundScreen({
           <View style={styles.arrivalBanner}>
             <Text style={styles.arrivalText}>The driver will arrive in</Text>
             <View style={styles.arrivalBadge}>
-              <Text style={styles.arrivalBadgeText}>3 min</Text>
+              <Text style={styles.arrivalBadgeText}>{countdown} min</Text>
             </View>
           </View>
 
           {/* Driver Profile Card */}
           <View style={styles.driverProfileCard}>
             <View style={styles.driverAvatarWrap}>
-              <Text style={styles.driverAvatarText}>UB</Text>
+              <Text style={styles.driverAvatarText}>{driver.avatar}</Text>
             </View>
 
             <View style={styles.driverDetails}>
-              <Text style={styles.driverName}>Ucok Behel</Text>
-              <Text style={styles.driverVehicleModel}>Honda CR-V • Black</Text>
+              <Text style={styles.driverName}>{driver.name}</Text>
+              <Text style={styles.driverVehicleModel}>{driver.carModel}</Text>
             </View>
 
             <View style={styles.plateAndRating}>
               <View style={styles.licensePlateBadge}>
-                <Text style={styles.licensePlateText}>AB6299ZG</Text>
+                <Text style={styles.licensePlateText}>{driver.licensePlate}</Text>
               </View>
               <View style={styles.ratingRow}>
                 <StarIcon size={13} color={colors.accent.primary} />
-                <Text style={styles.ratingText}>4.9</Text>
+                <Text style={styles.ratingText}>{driver.rating.toFixed(1)}</Text>
               </View>
             </View>
           </View>
@@ -101,12 +117,12 @@ export default function DriverFoundScreen({
 
               <View style={styles.specItem}>
                 <SteeringWheelIcon size={16} color={colors.text.secondary} />
-                <Text style={styles.specLabel}>482 Trips</Text>
+                <Text style={styles.specLabel}>{driver.tripsCount} Trips</Text>
               </View>
 
               <View style={styles.specItem}>
                 <ShieldCheckIcon size={16} color={colors.accent.primary} />
-                <Text style={styles.specLabel}>98% Safety</Text>
+                <Text style={styles.specLabel}>{driver.safetyRating}% Safety</Text>
               </View>
             </View>
 
@@ -122,10 +138,12 @@ export default function DriverFoundScreen({
             {/* Fare Summary in Rands */}
             <View style={styles.fareRow}>
               <View>
-                <Text style={styles.tierName}>Standard Ride</Text>
+                <Text style={styles.tierName}>
+                  {tier.toUpperCase()} Ride
+                </Text>
                 <Text style={styles.paymentMethodLabel}>Cash or Card on arrival</Text>
               </View>
-              <Text style={styles.fareAmount}>R45</Text>
+              <Text style={styles.fareAmount}>R{tierFares[tier]}</Text>
             </View>
           </View>
 
@@ -133,7 +151,7 @@ export default function DriverFoundScreen({
           <TouchableOpacity
             style={styles.chatButton}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate("RideInProgress")}
+            onPress={() => setChatVisible(true)}
           >
             <View style={styles.chatIconBadge}>
               <ChatBubbleIcon size={18} color={colors.accent.contrast} />
@@ -141,8 +159,26 @@ export default function DriverFoundScreen({
             <Text style={styles.chatButtonText}>Chat with driver</Text>
             <Text style={styles.chatArrows}>›››</Text>
           </TouchableOpacity>
+
+          {/* Start Ride CTA */}
+          <TouchableOpacity
+            style={styles.startRideButton}
+            activeOpacity={0.85}
+            onPress={() => {
+              startRide();
+              navigation.replace("RideInProgress");
+            }}
+          >
+            <Text style={styles.startRideButtonText}>Start Ride (Driver Arrived)</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Driver Chat Modal */}
+      <DriverChatModal
+        visible={chatVisible}
+        onClose={() => setChatVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -379,5 +415,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.accent.contrast,
     letterSpacing: -2,
+  },
+  startRideButton: {
+    backgroundColor: colors.surface.elevated,
+    height: 52,
+    borderRadius: 26,
+    borderWidth: 1.5,
+    borderColor: colors.accent.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: spacing.sm,
+  },
+  startRideButtonText: {
+    color: colors.accent.primary,
+    fontSize: 15,
+    fontWeight: "bold",
   },
 });

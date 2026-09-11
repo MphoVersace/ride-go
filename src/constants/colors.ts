@@ -19,6 +19,7 @@ export const colors = {
   // 30% - Panel / Surface / Structure
   surface: {
     card: "#102A52",
+    cardAlt: "#16325C",
     elevated: "#16325C",
     subtle: "#0D2244",
     border: "#1D3557",
@@ -28,6 +29,7 @@ export const colors = {
   // 10% - Accent & Interactive Highlights
   accent: {
     primary: "#5BC0FF",
+    secondary: "#38A3E5",
     hover: "#4AAFEF",
     subtle: "rgba(91, 192, 255, 0.15)",
     contrast: "#071A3D", // Text on accent

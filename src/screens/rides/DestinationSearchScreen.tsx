@@ -19,6 +19,7 @@ import {
   SearchIcon,
   TargetIcon,
 } from "../../components/common/SvgIcons";
+import { useRide } from "../../services/RideContext";
 
 interface Suggestion {
   id: string;
@@ -30,7 +31,14 @@ interface Suggestion {
 export default function DestinationSearchScreen({
   navigation,
 }: RootStackScreenProps<"DestinationSearch">) {
-  const [pickup, setPickup] = useState("14 Long St, Cape Town");
+  const {
+    pickup: currentPickup,
+    setPickupLocation,
+    setDestinationLocation,
+    startSearch,
+  } = useRide();
+
+  const [pickup, setPickup] = useState(currentPickup.title);
   const [destination, setDestination] = useState("");
 
   const suggestions: Suggestion[] = [
@@ -61,8 +69,10 @@ export default function DestinationSearchScreen({
   ];
 
   const handleSelectLocation = (place: Suggestion) => {
-    setDestination(place.title);
-    navigation.navigate("DriverFound");
+    setPickupLocation(pickup, "Cape Town, 8001");
+    setDestinationLocation(place.title, place.address, place.distance);
+    startSearch();
+    navigation.replace("RideSearching");
   };
 
   return (
