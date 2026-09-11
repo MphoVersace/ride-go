@@ -91,9 +91,9 @@ ride-go/
 │   │   └── index.ts              # Navigation barrel export
 │   ├── screens/                  # Modular domain screen components
 │   │   ├── auth/                 # Authentication & onboarding flow
-│   │   │   ├── AccountScreen.js
-│   │   │   ├── AccountTypeScreen.js
-│   │   │   └── RiderRegistrationScreen.js
+│   │   │   ├── AccountScreen.tsx        # Welcome screen with login & account creation CTAs
+│   │   │   ├── AccountTypeScreen.tsx    # Role selection (Rider vs Driver partner)
+│   │   │   └── RiderRegistrationScreen.tsx # Rider signup form with profile sync
 │   │   ├── home/                 # Main home experience
 │   │   │   └── RiderHomeScreen.tsx # Dark map, pill inputs, service tabs, Rand tiers
 │   │   ├── onboarding/           # Animated splash & introduction
@@ -264,6 +264,20 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
 4. **Help & Support Knowledge Base ([HelpSupportScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/HelpSupportScreen.tsx))**:
    - Expandable FAQ accordion addressing Rand pricing, lost property, and safety.
    - Direct support ticket creation and agent callback triggers.
+
+---
+
+## 12. Authentication & Role Selection Flow
+
+1. **Welcome Portal ([AccountScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/auth/AccountScreen.tsx))**:
+   - Clean 60-30-10 splash branding and vehicle silhouette hero.
+   - Direct entry points for account creation and instant login.
+2. **Account Role Selection ([AccountTypeScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/auth/AccountTypeScreen.tsx))**:
+   - Interactive role selection between Passenger (*"I want to ride"*) and Driver Partner (*"I want to drive"*).
+3. **Rider Registration & Onboarding ([RiderRegistrationScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/auth/RiderRegistrationScreen.tsx))**:
+   - Registration form with first/last name, South African mobile (+27), email, and secure password.
+   - Automatically initializes and synchronizes the rider profile within `RideContext` before routing to the main home dashboard.
+
 
 
 
