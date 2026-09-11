@@ -15,15 +15,18 @@ import {
   StarIcon,
   ShieldCheckIcon,
 } from "../../components/common/SvgIcons";
+import { useRide } from "../../services/RideContext";
 
 export default function TripCompletedScreen({
   navigation,
 }: RootStackScreenProps<"TripCompleted">) {
+  const { driver, tier, tierFares, completeTrip } = useRide();
   const [rating, setRating] = useState(5);
   const [selectedTip, setSelectedTip] = useState<number | null>(20);
   const [comment, setComment] = useState("");
 
   const tipOptions = [10, 20, 50, 100];
+  const baseFare = tierFares[tier];
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -33,7 +36,7 @@ export default function TripCompletedScreen({
         {/* Driver Avatar & Badge */}
         <View style={styles.avatarContainer}>
           <View style={styles.avatarCircle}>
-            <Text style={styles.avatarText}>UB</Text>
+            <Text style={styles.avatarText}>{driver.avatar}</Text>
           </View>
           <View style={styles.verifiedBadge}>
             <ShieldCheckIcon size={14} color={colors.accent.contrast} />
@@ -42,7 +45,7 @@ export default function TripCompletedScreen({
 
         <Text style={styles.title}>Trip Completed!</Text>
         <Text style={styles.subtitle}>
-          How was your ride with <Text style={styles.driverHighlight}>Ucok Behel</Text>?
+          How was your ride with <Text style={styles.driverHighlight}>{driver.name}</Text>?
         </Text>
 
         {/* 5-Star Rating Selector */}
@@ -66,8 +69,10 @@ export default function TripCompletedScreen({
         {/* Fare Receipt Summary */}
         <View style={styles.receiptCard}>
           <View style={styles.receiptRow}>
-            <Text style={styles.receiptLabel}>Ride Fare (Standard)</Text>
-            <Text style={styles.receiptValue}>R45.00</Text>
+            <Text style={styles.receiptLabel}>
+              Ride Fare ({tier.charAt(0).toUpperCase() + tier.slice(1)})
+            </Text>
+            <Text style={styles.receiptValue}>R{baseFare}.00</Text>
           </View>
           {selectedTip !== null && selectedTip > 0 && (
             <View style={styles.receiptRow}>
@@ -79,14 +84,16 @@ export default function TripCompletedScreen({
           <View style={styles.receiptRow}>
             <Text style={styles.receiptTotalLabel}>Total Paid</Text>
             <Text style={styles.receiptTotalValue}>
-              R{45 + (selectedTip ?? 0)}.00
+              R{baseFare + (selectedTip ?? 0)}.00
             </Text>
           </View>
         </View>
 
         {/* Tip Selection in Rands */}
         <View style={styles.tipSection}>
-          <Text style={styles.tipTitle}>Add a tip for Ucok?</Text>
+          <Text style={styles.tipTitle}>
+            Add a tip for {driver.name.split(" ")[0]}?
+          </Text>
           <View style={styles.tipChipsRow}>
             {tipOptions.map((amount) => (
               <TouchableOpacity
@@ -126,9 +133,12 @@ export default function TripCompletedScreen({
         <TouchableOpacity
           style={styles.doneButton}
           activeOpacity={0.85}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => {
+            completeTrip(rating, selectedTip ?? 0, comment);
+            navigation.navigate("TripReceipt");
+          }}
         >
-          <Text style={styles.doneButtonText}>Done</Text>
+          <Text style={styles.doneButtonText}>Complete & View Receipt</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

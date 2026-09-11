@@ -77,7 +77,9 @@ ride-go/
 │   ├── components/
 │   │   ├── common/               # Reusable UI primitives
 │   │   │   ├── DarkRouteMap.tsx  # Vector dark map with glowing cyan route polyline
-│   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, seats)
+│   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
+│   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
+│   │   │   ├── VehicleSvgs.tsx   # Top-down & side vector vehicle SVGs
 │   │   │   └── .gitkeep
 │   ├── constants/
 │   │   ├── colors.ts             # 60-30-10 color palette tokens
@@ -105,19 +107,20 @@ ride-go/
 │   │   │   ├── SafetyCentreScreen.js
 │   │   │   ├── SavedPlacesScreen.js
 │   │   │   └── SettingsScreen.js
-│   │   ├── rides/                # Ride booking, search, live tracking, receipts
-│   │   │   ├── DestinationResultsScreen.js
-│   │   │   ├── DestinationSearchScreen.tsx # Stacked pill inputs & Cape Town suggestions
-│   │   │   ├── DriverFoundScreen.tsx     # ETA banner, top-down 3D vehicle card, chat CTA
-│   │   │   ├── RideHistoryScreen.js
-│   │   │   ├── RideInProgressScreen.tsx  # Live route ticker & emergency trigger
-│   │   │   ├── RideOptionsScreen.js
-│   │   │   ├── RideSearchingScreen.js
-│   │   │   ├── TripCompletedScreen.tsx   # 5-star rating, Rand tip chips (R10, R20, R50)
-│   │   │   ├── TripDetailsScreen.js
-│   │   │   └── TripReceiptScreen.js
+│   │   ├── rides/                # Interactive ride booking, tracking, and receipts
+│   │   │   ├── DestinationResultsScreen.tsx # Geocoded results & distance tags
+│   │   │   ├── DestinationSearchScreen.tsx  # Stacked pill inputs & SA suggestions
+│   │   │   ├── DriverFoundScreen.tsx        # Driver match, 3D card, live chat trigger
+│   │   │   ├── RideHistoryScreen.tsx        # Trip activity list in Rands
+│   │   │   ├── RideInProgressScreen.tsx     # Live route ticker & SOS trigger
+│   │   │   ├── RideOptionsScreen.tsx        # Vehicle tier picker (Standard, Comfort, Luxury)
+│   │   │   ├── RideSearchingScreen.tsx      # Animated radar pulse & driver search
+│   │   │   ├── TripCompletedScreen.tsx      # 5-star rating, Rand tip chips (R10–R100)
+│   │   │   ├── TripDetailsScreen.tsx        # Deep-dive trip summary, rebook CTA
+│   │   │   └── TripReceiptScreen.tsx        # Itemized Rand invoice, wallet verification
 │   │   └── index.ts              # Screen registry re-export
-│   ├── services/                 # Remote API services & storage
+│   ├── services/                 # Remote API services & state management
+│   │   ├── RideContext.tsx       # Global ride state machine, driver chat & Rand fares
 │   │   └── .gitkeep
 │   ├── types/                    # Domain models & TypeScript interfaces
 │   │   ├── index.ts
@@ -205,3 +208,26 @@ RideGo employs a **hybrid vehicle visualization pipeline**:
 - **Photorealistic 3D Renders**: Hero vehicle showcase cards in `assets/vehicles/` generated for inspection views and driver matching.
 - **Scalable Vector SVGs (`VehicleSvgs.tsx`)**: High-performance vector vehicle components (`VehicleTopDownSvg` and `VehicleSideSvg`) used for realtime route tracking on `DarkRouteMap` and ride tier selection cards.
 - **Attribution**: Vector vehicle blueprints derived and adapted from Vecteezy (*Toyota Prius illustration collection via Vecteezy.com* under standard attribution license).
+
+---
+
+## 9. Interactive Ride Engine & State Transitions
+
+RideGo features an end-to-end interactive mobility workflow driven by `RideContext`:
+
+1. **South African Rand Fare Engine**:
+   - Standard: `R45.00`
+   - Comfort: `R75.00`
+   - Luxury: `R140.00`
+   - Driver tips: `R10`, `R20`, `R50`, `R100` chips
+2. **Lifecycle State Machine**:
+   - `idle`: Pickups and destinations selected via search with live distance calculation.
+   - `searching`: Dynamic radar pulse scanning nearby drivers in real-time.
+   - `driver_found`: Matched driver card with license plate, rating, 3-minute ETA countdown, and in-app chat trigger.
+   - `in_progress`: Turn-by-turn route tracking, destination arrival ticker, and instant SOS trigger.
+   - `completed`: 5-star feedback rating, tipping, and itemized invoice receipt generation.
+3. **In-App Driver Messaging**:
+   - `DriverChatModal.tsx` provides instant two-way chat with preset quick-reply chips and simulated automated driver responses.
+4. **Persistent Ride History**:
+   - Completed rides are automatically logged to `rideHistory`, allowing riders to re-inspect full route receipts or re-book past routes with one tap.
+

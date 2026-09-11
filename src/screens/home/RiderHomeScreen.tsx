@@ -24,15 +24,15 @@ import {
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
 import { VehicleSideSvg } from "../../components/common/VehicleSvgs";
+import { useRide } from "../../services/RideContext";
 
 export default function RiderHomeScreen({
   navigation,
 }: RootStackScreenProps<"RiderHome">) {
+  const { pickup, destination, tier, selectTier, tierFares, startSearch } =
+    useRide();
   const [selectedService, setSelectedService] = useState<"driver" | "package">(
     "driver"
-  );
-  const [selectedTier, setSelectedTier] = useState<"standard" | "comfort" | "luxury">(
-    "standard"
   );
 
   return (
@@ -99,7 +99,7 @@ export default function RiderHomeScreen({
             <View style={styles.pillIconWrap}>
               <PinIcon size={18} color={colors.accent.primary} />
             </View>
-            <Text style={styles.locationPillText}>14 Long St, Cape Town</Text>
+            <Text style={styles.locationPillText}>{pickup.title}</Text>
           </TouchableOpacity>
 
           {/* Inline Flip/Swap Button */}
@@ -118,8 +118,14 @@ export default function RiderHomeScreen({
             <View style={styles.pillIconWrap}>
               <PinIcon size={18} color={colors.text.secondary} />
             </View>
-            <Text style={styles.locationPlaceholderText}>
-              Add your destination
+            <Text
+              style={
+                destination.title
+                  ? styles.locationPillText
+                  : styles.locationPlaceholderText
+              }
+            >
+              {destination.title || "Add your destination"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -193,15 +199,15 @@ export default function RiderHomeScreen({
             <TouchableOpacity
               style={[
                 styles.tierCard,
-                selectedTier === "standard" && styles.tierCardActive,
+                tier === "standard" && styles.tierCardActive,
               ]}
               activeOpacity={0.85}
-              onPress={() => setSelectedTier("standard")}
+              onPress={() => selectTier("standard")}
             >
               <Text
                 style={[
                   styles.tierTitle,
-                  selectedTier === "standard" && styles.tierTitleActive,
+                  tier === "standard" && styles.tierTitleActive,
                 ]}
               >
                 Standard
@@ -213,7 +219,7 @@ export default function RiderHomeScreen({
                   width={54}
                   height={24}
                   color={
-                    selectedTier === "standard"
+                    tier === "standard"
                       ? colors.accent.primary
                       : colors.text.muted
                   }
@@ -230,13 +236,13 @@ export default function RiderHomeScreen({
                   <SteeringWheelIcon
                     size={16}
                     color={
-                      selectedTier === "standard"
+                      tier === "standard"
                         ? colors.accent.contrast
                         : colors.accent.primary
                     }
                   />
                 </View>
-                <Text style={styles.tierPrice}>R45</Text>
+                <Text style={styles.tierPrice}>R{tierFares.standard}</Text>
               </View>
             </TouchableOpacity>
 
@@ -244,15 +250,15 @@ export default function RiderHomeScreen({
             <TouchableOpacity
               style={[
                 styles.tierCard,
-                selectedTier === "comfort" && styles.tierCardActive,
+                tier === "comfort" && styles.tierCardActive,
               ]}
               activeOpacity={0.85}
-              onPress={() => setSelectedTier("comfort")}
+              onPress={() => selectTier("comfort")}
             >
               <Text
                 style={[
                   styles.tierTitle,
-                  selectedTier === "comfort" && styles.tierTitleActive,
+                  tier === "comfort" && styles.tierTitleActive,
                 ]}
               >
                 Comfort
@@ -264,7 +270,7 @@ export default function RiderHomeScreen({
                   width={54}
                   height={24}
                   color={
-                    selectedTier === "comfort"
+                    tier === "comfort"
                       ? colors.accent.primary
                       : colors.text.muted
                   }
@@ -281,13 +287,13 @@ export default function RiderHomeScreen({
                   <SteeringWheelIcon
                     size={16}
                     color={
-                      selectedTier === "comfort"
+                      tier === "comfort"
                         ? colors.accent.contrast
                         : colors.accent.primary
                     }
                   />
                 </View>
-                <Text style={styles.tierPrice}>R75</Text>
+                <Text style={styles.tierPrice}>R{tierFares.comfort}</Text>
               </View>
             </TouchableOpacity>
 
@@ -295,15 +301,15 @@ export default function RiderHomeScreen({
             <TouchableOpacity
               style={[
                 styles.tierCard,
-                selectedTier === "luxury" && styles.tierCardActive,
+                tier === "luxury" && styles.tierCardActive,
               ]}
               activeOpacity={0.85}
-              onPress={() => setSelectedTier("luxury")}
+              onPress={() => selectTier("luxury")}
             >
               <Text
                 style={[
                   styles.tierTitle,
-                  selectedTier === "luxury" && styles.tierTitleActive,
+                  tier === "luxury" && styles.tierTitleActive,
                 ]}
               >
                 Luxury
@@ -315,7 +321,7 @@ export default function RiderHomeScreen({
                   width={54}
                   height={24}
                   color={
-                    selectedTier === "luxury"
+                    tier === "luxury"
                       ? colors.accent.primary
                       : colors.text.muted
                   }
@@ -332,13 +338,13 @@ export default function RiderHomeScreen({
                   <SteeringWheelIcon
                     size={16}
                     color={
-                      selectedTier === "luxury"
+                      tier === "luxury"
                         ? colors.accent.contrast
                         : colors.accent.primary
                     }
                   />
                 </View>
-                <Text style={styles.tierPrice}>R140</Text>
+                <Text style={styles.tierPrice}>R{tierFares.luxury}</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -348,10 +354,13 @@ export default function RiderHomeScreen({
         <TouchableOpacity
           style={styles.requestRideButton}
           activeOpacity={0.85}
-          onPress={() => navigation.navigate("DriverFound")}
+          onPress={() => {
+            startSearch();
+            navigation.navigate("RideSearching");
+          }}
         >
           <Text style={styles.requestRideText}>
-            Confirm {selectedTier.toUpperCase()} • {selectedTier === "standard" ? "R45" : selectedTier === "comfort" ? "R75" : "R140"}
+            Confirm {tier.toUpperCase()} • R{tierFares[tier]}
           </Text>
           <ArrowRightIcon size={20} color={colors.accent.contrast} />
         </TouchableOpacity>

@@ -19,11 +19,15 @@ import {
   ArrowRightIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
+import DriverChatModal from "../../components/common/DriverChatModal";
+import { useRide } from "../../services/RideContext";
 
 export default function RideInProgressScreen({
   navigation,
 }: RootStackScreenProps<"RideInProgress">) {
-  const [etaMinutes, setEtaMinutes] = useState(12);
+  const { pickup, destination, driver } = useRide();
+  const [etaMinutes, setEtaMinutes] = useState(8);
+  const [chatVisible, setChatVisible] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -83,14 +87,14 @@ export default function RideInProgressScreen({
           <View style={styles.routeItem}>
             <PinIcon size={16} color={colors.accent.primary} />
             <Text style={styles.routeText} numberOfLines={1}>
-              14 Long St, Cape Town
+              {pickup.title}
             </Text>
           </View>
           <View style={styles.routeDivider} />
           <View style={styles.routeItem}>
             <PinIcon size={16} color={colors.text.secondary} />
             <Text style={styles.routeText} numberOfLines={1}>
-              V&A Waterfront, Cape Town
+              {destination.title}
             </Text>
           </View>
         </View>
@@ -98,17 +102,20 @@ export default function RideInProgressScreen({
         {/* Driver Quick Bar */}
         <View style={styles.driverBar}>
           <View style={styles.driverAvatar}>
-            <Text style={styles.driverAvatarText}>UB</Text>
+            <Text style={styles.driverAvatarText}>{driver.avatar}</Text>
           </View>
           <View style={styles.driverInfo}>
-            <Text style={styles.driverName}>Ucok Behel</Text>
-            <Text style={styles.carPlate}>Honda CR-V • AB6299ZG</Text>
+            <Text style={styles.driverName}>{driver.name}</Text>
+            <Text style={styles.carPlate}>{driver.carModel} • {driver.licensePlate}</Text>
           </View>
           <View style={styles.actionRow}>
             <TouchableOpacity style={styles.circleAction}>
               <PhoneIcon size={18} color={colors.text.primary} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.circleAction}>
+            <TouchableOpacity
+              style={styles.circleAction}
+              onPress={() => setChatVisible(true)}
+            >
               <ChatBubbleIcon size={18} color={colors.accent.primary} />
             </TouchableOpacity>
           </View>
@@ -118,12 +125,18 @@ export default function RideInProgressScreen({
         <TouchableOpacity
           style={styles.arriveButton}
           activeOpacity={0.85}
-          onPress={() => navigation.navigate("TripCompleted")}
+          onPress={() => navigation.replace("TripCompleted")}
         >
           <Text style={styles.arriveButtonText}>Arrived at Destination</Text>
           <ArrowRightIcon size={20} color={colors.accent.contrast} />
         </TouchableOpacity>
       </View>
+
+      {/* Driver Chat Modal */}
+      <DriverChatModal
+        visible={chatVisible}
+        onClose={() => setChatVisible(false)}
+      />
     </SafeAreaView>
   );
 }
