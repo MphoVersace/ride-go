@@ -1,125 +1,153 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RiderHomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <View style={styles.container}>
+        <StatusBar style="light" />
 
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Good day 👋</Text>
-          <Text style={styles.subtitle}>Where are you going?</Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.profileButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderProfile")}
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.profileIcon}>👤</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.locationCard}>
-        <View style={styles.locationIconContainer}>
-          <Text style={styles.locationIcon}>📍</Text>
-        </View>
-
-        <View style={styles.locationText}>
-          <Text style={styles.locationLabel}>Current location</Text>
-          <Text style={styles.locationValue}>Your current location</Text>
-        </View>
-
-        <Text style={styles.locationArrow}>›</Text>
-      </View>
-
-      <TouchableOpacity
-        style={styles.destinationCard}
-        activeOpacity={0.85}
-        onPress={() => navigation.navigate("DestinationSearch")}
-      >
-        <View style={styles.searchIconContainer}>
-          <Text style={styles.searchIcon}>⌕</Text>
-        </View>
-
-        <Text style={styles.destinationText}>Where do you want to go?</Text>
-
-        <Text style={styles.destinationArrow}>›</Text>
-      </TouchableOpacity>
-
-      <View style={styles.mapContainer}>
-        <View style={styles.mapRoadHorizontal} />
-        <View style={styles.mapRoadVertical} />
-        <View style={styles.mapRoadDiagonal} />
-
-        <View style={styles.mapCircleOne} />
-        <View style={styles.mapCircleTwo} />
-        <View style={styles.mapCircleThree} />
-
-        <View style={styles.mapPin}>
-          <Text style={styles.mapPinText}>📍</Text>
-        </View>
-
-        <View style={styles.mapLabel}>
-          <Text style={styles.mapLabelText}>Your location</Text>
-        </View>
-      </View>
-
-      <View style={styles.quickSection}>
-        <Text style={styles.sectionTitle}>Quick actions</Text>
-
-        <View style={styles.quickActions}>
-          <TouchableOpacity style={styles.quickCard} activeOpacity={0.85}>
-            <View style={styles.quickIconCircle}>
-              <Text style={styles.quickIcon}>🏠</Text>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.greeting}>Good day 👋</Text>
+              <Text style={styles.subtitle}>Where are you going?</Text>
             </View>
 
-            <Text style={styles.quickTitle}>Home</Text>
-            <Text style={styles.quickSubtitle}>Add location</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.profileButton}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate("RiderProfile")}
+            >
+              <Text style={styles.profileIcon}>👤</Text>
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity style={styles.quickCard} activeOpacity={0.85}>
-            <View style={styles.quickIconCircle}>
-              <Text style={styles.quickIcon}>💼</Text>
+          <View style={styles.locationCard}>
+            <View style={styles.locationIconContainer}>
+              <Text style={styles.locationIcon}>📍</Text>
             </View>
 
-            <Text style={styles.quickTitle}>Work</Text>
-            <Text style={styles.quickSubtitle}>Add location</Text>
+            <View style={styles.locationText}>
+              <Text style={styles.locationLabel}>Current location</Text>
+              <Text style={styles.locationValue}>Your current location</Text>
+            </View>
+
+            <Text style={styles.locationArrow}>›</Text>
+          </View>
+
+          <TouchableOpacity
+            style={styles.destinationCard}
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate("DestinationSearch")}
+          >
+            <View style={styles.searchIconContainer}>
+              <Text style={styles.searchIcon}>⌕</Text>
+            </View>
+
+            <Text style={styles.destinationText}>Where do you want to go?</Text>
+
+            <Text style={styles.destinationArrow}>›</Text>
+          </TouchableOpacity>
+
+          <View style={styles.mapContainer}>
+            <View style={styles.mapRoadHorizontal} />
+            <View style={styles.mapRoadVertical} />
+            <View style={styles.mapRoadDiagonal} />
+
+            <View style={styles.mapCircleOne} />
+            <View style={styles.mapCircleTwo} />
+            <View style={styles.mapCircleThree} />
+
+            <View style={styles.mapPin}>
+              <Text style={styles.mapPinText}>📍</Text>
+            </View>
+
+            <View style={styles.mapLabel}>
+              <Text style={styles.mapLabelText}>Your location</Text>
+            </View>
+          </View>
+
+          <View style={styles.quickSection}>
+            <Text style={styles.sectionTitle}>Quick actions</Text>
+
+            <View style={styles.quickActions}>
+              <TouchableOpacity style={styles.quickCard} activeOpacity={0.85}>
+                <View style={styles.quickIconCircle}>
+                  <Text style={styles.quickIcon}>🏠</Text>
+                </View>
+
+                <Text style={styles.quickTitle}>Home</Text>
+                <Text style={styles.quickSubtitle}>Add location</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.quickCard} activeOpacity={0.85}>
+                <View style={styles.quickIconCircle}>
+                  <Text style={styles.quickIcon}>💼</Text>
+                </View>
+
+                <Text style={styles.quickTitle}>Work</Text>
+                <Text style={styles.quickSubtitle}>Add location</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+
+        <View style={styles.bottomNavigation}>
+          <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
+            <Text style={styles.navIconActive}>⌂</Text>
+            <Text style={styles.navTextActive}>Home</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
+            <Text style={styles.navIcon}>◷</Text>
+            <Text style={styles.navText}>Activity</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.navItem}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("RiderProfile")}
+          >
+            <Text style={styles.navIcon}>👤</Text>
+            <Text style={styles.navText}>Profile</Text>
           </TouchableOpacity>
         </View>
       </View>
-
-      <View style={styles.bottomNavigation}>
-        <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
-          <Text style={styles.navIconActive}>⌂</Text>
-          <Text style={styles.navTextActive}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
-          <Text style={styles.navIcon}>◷</Text>
-          <Text style={styles.navText}>Activity</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderProfile")}
-        >
-          <Text style={styles.navIcon}>👤</Text>
-          <Text style={styles.navText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#071A3D",
+  },
+
   container: {
     flex: 1,
     backgroundColor: "#071A3D",
+  },
+
+  scrollView: {
+    flex: 1,
+  },
+
+  contentContainer: {
     paddingHorizontal: 20,
-    paddingTop: 55,
+    paddingTop: 18,
+    paddingBottom: 112,
   },
 
   header: {
