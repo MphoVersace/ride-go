@@ -12,7 +12,7 @@ import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
 import { useRide } from "../../services/RideContext";
-import { VehicleTopDownSvg } from "../../components/common/VehicleSvgs";
+import Svg, { Circle } from "react-native-svg";
 import { PinIcon } from "../../components/common/SvgIcons";
 
 export default function RideSearchingScreen({
@@ -154,9 +154,12 @@ export default function RideSearchingScreen({
             ]}
           />
 
-          {/* Center Radar Vehicle Node */}
+          {/* Center Radar Dispatch Beacon (Zero Cars) */}
           <View style={styles.centerNode}>
-            <VehicleTopDownSvg width={28} height={56} />
+            <Svg width={40} height={40} viewBox="0 0 40 40" fill="none">
+              <Circle cx={20} cy={20} r={17} fill={colors.surface.card} stroke={colors.accent.primary} strokeWidth={2.5} />
+              <Circle cx={20} cy={20} r={8} fill={colors.accent.primary} />
+            </Svg>
           </View>
         </View>
 

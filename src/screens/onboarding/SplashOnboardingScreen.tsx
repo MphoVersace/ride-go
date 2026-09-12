@@ -14,14 +14,15 @@ import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
 import { ArrowRightIcon } from "../../components/common/SvgIcons";
-import Vehicle3DViewer, { CameraAnglePreset } from "../../components/common/Vehicle3DViewer";
-import VehicleLoader from "../../components/common/VehicleLoader";
+import RouteTelemetryGraphic, { TelemetryGraphicMode } from "../../components/common/RouteTelemetryGraphic";
+import TelemetryPulseLoader from "../../components/common/TelemetryPulseLoader";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface OnboardingSlide {
   id: string;
-  angle: CameraAnglePreset;
+  mode: TelemetryGraphicMode;
+  tag: string;
   title: string;
   description: string;
 }
@@ -29,24 +30,27 @@ interface OnboardingSlide {
 const ONBOARDING_SLIDES: OnboardingSlide[] = [
   {
     id: "slide_1",
-    angle: "front",
-    title: "Ride with confidence",
+    mode: "network",
+    tag: "POINT-TO-POINT TRANSIT",
+    title: "Smart Point-to-Point Travel",
     description:
-      "Safe, premium rides and seamless point-to-point travel across all South African metros.",
+      "Direct on-demand transit mapped seamlessly across South African metros with optimized routing.",
   },
   {
     id: "slide_2",
-    angle: "angle",
-    title: "Upfront transparent fares",
+    mode: "fare",
+    tag: "TRANSPARENT RAND PRICING",
+    title: "Upfront Guaranteed Fares",
     description:
-      "Lock in guaranteed Rand prices before you book with zero unexpected surges or hidden fees.",
+      "Clear Rand pricing locked before you confirm with zero hidden fees or unexpected surge spikes.",
   },
   {
     id: "slide_3",
-    angle: "rear",
-    title: "Rapid on-demand logistics",
+    mode: "dispatch",
+    tag: "NATIONWIDE TELEMETRY",
+    title: "Instant National Dispatch",
     description:
-      "From express courier motorcycles to heavy bakkies and full moving trucks at your fingertips.",
+      "Connect with verified local mobility partners in seconds with live satellite route tracking.",
   },
 ];
 
@@ -64,7 +68,7 @@ export default function SplashOnboardingScreen({
   const splashMessages = [
     "Initializing RideGo Telemetry...",
     "Connecting to GPS satellite nodes...",
-    "Verifying South African active fleet...",
+    "Verifying active South African routes...",
     "Ready to move.",
   ];
 
@@ -85,14 +89,14 @@ export default function SplashOnboardingScreen({
     ]).start();
 
     // 2. Cycling splash telemetry messages
-    const stepTimer1 = setTimeout(() => setSplashStep(1), 900);
-    const stepTimer2 = setTimeout(() => setSplashStep(2), 1800);
-    const stepTimer3 = setTimeout(() => setSplashStep(3), 2600);
+    const stepTimer1 = setTimeout(() => setSplashStep(1), 800);
+    const stepTimer2 = setTimeout(() => setSplashStep(2), 1600);
+    const stepTimer3 = setTimeout(() => setSplashStep(3), 2400);
 
-    // 3. Transition to Onboarding Screen after 3.3s
+    // 3. Transition to Onboarding Screen after 3.2s
     const splashTimer = setTimeout(() => {
       setShowOnboarding(true);
-    }, 3300);
+    }, 3200);
 
     return () => {
       clearTimeout(stepTimer1);
@@ -119,25 +123,9 @@ export default function SplashOnboardingScreen({
     navigation.navigate("Account");
   };
 
-  const handleAngleSelect = (angle: CameraAnglePreset) => {
-    let targetIndex = currentSlide;
-    if (angle === "front") targetIndex = 0;
-    else if (angle === "angle" || angle === "side") targetIndex = 1;
-    else if (angle === "rear") targetIndex = 2;
-
-    if (targetIndex !== currentSlide) {
-      scrollViewRef.current?.scrollTo({
-        x: targetIndex * SCREEN_WIDTH,
-        animated: true,
-      });
-      setCurrentSlide(targetIndex);
-    }
-  };
-
   // ONBOARDING SCREEN
   if (showOnboarding) {
     const isLastSlide = currentSlide === ONBOARDING_SLIDES.length - 1;
-    const currentSlideAngle = ONBOARDING_SLIDES[currentSlide]?.angle || "angle";
 
     return (
       <SafeAreaView style={styles.container}>
@@ -158,22 +146,7 @@ export default function SplashOnboardingScreen({
           </TouchableOpacity>
         </View>
 
-        {/* Interactive 3D Model Showcase Pedestal (Hardware-Accelerated WebGL & SVG Fallback) */}
-        <View style={styles.pedestalWrapper}>
-          <View style={styles.pedestalOuterCard}>
-            <Vehicle3DViewer
-              height={230}
-              currentAngle={currentSlideAngle}
-              autoRotate={currentSlide === 1}
-              interactive={true}
-              showAngleControls={true}
-              showColorControls={true}
-              onAngleChange={handleAngleSelect}
-            />
-          </View>
-        </View>
-
-        {/* Swipeable Copy Carousel */}
+        {/* Swipeable Route Telemetry Carousel */}
         <ScrollView
           ref={scrollViewRef}
           horizontal
@@ -188,15 +161,30 @@ export default function SplashOnboardingScreen({
             }
           }}
           scrollEventThrottle={16}
-          style={styles.copyCarousel}
+          style={styles.carousel}
         >
           {ONBOARDING_SLIDES.map((slide) => (
             <View
               key={slide.id}
-              style={[styles.copySlideContainer, { width: SCREEN_WIDTH }]}
+              style={[styles.slideContainer, { width: SCREEN_WIDTH }]}
             >
-              <Text style={styles.heading}>{slide.title}</Text>
-              <Text style={styles.description}>{slide.description}</Text>
+              {/* Graphic Pedestal */}
+              <View style={styles.graphicWrapper}>
+                <RouteTelemetryGraphic
+                  mode={slide.mode}
+                  width={SCREEN_WIDTH - 48}
+                  height={200}
+                />
+              </View>
+
+              {/* Onboarding Copy */}
+              <View style={styles.copyContainer}>
+                <View style={styles.tagBadge}>
+                  <Text style={styles.tagText}>{slide.tag}</Text>
+                </View>
+                <Text style={styles.heading}>{slide.title}</Text>
+                <Text style={styles.description}>{slide.description}</Text>
+              </View>
             </View>
           ))}
         </ScrollView>
@@ -240,7 +228,7 @@ export default function SplashOnboardingScreen({
     );
   }
 
-  // SPLASH LOADING SCREEN
+  // SPLASH LOADING SCREEN (Zero Cars, Pure Telemetry Pulse)
   return (
     <View style={styles.splashContainer}>
       <StatusBar style="light" />
@@ -261,13 +249,12 @@ export default function SplashOnboardingScreen({
         </Text>
       </Animated.View>
 
-      {/* High-Tech Highway Vehicle Loading Visual */}
+      {/* High-Tech Geometric GPS Radar Pulse */}
       <View style={styles.loaderWrap}>
-        <VehicleLoader
-          size="lg"
-          mode="highway"
-          showProgress={true}
+        <TelemetryPulseLoader
           statusText={splashMessages[splashStep]}
+          coordinates="-26.2041° S, 28.0473° E"
+          showProgress={true}
         />
       </View>
 
@@ -331,7 +318,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     paddingTop: spacing.xs,
   },
   onboardingBrandTitle: {
@@ -355,33 +342,37 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.text.secondary,
   },
-  pedestalWrapper: {
+  carousel: {
+    flex: 1,
+  },
+  slideContainer: {
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: spacing.lg,
+  },
+  graphicWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: spacing.lg,
+  },
+  copyContainer: {
+    alignItems: "center",
     paddingHorizontal: spacing.md,
-    marginTop: spacing.sm,
   },
-  pedestalOuterCard: {
-    width: "100%",
-    borderRadius: 20,
+  tagBadge: {
     backgroundColor: colors.surface.card,
-    borderWidth: 1.5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    borderWidth: 1,
     borderColor: colors.surface.border,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
-    elevation: 8,
+    marginBottom: spacing.sm,
   },
-  copyCarousel: {
-    flexGrow: 0,
-    marginVertical: spacing.md,
-  },
-  copySlideContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: spacing.xl,
+  tagText: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: colors.accent.primary,
+    letterSpacing: 1,
   },
   heading: {
     fontSize: 28,
