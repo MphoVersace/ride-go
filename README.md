@@ -85,9 +85,11 @@ ride-go/
 │   ├── components/
 │   │   ├── common/               # Reusable UI primitives
 │   │   │   ├── BottomTabBar.tsx  # Floating 4-tab navigation bar (Home, Trips, Wallet, Profile)
-│   │   │   ├── DarkRouteMap.tsx  # Vector dark map with interpolated vehicle motion along path & ETA bubble
+│   │   │   ├── DarkRouteMap.tsx  # Vector dark map with GPS waypoint tracking beacon & ETA bubble
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
+│   │   │   ├── RouteTelemetryGraphic.tsx # Pure vector mobility graphics (Network Matrix, Guaranteed Rand Fares, Satellite Dispatch)
 │   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
+│   │   │   ├── TelemetryPulseLoader.tsx # High-tech geometric GPS radar pulse loader with coordinate locks
 │   │   │   ├── Vehicle3DViewer.tsx # Interactive 3D WebGL viewer (360° orbit, camera transitions, SVG fallback)
 │   │   │   ├── VehicleLoader.tsx # Animated highway and circuit vehicle loading telemetry component
 │   │   │   ├── VehicleSvgs.tsx   # 3D shaded vector suite (3D Side, 3D Front, 3D Rear, Top-Down, Courier, Bakkie, Truck)
@@ -96,6 +98,8 @@ ride-go/
 │   ├── constants/
 │   │   ├── colors.ts             # 60-30-10 color palette tokens
 │   │   ├── metrics.ts            # 8px spacing grid & platform specs (Android & iOS)
+│   │   ├── vehicleFinishes.ts    # Curated automotive paint finishes
+│   │   ├── vehicleModelData.ts   # Embedded binary data URI for 3D model
 │   │   └── index.ts              # Constants barrel export
 │   ├── navigation/
 │   │   ├── types.ts              # Strongly-typed RootStackParamList & navigation props
@@ -103,13 +107,13 @@ ride-go/
 │   │   └── index.ts              # Navigation barrel export
 │   ├── screens/                  # Modular domain screen components
 │   │   ├── auth/                 # Authentication & onboarding flow
-│   │   │   ├── AccountScreen.tsx        # Welcome screen with login & account creation CTAs
+│   │   │   ├── AccountScreen.tsx        # Welcome screen with geometric MobilityNetworkBadge & login CTAs
 │   │   │   ├── AccountTypeScreen.tsx    # Role selection (Rider vs Driver partner)
 │   │   │   └── RiderRegistrationScreen.tsx # Rider signup form with profile sync
 │   │   ├── home/                 # Main home experience
 │   │   │   └── RiderHomeScreen.tsx # Dark map, pill inputs, service tabs, Rand tiers
 │   │   ├── onboarding/           # Animated splash & introduction
-│   │   │   └── SplashOnboardingScreen.tsx # 3D vehicle showcase with synchronized camera angles
+│   │   │   └── SplashOnboardingScreen.tsx # Ultra-sleek car-free route telemetry carousel & GPS radar loader
 │   │   ├── profile/              # Profile, settings, and support
 │   │   │   ├── EditProfileScreen.tsx    # Live name/email/phone editing with avatar generation
 │   │   │   ├── HelpSupportScreen.tsx    # Interactive FAQ accordion & ticket submission
@@ -146,6 +150,7 @@ ride-go/
 │   ├── index.js                  # Expo entry point
 │   ├── package.json              # Dependencies & scripts
 │   ├── tsconfig.json             # TypeScript compiler configuration
+│   └── README.md                 # Architecture & developer documentation
 ```
 
 ---
@@ -154,7 +159,7 @@ ride-go/
 
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
-| **Onboarding** | `SplashOnboarding` | Hardware-accelerated 3D vehicle viewer loading `base.glb` with 360° interactive touch rotation, synchronized camera orbit transitions (Front, 3/4 Perspective, Rear), and instant pure vector SVG fallbacks |
+| **Onboarding** | `SplashOnboarding` | Ultra-sleek car-free route telemetry carousel (Network Matrix, Guaranteed Rand Fares, Satellite Dispatch) and geometric GPS sonar pulse loading sequence |
 | **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |

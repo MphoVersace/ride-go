@@ -16,7 +16,14 @@ import {
   SteeringWheelIcon,
   ArrowRightIcon,
 } from "../../components/common/SvgIcons";
-import { VehicleSideSvg } from "../../components/common/VehicleSvgs";
+import Svg, { Circle, Path } from "react-native-svg";
+
+const UserPassengerIcon = ({ color, size = 24 }: { color: string; size?: number }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Circle cx={12} cy={8} r={4} stroke={color} strokeWidth={2} />
+    <Path d="M4 20c0-4 4-7 8-7s8 3 8 7" stroke={color} strokeWidth={2} strokeLinecap="round" />
+  </Svg>
+);
 
 type RoleOption = "rider" | "driver";
 
@@ -78,9 +85,8 @@ export default function AccountTypeScreen({
             onPress={() => setSelectedRole("rider")}
           >
             <View style={styles.iconCircle}>
-              <VehicleSideSvg
-                width={48}
-                height={24}
+              <UserPassengerIcon
+                size={24}
                 color={selectedRole === "rider" ? colors.accent.primary : colors.text.muted}
               />
             </View>

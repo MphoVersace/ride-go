@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Svg, { Path, Circle, Rect, G } from "react-native-svg";
 import { colors } from "../../constants/colors";
-import { VehicleTopDownSvg } from "./VehicleSvgs";
+
 
 interface DarkRouteMapProps {
   height?: number;
@@ -118,19 +118,24 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
         )}
       </Svg>
 
-      {/* Realtime Moving Vector Vehicle Marker (Top-down Prius) */}
+      {/* Realtime Moving GPS Telemetry Waypoint Beacon (Zero Cars) */}
       {showRoute && (
         <View
           style={[
-            styles.vehicleMarkerContainer,
+            styles.beaconContainer,
             {
               left: `${(vehiclePos.x / 360) * 100}%`,
               top: `${(vehiclePos.y / 240) * 100}%`,
-              transform: [{ translateX: -12 }, { translateY: -22 }],
+              transform: [{ translateX: -14 }, { translateY: -14 }],
             },
           ]}
         >
-          <VehicleTopDownSvg width={24} height={44} rotation={vehiclePos.angle} />
+          <View style={{ transform: [{ rotate: `${vehiclePos.angle}deg` }] }}>
+            <Svg width={28} height={28} viewBox="0 0 28 28" fill="none">
+              <Circle cx={14} cy={14} r={12} fill={colors.background.primary} stroke={colors.accent.primary} strokeWidth={2.5} />
+              <Path d="M14 6 L19 18 L14 15.5 L9 18 Z" fill={colors.accent.primary} />
+            </Svg>
+          </View>
         </View>
       )}
 
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
     color: "#1B3B68",
     letterSpacing: 1.5,
   },
-  vehicleMarkerContainer: {
+  beaconContainer: {
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",

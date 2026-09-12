@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -8,10 +7,45 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Svg, { Circle, Path, Line, Defs, LinearGradient, Stop } from "react-native-svg";
 import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
-import { Vehicle3DShadedSideSvg } from "../../components/common/VehicleSvgs";
+
+// Geometric Mobility Network Hub Badge (Zero cars)
+const MobilityNetworkBadge = () => (
+  <Svg width={180} height={180} viewBox="0 0 180 180" fill="none">
+    <Defs>
+      <LinearGradient id="hubGrad" x1="0" y1="0" x2="1" y2="1">
+        <Stop offset="0%" stopColor={colors.accent.primary} stopOpacity="1" />
+        <Stop offset="100%" stopColor={colors.accent.secondary} stopOpacity="0.8" />
+      </LinearGradient>
+      <LinearGradient id="hubGlow" x1="0" y1="0" x2="0" y2="1">
+        <Stop offset="0%" stopColor={colors.accent.primary} stopOpacity="0.25" />
+        <Stop offset="100%" stopColor={colors.accent.primary} stopOpacity="0.02" />
+      </LinearGradient>
+    </Defs>
+    {/* Concentric Transit Orbits */}
+    <Circle cx={90} cy={90} r={76} stroke={colors.surface.border} strokeWidth={1.5} strokeDasharray="5 5" />
+    <Circle cx={90} cy={90} r={52} stroke={colors.surface.border} strokeWidth={1.5} />
+    <Circle cx={90} cy={90} r={28} fill="url(#hubGlow)" stroke={colors.accent.primary} strokeWidth={1.5} />
+
+    {/* Transverse Transit Arcs */}
+    <Path d="M 30 130 C 55 50, 125 50, 150 130" stroke="url(#hubGrad)" strokeWidth="2.5" strokeLinecap="round" />
+    <Path d="M 35 70 C 65 135, 120 135, 145 70" stroke={colors.surface.border} strokeWidth="1.8" strokeDasharray="4 4" strokeLinecap="round" />
+
+    {/* Interconnected Metro Nodes */}
+    <Circle cx={30} cy={130} r={5} fill={colors.accent.primary} />
+    <Circle cx={150} cy={130} r={5} fill={colors.accent.primary} />
+    <Circle cx={35} cy={70} r={4} fill={colors.text.muted} />
+    <Circle cx={145} cy={70} r={4} fill={colors.text.muted} />
+    <Circle cx={90} cy={40} r={4} fill={colors.accent.primary} />
+
+    {/* Central Mobility Core */}
+    <Circle cx={90} cy={90} r={10} fill={colors.accent.primary} />
+    <Circle cx={90} cy={90} r={4} fill="#FFFFFF" />
+  </Svg>
+);
 
 export default function AccountScreen({
   navigation,
@@ -26,10 +60,10 @@ export default function AccountScreen({
         <Text style={styles.brandTagline}>SOUTH AFRICA</Text>
       </View>
 
-      {/* Hero Visual Card */}
+      {/* Hero Visual Card with Geometric Mobility Hub */}
       <View style={styles.heroWrap}>
         <View style={styles.heroCircle}>
-          <Vehicle3DShadedSideSvg width={230} height={105} />
+          <MobilityNetworkBadge />
         </View>
 
         <Text style={styles.heading}>Move Seamlessly Across South Africa</Text>
@@ -68,72 +102,77 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background.primary,
-    paddingHorizontal: spacing.lg,
     justifyContent: "space-between",
-    paddingBottom: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
   brandHeader: {
     alignItems: "center",
-    marginTop: spacing.xl,
+    marginTop: spacing.sm,
   },
   brandTitle: {
-    fontSize: 38,
-    fontWeight: "900",
+    fontSize: 32,
+    fontWeight: "bold",
     color: colors.accent.primary,
-    letterSpacing: 1.5,
+    letterSpacing: -0.5,
   },
   brandTagline: {
-    fontSize: 11,
-    fontWeight: "800",
-    color: colors.text.muted,
-    letterSpacing: 3,
+    fontSize: 10,
+    fontWeight: "700",
+    color: colors.text.secondary,
+    letterSpacing: 2,
     marginTop: 2,
   },
   heroWrap: {
     alignItems: "center",
-    marginVertical: spacing.lg,
+    paddingHorizontal: spacing.sm,
   },
   heroCircle: {
-    width: 240,
-    height: 130,
-    borderRadius: 24,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
     backgroundColor: colors.surface.card,
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: spacing.lg,
     borderWidth: 1.5,
     borderColor: colors.surface.border,
-    marginBottom: spacing.lg,
-    overflow: "hidden",
-  },
-  heroCarImage: {
-    width: 220,
-    height: 110,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    elevation: 6,
   },
   heading: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: "bold",
     color: colors.text.primary,
     textAlign: "center",
     marginBottom: spacing.sm,
-    lineHeight: 32,
   },
   description: {
     fontSize: 14,
+    lineHeight: 20,
     color: colors.text.secondary,
     textAlign: "center",
-    lineHeight: 20,
-    paddingHorizontal: spacing.sm,
+    maxWidth: 300,
   },
   buttonGroup: {
     width: "100%",
     gap: spacing.sm,
+    marginBottom: spacing.xs,
   },
   primaryButton: {
-    backgroundColor: colors.accent.primary,
     height: 56,
+    backgroundColor: colors.accent.primary,
     borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: colors.accent.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 4,
   },
   primaryButtonText: {
     fontSize: 16,
@@ -141,16 +180,16 @@ const styles = StyleSheet.create({
     color: colors.accent.contrast,
   },
   secondaryButton: {
+    height: 56,
     backgroundColor: colors.surface.card,
-    height: 54,
-    borderRadius: 27,
+    borderRadius: 28,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: colors.surface.border,
   },
   secondaryButtonText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "600",
     color: colors.text.primary,
   },
@@ -160,5 +199,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 16,
     marginTop: spacing.xs,
+    paddingHorizontal: spacing.sm,
   },
 });
