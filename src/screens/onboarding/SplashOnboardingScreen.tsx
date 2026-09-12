@@ -14,18 +14,14 @@ import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
 import { ArrowRightIcon } from "../../components/common/SvgIcons";
-import {
-  Vehicle3DFrontSvg,
-  Vehicle3DShadedSideSvg,
-  Vehicle3DRearSvg,
-} from "../../components/common/VehicleSvgs";
+import Vehicle3DViewer, { CameraAnglePreset } from "../../components/common/Vehicle3DViewer";
 import VehicleLoader from "../../components/common/VehicleLoader";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface OnboardingSlide {
   id: string;
-  renderVehicle: () => React.ReactNode;
+  angle: CameraAnglePreset;
   title: string;
   description: string;
 }
@@ -33,39 +29,21 @@ interface OnboardingSlide {
 const ONBOARDING_SLIDES: OnboardingSlide[] = [
   {
     id: "slide_1",
-    renderVehicle: () => (
-      <Vehicle3DFrontSvg
-        width={230}
-        height={140}
-        primaryColor={colors.accent.primary}
-      />
-    ),
+    angle: "front",
     title: "Ride with confidence",
     description:
       "Safe, premium rides and seamless point-to-point travel across all South African metros.",
   },
   {
     id: "slide_2",
-    renderVehicle: () => (
-      <Vehicle3DShadedSideSvg
-        width={250}
-        height={115}
-        primaryColor={colors.accent.primary}
-      />
-    ),
+    angle: "angle",
     title: "Upfront transparent fares",
     description:
       "Lock in guaranteed Rand prices before you book with zero unexpected surges or hidden fees.",
   },
   {
     id: "slide_3",
-    renderVehicle: () => (
-      <Vehicle3DRearSvg
-        width={230}
-        height={140}
-        primaryColor={colors.accent.primary}
-      />
-    ),
+    angle: "rear",
     title: "Rapid on-demand logistics",
     description:
       "From express courier motorcycles to heavy bakkies and full moving trucks at your fingertips.",
@@ -141,9 +119,25 @@ export default function SplashOnboardingScreen({
     navigation.navigate("Account");
   };
 
+  const handleAngleSelect = (angle: CameraAnglePreset) => {
+    let targetIndex = currentSlide;
+    if (angle === "front") targetIndex = 0;
+    else if (angle === "angle" || angle === "side") targetIndex = 1;
+    else if (angle === "rear") targetIndex = 2;
+
+    if (targetIndex !== currentSlide) {
+      scrollViewRef.current?.scrollTo({
+        x: targetIndex * SCREEN_WIDTH,
+        animated: true,
+      });
+      setCurrentSlide(targetIndex);
+    }
+  };
+
   // ONBOARDING SCREEN
   if (showOnboarding) {
     const isLastSlide = currentSlide === ONBOARDING_SLIDES.length - 1;
+    const currentSlideAngle = ONBOARDING_SLIDES[currentSlide]?.angle || "angle";
 
     return (
       <SafeAreaView style={styles.container}>
@@ -164,7 +158,21 @@ export default function SplashOnboardingScreen({
           </TouchableOpacity>
         </View>
 
-        {/* Swipeable Horizontal Slides Carousel */}
+        {/* Interactive 3D Model Showcase Pedestal (Hardware-Accelerated WebGL & SVG Fallback) */}
+        <View style={styles.pedestalWrapper}>
+          <View style={styles.pedestalOuterCard}>
+            <Vehicle3DViewer
+              height={230}
+              currentAngle={currentSlideAngle}
+              autoRotate={currentSlide === 1}
+              interactive={true}
+              showAngleControls={true}
+              onAngleChange={handleAngleSelect}
+            />
+          </View>
+        </View>
+
+        {/* Swipeable Copy Carousel */}
         <ScrollView
           ref={scrollViewRef}
           horizontal
@@ -174,28 +182,20 @@ export default function SplashOnboardingScreen({
             const newIndex = Math.round(
               e.nativeEvent.contentOffset.x / SCREEN_WIDTH
             );
-            setCurrentSlide(newIndex);
+            if (newIndex >= 0 && newIndex < ONBOARDING_SLIDES.length) {
+              setCurrentSlide(newIndex);
+            }
           }}
           scrollEventThrottle={16}
-          style={styles.carousel}
+          style={styles.copyCarousel}
         >
           {ONBOARDING_SLIDES.map((slide) => (
             <View
               key={slide.id}
-              style={[styles.slideContainer, { width: SCREEN_WIDTH }]}
+              style={[styles.copySlideContainer, { width: SCREEN_WIDTH }]}
             >
-              {/* Pure 3D Vector SVG Vehicle Pedestal (Rule 17 Compliant: No 5-star badges) */}
-              <View style={styles.pedestalOuterRing}>
-                <View style={styles.pedestalInnerRing}>
-                  {slide.renderVehicle()}
-                </View>
-              </View>
-
-              {/* Onboarding Copy */}
-              <View style={styles.copyContainer}>
-                <Text style={styles.heading}>{slide.title}</Text>
-                <Text style={styles.description}>{slide.description}</Text>
-              </View>
+              <Text style={styles.heading}>{slide.title}</Text>
+              <Text style={styles.description}>{slide.description}</Text>
             </View>
           ))}
         </ScrollView>
@@ -354,47 +354,36 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.text.secondary,
   },
-  carousel: {
-    flex: 1,
-  },
-  slideContainer: {
+  pedestalWrapper: {
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.md,
+    marginTop: spacing.sm,
   },
-  pedestalOuterRing: {
-    width: 270,
-    height: 270,
-    borderRadius: 135,
+  pedestalOuterCard: {
+    width: "100%",
+    borderRadius: 20,
     backgroundColor: colors.surface.card,
     borderWidth: 1.5,
     borderColor: colors.surface.border,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: spacing.xl,
+    overflow: "hidden",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.35,
     shadowRadius: 12,
     elevation: 8,
   },
-  pedestalInnerRing: {
-    width: 224,
-    height: 224,
-    borderRadius: 112,
-    backgroundColor: colors.surface.elevated,
-    borderWidth: 1.5,
-    borderColor: colors.surface.border,
+  copyCarousel: {
+    flexGrow: 0,
+    marginVertical: spacing.md,
+  },
+  copySlideContainer: {
     alignItems: "center",
     justifyContent: "center",
-    overflow: "hidden",
-  },
-  copyContainer: {
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.xl,
   },
   heading: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "bold",
     color: colors.text.primary,
     textAlign: "center",

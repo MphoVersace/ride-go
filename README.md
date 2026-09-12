@@ -12,6 +12,8 @@ RideGo is an on-demand ride-hailing and mobility application built with **React 
 - **Navigation**: React Navigation 7 (Native Stack)
 - **Safe Area**: `react-native-safe-area-context`
 - **Vector Graphics**: `react-native-svg`
+- **3D Hardware Acceleration**: `react-native-webview` with Google `<model-viewer>` for real-time 360° orbital touch rotation and studio PBR lighting
+- **3D Asset Pipeline**: Metro bundler configured via `metro.config.js` for `.glb`, `.gltf`, `.obj`, and `.usdz` assets
 - **Orchestration**: `concurrently` (multi-process terminal runner with ungarbled QR display)
 
 ---
@@ -67,6 +69,10 @@ ride-go/
 │   ├── favicon.png
 │   ├── icon.png
 │   ├── splash-icon.png
+│   ├── models/                   # Master 3D vehicle assets
+│   │   ├── base.glb              # Binary GLTF with PBR metallic-roughness material (4.18MB)
+│   │   ├── base.obj              # 60,014-vertex Wavefront OBJ mesh (11.75MB)
+│   │   └── base.usdz             # Universal Scene Description for iOS AR (8.18MB)
 │   └── vehicles/                 # Vehicle references & source blueprint assets
 │       ├── car_perspective.jpg   # Reference 3D perspective sedan render
 │       ├── car_top_down.jpg      # Reference top-down vehicle render
@@ -82,6 +88,7 @@ ride-go/
 │   │   │   ├── DarkRouteMap.tsx  # Vector dark map with interpolated vehicle motion along path & ETA bubble
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
 │   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
+│   │   │   ├── Vehicle3DViewer.tsx # Interactive 3D WebGL viewer (360° orbit, camera transitions, SVG fallback)
 │   │   │   ├── VehicleLoader.tsx # Animated highway and circuit vehicle loading telemetry component
 │   │   │   ├── VehicleSvgs.tsx   # 3D shaded vector suite (3D Side, 3D Front, 3D Rear, Top-Down, Courier, Bakkie, Truck)
 │   │   │   ├── index.ts          # Common components barrel export
@@ -102,7 +109,7 @@ ride-go/
 │   │   ├── home/                 # Main home experience
 │   │   │   └── RiderHomeScreen.tsx # Dark map, pill inputs, service tabs, Rand tiers
 │   │   ├── onboarding/           # Animated splash & introduction
-│   │   │   └── SplashOnboardingScreen.tsx
+│   │   │   └── SplashOnboardingScreen.tsx # 3D vehicle showcase with synchronized camera angles
 │   │   ├── profile/              # Profile, settings, and support
 │   │   │   ├── EditProfileScreen.tsx    # Live name/email/phone editing with avatar generation
 │   │   │   ├── HelpSupportScreen.tsx    # Interactive FAQ accordion & ticket submission
@@ -130,14 +137,15 @@ ride-go/
 │   ├── types/                    # Domain models & TypeScript interfaces
 │   │   ├── index.ts
 │   │   └── .gitkeep
-│   └── utils/                    # Utility helpers and formatters
-│       └── .gitkeep
-├── App.tsx                       # Root React Native component
-├── app.json                      # Expo application manifest
-├── index.js                      # Expo entry point
-├── package.json                  # Dependencies & scripts
-├── tsconfig.json                 # TypeScript compiler configuration
-└── README.md                     # Architecture & developer documentation
+│   ├── utils/                    # Utility helpers and formatters
+│   │   └── .gitkeep
+│   ├── declarations.d.ts         # TypeScript asset module declarations (glb, obj, usdz, etc.)
+│   ├── metro.config.js           # Metro bundler config extending asset extensions
+│   ├── App.tsx                   # Root React Native component
+│   ├── app.json                  # Expo application manifest
+│   ├── index.js                  # Expo entry point
+│   ├── package.json              # Dependencies & scripts
+│   ├── tsconfig.json             # TypeScript compiler configuration
 ```
 
 ---
@@ -146,7 +154,7 @@ ride-go/
 
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
-| **Onboarding** | `SplashOnboarding` | Swipeable 100% vector 3D vehicle carousel (3D Front, 3D Shaded Side, 3D Rear SVGs) with interactive paging and telemetry loading sequence |
+| **Onboarding** | `SplashOnboarding` | Hardware-accelerated 3D vehicle viewer loading `base.glb` with 360° interactive touch rotation, synchronized camera orbit transitions (Front, 3/4 Perspective, Rear), and instant pure vector SVG fallbacks |
 | **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
@@ -283,6 +291,19 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
    - Registration form with first/last name, South African mobile (+27), email, and secure password.
    - Automatically initializes and synchronizes the rider profile within `RideContext` before routing to the main home dashboard.
 
+---
 
+## 13. 3D Model Asset Pipeline & Interactive 3D Viewer
 
-
+1. **Master 3D Vehicle Models (`assets/models/`)**:
+   - **`base.glb`** (4.18 MB): Binary GLTF 2.0 asset containing the complete vehicle geometry and PBR metallic-roughness material for hardware-accelerated WebGL rendering.
+   - **`base.obj`** (11.75 MB): 60,014-vertex / 120,000-face Wavefront polygonal mesh providing precise physical vehicle dimensions: 0.89m width × 0.65m height × 1.90m length.
+   - **`base.usdz`** (8.18 MB): Universal Scene Description package tailored for Apple QuickLook AR on iOS devices.
+2. **Metro Asset Resolver Configuration ([metro.config.js](file:///d:/deployment_2026/ride-go/metro.config.js))**:
+   - Extended `config.resolver.assetExts` to recognize `glb`, `gltf`, `obj`, and `usdz` extensions, allowing direct `require()` asset imports into React Native bundles.
+3. **Hardware-Accelerated 3D Component ([Vehicle3DViewer.tsx](file:///d:/deployment_2026/ride-go/src/components/common/Vehicle3DViewer.tsx))**:
+   - Embeds a high-performance WebGL canvas via `react-native-webview` utilizing Google `<model-viewer>`.
+   - **Full 360° Interaction**: Touch-based orbital rotation with natural inertia and auto-rotate toggling.
+   - **Camera Orbit Presets**: Programmatic camera transitions between Front (`0deg 75deg 2.4m`), 3/4 Perspective (`45deg 72deg 2.5m`), Side (`90deg 75deg 2.4m`), and Rear (`180deg 75deg 2.4m`).
+   - **Instant SVG Fallback**: Zero-latency rendering using `VehicleSvgs.tsx` (`Vehicle3DFrontSvg`, `Vehicle3DShadedSideSvg`, `Vehicle3DRearSvg`) while WebGL initializes or when offline.
+   - **Strict Compliance**: Adheres to the 60-30-10 palette (`#071A3D`, `#102A52`, `#5BC0FF`) with zero Rule 16 / Rule 17 forbidden badges.
