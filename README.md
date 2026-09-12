@@ -67,11 +67,11 @@ ride-go/
 │   ├── favicon.png
 │   ├── icon.png
 │   ├── splash-icon.png
-│   └── vehicles/                 # Photorealistic 3D vehicle assets
-│       ├── car_front.jpg         # 3D direct front-facing electric sedan render
-│       ├── car_perspective.jpg   # 3D 3/4 perspective electric sedan render
-│       ├── car_rear.jpg          # 3D rear 3/4 perspective electric sedan render
-│       └── car_top_down.jpg      # Top-down vehicle inspection render
+│   └── vehicles/                 # Vehicle references & source blueprint assets
+│       ├── car_perspective.jpg   # Reference 3D perspective sedan render
+│       ├── car_top_down.jpg      # Reference top-down vehicle render
+│       ├── prius_blueprint.png   # Multi-angle technical automotive blueprint
+│       └── prius_blueprint.svg   # Scalable vector blueprint master
 ├── src/                          # Application source code
 │   ├── assets/
 │   │   ├── icons/                # SVG vector assets
@@ -83,7 +83,7 @@ ride-go/
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
 │   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
 │   │   │   ├── VehicleLoader.tsx # Animated highway and circuit vehicle loading telemetry component
-│   │   │   ├── VehicleSvgs.tsx   # Top-down & side vector vehicle SVGs (Sedan, Bike, Bakkie, Truck)
+│   │   │   ├── VehicleSvgs.tsx   # 3D shaded vector suite (3D Side, 3D Front, 3D Rear, Top-Down, Courier, Bakkie, Truck)
 │   │   │   ├── index.ts          # Common components barrel export
 │   │   │   └── .gitkeep
 │   ├── constants/
@@ -146,7 +146,7 @@ ride-go/
 
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
-| **Onboarding** | `SplashOnboarding` | Swipeable 3D photorealistic car carousel (front, perspective, rear angles) with interactive paging and telemetry loading sequence |
+| **Onboarding** | `SplashOnboarding` | Swipeable 100% vector 3D vehicle carousel (3D Front, 3D Shaded Side, 3D Rear SVGs) with interactive paging and telemetry loading sequence |
 | **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |

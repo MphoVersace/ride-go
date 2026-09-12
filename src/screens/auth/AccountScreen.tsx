@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
-import { VehicleSideSvg } from "../../components/common/VehicleSvgs";
+import { Vehicle3DShadedSideSvg } from "../../components/common/VehicleSvgs";
 
 export default function AccountScreen({
   navigation,
@@ -29,11 +29,7 @@ export default function AccountScreen({
       {/* Hero Visual Card */}
       <View style={styles.heroWrap}>
         <View style={styles.heroCircle}>
-          <Image
-            source={require("../../../assets/vehicles/car_perspective.jpg")}
-            style={styles.heroCarImage}
-            resizeMode="contain"
-          />
+          <Vehicle3DShadedSideSvg width={230} height={105} />
         </View>
 
         <Text style={styles.heading}>Move Seamlessly Across South Africa</Text>
