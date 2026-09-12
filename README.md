@@ -80,7 +80,9 @@ ride-go/
 │   │   │   ├── DarkRouteMap.tsx  # Vector dark map with interpolated vehicle motion along path & ETA bubble
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
 │   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
+│   │   │   ├── VehicleLoader.tsx # Animated highway and circuit vehicle loading telemetry component
 │   │   │   ├── VehicleSvgs.tsx   # Top-down & side vector vehicle SVGs (Sedan, Bike, Bakkie, Truck)
+│   │   │   ├── index.ts          # Common components barrel export
 │   │   │   └── .gitkeep
 │   ├── constants/
 │   │   ├── colors.ts             # 60-30-10 color palette tokens
@@ -142,7 +144,7 @@ ride-go/
 
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
-| **Onboarding** | `SplashOnboarding` | Animated vehicle & branding intro with splash sequence |
+| **Onboarding** | `SplashOnboarding` | High-tech highway vehicle loading telemetry and modernized circular pedestal onboarding hero |
 | **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
