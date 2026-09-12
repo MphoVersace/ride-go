@@ -160,10 +160,9 @@ export default function RiderHomeScreen({
               <Text style={styles.highlightName}>Ucok Behel</Text>
               <Text style={styles.highlightVehicle}>Honda CR-V • AB6299ZG</Text>
             </View>
-            <View style={styles.ratingStars}>
-              {[1, 2, 3, 4, 5].map((i) => (
-                <StarIcon key={i} size={14} color={colors.accent.primary} />
-              ))}
+            <View style={styles.driverRatingWrap}>
+              <StarIcon size={14} color={colors.accent.primary} />
+              <Text style={styles.driverRatingText}>4.9</Text>
             </View>
           </TouchableOpacity>
         ) : (
@@ -742,9 +741,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  ratingStars: {
+  driverRatingWrap: {
     flexDirection: "row",
-    gap: 3,
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: colors.surface.elevated,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  driverRatingText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: colors.text.primary,
   },
   promoBannerCard: {
     flexDirection: "row",

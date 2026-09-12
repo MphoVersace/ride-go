@@ -26,7 +26,7 @@ RideGo adheres strictly to the **60-30-10 visual hierarchy rule** with a maximum
 | **30%** | **Panel & Surface** | `#102A52` / `#16325C` | Cards, elevated sheets, input fields, containers, borders (`#1D3557`) |
 | **10%** | **Accent & Action** | `#5BC0FF` | Primary action buttons, active navigation states, pins, highlights |
 
-**Strict Policy**: Ad-hoc rainbow status tags, badges (e.g. 'READ ONLY', 'DEMO ONLY', 'OK'), and hover glow animations are strictly forbidden.
+**Strict Policy**: Ad-hoc rainbow status tags, badges (e.g. 'READ ONLY', 'DEMO ONLY', 'OK'), hover glow animations, and badges carrying '5-star' or safety guarantee claims (e.g. 'Verified 5-Star Drivers', 'SAPS 10111 Integrated') or floating shield trust icons are strictly forbidden (Rule 16 & Rule 17).
 
 ---
 
@@ -68,7 +68,9 @@ ride-go/
 │   ├── icon.png
 │   ├── splash-icon.png
 │   └── vehicles/                 # Photorealistic 3D vehicle assets
-│       ├── car_perspective.jpg   # 3D perspective sedan render
+│       ├── car_front.jpg         # 3D direct front-facing electric sedan render
+│       ├── car_perspective.jpg   # 3D 3/4 perspective electric sedan render
+│       ├── car_rear.jpg          # 3D rear 3/4 perspective electric sedan render
 │       └── car_top_down.jpg      # Top-down vehicle inspection render
 ├── src/                          # Application source code
 │   ├── assets/
@@ -144,7 +146,7 @@ ride-go/
 
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
-| **Onboarding** | `SplashOnboarding` | High-tech highway vehicle loading telemetry and modernized circular pedestal onboarding hero |
+| **Onboarding** | `SplashOnboarding` | Swipeable 3D photorealistic car carousel (front, perspective, rear angles) with interactive paging and telemetry loading sequence |
 | **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |

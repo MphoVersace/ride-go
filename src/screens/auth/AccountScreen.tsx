@@ -29,12 +29,16 @@ export default function AccountScreen({
       {/* Hero Visual Card */}
       <View style={styles.heroWrap}>
         <View style={styles.heroCircle}>
-          <VehicleSideSvg width={180} height={80} color={colors.accent.primary} />
+          <Image
+            source={require("../../../assets/vehicles/car_perspective.jpg")}
+            style={styles.heroCarImage}
+            resizeMode="contain"
+          />
         </View>
 
         <Text style={styles.heading}>Move Seamlessly Across South Africa</Text>
         <Text style={styles.description}>
-          Upfront Rand fares, verified 5-star drivers, live GPS tracking, and instant RideGo Wallet payments.
+          Upfront Rand fares, verified professional drivers, live GPS tracking, and instant RideGo Wallet payments.
         </Text>
       </View>
 
@@ -94,8 +98,8 @@ const styles = StyleSheet.create({
     marginVertical: spacing.lg,
   },
   heroCircle: {
-    width: 210,
-    height: 110,
+    width: 240,
+    height: 130,
     borderRadius: 24,
     backgroundColor: colors.surface.card,
     alignItems: "center",
@@ -103,6 +107,11 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.surface.border,
     marginBottom: spacing.lg,
+    overflow: "hidden",
+  },
+  heroCarImage: {
+    width: 220,
+    height: 110,
   },
   heading: {
     fontSize: 26,
