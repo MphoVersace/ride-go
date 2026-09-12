@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import Svg, { Path, Circle, Rect, Line, G } from "react-native-svg";
+import Svg, { Path, Circle, Rect, G } from "react-native-svg";
 import { colors } from "../../constants/colors";
 import { VehicleTopDownSvg } from "./VehicleSvgs";
 
@@ -8,13 +8,37 @@ interface DarkRouteMapProps {
   height?: number;
   showRoute?: boolean;
   driverEta?: string;
+  progress?: number; // 0.0 (origin) to 1.0 (destination)
+}
+
+function getInterpolatedPosition(progress: number) {
+  const p = Math.max(0, Math.min(1, progress));
+  const totalLength = 320;
+  const d = p * totalLength;
+
+  if (d <= 80) {
+    const u = d / 80;
+    return { x: 70, y: 180 - 80 * u, angle: 0 };
+  } else if (d <= 191.8) {
+    const u = (d - 80) / 111.8;
+    return { x: 70 + 110 * u, y: 100 - 20 * u, angle: 75 };
+  } else if (d <= 269.9) {
+    const u = (d - 191.8) / 78.1;
+    return { x: 180 + 50 * u, y: 80 + 60 * u, angle: 140 };
+  } else {
+    const u = (d - 269.9) / 50.1;
+    return { x: 230 + 50 * u, y: 140, angle: 90 };
+  }
 }
 
 export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
   height = 240,
   showRoute = true,
   driverEta,
+  progress = 0.35,
 }) => {
+  const vehiclePos = getInterpolatedPosition(progress);
+
   return (
     <View style={[styles.mapContainer, { height }]}>
       <Svg width="100%" height="100%" viewBox="0 0 360 240" preserveAspectRatio="none">
@@ -70,11 +94,25 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
             />
 
             {/* Pickup Marker (Origin) */}
-            <Circle cx="70" cy="180" r="10" fill={colors.background.primary} stroke={colors.accent.primary} strokeWidth="3" />
+            <Circle
+              cx="70"
+              cy="180"
+              r="10"
+              fill={colors.background.primary}
+              stroke={colors.accent.primary}
+              strokeWidth="3"
+            />
             <Circle cx="70" cy="180" r="4" fill={colors.accent.primary} />
 
             {/* Destination Marker */}
-            <Circle cx="280" cy="140" r="10" fill={colors.background.primary} stroke={colors.text.primary} strokeWidth="3" />
+            <Circle
+              cx="280"
+              cy="140"
+              r="10"
+              fill={colors.background.primary}
+              stroke={colors.text.primary}
+              strokeWidth="3"
+            />
             <Circle cx="280" cy="140" r="4" fill={colors.text.primary} />
           </G>
         )}
@@ -82,20 +120,33 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
 
       {/* Realtime Moving Vector Vehicle Marker (Top-down Prius) */}
       {showRoute && (
-        <View style={styles.vehicleMarkerContainer}>
-          <VehicleTopDownSvg width={22} height={44} rotation={70} />
+        <View
+          style={[
+            styles.vehicleMarkerContainer,
+            {
+              left: `${(vehiclePos.x / 360) * 100}%`,
+              top: `${(vehiclePos.y / 240) * 100}%`,
+              transform: [{ translateX: -12 }, { translateY: -22 }],
+            },
+          ]}
+        >
+          <VehicleTopDownSvg width={24} height={44} rotation={vehiclePos.angle} />
+        </View>
+      )}
+
+      {/* Dynamic Callout Bubble over Destination (matching video reference) */}
+      {showRoute && driverEta && (
+        <View style={styles.destinationCallout}>
+          <View style={styles.calloutBubble}>
+            <Text style={styles.calloutText}>{driverEta}</Text>
+          </View>
+          <View style={styles.calloutCaret} />
         </View>
       )}
 
       {/* Street Name Watermarks */}
       <Text style={styles.streetLabelLeft}>KINGS WAY</Text>
       <Text style={styles.streetLabelRight}>MAIN RD</Text>
-
-      {driverEta && (
-        <View style={styles.etaPill}>
-          <Text style={styles.etaText}>{driverEta}</Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -129,24 +180,44 @@ const styles = StyleSheet.create({
   },
   vehicleMarkerContainer: {
     position: "absolute",
-    left: 170,
-    top: 60,
     alignItems: "center",
     justifyContent: "center",
   },
-  etaPill: {
+  destinationCallout: {
     position: "absolute",
-    top: 14,
-    right: 14,
-    backgroundColor: colors.accent.primary,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    right: "12%",
+    top: "35%",
+    alignItems: "center",
+    zIndex: 10,
   },
-  etaText: {
-    color: colors.accent.contrast,
-    fontSize: 12,
+  calloutBubble: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderWidth: 1.5,
+    borderColor: colors.accent.primary,
+    shadowColor: colors.accent.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  calloutText: {
+    fontSize: 11,
     fontWeight: "bold",
+    color: colors.text.primary,
+  },
+  calloutCaret: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
+    borderTopWidth: 5,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderTopColor: colors.accent.primary,
+    marginTop: -0.5,
   },
 });
 

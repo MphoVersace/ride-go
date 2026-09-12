@@ -141,3 +141,179 @@ export const VehicleSideSvg: React.FC<{
     </Svg>
   );
 };
+
+/**
+ * Courier delivery motorcycle SVG with rear cargo box.
+ */
+export const CourierBikeSvg: React.FC<{
+  width?: number;
+  height?: number;
+  color?: string;
+}> = ({
+  width = 56,
+  height = 28,
+  color = colors.accent.primary,
+}) => {
+  return (
+    <Svg width={width} height={height} viewBox="0 0 160 80" fill="none">
+      {/* Front & Rear Wheels */}
+      <Circle cx="30" cy="58" r="14" fill="#111827" stroke={color} strokeWidth="2.5" />
+      <Circle cx="30" cy="58" r="6" fill="#C9D6E8" />
+      <Circle cx="130" cy="58" r="14" fill="#111827" stroke={color} strokeWidth="2.5" />
+      <Circle cx="130" cy="58" r="6" fill="#C9D6E8" />
+
+      {/* Bike Chassis & Frame */}
+      <Path
+        d="M30 58 L60 52 L90 54 L130 58"
+        stroke={color}
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
+      <Path
+        d="M60 52 L50 28 L36 28"
+        stroke={color}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+      {/* Front Fork & Handlebars */}
+      <Path
+        d="M130 58 L114 26 L108 26"
+        stroke={color}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+      {/* Rider Seat */}
+      <Path
+        d="M74 38 C80 34 94 34 100 38 L98 44 L72 44 Z"
+        fill={colors.background.primary}
+        stroke={color}
+        strokeWidth="1.5"
+      />
+
+      {/* Courier Delivery Box on Back */}
+      <Rect
+        x="36"
+        y="18"
+        width="34"
+        height="26"
+        rx="4"
+        fill={colors.surface.elevated}
+        stroke={color}
+        strokeWidth="2"
+      />
+      <Path
+        d="M36 28 L70 28"
+        stroke={color}
+        strokeWidth="1.5"
+      />
+      {/* Headlight */}
+      <Circle cx="120" cy="30" r="4" fill="#FFFFFF" />
+    </Svg>
+  );
+};
+
+/**
+ * South African Delivery Bakkie (Pickup truck) with cargo bed.
+ */
+export const DeliveryBakkieSvg: React.FC<{
+  width?: number;
+  height?: number;
+  color?: string;
+}> = ({
+  width = 60,
+  height = 28,
+  color = colors.accent.primary,
+}) => {
+  return (
+    <Svg width={width} height={height} viewBox="0 0 160 80" fill="none">
+      {/* Cab and Cargo Bed Silhouette */}
+      <Path
+        d="M10 52 C10 46 14 44 20 44 L90 44 L90 28 C90 22 96 18 104 18 L124 18 C132 18 140 26 148 38 L152 46 C154 50 154 54 150 56 L138 56 C136 48 126 42 116 42 C106 42 96 48 94 56 L54 56 C52 48 42 42 32 42 C22 42 12 48 10 56 Z"
+        fill={color}
+        opacity={0.9}
+      />
+      {/* Open Bed Rail */}
+      <Rect
+        x="12"
+        y="32"
+        width="76"
+        height="12"
+        rx="2"
+        fill={colors.surface.elevated}
+        stroke={color}
+        strokeWidth="1.5"
+      />
+      {/* Cab Window */}
+      <Path
+        d="M96 24 L120 24 C126 24 132 30 138 38 L96 38 Z"
+        fill={colors.background.primary}
+      />
+
+      {/* Front and Rear Rugged Wheels */}
+      <Circle cx="32" cy="56" r="13" fill="#111827" stroke={color} strokeWidth="2.5" />
+      <Circle cx="32" cy="56" r="5" fill="#C9D6E8" />
+      <Circle cx="116" cy="56" r="13" fill="#111827" stroke={color} strokeWidth="2.5" />
+      <Circle cx="116" cy="56" r="5" fill="#C9D6E8" />
+
+      {/* Lights */}
+      <Path d="M152 48 L148 52" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
+      <Path d="M8 46 L8 52" stroke="#FF4D4D" strokeWidth="2.5" strokeLinecap="round" />
+    </Svg>
+  );
+};
+
+/**
+ * Enclosed Furniture Moving Truck SVG.
+ */
+export const MovingTruckSvg: React.FC<{
+  width?: number;
+  height?: number;
+  color?: string;
+}> = ({
+  width = 64,
+  height = 30,
+  color = colors.accent.primary,
+}) => {
+  return (
+    <Svg width={width} height={height} viewBox="0 0 160 80" fill="none">
+      {/* Enclosed Rear Cargo Box */}
+      <Rect
+        x="8"
+        y="12"
+        width="90"
+        height="44"
+        rx="4"
+        fill={colors.surface.elevated}
+        stroke={color}
+        strokeWidth="2"
+      />
+      {/* Box Panel Ribs */}
+      <Path d="M38 12 V56M68 12 V56" stroke={color} strokeWidth="1" opacity={0.6} />
+
+      {/* Cab Front */}
+      <Path
+        d="M98 22 C98 18 102 16 108 16 L124 16 C134 16 142 24 148 36 L154 48 C156 52 154 56 148 56 L134 56 C132 48 122 42 112 42 C102 42 98 48 98 56 Z"
+        fill={color}
+        opacity={0.9}
+      />
+      {/* Cab Windshield */}
+      <Path
+        d="M104 22 L122 22 C128 22 134 28 140 36 L104 36 Z"
+        fill={colors.background.primary}
+      />
+
+      {/* Dual Rear Wheels & Front Wheel */}
+      <Circle cx="30" cy="58" r="12" fill="#111827" stroke={color} strokeWidth="2" />
+      <Circle cx="30" cy="58" r="5" fill="#C9D6E8" />
+      <Circle cx="54" cy="58" r="12" fill="#111827" stroke={color} strokeWidth="2" />
+      <Circle cx="54" cy="58" r="5" fill="#C9D6E8" />
+      <Circle cx="120" cy="58" r="12" fill="#111827" stroke={color} strokeWidth="2" />
+      <Circle cx="120" cy="58" r="5" fill="#C9D6E8" />
+
+      {/* Lights */}
+      <Path d="M152 48 L148 52" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
+      <Path d="M6 50 L6 54" stroke="#FF4D4D" strokeWidth="2" strokeLinecap="round" />
+    </Svg>
+  );
+};
+
