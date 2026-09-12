@@ -307,3 +307,6 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
    - **Camera Orbit Presets**: Programmatic camera transitions between Front (`0deg 75deg 2.4m`), 3/4 Perspective (`45deg 72deg 2.5m`), Side (`90deg 75deg 2.4m`), and Rear (`180deg 75deg 2.4m`).
    - **Instant SVG Fallback**: Zero-latency rendering using `VehicleSvgs.tsx` (`Vehicle3DFrontSvg`, `Vehicle3DShadedSideSvg`, `Vehicle3DRearSvg`) while WebGL initializes or when offline.
    - **Strict Compliance**: Adheres to the 60-30-10 palette (`#071A3D`, `#102A52`, `#5BC0FF`) with zero Rule 16 / Rule 17 forbidden badges.
+4. **Embedded Data URI Architecture ([vehicleModelData.ts](file:///d:/deployment_2026/ride-go/src/constants/vehicleModelData.ts))**:
+   - Encodes `base.glb` into an in-memory `data:model/gltf-binary;base64,...` constant.
+   - Completely bypasses Metro bundler startup cache latency, eliminating `Cannot find module ... base.glb` errors when running across pre-existing Expo processes without requiring a server reboot (`npx expo start -c`).

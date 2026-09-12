@@ -9,9 +9,9 @@ import {
   ViewStyle,
 } from "react-native";
 import { WebView } from "react-native-webview";
-import { Asset } from "expo-asset";
 import Svg, { Path, Circle } from "react-native-svg";
 import { colors } from "../../constants/colors";
+import { VEHICLE_GLB_BASE64 } from "../../constants/vehicleModelData";
 import {
   Vehicle3DFrontSvg,
   Vehicle3DShadedSideSvg,
@@ -120,7 +120,7 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
   onAngleChange,
   style,
 }) => {
-  const [modelUri, setModelUri] = useState<string | null>(null);
+  const [modelUri, setModelUri] = useState<string>(VEHICLE_GLB_BASE64);
   const [selectedAngle, setSelectedAngle] = useState<CameraAnglePreset>(
     (currentAngle in ORBIT_MAP ? currentAngle : "angle") as CameraAnglePreset
   );
@@ -136,27 +136,6 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       applyCameraOrbit(ORBIT_MAP[angleKey]);
     }
   }, [currentAngle]);
-
-  // Load 3D model asset via expo-asset
-  useEffect(() => {
-    let isMounted = true;
-    async function loadAsset() {
-      try {
-        const asset = Asset.fromModule(require("../../../assets/models/base.glb"));
-        await asset.downloadAsync();
-        if (isMounted) {
-          const resolvedUri = asset.localUri || asset.uri;
-          setModelUri(resolvedUri);
-        }
-      } catch (e) {
-        console.warn("Failed to load 3D model base.glb asset:", e);
-      }
-    }
-    loadAsset();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   const applyCameraOrbit = (orbitStr: string) => {
     if (webViewRef.current) {
