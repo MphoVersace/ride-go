@@ -310,3 +310,9 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
 4. **Embedded Data URI Architecture ([vehicleModelData.ts](file:///d:/deployment_2026/ride-go/src/constants/vehicleModelData.ts))**:
    - Encodes `base.glb` into an in-memory `data:model/gltf-binary;base64,...` constant.
    - Completely bypasses Metro bundler startup cache latency, eliminating `Cannot find module ... base.glb` errors when running across pre-existing Expo processes without requiring a server reboot (`npx expo start -c`).
+5. **Real-Time Automotive Paint Customization**:
+   - **Dynamic PBR Material Tuning**: Injected WebGL script calls `setBaseColorFactor`, `setMetallicFactor`, and `setRoughnessFactor` across model materials in real time.
+   - **Curated Finishes**: Cyber Cyan (`#5BC0FF`), Deep Sapphire (`#1D3557`), Platinum Silver (`#C9D6E8`), Obsidian Navy (`#102A52`), Pure Pearl (`#FFFFFF`), and Matte Charcoal (`#334155`).
+   - **Interactive Paint Swatches**: Floating top-right paint chips with active indicator ring allowing users to customize car paint on the fly during onboarding and vehicle inspection.
+   - **SVG Fallback Synchronization**: Seamlessly propagates selected paint finish to vector SVG fallbacks (`primaryColor={selectedColor.hex}`).
+
