@@ -1,31 +1,65 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Dimensions,
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
-import { VehicleSideSvg } from "../../components/common/VehicleSvgs";
-import { ShieldCheckIcon, ArrowRightIcon } from "../../components/common/SvgIcons";
+import { ArrowRightIcon } from "../../components/common/SvgIcons";
 import VehicleLoader from "../../components/common/VehicleLoader";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+interface OnboardingSlide {
+  id: string;
+  image: any;
+  title: string;
+  description: string;
+}
+
+const ONBOARDING_SLIDES: OnboardingSlide[] = [
+  {
+    id: "slide_1",
+    image: require("../../../assets/vehicles/car_front.jpg"),
+    title: "Ride with confidence",
+    description:
+      "Safe, premium rides and seamless point-to-point travel across all South African metros.",
+  },
+  {
+    id: "slide_2",
+    image: require("../../../assets/vehicles/car_perspective.jpg"),
+    title: "Upfront transparent fares",
+    description:
+      "Lock in guaranteed Rand prices before you book with zero unexpected surges or hidden fees.",
+  },
+  {
+    id: "slide_3",
+    image: require("../../../assets/vehicles/car_rear.jpg"),
+    title: "Rapid on-demand logistics",
+    description:
+      "From express courier motorcycles to heavy bakkies and full moving trucks at your fingertips.",
+  },
+];
 
 export default function SplashOnboardingScreen({
   navigation,
 }: RootStackScreenProps<"SplashOnboarding">) {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [splashStep, setSplashStep] = useState(0);
 
+  const scrollViewRef = useRef<ScrollView>(null);
   const logoScale = useRef(new Animated.Value(0.75)).current;
   const logoOpacity = useRef(new Animated.Value(0)).current;
-
-  // Onboarding hero entry animation
-  const heroFadeAnim = useRef(new Animated.Value(0)).current;
-  const heroSlideAnim = useRef(new Animated.Value(20)).current;
 
   const splashMessages = [
     "Initializing RideGo Telemetry...",
@@ -58,18 +92,6 @@ export default function SplashOnboardingScreen({
     // 3. Transition to Onboarding Screen after 3.3s
     const splashTimer = setTimeout(() => {
       setShowOnboarding(true);
-      Animated.parallel([
-        Animated.timing(heroFadeAnim, {
-          toValue: 1,
-          duration: 700,
-          useNativeDriver: true,
-        }),
-        Animated.timing(heroSlideAnim, {
-          toValue: 0,
-          duration: 700,
-          useNativeDriver: true,
-        }),
-      ]).start();
     }, 3300);
 
     return () => {
@@ -78,12 +100,31 @@ export default function SplashOnboardingScreen({
       clearTimeout(stepTimer3);
       clearTimeout(splashTimer);
     };
-  }, [logoScale, logoOpacity, heroFadeAnim, heroSlideAnim]);
+  }, [logoScale, logoOpacity]);
+
+  const handleNextPress = () => {
+    if (currentSlide < ONBOARDING_SLIDES.length - 1) {
+      const nextIndex = currentSlide + 1;
+      scrollViewRef.current?.scrollTo({
+        x: nextIndex * SCREEN_WIDTH,
+        animated: true,
+      });
+      setCurrentSlide(nextIndex);
+    } else {
+      navigation.navigate("Account");
+    }
+  };
+
+  const handleSkip = () => {
+    navigation.navigate("Account");
+  };
 
   // ONBOARDING SCREEN
   if (showOnboarding) {
+    const isLastSlide = currentSlide === ONBOARDING_SLIDES.length - 1;
+
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <StatusBar style="light" />
 
         {/* Top Header Bar */}
@@ -94,81 +135,89 @@ export default function SplashOnboardingScreen({
           </View>
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate("Account")}
+            onPress={handleSkip}
             style={styles.skipButton}
           >
             <Text style={styles.skipText}>Skip</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Hero Visual Card (Concentric Rings + Floating Shield + Precision Vehicle) */}
-        <Animated.View
-          style={[
-            styles.heroVisualWrap,
-            {
-              opacity: heroFadeAnim,
-              transform: [{ translateY: heroSlideAnim }],
-            },
-          ]}
+        {/* Swipeable Horizontal Slides Carousel */}
+        <ScrollView
+          ref={scrollViewRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={(e) => {
+            const newIndex = Math.round(
+              e.nativeEvent.contentOffset.x / SCREEN_WIDTH
+            );
+            setCurrentSlide(newIndex);
+          }}
+          scrollEventThrottle={16}
+          style={styles.carousel}
         >
-          <View style={styles.pedestalOuterRing}>
-            <View style={styles.pedestalInnerRing}>
-              {/* Floating Verified Shield Badge */}
-              <View style={styles.floatingShieldBadge}>
-                <ShieldCheckIcon size={24} color={colors.accent.primary} />
+          {ONBOARDING_SLIDES.map((slide) => (
+            <View
+              key={slide.id}
+              style={[styles.slideContainer, { width: SCREEN_WIDTH }]}
+            >
+              {/* Photorealistic 3D Vehicle Pedestal (Clean, No badges per Rule 17) */}
+              <View style={styles.pedestalOuterRing}>
+                <View style={styles.pedestalInnerRing}>
+                  <Image
+                    source={slide.image}
+                    style={styles.carImage}
+                    resizeMode="contain"
+                  />
+                </View>
               </View>
 
-              {/* Precision Vector Vehicle */}
-              <View style={styles.pedestalCarContainer}>
-                <VehicleSideSvg
-                  width={190}
-                  height={90}
-                  color={colors.accent.primary}
-                />
+              {/* Onboarding Copy */}
+              <View style={styles.copyContainer}>
+                <Text style={styles.heading}>{slide.title}</Text>
+                <Text style={styles.description}>{slide.description}</Text>
               </View>
             </View>
-          </View>
+          ))}
+        </ScrollView>
 
-          {/* Key Value Proposition Badges */}
-          <View style={styles.featureChipsRow}>
-            <View style={styles.featureChip}>
-              <ShieldCheckIcon size={14} color={colors.accent.primary} />
-              <Text style={styles.featureChipText}>Verified 5-Star Drivers</Text>
-            </View>
-            <View style={styles.featureChip}>
-              <ShieldCheckIcon size={14} color={colors.accent.primary} />
-              <Text style={styles.featureChipText}>SAPS 10111 Integrated</Text>
-            </View>
-          </View>
-        </Animated.View>
-
-        {/* Onboarding Copy */}
-        <View style={styles.copyContainer}>
-          <Text style={styles.heading}>Ride with confidence</Text>
-          <Text style={styles.description}>
-            Safe, reliable passenger rides and rapid parcel logistics across South Africa with upfront Rand pricing.
-          </Text>
-
+        {/* Bottom Navigation & Action Section */}
+        <View style={styles.bottomSection}>
           {/* Pagination Indicators */}
           <View style={styles.paginationRow}>
-            <View style={[styles.pageDot, styles.pageDotActive]} />
-            <View style={styles.pageDot} />
-            <View style={styles.pageDot} />
+            {ONBOARDING_SLIDES.map((_, idx) => (
+              <TouchableOpacity
+                key={idx}
+                activeOpacity={0.7}
+                onPress={() => {
+                  scrollViewRef.current?.scrollTo({
+                    x: idx * SCREEN_WIDTH,
+                    animated: true,
+                  });
+                  setCurrentSlide(idx);
+                }}
+                style={[
+                  styles.pageDot,
+                  currentSlide === idx && styles.pageDotActive,
+                ]}
+              />
+            ))}
           </View>
-        </View>
 
-        {/* Bottom CTA Section */}
-        <View style={styles.bottomSection}>
+          {/* Dynamic Action Button */}
           <TouchableOpacity
             style={styles.getStartedButton}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate("Account")}
+            onPress={handleNextPress}
           >
-            <Text style={styles.getStartedText}>Get Started</Text>
+            <Text style={styles.getStartedText}>
+              {isLastSlide ? "Get Started" : "Next"}
+            </Text>
             <ArrowRightIcon size={20} color={colors.accent.contrast} />
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -188,10 +237,12 @@ export default function SplashOnboardingScreen({
         ]}
       >
         <Text style={styles.splashLogo}>RideGo</Text>
-        <Text style={styles.splashSubtitle}>SOUTH AFRICA • ON-DEMAND MOBILITY</Text>
+        <Text style={styles.splashSubtitle}>
+          SOUTH AFRICA • ON-DEMAND MOBILITY
+        </Text>
       </Animated.View>
 
-      {/* Modern High-Tech Highway Vehicle Loading Visual */}
+      {/* High-Tech Highway Vehicle Loading Visual */}
       <View style={styles.loaderWrap}>
         <VehicleLoader
           size="lg"
@@ -210,6 +261,7 @@ export default function SplashOnboardingScreen({
 }
 
 const styles = StyleSheet.create({
+  /* Splash Loading Styles */
   splashContainer: {
     flex: 1,
     backgroundColor: colors.background.primary,
@@ -254,16 +306,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background.primary,
-    paddingHorizontal: spacing.md,
     justifyContent: "space-between",
-    paddingTop: spacing.lg,
-    paddingBottom: spacing.xl,
   },
   onboardingHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.xs,
   },
   onboardingBrandTitle: {
     fontSize: 26,
@@ -286,86 +336,55 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.text.secondary,
   },
-  heroVisualWrap: {
+  carousel: {
+    flex: 1,
+  },
+  slideContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
   },
   pedestalOuterRing: {
-    width: 260,
-    height: 260,
-    borderRadius: 130,
+    width: 270,
+    height: 270,
+    borderRadius: 135,
     backgroundColor: colors.surface.card,
     borderWidth: 1.5,
     borderColor: colors.surface.border,
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: spacing.xl,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    elevation: 8,
   },
   pedestalInnerRing: {
-    width: 210,
-    height: 210,
-    borderRadius: 105,
+    width: 224,
+    height: 224,
+    borderRadius: 112,
     backgroundColor: colors.surface.elevated,
     borderWidth: 1.5,
     borderColor: colors.surface.border,
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
+    overflow: "hidden",
   },
-  floatingShieldBadge: {
-    position: "absolute",
-    top: -16,
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.surface.elevated,
-    borderWidth: 2,
-    borderColor: colors.accent.primary,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
-    zIndex: 10,
-  },
-  pedestalCarContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 8,
-  },
-  featureChipsRow: {
-    flexDirection: "row",
-    gap: spacing.xs,
-    marginTop: spacing.md,
-  },
-  featureChip: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: colors.surface.card,
-    paddingVertical: 6,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
-  },
-  featureChipText: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: colors.text.secondary,
+  carImage: {
+    width: 240,
+    height: 180,
   },
   copyContainer: {
     alignItems: "center",
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: spacing.md,
   },
   heading: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
     color: colors.text.primary,
     textAlign: "center",
-    marginBottom: spacing.xs,
+    marginBottom: spacing.sm,
   },
   description: {
     fontSize: 15,
@@ -373,13 +392,17 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     textAlign: "center",
     maxWidth: 320,
-    marginBottom: spacing.md,
+  },
+  bottomSection: {
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.lg,
+    gap: spacing.md,
   },
   paginationRow: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
-    marginTop: spacing.xs,
   },
   pageDot: {
     width: 8,
@@ -388,11 +411,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface.border,
   },
   pageDotActive: {
-    width: 24,
+    width: 28,
     backgroundColor: colors.accent.primary,
-  },
-  bottomSection: {
-    width: "100%",
   },
   getStartedButton: {
     width: "100%",
