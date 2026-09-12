@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,13 +14,18 @@ import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
 import { ArrowRightIcon } from "../../components/common/SvgIcons";
+import {
+  Vehicle3DFrontSvg,
+  Vehicle3DShadedSideSvg,
+  Vehicle3DRearSvg,
+} from "../../components/common/VehicleSvgs";
 import VehicleLoader from "../../components/common/VehicleLoader";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface OnboardingSlide {
   id: string;
-  image: any;
+  renderVehicle: () => React.ReactNode;
   title: string;
   description: string;
 }
@@ -29,21 +33,39 @@ interface OnboardingSlide {
 const ONBOARDING_SLIDES: OnboardingSlide[] = [
   {
     id: "slide_1",
-    image: require("../../../assets/vehicles/car_front.jpg"),
+    renderVehicle: () => (
+      <Vehicle3DFrontSvg
+        width={230}
+        height={140}
+        primaryColor={colors.accent.primary}
+      />
+    ),
     title: "Ride with confidence",
     description:
       "Safe, premium rides and seamless point-to-point travel across all South African metros.",
   },
   {
     id: "slide_2",
-    image: require("../../../assets/vehicles/car_perspective.jpg"),
+    renderVehicle: () => (
+      <Vehicle3DShadedSideSvg
+        width={250}
+        height={115}
+        primaryColor={colors.accent.primary}
+      />
+    ),
     title: "Upfront transparent fares",
     description:
       "Lock in guaranteed Rand prices before you book with zero unexpected surges or hidden fees.",
   },
   {
     id: "slide_3",
-    image: require("../../../assets/vehicles/car_rear.jpg"),
+    renderVehicle: () => (
+      <Vehicle3DRearSvg
+        width={230}
+        height={140}
+        primaryColor={colors.accent.primary}
+      />
+    ),
     title: "Rapid on-demand logistics",
     description:
       "From express courier motorcycles to heavy bakkies and full moving trucks at your fingertips.",
@@ -162,14 +184,10 @@ export default function SplashOnboardingScreen({
               key={slide.id}
               style={[styles.slideContainer, { width: SCREEN_WIDTH }]}
             >
-              {/* Photorealistic 3D Vehicle Pedestal (Clean, No badges per Rule 17) */}
+              {/* Pure 3D Vector SVG Vehicle Pedestal (Rule 17 Compliant: No 5-star badges) */}
               <View style={styles.pedestalOuterRing}>
                 <View style={styles.pedestalInnerRing}>
-                  <Image
-                    source={slide.image}
-                    style={styles.carImage}
-                    resizeMode="contain"
-                  />
+                  {slide.renderVehicle()}
                 </View>
               </View>
 
@@ -370,10 +388,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-  },
-  carImage: {
-    width: 240,
-    height: 180,
   },
   copyContainer: {
     alignItems: "center",
