@@ -16,6 +16,7 @@
     "react-native-webview": "13.16.1"
   },
   "scripts": {
+    "dev": "concurrently --kill-others-on-fail --raw \"npx expo start --port 8082\"",
     "start": "concurrently --kill-others-on-fail --raw \"npx expo start --port 8082\"",
     "android": "concurrently --kill-others-on-fail --raw \"npx expo start --android --port 8082\"",
     "ios": "concurrently --kill-others-on-fail --raw \"npx expo start --ios --port 8082\"",

@@ -20,14 +20,35 @@ import {
 
 export type CameraAnglePreset = "front" | "angle" | "side" | "rear";
 
+export interface VehiclePaintFinish {
+  id: string;
+  name: string;
+  hex: string;
+  metallic: number;
+  roughness: number;
+}
+
+// Curated automotive paint finishes aligned strictly with 60-30-10 palette
+export const VEHICLE_PAINT_FINISHES: VehiclePaintFinish[] = [
+  { id: "cyan", name: "Cyber Cyan", hex: "#5BC0FF", metallic: 0.85, roughness: 0.22 },
+  { id: "sapphire", name: "Deep Sapphire", hex: "#1D3557", metallic: 0.9, roughness: 0.2 },
+  { id: "platinum", name: "Platinum Silver", hex: "#C9D6E8", metallic: 0.95, roughness: 0.18 },
+  { id: "obsidian", name: "Obsidian Navy", hex: "#102A52", metallic: 0.75, roughness: 0.3 },
+  { id: "pearl", name: "Pure Pearl", hex: "#FFFFFF", metallic: 0.45, roughness: 0.25 },
+  { id: "charcoal", name: "Matte Charcoal", hex: "#334155", metallic: 0.3, roughness: 0.55 },
+];
+
 export interface Vehicle3DViewerProps {
   width?: number | string;
   height?: number;
   currentAngle?: CameraAnglePreset | string;
+  currentColorHex?: string;
   autoRotate?: boolean;
   interactive?: boolean;
   showAngleControls?: boolean;
+  showColorControls?: boolean;
   onAngleChange?: (angle: CameraAnglePreset) => void;
+  onColorChange?: (color: VehiclePaintFinish) => void;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -114,15 +135,23 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
   width = "100%",
   height = 250,
   currentAngle = "angle",
+  currentColorHex,
   autoRotate = true,
   interactive = true,
   showAngleControls = false,
+  showColorControls = false,
   onAngleChange,
+  onColorChange,
   style,
 }) => {
-  const [modelUri, setModelUri] = useState<string>(VEHICLE_GLB_BASE64);
+  const [modelUri] = useState<string>(VEHICLE_GLB_BASE64);
   const [selectedAngle, setSelectedAngle] = useState<CameraAnglePreset>(
     (currentAngle in ORBIT_MAP ? currentAngle : "angle") as CameraAnglePreset
+  );
+  const [selectedColor, setSelectedColor] = useState<VehiclePaintFinish>(
+    VEHICLE_PAINT_FINISHES.find(
+      (f) => f.hex.toLowerCase() === currentColorHex?.toLowerCase()
+    ) || VEHICLE_PAINT_FINISHES[0]
   );
   const [isAutoRotateActive, setIsAutoRotateActive] = useState<boolean>(autoRotate);
   const [is3DReady, setIs3DReady] = useState<boolean>(false);
@@ -136,6 +165,31 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
       applyCameraOrbit(ORBIT_MAP[angleKey]);
     }
   }, [currentAngle]);
+
+  // Synchronize currentColorHex prop changes
+  useEffect(() => {
+    if (currentColorHex) {
+      const match = VEHICLE_PAINT_FINISHES.find(
+        (f) => f.hex.toLowerCase() === currentColorHex.toLowerCase()
+      );
+      if (match && match.id !== selectedColor.id) {
+        setSelectedColor(match);
+      }
+    }
+  }, [currentColorHex]);
+
+  // Apply PBR material paint color dynamically inside WebGL model-viewer
+  useEffect(() => {
+    if (webViewRef.current && is3DReady) {
+      const js = `
+        if (window.setCarColor) {
+          window.setCarColor('${selectedColor.hex}', ${selectedColor.metallic}, ${selectedColor.roughness});
+        }
+        true;
+      `;
+      webViewRef.current.injectJavaScript(js);
+    }
+  }, [selectedColor, is3DReady]);
 
   const applyCameraOrbit = (orbitStr: string) => {
     if (webViewRef.current) {
@@ -154,6 +208,13 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     applyCameraOrbit(ORBIT_MAP[angle]);
     if (onAngleChange) {
       onAngleChange(angle);
+    }
+  };
+
+  const handleColorSelect = (finish: VehiclePaintFinish) => {
+    setSelectedColor(finish);
+    if (onColorChange) {
+      onColorChange(finish);
     }
   };
 
@@ -205,7 +266,7 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
 <body>
   <model-viewer
     id="vehicleViewer"
-    src="${modelUri || ""}"
+    src="${modelUri}"
     ${interactive ? "camera-controls" : ""}
     ${isAutoRotateActive ? "auto-rotate" : ""}
     rotation-per-second="18deg"
@@ -213,7 +274,7 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
     interpolation-decay="150"
     shadow-intensity="1.6"
     shadow-softness="0.75"
-    exposure="1.08"
+    exposure="1.1"
     environment-image="neutral"
     interaction-prompt="none"
   >
@@ -222,10 +283,31 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
   <script>
     const viewer = document.getElementById('vehicleViewer');
 
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+      const num = parseInt(hex, 16);
+      return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+    }
+
+    window.setCarColor = function(colorHex, metallic, roughness) {
+      if (viewer && viewer.model && viewer.model.materials) {
+        const [r, g, b] = hexToRgb(colorHex);
+        for (const mat of viewer.model.materials) {
+          if (mat.pbrMetallicRoughness) {
+            mat.pbrMetallicRoughness.setBaseColorFactor([r / 255, g / 255, b / 255, 1.0]);
+            mat.pbrMetallicRoughness.setMetallicFactor(metallic !== undefined ? metallic : 0.85);
+            mat.pbrMetallicRoughness.setRoughnessFactor(roughness !== undefined ? roughness : 0.22);
+          }
+        }
+      }
+    };
+
     viewer.addEventListener('load', () => {
       if (window.ReactNativeWebView) {
         window.ReactNativeWebView.postMessage(JSON.stringify({ type: '3D_LOADED' }));
       }
+      window.setCarColor('${selectedColor.hex}', ${selectedColor.metallic}, ${selectedColor.roughness});
     });
 
     viewer.addEventListener('error', (err) => {
@@ -251,50 +333,48 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
 </html>
   `;
 
-  // Render SVG fallback matching the selected angle
+  // Render SVG fallback matching the selected angle and selected paint color
   const renderSvgFallback = () => {
     switch (selectedAngle) {
       case "front":
-        return <Vehicle3DFrontSvg width={220} height={135} />;
+        return <Vehicle3DFrontSvg width={220} height={135} primaryColor={selectedColor.hex} />;
       case "rear":
-        return <Vehicle3DRearSvg width={220} height={135} />;
+        return <Vehicle3DRearSvg width={220} height={135} primaryColor={selectedColor.hex} />;
       case "side":
       case "angle":
       default:
-        return <Vehicle3DShadedSideSvg width={240} height={110} />;
+        return <Vehicle3DShadedSideSvg width={240} height={110} primaryColor={selectedColor.hex} />;
     }
   };
 
   return (
     <View style={[styles.container, { width: width as any, height }, style]}>
       {/* 3D Model WebGL Canvas */}
-      {modelUri ? (
-        <View style={styles.webViewHolder}>
-          <WebView
-            ref={webViewRef}
-            source={{ html: htmlContent, baseUrl: "" }}
-            originWhitelist={["*"]}
-            allowFileAccess={true}
-            allowFileAccessFromFileURLs={true}
-            allowUniversalAccessFromFileURLs={true}
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            scrollEnabled={false}
-            bounces={false}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            onMessage={(event) => {
-              try {
-                const data = JSON.parse(event.nativeEvent.data);
-                if (data.type === "3D_LOADED") {
-                  setIs3DReady(true);
-                }
-              } catch (e) {}
-            }}
-            style={styles.webView}
-          />
-        </View>
-      ) : null}
+      <View style={styles.webViewHolder}>
+        <WebView
+          ref={webViewRef}
+          source={{ html: htmlContent, baseUrl: "" }}
+          originWhitelist={["*"]}
+          allowFileAccess={true}
+          allowFileAccessFromFileURLs={true}
+          allowUniversalAccessFromFileURLs={true}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          scrollEnabled={false}
+          bounces={false}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          onMessage={(event) => {
+            try {
+              const data = JSON.parse(event.nativeEvent.data);
+              if (data.type === "3D_LOADED") {
+                setIs3DReady(true);
+              }
+            } catch (e) {}
+          }}
+          style={styles.webView}
+        />
+      </View>
 
       {/* Instant Pure Vector SVG Fallback / Loading Presentation */}
       {!is3DReady && (
@@ -303,6 +383,36 @@ export const Vehicle3DViewer: React.FC<Vehicle3DViewerProps> = ({
           <View style={styles.loadingIndicatorRow}>
             <ActivityIndicator size="small" color={colors.accent.primary} />
             <Text style={styles.loadingText}>Initializing 3D Vehicle...</Text>
+          </View>
+        </View>
+      )}
+
+      {/* Paint Color Swatches Bar (Top Floating Strip) */}
+      {showColorControls && (
+        <View style={styles.colorPaletteRow}>
+          <Text style={styles.paintLabel}>PAINT</Text>
+          <View style={styles.swatchesGroup}>
+            {VEHICLE_PAINT_FINISHES.map((finish) => {
+              const isSelected = selectedColor.id === finish.id;
+              return (
+                <TouchableOpacity
+                  key={finish.id}
+                  activeOpacity={0.8}
+                  onPress={() => handleColorSelect(finish)}
+                  style={[
+                    styles.colorSwatchRing,
+                    isSelected && styles.colorSwatchRingActive,
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.colorSwatchFill,
+                      { backgroundColor: finish.hex },
+                    ]}
+                  />
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </View>
       )}
@@ -452,6 +562,52 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: colors.text.muted,
     fontWeight: "500",
+  },
+  colorPaletteRow: {
+    position: "absolute",
+    top: 8,
+    right: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(16, 42, 82, 0.9)", // 30% Panel
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+    zIndex: 10,
+    gap: 6,
+  },
+  paintLabel: {
+    fontSize: 9,
+    fontWeight: "700",
+    color: colors.text.muted,
+    letterSpacing: 1,
+    marginRight: 2,
+  },
+  swatchesGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  colorSwatchRing: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1.5,
+    borderColor: "transparent",
+  },
+  colorSwatchRingActive: {
+    borderColor: colors.accent.primary, // 10% Accent indicator
+  },
+  colorSwatchFill: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
   controlsRow: {
     position: "absolute",

@@ -167,6 +167,7 @@ export default function SplashOnboardingScreen({
               autoRotate={currentSlide === 1}
               interactive={true}
               showAngleControls={true}
+              showColorControls={true}
               onAngleChange={handleAngleSelect}
             />
           </View>
