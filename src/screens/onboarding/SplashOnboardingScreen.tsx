@@ -22,7 +22,6 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 interface OnboardingSlide {
   id: string;
   mode: TelemetryGraphicMode;
-  tag: string;
   title: string;
   description: string;
 }
@@ -31,7 +30,6 @@ const ONBOARDING_SLIDES: OnboardingSlide[] = [
   {
     id: "slide_1",
     mode: "network",
-    tag: "POINT-TO-POINT TRANSIT",
     title: "Smart Point-to-Point Travel",
     description:
       "Direct on-demand transit mapped seamlessly across South African metros with optimized routing.",
@@ -39,18 +37,16 @@ const ONBOARDING_SLIDES: OnboardingSlide[] = [
   {
     id: "slide_2",
     mode: "fare",
-    tag: "TRANSPARENT RAND PRICING",
-    title: "Upfront Guaranteed Fares",
+    title: "Upfront Transparent Fares",
     description:
       "Clear Rand pricing locked before you confirm with zero hidden fees or unexpected surge spikes.",
   },
   {
     id: "slide_3",
     mode: "dispatch",
-    tag: "NATIONWIDE TELEMETRY",
     title: "Instant National Dispatch",
     description:
-      "Connect with verified local mobility partners in seconds with live satellite route tracking.",
+      "Connect with local mobility partners in seconds with live satellite route tracking.",
   },
 ];
 
@@ -179,9 +175,6 @@ export default function SplashOnboardingScreen({
 
               {/* Onboarding Copy */}
               <View style={styles.copyContainer}>
-                <View style={styles.tagBadge}>
-                  <Text style={styles.tagText}>{slide.tag}</Text>
-                </View>
                 <Text style={styles.heading}>{slide.title}</Text>
                 <Text style={styles.description}>{slide.description}</Text>
               </View>
@@ -358,21 +351,6 @@ const styles = StyleSheet.create({
   copyContainer: {
     alignItems: "center",
     paddingHorizontal: spacing.md,
-  },
-  tagBadge: {
-    backgroundColor: colors.surface.card,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
-    marginBottom: spacing.sm,
-  },
-  tagText: {
-    fontSize: 10,
-    fontWeight: "700",
-    color: colors.accent.primary,
-    letterSpacing: 1,
   },
   heading: {
     fontSize: 28,

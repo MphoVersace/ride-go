@@ -15,7 +15,6 @@ import {
   ArrowLeftIcon,
   PinIcon,
   TargetIcon,
-  StarIcon,
   CreditCardIcon,
   CheckCircleIcon,
 } from "../../components/common/SvgIcons";
@@ -130,16 +129,7 @@ export default function TripDetailsScreen({
             </View>
             <View style={styles.driverMeta}>
               <Text style={styles.driverName}>{trip.driverName}</Text>
-              <View style={styles.starsRow}>
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <StarIcon
-                    key={s}
-                    size={14}
-                    color={colors.accent.primary}
-                    filled={s <= trip.rating}
-                  />
-                ))}
-              </View>
+              <Text style={styles.driverStatusText}>Completed</Text>
             </View>
           </View>
         </View>
@@ -359,10 +349,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: colors.text.primary,
   },
-  starsRow: {
-    flexDirection: "row",
-    gap: 3,
-    marginTop: 3,
+  driverStatusText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: colors.accent.primary,
+    marginTop: 2,
   },
   fareRow: {
     flexDirection: "row",

@@ -167,7 +167,7 @@ export default function HelpSupportScreen({
           );
         })}
 
-        {/* Safety Badge Note */}
+        {/* Urgent Safety Note */}
         <View style={styles.safetyCard}>
           <ShieldCheckIcon size={20} color={colors.accent.primary} />
           <Text style={styles.safetyText}>

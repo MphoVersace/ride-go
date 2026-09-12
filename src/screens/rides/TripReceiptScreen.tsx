@@ -17,7 +17,6 @@ import {
   PinIcon,
   TargetIcon,
   CreditCardIcon,
-  StarIcon,
 } from "../../components/common/SvgIcons";
 import { useRide } from "../../services/RideContext";
 
@@ -118,12 +117,7 @@ export default function TripReceiptScreen({
             </View>
             <View style={styles.driverInfoWrap}>
               <Text style={styles.driverNameText}>{driverName}</Text>
-              <View style={styles.driverRatingRow}>
-                <StarIcon size={14} color={colors.accent.primary} filled />
-                <Text style={styles.driverRatingText}>
-                  {driver.rating} • {tierName}
-                </Text>
-              </View>
+              <Text style={styles.driverTierText}>{tierName}</Text>
             </View>
             <View style={styles.vehicleInfoWrap}>
               <Text style={styles.vehicleModel}>{driver.carModel}</Text>
@@ -335,15 +329,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: colors.text.primary,
   },
-  driverRatingRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    marginTop: 2,
-  },
-  driverRatingText: {
+  driverTierText: {
     fontSize: 12,
-    color: colors.text.secondary,
+    fontWeight: "600",
+    color: colors.accent.primary,
+    marginTop: 2,
   },
   vehicleInfoWrap: {
     alignItems: "flex-end",

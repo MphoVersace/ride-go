@@ -17,7 +17,7 @@ import {
   HomeIcon,
   BriefcaseIcon,
   PinIcon,
-  StarIcon,
+  TargetIcon,
   PlusIcon,
   TrashIcon,
   ArrowRightIcon,
@@ -64,7 +64,7 @@ export default function SavedPlacesScreen({
       case "airport":
         return <PinIcon size={20} color={colors.accent.primary} />;
       default:
-        return <StarIcon size={20} color={colors.accent.primary} filled />;
+        return <TargetIcon size={20} color={colors.accent.primary} />;
     }
   };
 

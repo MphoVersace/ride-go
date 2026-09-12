@@ -12,8 +12,8 @@ import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
 
-// Geometric Mobility Network Hub Badge (Zero cars)
-const MobilityNetworkBadge = () => (
+// Geometric Mobility Network Hub Graphic (Zero cars)
+const MobilityNetworkGraphic = () => (
   <Svg width={180} height={180} viewBox="0 0 180 180" fill="none">
     <Defs>
       <LinearGradient id="hubGrad" x1="0" y1="0" x2="1" y2="1">
@@ -63,7 +63,7 @@ export default function AccountScreen({
       {/* Hero Visual Card with Geometric Mobility Hub */}
       <View style={styles.heroWrap}>
         <View style={styles.heroCircle}>
-          <MobilityNetworkBadge />
+          <MobilityNetworkGraphic />
         </View>
 
         <Text style={styles.heading}>Move Seamlessly Across South Africa</Text>

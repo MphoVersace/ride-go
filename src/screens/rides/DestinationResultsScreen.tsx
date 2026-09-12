@@ -134,9 +134,7 @@ export default function DestinationResultsScreen({
               <Text style={styles.resultTitle}>{item.title}</Text>
               <Text style={styles.resultAddress}>{item.address}</Text>
             </View>
-            <View style={styles.distanceBadge}>
-              <Text style={styles.distanceText}>{item.distance}</Text>
-            </View>
+            <Text style={styles.distanceText}>{item.distance}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -247,14 +245,8 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     marginTop: 2,
   },
-  distanceBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10,
-    backgroundColor: colors.surface.cardAlt,
-  },
   distanceText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "600",
     color: colors.accent.primary,
   },
