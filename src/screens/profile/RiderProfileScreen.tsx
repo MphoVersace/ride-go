@@ -14,7 +14,6 @@ import { spacing } from "../../constants/metrics";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  StarIcon,
   WalletIcon,
   HomeIcon,
   ShieldCheckIcon,
@@ -28,15 +27,15 @@ import { useRide } from "../../services/RideContext";
 export default function RiderProfileScreen({
   navigation,
 }: RootStackScreenProps<"RiderProfile">) {
-  const { userProfile, walletBalance, savedPlaces, rideHistory } = useRide();
+  const { userProfile, rideHistory, walletBalance, savedPlaces } = useRide();
 
-  const menuSections = [
+  const menuItems = [
     {
       id: "history",
       title: "Trip History",
       subtitle: "Review your completed trips & receipts",
       icon: <CheckCircleIcon size={20} color={colors.accent.primary} />,
-      badge: `${rideHistory.length} trips`,
+      meta: `${rideHistory.length} trips`,
       onPress: () => navigation.navigate("RideHistory"),
     },
     {
@@ -44,7 +43,7 @@ export default function RiderProfileScreen({
       title: "Wallet & Payments",
       subtitle: "Top up wallet & manage cards",
       icon: <WalletIcon size={20} color={colors.accent.primary} />,
-      badge: `R${walletBalance}.00`,
+      meta: `R${walletBalance}.00`,
       onPress: () => navigation.navigate("PaymentMethods"),
     },
     {
@@ -52,7 +51,7 @@ export default function RiderProfileScreen({
       title: "Saved Places",
       subtitle: "Home, Work & favorites",
       icon: <HomeIcon size={20} color={colors.accent.primary} />,
-      badge: `${savedPlaces.length} saved`,
+      meta: `${savedPlaces.length} saved`,
       onPress: () => navigation.navigate("SavedPlaces"),
     },
     {
@@ -111,22 +110,13 @@ export default function RiderProfileScreen({
             <View style={styles.avatarCircle}>
               <Text style={styles.avatarText}>{userProfile.avatar}</Text>
             </View>
-            <View style={styles.verifiedBadge}>
-              <ShieldCheckIcon size={14} color={colors.accent.contrast} />
-            </View>
           </View>
 
           <View style={styles.userInfoWrap}>
             <Text style={styles.userName}>{userProfile.name}</Text>
             <Text style={styles.userPhone}>{userProfile.phone}</Text>
             <Text style={styles.userEmail}>{userProfile.email}</Text>
-
-            <View style={styles.ratingRow}>
-              <StarIcon size={14} color={colors.accent.primary} filled />
-              <Text style={styles.ratingText}>{userProfile.rating} Rating</Text>
-              <Text style={styles.ratingDot}>•</Text>
-              <Text style={styles.memberSince}>Since {userProfile.memberSince}</Text>
-            </View>
+            <Text style={styles.memberSince}>Member since {userProfile.memberSince}</Text>
           </View>
         </View>
 
@@ -153,7 +143,7 @@ export default function RiderProfileScreen({
         <Text style={styles.sectionHeader}>Account Menu</Text>
 
         {/* Menu Rows */}
-        {menuSections.map((item) => (
+        {menuItems.map((item) => (
           <TouchableOpacity
             key={item.id}
             style={styles.menuRow}
@@ -167,10 +157,8 @@ export default function RiderProfileScreen({
               <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
             </View>
 
-            {item.badge && (
-              <View style={styles.badgeWrap}>
-                <Text style={styles.badgeText}>{item.badge}</Text>
-              </View>
+            {item.meta && (
+              <Text style={styles.menuMetaText}>{item.meta}</Text>
             )}
 
             <View style={styles.arrowWrap}>
@@ -253,17 +241,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.accent.primary,
   },
-  verifiedBadge: {
-    position: "absolute",
-    bottom: -2,
-    right: -2,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: colors.accent.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   userInfoWrap: {
     flex: 1,
   },
@@ -282,24 +259,10 @@ const styles = StyleSheet.create({
     color: colors.text.muted,
     marginTop: 1,
   },
-  ratingRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    marginTop: 6,
-  },
-  ratingText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: colors.accent.primary,
-  },
-  ratingDot: {
-    fontSize: 12,
-    color: colors.text.muted,
-  },
   memberSince: {
-    fontSize: 11,
+    fontSize: 12,
     color: colors.text.muted,
+    marginTop: 4,
   },
   statsGrid: {
     flexDirection: "row",
@@ -373,17 +336,11 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     marginTop: 2,
   },
-  badgeWrap: {
-    backgroundColor: colors.surface.cardAlt,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10,
-    marginRight: 4,
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: "700",
+  menuMetaText: {
+    fontSize: 13,
+    fontWeight: "600",
     color: colors.accent.primary,
+    marginRight: 4,
   },
   arrowWrap: {
     width: 28,

@@ -16,7 +16,6 @@ import {
   ArrowRightIcon,
   PinIcon,
   TargetIcon,
-  StarIcon,
   CheckCircleIcon,
 } from "../../components/common/SvgIcons";
 import { useRide } from "../../services/RideContext";
@@ -56,7 +55,7 @@ export default function RideHistoryScreen({
                 {rideHistory.length} completed {rideHistory.length === 1 ? "ride" : "rides"} in South Africa
               </Text>
             </View>
-            <View style={styles.badgeCircle}>
+            <View style={styles.summaryIconWrap}>
               <CheckCircleIcon size={24} color={colors.accent.primary} />
             </View>
           </View>
@@ -122,20 +121,11 @@ export default function RideHistoryScreen({
                   </View>
                 </View>
 
-                {/* Driver and Rating Footer */}
+                {/* Driver and Status Footer */}
                 <View style={styles.tripFooter}>
                   <View style={styles.driverSection}>
                     <Text style={styles.driverName}>Driver: {trip.driverName}</Text>
-                    <View style={styles.starsRow}>
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <StarIcon
-                          key={s}
-                          size={12}
-                          color={colors.accent.primary}
-                          filled={s <= trip.rating}
-                        />
-                      ))}
-                    </View>
+                    <Text style={styles.tripStatusText}>Completed</Text>
                   </View>
 
                   <View style={styles.arrowCircle}>
@@ -208,7 +198,7 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     marginTop: 3,
   },
-  badgeCircle: {
+  summaryIconWrap: {
     width: 44,
     height: 44,
     borderRadius: 22,
@@ -292,10 +282,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.text.primary,
   },
-  starsRow: {
-    flexDirection: "row",
-    gap: 2,
-    marginTop: 3,
+  tripStatusText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: colors.accent.primary,
+    marginTop: 2,
   },
   arrowCircle: {
     width: 32,

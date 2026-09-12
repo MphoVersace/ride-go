@@ -111,53 +111,45 @@ export const RouteTelemetryGraphic: React.FC<RouteTelemetryGraphicProps> = ({
 
           {/* Sub-node */}
           <Circle cx="240" cy="45" r="4" fill={colors.text.muted} />
-
-          {/* Route Distance Callout Card */}
-          <Rect x="70" y="85" width="160" height="34" rx="8" fill={colors.background.primary} stroke={colors.surface.border} strokeWidth="1" />
         </Svg>
 
         <View style={styles.networkMetricOverlay}>
-          <Text style={styles.metricText}>18.4 km • 14 MIN ETA</Text>
-          <Text style={styles.metricSubText}>Johannesburg ➔ Sandton Hub</Text>
+          <Text style={styles.metricText}>18.4 km • 14 MIN</Text>
+          <Text style={styles.metricSubText}>Johannesburg ➔ Sandton</Text>
         </View>
       </View>
     );
   }
 
-  // 2. FARE GUARANTEE MODE (Slide 2: Upfront Transparent Rand Pricing)
+  // 2. FARE TELEMETRY MODE (Slide 2: Upfront Rand Pricing)
   if (mode === "fare") {
     return (
       <View style={[styles.container, { width, height }]}>
         <View style={styles.fareCardHolder}>
-          {/* Header Row */}
+          {/* Header Row - Pure Typography, No Badges */}
           <View style={styles.fareHeaderRow}>
             <View>
-              <Text style={styles.fareCategoryLabel}>GUARANTEED RAND FARE</Text>
+              <Text style={styles.fareCategoryLabel}>UPFRONT FARE</Text>
               <Text style={styles.fareAmountText}>R 145.00</Text>
             </View>
-            <View style={styles.lockBadge}>
-              <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
-                <Rect x="4" y="10" width="16" height="11" rx="2" stroke={colors.accent.primary} strokeWidth="2" />
-                <Path d="M8 10V7a4 4 0 118 0v3" stroke={colors.accent.primary} strokeWidth="2" />
-              </Svg>
-            </View>
+            <Text style={styles.fareCurrencySub}>ZAR</Text>
           </View>
 
           {/* Divider */}
           <View style={styles.fareDivider} />
 
-          {/* Metric Breakdown Rows */}
+          {/* Metric Breakdown Rows - Pure Text Rows */}
           <View style={styles.breakdownRow}>
-            <Text style={styles.breakdownLabel}>Base Transit Distance</Text>
+            <Text style={styles.breakdownLabel}>Distance</Text>
             <Text style={styles.breakdownValue}>18.4 km</Text>
           </View>
           <View style={styles.breakdownRow}>
-            <Text style={styles.breakdownLabel}>Estimated Travel Time</Text>
+            <Text style={styles.breakdownLabel}>Duration</Text>
             <Text style={styles.breakdownValue}>14 mins</Text>
           </View>
           <View style={styles.breakdownRow}>
-            <Text style={styles.breakdownLabel}>Surge Multiplier</Text>
-            <Text style={styles.breakdownHighlight}>0.0x (Guaranteed Flat)</Text>
+            <Text style={styles.breakdownLabel}>Rate Structure</Text>
+            <Text style={styles.breakdownHighlight}>Direct Flat Rate</Text>
           </View>
         </View>
       </View>
@@ -216,7 +208,7 @@ const styles = StyleSheet.create({
   },
   networkMetricOverlay: {
     position: "absolute",
-    top: 92,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -247,29 +239,25 @@ const styles = StyleSheet.create({
   fareHeaderRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
   },
   fareCategoryLabel: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: "700",
     color: colors.text.muted,
     letterSpacing: 1.2,
   },
   fareAmountText: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "bold",
     color: colors.text.primary,
     marginTop: 2,
   },
-  lockBadge: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.surface.elevated,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
-    alignItems: "center",
-    justifyContent: "center",
+  fareCurrencySub: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: colors.accent.primary,
+    marginBottom: 4,
   },
   fareDivider: {
     height: 1,
@@ -280,7 +268,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 3,
+    paddingVertical: 4,
   },
   breakdownLabel: {
     fontSize: 12,

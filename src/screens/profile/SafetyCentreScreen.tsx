@@ -114,7 +114,7 @@ export default function SafetyCentreScreen({
           <View style={styles.heroInfo}>
             <Text style={styles.heroTitle}>RideGo Safety Toolkit</Text>
             <Text style={styles.heroDescription}>
-              24/7 incident response, satellite GPS route tracking, and verified South African driver screening.
+              24/7 incident response, satellite GPS route tracking, and professional driver screening.
             </Text>
           </View>
         </View>
@@ -134,7 +134,7 @@ export default function SafetyCentreScreen({
             <Text style={styles.emergencyTitle}>Police Flying Squad (10111)</Text>
             <Text style={styles.emergencyDesc}>South African Police Service rapid response</Text>
           </View>
-          <View style={styles.callBadge}>
+          <View style={styles.callIconWrap}>
             <PhoneIcon size={16} color={colors.accent.contrast} />
           </View>
         </TouchableOpacity>
@@ -151,7 +151,7 @@ export default function SafetyCentreScreen({
             <Text style={styles.emergencyTitle}>National Emergency (112)</Text>
             <Text style={styles.emergencyDesc}>Cellular emergency dispatch for all mobile networks</Text>
           </View>
-          <View style={styles.callBadge}>
+          <View style={styles.callIconWrap}>
             <PhoneIcon size={16} color={colors.accent.contrast} />
           </View>
         </TouchableOpacity>
@@ -168,7 +168,7 @@ export default function SafetyCentreScreen({
             <Text style={styles.emergencyTitle}>RideGo 24/7 Incident Hotline</Text>
             <Text style={styles.emergencyDesc}>Dedicated toll-free rider safety dispatch</Text>
           </View>
-          <View style={styles.callBadge}>
+          <View style={styles.callIconWrap}>
             <PhoneIcon size={16} color={colors.accent.contrast} />
           </View>
         </TouchableOpacity>
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     marginTop: 2,
   },
-  callBadge: {
+  callIconWrap: {
     width: 36,
     height: 36,
     borderRadius: 18,

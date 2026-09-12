@@ -18,7 +18,6 @@ import {
   SteeringWheelIcon,
   PackageIcon,
   SeatIcon,
-  StarIcon,
   ArrowRightIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
@@ -160,10 +159,7 @@ export default function RiderHomeScreen({
               <Text style={styles.highlightName}>Ucok Behel</Text>
               <Text style={styles.highlightVehicle}>Honda CR-V • AB6299ZG</Text>
             </View>
-            <View style={styles.driverRatingWrap}>
-              <StarIcon size={14} color={colors.accent.primary} />
-              <Text style={styles.driverRatingText}>4.9</Text>
-            </View>
+            <ArrowRightIcon size={16} color={colors.accent.primary} />
           </TouchableOpacity>
         ) : (
           /* Promo Hero Banner Card for Parcel / Moving Day */
@@ -175,7 +171,7 @@ export default function RiderHomeScreen({
             <View style={styles.promoInfo}>
               <Text style={styles.promoHeading}>Moving day made simple</Text>
               <Text style={styles.promoSubtext}>
-                Book a heavy bakkie or truck with verified movers
+                Book a heavy bakkie or truck with professional movers
               </Text>
               <View style={styles.promoActionRow}>
                 <Text style={styles.promoActionText}>Book Moving Truck</Text>
@@ -188,17 +184,17 @@ export default function RiderHomeScreen({
           </TouchableOpacity>
         )}
 
-        {/* Stacked Location Pill Cards */}
+        {/* Location Input Cards */}
         <View style={styles.locationCardGroup}>
           <TouchableOpacity
-            style={styles.locationPill}
+            style={styles.locationInputRow}
             activeOpacity={0.85}
             onPress={() => navigation.navigate("DestinationSearch")}
           >
-            <View style={styles.pillIconWrap}>
+            <View style={styles.locationIconWrap}>
               <PinIcon size={18} color={colors.accent.primary} />
             </View>
-            <Text style={styles.locationPillText}>
+            <Text style={styles.locationInputText}>
               {selectedService === "driver" ? pickup.title : `Pickup: ${pickup.title}`}
             </Text>
           </TouchableOpacity>
@@ -212,17 +208,17 @@ export default function RiderHomeScreen({
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.locationPill}
+            style={styles.locationInputRow}
             activeOpacity={0.85}
             onPress={() => navigation.navigate("DestinationSearch")}
           >
-            <View style={styles.pillIconWrap}>
+            <View style={styles.locationIconWrap}>
               <PinIcon size={18} color={colors.text.secondary} />
             </View>
             <Text
               style={
                 destination.title
-                  ? styles.locationPillText
+                  ? styles.locationInputText
                   : styles.locationPlaceholderText
               }
             >
@@ -241,8 +237,8 @@ export default function RiderHomeScreen({
         <View style={styles.serviceSelector}>
           <TouchableOpacity
             style={[
-              styles.servicePill,
-              selectedService === "driver" && styles.servicePillActive,
+              styles.serviceTabButton,
+              selectedService === "driver" && styles.serviceTabButtonActive,
             ]}
             activeOpacity={0.85}
             onPress={() => setSelectedService("driver")}
@@ -257,8 +253,8 @@ export default function RiderHomeScreen({
             />
             <Text
               style={[
-                styles.servicePillText,
-                selectedService === "driver" && styles.servicePillTextActive,
+                styles.serviceTabButtonText,
+                selectedService === "driver" && styles.serviceTabButtonTextActive,
               ]}
             >
               Driver
@@ -267,8 +263,8 @@ export default function RiderHomeScreen({
 
           <TouchableOpacity
             style={[
-              styles.servicePill,
-              selectedService === "package" && styles.servicePillActive,
+              styles.serviceTabButton,
+              selectedService === "package" && styles.serviceTabButtonActive,
             ]}
             activeOpacity={0.85}
             onPress={() => setSelectedService("package")}
@@ -283,8 +279,8 @@ export default function RiderHomeScreen({
             />
             <Text
               style={[
-                styles.servicePillText,
-                selectedService === "package" && styles.servicePillTextActive,
+                styles.serviceTabButtonText,
+                selectedService === "package" && styles.serviceTabButtonTextActive,
               ]}
             >
               Package
@@ -345,7 +341,7 @@ export default function RiderHomeScreen({
                 </View>
 
                 <View style={styles.tierBottomRow}>
-                  <View style={styles.tierIconBadge}>
+                  <View style={styles.tierIconWrap}>
                     <SteeringWheelIcon
                       size={16}
                       color={
@@ -396,7 +392,7 @@ export default function RiderHomeScreen({
                 </View>
 
                 <View style={styles.tierBottomRow}>
-                  <View style={styles.tierIconBadge}>
+                  <View style={styles.tierIconWrap}>
                     <SteeringWheelIcon
                       size={16}
                       color={
@@ -447,7 +443,7 @@ export default function RiderHomeScreen({
                 </View>
 
                 <View style={styles.tierBottomRow}>
-                  <View style={styles.tierIconBadge}>
+                  <View style={styles.tierIconWrap}>
                     <SteeringWheelIcon
                       size={16}
                       color={
@@ -505,7 +501,7 @@ export default function RiderHomeScreen({
                 </View>
 
                 <View style={styles.tierBottomRow}>
-                  <View style={styles.tierIconBadge}>
+                  <View style={styles.tierIconWrap}>
                     <PackageIcon
                       size={14}
                       color={
@@ -556,7 +552,7 @@ export default function RiderHomeScreen({
                 </View>
 
                 <View style={styles.tierBottomRow}>
-                  <View style={styles.tierIconBadge}>
+                  <View style={styles.tierIconWrap}>
                     <PackageIcon
                       size={14}
                       color={
@@ -607,7 +603,7 @@ export default function RiderHomeScreen({
                 </View>
 
                 <View style={styles.tierBottomRow}>
-                  <View style={styles.tierIconBadge}>
+                  <View style={styles.tierIconWrap}>
                     <PackageIcon
                       size={14}
                       color={
@@ -809,7 +805,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
     gap: spacing.xs,
   },
-  locationPill: {
+  locationInputRow: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.surface.card,
@@ -819,10 +815,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.surface.border,
   },
-  pillIconWrap: {
+  locationIconWrap: {
     marginRight: spacing.sm,
   },
-  locationPillText: {
+  locationInputText: {
     fontSize: 15,
     fontWeight: "600",
     color: colors.text.primary,
@@ -850,7 +846,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     marginBottom: spacing.md,
   },
-  servicePill: {
+  serviceTabButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
@@ -861,16 +857,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.surface.border,
   },
-  servicePillActive: {
+  serviceTabButtonActive: {
     backgroundColor: colors.accent.primary,
     borderColor: colors.accent.primary,
   },
-  servicePillText: {
+  serviceTabButtonText: {
     fontSize: 14,
     fontWeight: "600",
     color: colors.text.secondary,
   },
-  servicePillTextActive: {
+  serviceTabButtonTextActive: {
     color: colors.accent.contrast,
     fontWeight: "bold",
   },
@@ -938,7 +934,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  tierIconBadge: {
+  tierIconWrap: {
     width: 26,
     height: 26,
     borderRadius: 13,

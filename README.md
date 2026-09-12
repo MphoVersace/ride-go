@@ -131,7 +131,7 @@ ride-go/
 │   │   │   ├── RideInProgressScreen.tsx     # Live route ticker & SOS trigger
 │   │   │   ├── RideOptionsScreen.tsx        # Vehicle tier picker (Standard, Comfort, Luxury)
 │   │   │   ├── RideSearchingScreen.tsx      # Animated radar pulse & driver search
-│   │   │   ├── TripCompletedScreen.tsx      # 5-star rating, Rand tip chips (R10–R100)
+│   │   │   ├── TripCompletedScreen.tsx      # Numerical transit feedback score (1–5), Rand tip chips (R10–R100)
 │   │   │   ├── TripDetailsScreen.tsx        # Deep-dive trip summary, rebook CTA
 │   │   │   └── TripReceiptScreen.tsx        # Itemized Rand invoice, wallet verification
 │   │   └── index.ts              # Screen registry re-export
@@ -159,7 +159,7 @@ ride-go/
 
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
-| **Onboarding** | `SplashOnboarding` | Ultra-sleek car-free route telemetry carousel (Network Matrix, Guaranteed Rand Fares, Satellite Dispatch) and geometric GPS sonar pulse loading sequence |
+| **Onboarding** | `SplashOnboarding` | Ultra-sleek car-free route telemetry carousel (Network Matrix, Upfront Rand Fares, Satellite Dispatch) and geometric GPS sonar pulse loading sequence |
 | **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
@@ -170,7 +170,7 @@ ride-go/
 | **Rides** | `RideSearching` | Dynamic radar/searching state locating nearby drivers |
 | **Rides** | `DriverFound` | Matched driver info, vehicle details, ETA, plate number |
 | **Rides** | `RideInProgress` | Real-time animated vector map tracking, countdown bubble, route scrubber, distance ticker |
-| **Rides** | `TripCompleted` | Destination reached summary and star rating submission |
+| **Rides** | `TripCompleted` | Destination reached summary and numerical transit score feedback (1–5) |
 | **Rides** | `TripReceipt` | Itemized invoice breakdown, payment verification |
 | **Rides** | `RideHistory` | List of past trips with dates, routes, and amounts |
 | **Rides** | `TripDetails` | Deep-dive trip summary, route map, driver details |

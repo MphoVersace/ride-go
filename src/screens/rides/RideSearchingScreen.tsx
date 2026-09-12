@@ -82,12 +82,10 @@ export default function RideSearchingScreen({
       <StatusBar style="light" />
 
       <View style={styles.container}>
-        {/* Tier & Price Badge */}
-        <View style={styles.tierBadge}>
-          <Text style={styles.tierBadgeText}>
-            {tier.toUpperCase()} • R{tierFares[tier]}
-          </Text>
-        </View>
+        {/* Tier & Price - Clean Typography, No Badges */}
+        <Text style={styles.tierFareHeader}>
+          {tier.toUpperCase()} • R{tierFares[tier]}
+        </Text>
 
         {/* Animated Radar Center Area */}
         <View style={styles.radarContainer}>
@@ -209,19 +207,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: spacing.lg,
   },
-  tierBadge: {
-    backgroundColor: colors.surface.elevated,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.accent.primary,
-  },
-  tierBadgeText: {
+  tierFareHeader: {
     color: colors.accent.primary,
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "bold",
-    letterSpacing: 1,
+    letterSpacing: 1.2,
+    marginTop: spacing.sm,
   },
   radarContainer: {
     width: 200,

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,12 +16,11 @@ import {
   ChatBubbleIcon,
   PhoneIcon,
   SeatIcon,
-  ShieldCheckIcon,
-  StarIcon,
   SteeringWheelIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
 import DriverChatModal from "../../components/common/DriverChatModal";
+import RouteTelemetryGraphic from "../../components/common/RouteTelemetryGraphic";
 import { useRide } from "../../services/RideContext";
 
 export default function DriverFoundScreen({
@@ -77,12 +75,10 @@ export default function DriverFoundScreen({
 
         {/* Floating Bottom Sheet Container */}
         <View style={styles.sheetCard}>
-          {/* Arrival Status Banner */}
+          {/* Arrival Status Banner - Pure Typography */}
           <View style={styles.arrivalBanner}>
             <Text style={styles.arrivalText}>The driver will arrive in</Text>
-            <View style={styles.arrivalBadge}>
-              <Text style={styles.arrivalBadgeText}>{countdown} min</Text>
-            </View>
+            <Text style={styles.arrivalCountdownText}>{countdown} min</Text>
           </View>
 
           {/* Driver Profile Card */}
@@ -96,23 +92,17 @@ export default function DriverFoundScreen({
               <Text style={styles.driverVehicleModel}>{driver.carModel}</Text>
             </View>
 
-            <View style={styles.plateAndRating}>
-              <View style={styles.licensePlateBadge}>
-                <Text style={styles.licensePlateText}>{driver.licensePlate}</Text>
-              </View>
-              <View style={styles.ratingRow}>
-                <StarIcon size={13} color={colors.accent.primary} />
-                <Text style={styles.ratingText}>{driver.rating.toFixed(1)}</Text>
-              </View>
+            <View style={styles.plateAndStatus}>
+              <Text style={styles.licensePlateText}>{driver.licensePlate}</Text>
             </View>
           </View>
 
-          {/* Vehicle Inspection & Top-Down Render Card */}
+          {/* Trip Telemetry Overview Card (Zero Cars) */}
           <View style={styles.vehicleOverviewCard}>
             <View style={styles.vehicleSpecsRow}>
               <View style={styles.specItem}>
                 <SeatIcon size={16} color={colors.text.secondary} />
-                <Text style={styles.specLabel}>4 Seat</Text>
+                <Text style={styles.specLabel}>4 Seats</Text>
               </View>
 
               <View style={styles.specItem}>
@@ -121,18 +111,13 @@ export default function DriverFoundScreen({
               </View>
 
               <View style={styles.specItem}>
-                <ShieldCheckIcon size={16} color={colors.accent.primary} />
-                <Text style={styles.specLabel}>{driver.safetyRating}% Safety</Text>
+                <Text style={styles.specLabel}>Direct Transit</Text>
               </View>
             </View>
 
-            {/* Top-Down 3D Vehicle Visual */}
-            <View style={styles.topDownCarWrapper}>
-              <Image
-                source={require("../../../assets/vehicles/car_top_down.jpg")}
-                style={styles.topDownCarImage}
-                resizeMode="contain"
-              />
+            {/* Live Route Telemetry Graphic */}
+            <View style={styles.telemetryGraphicWrap}>
+              <RouteTelemetryGraphic mode="network" width={280} height={160} />
             </View>
 
             {/* Fare Summary in Rands */}
@@ -153,7 +138,7 @@ export default function DriverFoundScreen({
             activeOpacity={0.85}
             onPress={() => setChatVisible(true)}
           >
-            <View style={styles.chatIconBadge}>
+            <View style={styles.chatIconWrap}>
               <ChatBubbleIcon size={18} color={colors.accent.contrast} />
             </View>
             <Text style={styles.chatButtonText}>Chat with driver</Text>
@@ -250,15 +235,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.text.primary,
   },
-  arrivalBadge: {
-    backgroundColor: colors.accent.primary,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  arrivalBadgeText: {
-    color: colors.accent.contrast,
-    fontSize: 13,
+  arrivalCountdownText: {
+    color: colors.accent.primary,
+    fontSize: 16,
     fontWeight: "bold",
   },
   driverProfileCard: {
@@ -300,33 +279,14 @@ const styles = StyleSheet.create({
     color: colors.text.muted,
     marginTop: 2,
   },
-  plateAndRating: {
+  plateAndStatus: {
     alignItems: "flex-end",
-    gap: 4,
-  },
-  licensePlateBadge: {
-    backgroundColor: colors.surface.elevated,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.accent.primary,
   },
   licensePlateText: {
     color: colors.accent.primary,
-    fontSize: 12,
-    fontWeight: "bold",
-    letterSpacing: 1,
-  },
-  ratingRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 3,
-  },
-  ratingText: {
     fontSize: 13,
     fontWeight: "bold",
-    color: colors.text.primary,
+    letterSpacing: 1,
   },
   vehicleOverviewCard: {
     backgroundColor: colors.surface.elevated,
@@ -354,16 +314,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
   },
-  topDownCarWrapper: {
-    height: 220,
+  telemetryGraphicWrap: {
     alignItems: "center",
     justifyContent: "center",
     marginVertical: spacing.xs,
-  },
-  topDownCarImage: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 16,
   },
   fareRow: {
     flexDirection: "row",
@@ -397,7 +351,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     justifyContent: "space-between",
   },
-  chatIconBadge: {
+  chatIconWrap: {
     width: 32,
     height: 32,
     borderRadius: 16,

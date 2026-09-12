@@ -11,10 +11,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
-import {
-  StarIcon,
-  ShieldCheckIcon,
-} from "../../components/common/SvgIcons";
 import { useRide } from "../../services/RideContext";
 
 export default function TripCompletedScreen({
@@ -33,13 +29,10 @@ export default function TripCompletedScreen({
       <StatusBar style="light" />
 
       <View style={styles.content}>
-        {/* Driver Avatar & Badge */}
+        {/* Driver Avatar */}
         <View style={styles.avatarContainer}>
           <View style={styles.avatarCircle}>
             <Text style={styles.avatarText}>{driver.avatar}</Text>
-          </View>
-          <View style={styles.verifiedBadge}>
-            <ShieldCheckIcon size={14} color={colors.accent.contrast} />
           </View>
         </View>
 
@@ -48,20 +41,26 @@ export default function TripCompletedScreen({
           How was your ride with <Text style={styles.driverHighlight}>{driver.name}</Text>?
         </Text>
 
-        {/* 5-Star Rating Selector */}
-        <View style={styles.starsRow}>
-          {[1, 2, 3, 4, 5].map((star) => (
+        {/* Transit Rating Score Selector (1 to 5) */}
+        <View style={styles.scoreRow}>
+          {[1, 2, 3, 4, 5].map((score) => (
             <TouchableOpacity
-              key={star}
+              key={score}
               activeOpacity={0.8}
-              onPress={() => setRating(star)}
-              style={styles.starButton}
+              onPress={() => setRating(score)}
+              style={[
+                styles.scoreButton,
+                rating === score && styles.scoreButtonActive,
+              ]}
             >
-              <StarIcon
-                size={34}
-                color={colors.accent.primary}
-                filled={star <= rating}
-              />
+              <Text
+                style={[
+                  styles.scoreButtonText,
+                  rating === score && styles.scoreButtonTextActive,
+                ]}
+              >
+                {score}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -176,17 +175,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.accent.primary,
   },
-  verifiedBadge: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: colors.accent.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
@@ -203,13 +191,32 @@ const styles = StyleSheet.create({
     color: colors.accent.primary,
     fontWeight: "bold",
   },
-  starsRow: {
+  scoreRow: {
     flexDirection: "row",
     gap: 12,
     marginBottom: spacing.lg,
   },
-  starButton: {
-    padding: 4,
+  scoreButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.surface.card,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  scoreButtonActive: {
+    backgroundColor: colors.accent.primary,
+    borderColor: colors.accent.primary,
+  },
+  scoreButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: colors.text.primary,
+  },
+  scoreButtonTextActive: {
+    color: colors.accent.contrast,
   },
   receiptCard: {
     width: "100%",

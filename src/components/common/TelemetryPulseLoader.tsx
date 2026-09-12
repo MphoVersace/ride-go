@@ -133,10 +133,8 @@ export const TelemetryPulseLoader: React.FC<TelemetryPulseLoaderProps> = ({
         </View>
       </View>
 
-      {/* Coordinate Telemetry Tag */}
-      <View style={styles.coordinateBadge}>
-        <Text style={styles.coordinateText}>{coordinates}</Text>
-      </View>
+      {/* Coordinate Telemetry Readout - Pure typography, no badge container */}
+      <Text style={styles.coordinateText}>{coordinates}</Text>
 
       {/* Status Message */}
       <Text style={styles.statusText}>{statusText}</Text>
@@ -199,20 +197,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: colors.accent.primary,
   },
-  coordinateBadge: {
-    marginTop: spacing.lg,
-    backgroundColor: colors.surface.card,
-    paddingVertical: 5,
-    paddingHorizontal: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
-  },
   coordinateText: {
     fontSize: 11,
     fontFamily: "monospace",
     color: colors.accent.primary,
     letterSpacing: 0.8,
+    marginTop: spacing.md,
   },
   statusText: {
     fontSize: 14,

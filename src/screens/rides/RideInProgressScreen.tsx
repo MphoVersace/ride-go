@@ -18,7 +18,6 @@ import {
   ShieldCheckIcon,
   PinIcon,
   TargetIcon,
-  StarIcon,
   ArrowRightIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
@@ -98,20 +97,18 @@ export default function RideInProgressScreen({
           />
         </View>
 
-        {/* Live Status Bar matching video reference */}
+        {/* Live Status Row - Clean Typography, No Pills */}
         <View style={styles.liveStatusRow}>
-          <View style={styles.statusIndicatorPill}>
+          <View style={styles.statusRowLeft}>
             <View style={styles.pulsingDot} />
             <Text style={styles.statusText}>
-              In transit • arriving in {etaMinutes} min
+              In transit • {etaMinutes} min
             </Text>
           </View>
-          <View style={styles.distanceBadge}>
-            <Text style={styles.distanceBadgeText}>{distanceKm} km left</Text>
-          </View>
+          <Text style={styles.distanceText}>{distanceKm} km left</Text>
         </View>
 
-        {/* Driver Header Card with Call/Chat Triggers */}
+        {/* Driver Header Card */}
         <View style={styles.driverCard}>
           <View style={styles.driverAvatar}>
             <Text style={styles.driverAvatarText}>{driver.avatar}</Text>
@@ -119,12 +116,7 @@ export default function RideInProgressScreen({
 
           <View style={styles.driverInfo}>
             <Text style={styles.driverName}>{driver.name}</Text>
-            <View style={styles.driverRatingRow}>
-              <StarIcon size={14} color={colors.accent.primary} filled />
-              <Text style={styles.driverRatingText}>
-                {driver.rating} • {driver.carModel}
-              </Text>
-            </View>
+            <Text style={styles.driverSubText}>{driver.carModel}</Text>
             <Text style={styles.plateNumber}>{driver.licensePlate}</Text>
           </View>
 
@@ -276,15 +268,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: spacing.xs,
   },
-  statusIndicatorPill: {
+  statusRowLeft: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.surface.card,
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
     gap: 8,
   },
   pulsingDot: {
@@ -294,20 +280,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent.primary,
   },
   statusText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "700",
     color: colors.text.primary,
   },
-  distanceBadge: {
-    backgroundColor: colors.surface.cardAlt,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  distanceBadgeText: {
-    fontSize: 12,
-    fontWeight: "bold",
+  distanceText: {
+    fontSize: 13,
+    fontWeight: "600",
     color: colors.accent.primary,
+  },
+  driverSubText: {
+    fontSize: 12,
+    color: colors.text.secondary,
   },
   driverCard: {
     flexDirection: "row",
