@@ -32,6 +32,7 @@ import DriverFoundScreen from "./screens/DriverFoundScreen";
 import RideInProgressScreen from "./screens/RideInProgressScreen";
 import TripCompletedScreen from "./screens/TripCompletedScreen";
 import TripReceiptScreen from "./screens/TripReceiptScreen";
+import DriverHomeScreen from "./screens/DriverHomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -222,6 +223,8 @@ export default function App() {
         <Stack.Screen name="TripCompleted" component={TripCompletedScreen} />
 
         <Stack.Screen name="TripReceipt" component={TripReceiptScreen} />
+
+        <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
