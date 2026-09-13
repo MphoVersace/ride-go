@@ -109,7 +109,7 @@ ride-go/
 │   │   └── index.ts              # Navigation barrel export
 │   ├── screens/                  # Modular domain screen components
 │   │   ├── auth/                 # Authentication & onboarding flow
-│   │   │   ├── AccountScreen.tsx        # Welcome screen with geometric MobilityNetworkBadge & login CTAs
+│   │   │   ├── AccountScreen.tsx        # Welcome screen with panoramic NationalTransitMapCard, 3-pillar telemetry matrix, and yellow action dock
 │   │   │   ├── AccountTypeScreen.tsx    # Role selection (Rider vs Driver partner)
 │   │   │   └── RiderRegistrationScreen.tsx # Rider signup form with profile sync
 │   │   ├── home/                 # Main home experience
@@ -162,7 +162,7 @@ ride-go/
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
 | **Onboarding** | `SplashOnboarding` | Ultra-sleek car-free route telemetry carousel (Network Matrix, Upfront Rand Fares, Satellite Dispatch) and geometric GPS sonar pulse loading sequence |
-| **Auth** | `Account` | Welcome screen with Log in / Register CTAs |
+| **Auth** | `Account` | Welcome screen with panoramic NationalTransitMapCard, 3-pillar telemetry matrix, and yellow action dock |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
 | **Home** | `RiderHome` | Dual mode (Rides & Parcel Delivery), moving hero promo, map, and floating bottom tab bar |
