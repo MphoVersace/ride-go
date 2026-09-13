@@ -58,6 +58,7 @@ export default function SplashOnboardingScreen({
   const [splashStep, setSplashStep] = useState(0);
 
   const scrollViewRef = useRef<ScrollView>(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
   const logoScale = useRef(new Animated.Value(0.75)).current;
   const logoOpacity = useRef(new Animated.Value(0)).current;
 
@@ -122,6 +123,12 @@ export default function SplashOnboardingScreen({
   // ONBOARDING SCREEN
   if (showOnboarding) {
     const isLastSlide = currentSlide === ONBOARDING_SLIDES.length - 1;
+    const SLOT_WIDTH = 28;
+    const activeIndicatorTranslateX = scrollX.interpolate({
+      inputRange: ONBOARDING_SLIDES.map((_, idx) => idx * SCREEN_WIDTH),
+      outputRange: ONBOARDING_SLIDES.map((_, idx) => idx * SLOT_WIDTH),
+      extrapolate: "clamp",
+    });
 
     return (
       <SafeAreaView style={styles.container}>
@@ -143,11 +150,15 @@ export default function SplashOnboardingScreen({
         </View>
 
         {/* Swipeable Route Telemetry Carousel */}
-        <ScrollView
+        <Animated.ScrollView
           ref={scrollViewRef}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            { useNativeDriver: true }
+          )}
           onMomentumScrollEnd={(e) => {
             const newIndex = Math.round(
               e.nativeEvent.contentOffset.x / SCREEN_WIDTH
@@ -180,29 +191,44 @@ export default function SplashOnboardingScreen({
               </View>
             </View>
           ))}
-        </ScrollView>
+        </Animated.ScrollView>
 
         {/* Bottom Navigation & Action Section */}
         <View style={styles.bottomSection}>
-          {/* Pagination Indicators */}
-          <View style={styles.paginationRow}>
-            {ONBOARDING_SLIDES.map((_, idx) => (
-              <TouchableOpacity
-                key={idx}
-                activeOpacity={0.7}
-                onPress={() => {
-                  scrollViewRef.current?.scrollTo({
-                    x: idx * SCREEN_WIDTH,
-                    animated: true,
-                  });
-                  setCurrentSlide(idx);
-                }}
+          {/* Fluid Sliding Pagination Indicator Track */}
+          <View style={styles.sliderTrackContainer}>
+            <View style={styles.sliderTrack}>
+              {/* Reference Inactive Dots */}
+              {ONBOARDING_SLIDES.map((_, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    scrollViewRef.current?.scrollTo({
+                      x: idx * SCREEN_WIDTH,
+                      animated: true,
+                    });
+                    setCurrentSlide(idx);
+                  }}
+                  style={styles.sliderSlot}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Go to slide ${idx + 1}`}
+                >
+                  <View style={styles.inactiveSlotDot} />
+                </TouchableOpacity>
+              ))}
+
+              {/* Seamless Sliding Active Indicator Pill */}
+              <Animated.View
+                pointerEvents="none"
                 style={[
-                  styles.pageDot,
-                  currentSlide === idx && styles.pageDotActive,
+                  styles.activeSliderPill,
+                  {
+                    transform: [{ translateX: activeIndicatorTranslateX }],
+                  },
                 ]}
               />
-            ))}
+            </View>
           </View>
 
           {/* Dynamic Action Button */}
@@ -371,20 +397,37 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.lg,
     gap: spacing.md,
   },
-  paginationRow: {
-    flexDirection: "row",
+  sliderTrackContainer: {
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    marginVertical: spacing.xs,
   },
-  pageDot: {
+  sliderTrack: {
+    width: ONBOARDING_SLIDES.length * 28,
+    height: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+  },
+  sliderSlot: {
+    width: 28,
+    height: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inactiveSlotDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: colors.surface.border,
   },
-  pageDotActive: {
+  activeSliderPill: {
+    position: "absolute",
+    left: 0,
+    top: 4,
     width: 28,
+    height: 8,
+    borderRadius: 4,
     backgroundColor: colors.accent.primary,
   },
   getStartedButton: {
