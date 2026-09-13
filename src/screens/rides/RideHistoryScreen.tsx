@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -15,15 +15,28 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   PinIcon,
-  TargetIcon,
   CheckCircleIcon,
+  DownloadIcon,
+  SteeringWheelIcon,
+  WalletIcon,
 } from "../../components/common/SvgIcons";
 import { useRide } from "../../services/RideContext";
+
+type HistoryTabKey = "past" | "upcoming" | "business";
 
 export default function RideHistoryScreen({
   navigation,
 }: RootStackScreenProps<"RideHistory">) {
   const { rideHistory } = useRide();
+  const [activeTab, setActiveTab] = useState<HistoryTabKey>("past");
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const filterOptions = [
+    { key: "all", label: "All Rides" },
+    { key: "30days", label: "Last 30 Days" },
+    { key: "personal", label: "Personal" },
+    { key: "eco", label: "Eco / Electric" },
+  ];
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -38,7 +51,7 @@ export default function RideHistoryScreen({
         >
           <ArrowLeftIcon size={20} color={colors.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.appBarTitle}>Your Trips</Text>
+        <Text style={styles.appBarTitle}>Ride Activity & History</Text>
         <View style={styles.appBarSpacer} />
       </View>
 
@@ -46,28 +59,153 @@ export default function RideHistoryScreen({
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Summary Card */}
-        <View style={styles.summaryCard}>
-          <View style={styles.summaryHeader}>
-            <View>
-              <Text style={styles.summaryTitle}>Trip Activity</Text>
-              <Text style={styles.summarySubtitle}>
-                {rideHistory.length} completed {rideHistory.length === 1 ? "ride" : "rides"} in South Africa
-              </Text>
+        {/* Interactive Header Tabs */}
+        <View style={styles.tabsContainer}>
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === "past" && styles.tabButtonActive,
+            ]}
+            activeOpacity={0.8}
+            onPress={() => setActiveTab("past")}
+          >
+            <Text
+              style={[
+                styles.tabButtonText,
+                activeTab === "past" && styles.tabButtonTextActive,
+              ]}
+            >
+              Past Trips ({rideHistory.length})
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === "upcoming" && styles.tabButtonActive,
+            ]}
+            activeOpacity={0.8}
+            onPress={() => setActiveTab("upcoming")}
+          >
+            <Text
+              style={[
+                styles.tabButtonText,
+                activeTab === "upcoming" && styles.tabButtonTextActive,
+              ]}
+            >
+              Upcoming (1)
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === "business" && styles.tabButtonActive,
+            ]}
+            activeOpacity={0.8}
+            onPress={() => setActiveTab("business")}
+          >
+            <Text
+              style={[
+                styles.tabButtonText,
+                activeTab === "business" && styles.tabButtonTextActive,
+              ]}
+            >
+              Business
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Stat Metrics Bento Grid */}
+        <View style={styles.bentoGrid}>
+          {/* Bento Card 1: Total Trips */}
+          <View style={styles.bentoCard}>
+            <View style={styles.bentoHeaderRow}>
+              <Text style={styles.bentoLabel}>TRIPS</Text>
+              <SteeringWheelIcon size={16} color={colors.accent.primary} />
             </View>
-            <View style={styles.summaryIconWrap}>
-              <CheckCircleIcon size={24} color={colors.accent.primary} />
+            <View style={styles.bentoValueWrap}>
+              <Text style={styles.bentoValueNumber}>
+                {Math.max(28, rideHistory.length)}
+              </Text>
+              <Text style={styles.bentoSubtext}>All-time</Text>
+            </View>
+          </View>
+
+          {/* Bento Card 2: ZAR Saved */}
+          <View style={styles.bentoCard}>
+            <View style={styles.bentoHeaderRow}>
+              <Text style={styles.bentoLabelYellow}>SAVED</Text>
+              <WalletIcon size={16} color={colors.accent.primary} />
+            </View>
+            <View style={styles.bentoValueWrap}>
+              <Text style={styles.bentoValueYellow}>R380</Text>
+              <Text style={styles.bentoSubtext}>EV Pass</Text>
+            </View>
+          </View>
+
+          {/* Bento Card 3: Transit Score */}
+          <View style={styles.bentoCard}>
+            <View style={styles.bentoHeaderRow}>
+              <Text style={styles.bentoLabel}>TRANSIT</Text>
+              <CheckCircleIcon size={16} color={colors.accent.primary} />
+            </View>
+            <View style={styles.bentoValueWrap}>
+              <Text style={styles.bentoValueNumber}>99.4%</Text>
+              <Text style={styles.bentoSubtext}>Clean Transit</Text>
             </View>
           </View>
         </View>
 
-        <Text style={styles.sectionHeader}>Recent Trips</Text>
+        {/* Active Filter Chips */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filterChipsRow}
+        >
+          {filterOptions.map((filter) => {
+            const isSelected = selectedFilter === filter.key;
+            return (
+              <TouchableOpacity
+                key={filter.key}
+                style={[
+                  styles.filterChip,
+                  isSelected && styles.filterChipActive,
+                ]}
+                activeOpacity={0.8}
+                onPress={() => setSelectedFilter(filter.key)}
+              >
+                <Text
+                  style={[
+                    styles.filterChipText,
+                    isSelected && styles.filterChipTextActive,
+                  ]}
+                >
+                  {filter.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
 
+        {/* Month Group Header & Statement Action */}
+        <View style={styles.feedHeaderRow}>
+          <Text style={styles.feedHeaderTitle}>October 2024</Text>
+          <TouchableOpacity
+            style={styles.downloadStatementButton}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.downloadStatementText}>Statement</Text>
+            <DownloadIcon size={14} color={colors.accent.primary} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Trip List */}
         {rideHistory.length === 0 ? (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyTitle}>No rides taken yet</Text>
             <Text style={styles.emptySubtitle}>
-              When you complete a ride, details will be listed here.
+              When you complete a ride, itemized telemetry and receipts will appear here.
             </Text>
             <TouchableOpacity
               style={styles.bookNowButton}
@@ -80,18 +218,22 @@ export default function RideHistoryScreen({
         ) : (
           rideHistory.map((trip) => {
             const tierLabel =
-              trip.tier.charAt(0).toUpperCase() + trip.tier.slice(1);
+              trip.tier === "standard"
+                ? "Volt Eco"
+                : trip.tier === "comfort"
+                ? "Go Comfort"
+                : "Go Exec";
 
             return (
               <TouchableOpacity
                 key={trip.id}
                 style={styles.tripCard}
-                activeOpacity={0.85}
+                activeOpacity={0.88}
                 onPress={() =>
                   navigation.navigate("TripDetails", { tripId: trip.id })
                 }
               >
-                {/* Trip Header Row */}
+                {/* Top Row: Tier & Price */}
                 <View style={styles.tripTopRow}>
                   <View>
                     <Text style={styles.tripTier}>{tierLabel}</Text>
@@ -100,36 +242,38 @@ export default function RideHistoryScreen({
                   <View style={styles.priceContainer}>
                     <Text style={styles.tripPrice}>R{trip.total}.00</Text>
                     {trip.tip > 0 && (
-                      <Text style={styles.tripTipText}>(incl. R{trip.tip} tip)</Text>
+                      <Text style={styles.tripTipText}>
+                        (incl. R{trip.tip} tip)
+                      </Text>
                     )}
                   </View>
                 </View>
 
-                {/* Route */}
+                {/* Route Visual Trajectory */}
                 <View style={styles.routeBox}>
                   <View style={styles.routePoint}>
-                    <PinIcon size={14} color={colors.accent.primary} />
+                    <View style={styles.pickupDot} />
                     <Text style={styles.routeText} numberOfLines={1}>
                       {trip.pickup}
                     </Text>
                   </View>
+                  <View style={styles.verticalRouteLine} />
                   <View style={styles.routePoint}>
-                    <TargetIcon size={14} color={colors.accent.secondary} />
+                    <View style={styles.destDot} />
                     <Text style={styles.routeText} numberOfLines={1}>
                       {trip.destination}
                     </Text>
                   </View>
                 </View>
 
-                {/* Driver and Status Footer */}
+                {/* Footer Info Row */}
                 <View style={styles.tripFooter}>
-                  <View style={styles.driverSection}>
-                    <Text style={styles.driverName}>Driver: {trip.driverName}</Text>
-                    <Text style={styles.tripStatusText}>Completed</Text>
-                  </View>
-
-                  <View style={styles.arrowCircle}>
-                    <ArrowRightIcon size={16} color={colors.accent.primary} />
+                  <Text style={styles.driverInfoText}>
+                    Driver: {trip.driverName} • {trip.distance || "12.4 km"}
+                  </Text>
+                  <View style={styles.viewDetailsRow}>
+                    <Text style={styles.viewDetailsText}>Receipt</Text>
+                    <ArrowRightIcon size={12} color={colors.accent.primary} />
                   </View>
                 </View>
               </TouchableOpacity>
@@ -151,90 +295,176 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surface.border,
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.surface.card,
-    alignItems: "center",
-    justifyContent: "center",
     borderWidth: 1,
     borderColor: colors.surface.border,
+    alignItems: "center",
+    justifyContent: "center",
   },
   appBarTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "800",
     color: colors.text.primary,
+    letterSpacing: -0.2,
   },
   appBarSpacer: {
     width: 40,
   },
   scrollContent: {
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.xxl,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    paddingBottom: 40,
+    gap: spacing.md,
   },
-  summaryCard: {
+  tabsContainer: {
+    flexDirection: "row",
     backgroundColor: colors.surface.card,
-    borderRadius: 20,
-    padding: spacing.md,
+    borderRadius: 14,
+    padding: 4,
     borderWidth: 1,
     borderColor: colors.surface.border,
-    marginVertical: spacing.md,
   },
-  summaryHeader: {
+  tabButton: {
+    flex: 1,
+    paddingVertical: 9,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tabButtonActive: {
+    backgroundColor: colors.accent.primary,
+  },
+  tabButtonText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.text.secondary,
+  },
+  tabButtonTextActive: {
+    color: colors.accent.contrast,
+  },
+  bentoGrid: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  bentoCard: {
+    flex: 1,
+    backgroundColor: colors.surface.card,
+    borderRadius: 16,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+    justifyContent: "space-between",
+    minHeight: 88,
+  },
+  bentoHeaderRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  summaryTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+  bentoLabel: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: colors.text.secondary,
+    letterSpacing: 1,
+  },
+  bentoLabelYellow: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: colors.accent.primary,
+    letterSpacing: 1,
+  },
+  bentoValueWrap: {
+    marginTop: 6,
+  },
+  bentoValueNumber: {
+    fontSize: 20,
+    fontWeight: "900",
     color: colors.text.primary,
   },
-  summarySubtitle: {
-    fontSize: 13,
-    color: colors.text.secondary,
-    marginTop: 3,
+  bentoValueYellow: {
+    fontSize: 20,
+    fontWeight: "900",
+    color: colors.accent.primary,
   },
-  summaryIconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: colors.surface.cardAlt,
+  bentoSubtext: {
+    fontSize: 10,
+    color: colors.text.muted,
+    marginTop: 1,
+  },
+  filterChipsRow: {
+    gap: 8,
+  },
+  filterChip: {
+    backgroundColor: colors.surface.card,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  filterChipActive: {
+    backgroundColor: colors.surface.elevated,
+    borderColor: colors.accent.primary,
+  },
+  filterChipText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: colors.text.secondary,
+  },
+  filterChipTextActive: {
+    color: colors.accent.primary,
+  },
+  feedHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "center",
+    marginTop: 4,
   },
-  sectionHeader: {
-    fontSize: 16,
-    fontWeight: "bold",
+  feedHeaderTitle: {
+    fontSize: 12,
+    fontWeight: "800",
     color: colors.text.secondary,
-    marginBottom: spacing.sm,
+    letterSpacing: 1,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+  },
+  downloadStatementButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  downloadStatementText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.accent.primary,
   },
   tripCard: {
     backgroundColor: colors.surface.card,
-    borderRadius: 18,
+    borderRadius: 16,
     padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.surface.border,
-    marginBottom: spacing.sm,
+    gap: spacing.sm,
   },
   tripTopRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: spacing.xs,
   },
   tripTier: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    fontWeight: "800",
     color: colors.text.primary,
   },
   tripDate: {
-    fontSize: 12,
+    fontSize: 11,
     color: colors.text.muted,
     marginTop: 2,
   },
@@ -242,91 +472,100 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   tripPrice: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: colors.accent.primary,
+    fontSize: 15,
+    fontWeight: "800",
+    color: colors.text.primary,
   },
   tripTipText: {
-    fontSize: 11,
-    color: colors.text.muted,
+    fontSize: 10,
+    color: colors.text.secondary,
     marginTop: 2,
   },
   routeBox: {
-    backgroundColor: colors.surface.cardAlt,
-    borderRadius: 12,
-    padding: spacing.xs,
-    marginVertical: spacing.xs,
-    gap: 6,
+    gap: 4,
+    paddingVertical: 4,
   },
   routePoint: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
   },
+  pickupDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.accent.primary,
+  },
+  destDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 2,
+    backgroundColor: colors.text.primary,
+  },
+  verticalRouteLine: {
+    width: 2,
+    height: 8,
+    backgroundColor: colors.surface.border,
+    marginLeft: 3,
+  },
   routeText: {
+    fontSize: 12,
+    color: colors.text.primary,
     flex: 1,
-    fontSize: 13,
-    color: colors.text.secondary,
   },
   tripFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: spacing.xs,
-  },
-  driverSection: {
-    flex: 1,
-  },
-  driverName: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: colors.text.primary,
-  },
-  tripStatusText: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: colors.accent.primary,
+    borderTopWidth: 1,
+    borderTopColor: colors.surface.border,
+    paddingTop: 8,
     marginTop: 2,
   },
-  arrowCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.surface.cardAlt,
+  driverInfoText: {
+    fontSize: 11,
+    color: colors.text.muted,
+  },
+  viewDetailsRow: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    gap: 3,
+  },
+  viewDetailsText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.accent.primary,
   },
   emptyCard: {
     backgroundColor: colors.surface.card,
-    borderRadius: 20,
+    borderRadius: 16,
     padding: spacing.xl,
     alignItems: "center",
-    justifyContent: "center",
     borderWidth: 1,
     borderColor: colors.surface.border,
-    marginTop: spacing.lg,
+    gap: spacing.sm,
   },
   emptyTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: colors.text.primary,
-    marginBottom: 6,
   },
   emptySubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: colors.text.secondary,
     textAlign: "center",
-    marginBottom: spacing.lg,
+    lineHeight: 18,
   },
   bookNowButton: {
+    marginTop: spacing.sm,
     backgroundColor: colors.accent.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
     borderRadius: 20,
   },
   bookNowText: {
-    fontSize: 15,
-    fontWeight: "bold",
+    fontSize: 13,
+    fontWeight: "800",
     color: colors.accent.contrast,
   },
 });
