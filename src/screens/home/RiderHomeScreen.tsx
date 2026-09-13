@@ -77,7 +77,7 @@ const DESTINATION_PRESETS = [
 
 export default function RiderHomeScreen({
   navigation,
-}: RootStackScreenProps<"RiderHome">) {
+}: RootStackScreenProps<any>) {
   const {
     pickup,
     destination,
@@ -99,12 +99,14 @@ export default function RiderHomeScreen({
     PARCEL_TIERS.find((p) => p.key === selectedParcelTier) || PARCEL_TIERS[0];
 
   const handleTabPress = (tab: TabKey) => {
-    if (tab === "trips") {
-      navigation.navigate("RideHistory");
-    } else if (tab === "wallet") {
-      navigation.navigate("PaymentMethods");
-    } else if (tab === "profile") {
-      navigation.navigate("RiderProfile");
+    if (tab === "explore" || tab === "home") {
+      // Current tab
+    } else if (tab === "rides") {
+      navigation.navigate("Rides");
+    } else if (tab === "activity" || tab === "trips") {
+      navigation.navigate("Activity");
+    } else if (tab === "account" || tab === "profile") {
+      navigation.navigate("Account");
     }
   };
 
@@ -461,7 +463,7 @@ export default function RiderHomeScreen({
       </ScrollView>
 
       {/* Preserved Navigation Bar Locked */}
-      <BottomTabBar activeTab="home" onSelectTab={handleTabPress} />
+      <BottomTabBar activeTab="explore" onSelectTab={handleTabPress} />
     </SafeAreaView>
   );
 }

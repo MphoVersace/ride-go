@@ -27,6 +27,7 @@ import {
 } from "../../components/common/MobilityTelemetryVectors";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
 import SlideToConfirm from "../../components/common/SlideToConfirm";
+import BottomTabBar, { TabKey } from "../../components/common/BottomTabBar";
 import { useRide, RideTier } from "../../services/RideContext";
 
 interface TierOption {
@@ -63,7 +64,7 @@ const tiersData: TierOption[] = [
 
 export default function RideOptionsScreen({
   navigation,
-}: RootStackScreenProps<"RideOptions">) {
+}: RootStackScreenProps<any>) {
   const {
     pickup,
     destination,
@@ -77,6 +78,18 @@ export default function RideOptionsScreen({
   const handleConfirm = () => {
     startSearch();
     navigation.navigate("RideSearching");
+  };
+
+  const handleTabPress = (tab: TabKey) => {
+    if (tab === "explore" || tab === "home") {
+      navigation.navigate("Explore");
+    } else if (tab === "rides") {
+      // Current tab
+    } else if (tab === "activity" || tab === "trips") {
+      navigation.navigate("Activity");
+    } else if (tab === "account" || tab === "profile") {
+      navigation.navigate("Account");
+    }
   };
 
   return (
@@ -284,6 +297,9 @@ export default function RideOptionsScreen({
           </View>
         </View>
       </ScrollView>
+
+      {/* 4-Tab Navigation Bar */}
+      <BottomTabBar activeTab="rides" onSelectTab={handleTabPress} />
     </SafeAreaView>
   );
 }
@@ -322,7 +338,7 @@ const styles = StyleSheet.create({
     width: 40,
   },
   scrollContent: {
-    paddingBottom: 40,
+    paddingBottom: 96,
   },
   mapContainer: {
     position: "relative",

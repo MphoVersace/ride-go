@@ -21,15 +21,28 @@ import {
   WalletIcon,
 } from "../../components/common/SvgIcons";
 import { useRide } from "../../services/RideContext";
+import BottomTabBar, { TabKey } from "../../components/common/BottomTabBar";
 
 type HistoryTabKey = "past" | "upcoming" | "business";
 
 export default function RideHistoryScreen({
   navigation,
-}: RootStackScreenProps<"RideHistory">) {
+}: RootStackScreenProps<any>) {
   const { rideHistory } = useRide();
   const [activeTab, setActiveTab] = useState<HistoryTabKey>("past");
   const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const handleTabPress = (tab: TabKey) => {
+    if (tab === "explore" || tab === "home") {
+      navigation.navigate("Explore");
+    } else if (tab === "rides") {
+      navigation.navigate("Rides");
+    } else if (tab === "activity" || tab === "trips") {
+      // Current tab
+    } else if (tab === "account" || tab === "profile") {
+      navigation.navigate("Account");
+    }
+  };
 
   const filterOptions = [
     { key: "all", label: "All Rides" },
@@ -281,6 +294,9 @@ export default function RideHistoryScreen({
           })
         )}
       </ScrollView>
+
+      {/* 4-Tab Navigation Bar */}
+      <BottomTabBar activeTab="activity" onSelectTab={handleTabPress} />
     </SafeAreaView>
   );
 }
@@ -321,7 +337,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
-    paddingBottom: 40,
+    paddingBottom: 96,
     gap: spacing.md,
   },
   tabsContainer: {

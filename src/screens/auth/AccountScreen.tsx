@@ -31,7 +31,7 @@ import { useRide } from "../../services/RideContext";
 
 export default function AccountScreen({
   navigation,
-}: RootStackScreenProps<"Account">) {
+}: RootStackScreenProps<any>) {
   const { updateUserProfile } = useRide();
   const [role, setRole] = useState<"rider" | "driver">("rider");
   const [fullName, setFullName] = useState("Nomvula Zungu");
@@ -52,7 +52,7 @@ export default function AccountScreen({
         .toUpperCase()
         .slice(0, 2),
     });
-    navigation.navigate("RiderHome");
+    navigation.navigate("Explore");
   };
 
   const handleExpressSignIn = (provider: string) => {
@@ -60,7 +60,7 @@ export default function AccountScreen({
       name: fullName || "Nomvula Zungu",
       avatar: "NZ",
     });
-    navigation.navigate("RiderHome");
+    navigation.navigate("Explore");
   };
 
   return (
