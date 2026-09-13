@@ -161,7 +161,7 @@ ride-go/
 
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
-| **Onboarding** | `SplashOnboarding` | Ultra-sleek car-free route telemetry carousel (Network Matrix, Upfront Rand Fares, Satellite Dispatch) and geometric GPS sonar pulse loading sequence |
+| **Onboarding** | `SplashOnboarding` | Ultra-sleek car-free route telemetry carousel with fluid native-driven sliding active indicator and geometric GPS sonar pulse loading sequence |
 | **Auth** | `Account` | Welcome screen with panoramic NationalTransitMapCard, 3-pillar telemetry matrix, and yellow action dock |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
