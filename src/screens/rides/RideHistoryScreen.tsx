@@ -19,6 +19,9 @@ import {
   DownloadIcon,
   SteeringWheelIcon,
   WalletIcon,
+  TreeLeafIcon,
+  StarIcon,
+  ReceiptIcon,
 } from "../../components/common/SvgIcons";
 import { useRide } from "../../services/RideContext";
 import BottomTabBar, { TabKey } from "../../components/common/BottomTabBar";
@@ -157,15 +160,15 @@ export default function RideHistoryScreen({
             </View>
           </View>
 
-          {/* Bento Card 3: Transit Score */}
+          {/* Bento Card 3: Top Rider Rating */}
           <View style={styles.bentoCard}>
             <View style={styles.bentoHeaderRow}>
-              <Text style={styles.bentoLabel}>TRANSIT</Text>
-              <CheckCircleIcon size={16} color={colors.accent.primary} />
+              <Text style={styles.bentoLabel}>RATING</Text>
+              <StarIcon size={15} color={colors.accent.primary} />
             </View>
             <View style={styles.bentoValueWrap}>
-              <Text style={styles.bentoValueNumber}>99.4%</Text>
-              <Text style={styles.bentoSubtext}>Clean Transit</Text>
+              <Text style={styles.bentoValueNumber}>4.98</Text>
+              <Text style={styles.bentoSubtext}>Top Rider</Text>
             </View>
           </View>
         </View>
@@ -213,22 +216,8 @@ export default function RideHistoryScreen({
           </TouchableOpacity>
         </View>
 
-        {/* Trip List */}
-        {rideHistory.length === 0 ? (
-          <View style={styles.emptyCard}>
-            <Text style={styles.emptyTitle}>No rides taken yet</Text>
-            <Text style={styles.emptySubtitle}>
-              When you complete a ride, itemized telemetry and receipts will appear here.
-            </Text>
-            <TouchableOpacity
-              style={styles.bookNowButton}
-              activeOpacity={0.85}
-              onPress={() => navigation.navigate("RiderHome")}
-            >
-              <Text style={styles.bookNowText}>Book a Ride</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
+        {/* Trip List: Dynamic History or Stitch Featured History */}
+        {rideHistory.length > 0 ? (
           rideHistory.map((trip) => {
             const tierLabel =
               trip.tier === "standard"
@@ -246,7 +235,6 @@ export default function RideHistoryScreen({
                   navigation.navigate("TripDetails", { tripId: trip.id })
                 }
               >
-                {/* Top Row: Tier & Price */}
                 <View style={styles.tripTopRow}>
                   <View>
                     <Text style={styles.tripTier}>{tierLabel}</Text>
@@ -262,7 +250,6 @@ export default function RideHistoryScreen({
                   </View>
                 </View>
 
-                {/* Route Visual Trajectory */}
                 <View style={styles.routeBox}>
                   <View style={styles.routePoint}>
                     <View style={styles.pickupDot} />
@@ -279,7 +266,6 @@ export default function RideHistoryScreen({
                   </View>
                 </View>
 
-                {/* Footer Info Row */}
                 <View style={styles.tripFooter}>
                   <Text style={styles.driverInfoText}>
                     Driver: {trip.driverName} • {trip.distance || "12.4 km"}
@@ -292,7 +278,191 @@ export default function RideHistoryScreen({
               </TouchableOpacity>
             );
           })
+        ) : (
+          <View style={styles.stitchTripsStack}>
+            {/* Featured Trip 1: Volt Comfort EV */}
+            <View style={styles.tripCard}>
+              <View style={styles.tripTopRow}>
+                <View>
+                  <Text style={styles.tripTier}>Volt Comfort EV</Text>
+                  <Text style={styles.tripDate}>Yesterday • 8:15 PM</Text>
+                </View>
+                <View style={styles.priceContainer}>
+                  <Text style={styles.tripPrice}>R125.00</Text>
+                  <Text style={styles.tripStatusCompleted}>Completed</Text>
+                </View>
+              </View>
+
+              <View style={styles.routeBox}>
+                <View style={styles.routePoint}>
+                  <View style={styles.pickupDot} />
+                  <Text style={styles.routeText} numberOfLines={1}>
+                    V&A Waterfront (Breakwater Blvd, Cape Town)
+                  </Text>
+                </View>
+                <View style={styles.verticalRouteLine} />
+                <View style={styles.routePoint}>
+                  <View style={styles.destDot} />
+                  <Text style={styles.routeText} numberOfLines={1}>
+                    Camps Bay Promenade (Victoria Rd)
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.tripFooter}>
+                <Text style={styles.driverInfoText}>
+                  Driven by Marcus (Polestar 2) • 5.0
+                </Text>
+                <View style={styles.viewDetailsRow}>
+                  <Text style={styles.viewDetailsText}>Rebook Ride</Text>
+                  <ArrowRightIcon size={12} color={colors.accent.primary} />
+                </View>
+              </View>
+            </View>
+
+            {/* Featured Trip 2: Volt Black Exec */}
+            <View style={styles.tripCard}>
+              <View style={styles.tripTopRow}>
+                <View>
+                  <Text style={styles.tripTier}>Volt Black Exec</Text>
+                  <Text style={styles.tripDate}>Oct 12 • 11:30 AM</Text>
+                </View>
+                <View style={styles.priceContainer}>
+                  <Text style={styles.tripPrice}>R280.00</Text>
+                  <Text style={styles.tripStatusCompleted}>Completed</Text>
+                </View>
+              </View>
+
+              <View style={styles.routeBox}>
+                <View style={styles.routePoint}>
+                  <View style={styles.pickupDot} />
+                  <Text style={styles.routeText} numberOfLines={1}>
+                    Cape Town Int'l Airport (CPT Terminal 2)
+                  </Text>
+                </View>
+                <View style={styles.verticalRouteLine} />
+                <View style={styles.routePoint}>
+                  <View style={styles.destDot} />
+                  <Text style={styles.routeText} numberOfLines={1}>
+                    Century City (Bridgeway Precinct, Cape Town)
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.tripFooter}>
+                <Text style={styles.driverInfoText}>
+                  You rated: 5.0 • Exec Saloon
+                </Text>
+                <View style={styles.viewDetailsRow}>
+                  <Text style={styles.viewDetailsText}>View Receipt</Text>
+                  <ReceiptIcon size={14} color={colors.accent.primary} />
+                </View>
+              </View>
+            </View>
+
+            {/* Featured Trip 3: Volt Eco Zero CO2 */}
+            <View style={styles.tripCard}>
+              <View style={styles.tripTopRow}>
+                <View>
+                  <Text style={styles.tripTier}>Volt Eco Zero CO2</Text>
+                  <Text style={styles.tripDate}>Oct 9 • 6:45 PM</Text>
+                </View>
+                <View style={styles.priceContainer}>
+                  <Text style={styles.tripPrice}>R75.00</Text>
+                  <Text style={styles.tripStatusCompleted}>Completed</Text>
+                </View>
+              </View>
+
+              <View style={styles.routeBox}>
+                <View style={styles.routePoint}>
+                  <View style={styles.pickupDot} />
+                  <Text style={styles.routeText} numberOfLines={1}>
+                    Green Point (Somerset Road, Cape Town)
+                  </Text>
+                </View>
+                <View style={styles.verticalRouteLine} />
+                <View style={styles.routePoint}>
+                  <View style={styles.destDot} />
+                  <Text style={styles.routeText} numberOfLines={1}>
+                    Kloof Street (Gardens, Cape Town)
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.tripFooter}>
+                <Text style={styles.driverInfoText}>
+                  Paid with Apple Pay (•••• 4019)
+                </Text>
+                <View style={styles.viewDetailsRow}>
+                  <Text style={styles.viewDetailsText}>Rebook</Text>
+                  <ArrowRightIcon size={12} color={colors.accent.primary} />
+                </View>
+              </View>
+            </View>
+          </View>
         )}
+
+        {/* Environmental Impact Summary Card */}
+        <View style={styles.environmentalCard}>
+          <View style={styles.environmentalHeader}>
+            <View style={styles.environmentalIconBox}>
+              <TreeLeafIcon size={20} color={colors.accent.primary} />
+            </View>
+            <View style={styles.environmentalTitleWrap}>
+              <Text style={styles.environmentalTitle}>114 kg CO2 Saved</Text>
+              <Text style={styles.environmentalTag}>100% Electric Fleets</Text>
+            </View>
+          </View>
+          <Text style={styles.environmentalDescription}>
+            Your EV rides this month equivalent to planting 6 indigenous
+            yellowwood trees in Kirstenbosch Gardens.
+          </Text>
+        </View>
+
+        {/* Activity Settings & Enterprise Section */}
+        <View style={styles.enterpriseSection}>
+          <TouchableOpacity
+            style={styles.enterpriseItem}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("Settings")}
+          >
+            <View style={styles.enterpriseInfo}>
+              <Text style={styles.enterpriseTitle}>Add Business Profile</Text>
+              <Text style={styles.enterpriseSubtitle}>
+                Automate expensing to Concur or Expensify
+              </Text>
+            </View>
+            <ArrowRightIcon size={16} color={colors.accent.primary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.enterpriseItem}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("PaymentMethods")}
+          >
+            <View style={styles.enterpriseInfo}>
+              <Text style={styles.enterpriseTitle}>Payment Methods & Wallets</Text>
+              <Text style={styles.enterpriseSubtitle}>
+                Volt Cash (R150.00), Apple Pay, Visa
+              </Text>
+            </View>
+            <ArrowRightIcon size={16} color={colors.accent.primary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.enterpriseItem}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("HelpSupport")}
+          >
+            <View style={styles.enterpriseInfo}>
+              <Text style={styles.enterpriseTitle}>Help with a Past Trip</Text>
+              <Text style={styles.enterpriseSubtitle}>
+                Find lost items, report route issues
+              </Text>
+            </View>
+            <ArrowRightIcon size={16} color={colors.accent.primary} />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
 
       {/* 4-Tab Navigation Bar */}
@@ -583,5 +753,90 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "800",
     color: colors.accent.contrast,
+  },
+  stitchTripsStack: {
+    gap: spacing.md,
+  },
+  tripStatusCompleted: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: colors.accent.primary,
+    textTransform: "uppercase",
+    marginTop: 2,
+    letterSpacing: 0.5,
+  },
+  environmentalCard: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 16,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  environmentalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  environmentalIconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: colors.surface.elevated,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  environmentalTitleWrap: {
+    flex: 1,
+  },
+  environmentalTitle: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: colors.text.primary,
+  },
+  environmentalTag: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: colors.accent.primary,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginTop: 1,
+  },
+  environmentalDescription: {
+    fontSize: 12,
+    color: colors.text.secondary,
+    lineHeight: 18,
+  },
+  enterpriseSection: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+    overflow: "hidden",
+    marginTop: spacing.sm,
+  },
+  enterpriseItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surface.border,
+  },
+  enterpriseInfo: {
+    flex: 1,
+    gap: 2,
+  },
+  enterpriseTitle: {
+    fontSize: 13,
+    fontWeight: "800",
+    color: colors.text.primary,
+  },
+  enterpriseSubtitle: {
+    fontSize: 11,
+    color: colors.text.muted,
   },
 });

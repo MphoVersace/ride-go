@@ -114,7 +114,7 @@ ride-go/
 │   │   │   ├── AccountTypeScreen.tsx    # Role selection (Rider vs Driver partner)
 │   │   │   └── RiderRegistrationScreen.tsx # Rider signup form with profile sync
 │   │   ├── home/                 # Main home experience (Core Tab 1: Explore)
-│   │   │   └── RiderHomeScreen.tsx      # Core Tab 1 (Route: Explore): Initial landing screen; urban geo-grid map, Cape Town/Sandton focal halo, live fleet counter, prominent 'Where to?' discovery console, SA presets, and persistent BottomTabBar
+│   │   │   └── RiderHomeScreen.tsx      # Core Tab 1 (Route: Explore): High-fidelity urban geo-grid map, Cape Town City Bowl focal halo, '24 Ride-Go Cars Nearby' live counter, 'Where to?' discovery console with 'Schedule: Now', quick service carousel (Go Ride, Go Comfort, Go 4x4, Package Courier), MZANSI30 promo card, Fast Bookings presets with travel times, Active Driver HUD, and persistent BottomTabBar
 │   │   ├── onboarding/           # Animated splash & introduction
 │   │   │   └── SplashOnboardingScreen.tsx # Ultra-sleek car-free route telemetry carousel & GPS radar loader
 │   │   ├── profile/              # Profile, settings, and support (Core Tab 4: Account)
@@ -122,17 +122,17 @@ ride-go/
 │   │   │   ├── HelpSupportScreen.tsx    # Interactive FAQ accordion & ticket submission
 │   │   │   ├── NotificationsScreen.tsx  # Unread filter tabs & trip/wallet alerts
 │   │   │   ├── PaymentMethodsScreen.tsx # RideGo Wallet in Rands, top-up chips, card selection
-│   │   │   ├── RiderProfileScreen.tsx   # Core Tab 4 (Route: Account): Dark 60-30-10 user card, trip stats, account shortcuts (Wallet, Saved Places, Safety, Settings), and persistent BottomTabBar
-│   │   │   ├── SafetyCentreScreen.tsx   # SAPS 10111 / 112 dispatch & trusted contacts
+│   │   │   ├── RiderProfileScreen.tsx   # Core Tab 4 (Route: Account): Step 5 of 5 100% Ready progress banner, Tier 1 Verified Rider identity card (Nomvula Zungu, SmartID: 9403••••084), RIDEGOFIRST promo card, Capitec Pay Open Banking selector, 3 Active Urban Safety Safeguards (PIN, Live WhatsApp Share, Emergency Link), and 'Start Riding' CTA
+│   │   │   ├── SafetyCentreScreen.tsx   # Emergency dispatch & trusted contacts
 │   │   │   ├── SavedPlacesScreen.tsx    # Home, Work & favorite destination presets
 │   │   │   └── SettingsScreen.tsx       # Push/SMS toggles, biometrics & South Africa region
 │   │   ├── rides/                # Interactive ride booking, tracking, and receipts (Core Tabs 2 & 3: Rides & Activity)
 │   │   │   ├── DestinationResultsScreen.tsx # Geocoded results & distance tags
 │   │   │   ├── DestinationSearchScreen.tsx  # Stacked pill inputs & SA suggestions
 │   │   │   ├── DriverFoundScreen.tsx        # Live driver tracking HUD, floating ETA pill, safety PIN security banner, driver console
-│   │   │   ├── RideHistoryScreen.tsx        # Core Tab 3 (Route: Activity): Category tabs (Past, Upcoming, Business), Bento stat metrics (Trips, Saved, Transit Score), month-grouped feed, and persistent BottomTabBar
+│   │   │   ├── RideHistoryScreen.tsx        # Core Tab 3 (Route: Activity): Category tabs (Past, Upcoming, Business), Bento metrics (Trips: 28, Saved: R380, Rating: 4.98), filter chips, month header ('October 2024' + statement download), 3 featured trips (Volt Comfort EV, Volt Black Exec, Volt Eco Zero CO2), Environmental Impact card (114 kg CO2 Saved), and Enterprise shortcuts
 │   │   │   ├── RideInProgressScreen.tsx     # Real-time animated vector map tracking, floating ETA HUD, safety PIN verification, live route progress scrubber
-│   │   │   ├── RideOptionsScreen.tsx        # Core Tab 2 (Route: Rides): Top trip trajectory HUD (time/distance), route pills, carbon tier stack, interactive SlideToConfirm slider, and persistent BottomTabBar
+│   │   │   ├── RideOptionsScreen.tsx        # Core Tab 2 (Route: Rides): Top trajectory HUD ('22 mins • 14.2 km'), pickup/destination pills, Surge 1.0x badge, 4 tiers (Go Eco R75, Go Comfort R125, Go XL R195, Go Black R280) with strikethrough fares, Capitec Pay selector with -R20 promo chip, and PanResponder SlideToConfirm slider
 │   │   │   ├── RideSearchingScreen.tsx      # Tactical dark geo-grid radar, expanding sonar waves, rotating scanner beam, nearby driver telemetry pings
 │   │   │   ├── TripCompletedScreen.tsx      # Numerical transit feedback score (1–5), Rand tip chips (R10–R100)
 │   │   │   ├── TripDetailsScreen.tsx        # Deep-dive trip summary, rebook CTA
@@ -166,18 +166,18 @@ ride-go/
 | **Auth** | `Account` | Stitch Gateway: Step 01/05 progress, Rider/Driver role switcher, Express Sign Up (Apple, Google, Capitec), SA inputs (+27), POPIA footer, and direct transit launch |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
-| **Home** | `RiderHome` | Urban geo-grid map, Cape Town/Sandton focal halo, live fleet counter, prominent 'Where to?' discovery console, SA presets, and locked BottomTabBar |
+| **Home** | `RiderHome` | Core Tab 1 (Explore): Urban geo-grid map, Cape Town City Bowl focal halo, '24 Ride-Go Cars Nearby' live counter, 'Where to?' discovery console with 'Schedule: Now', quick service carousel (Go Ride, Go Comfort, Go 4x4, Package Courier), MZANSI30 promo card, Fast Bookings presets, Active Driver HUD, and locked BottomTabBar |
 | **Rides** | `DestinationSearch` | Destination query input and suggested places |
 | **Rides** | `DestinationResults` | Geocoded destination results and pin selection |
-| **Rides** | `RideOptions` | Top trip trajectory HUD (time/distance), route pills, carbon tier stack with telemetry vectors, and interactive SlideToConfirm slider |
+| **Rides** | `RideOptions` | Core Tab 2 (Rides): Top trajectory HUD ('22 mins • 14.2 km'), route pills, Surge 1.0x badge, 4 tiers (Go Eco R75, Go Comfort R125, Go XL R195, Go Black R280) with strikethrough fares, Capitec Pay selector with -R20 promo chip, and PanResponder SlideToConfirm slider |
 | **Rides** | `RideSearching` | Tactical dark geo-grid radar, expanding sonar waves, rotating scanner beam, nearby driver telemetry pings, and cycling dispatch status |
 | **Rides** | `DriverFound` | Live driver tracking HUD, floating ETA pill, safety PIN security banner, driver profile console, and upfront Rand fare |
 | **Rides** | `RideInProgress` | Real-time animated vector map tracking, floating ETA HUD, safety PIN verification, and live route progress scrubber |
 | **Rides** | `TripCompleted` | Destination reached summary and numerical transit score feedback (1–5) |
 | **Rides** | `TripReceipt` | Itemized invoice breakdown, payment verification |
-| **Rides** | `RideHistory` | Category tabs (Past, Upcoming, Business), Bento stat metrics (Trips, Saved, Transit Score), and month-grouped trip receipts |
+| **Rides** | `RideHistory` | Core Tab 3 (Activity): Category tabs (Past, Upcoming, Business), Bento metrics (Trips: 28, Saved: R380, Rating: 4.98), filter chips, month header ('October 2024' + statement download), 3 featured trips (Volt Comfort EV, Volt Black Exec, Volt Eco Zero CO2), Environmental Impact card (114 kg CO2 Saved), and Enterprise shortcuts |
 | **Rides** | `TripDetails` | Deep-dive trip summary, route map, driver details |
-| **Profile** | `RiderProfile` | User profile overview, rating, shortcuts to settings |
+| **Profile** | `RiderProfile` | Core Tab 4 (Account): Step 5 of 5 100% Ready progress banner, Tier 1 Verified Rider identity card (Nomvula Zungu, SmartID: 9403••••084), RIDEGOFIRST promo card, Capitec Pay Open Banking selector, 3 Active Urban Safety Safeguards (PIN, Live WhatsApp Share, Emergency Link), and 'Start Riding' CTA |
 | **Profile** | `EditProfile` | Form to edit personal info, avatar, email, phone |
 | **Profile** | `SavedPlaces` | Bookmark management for Home, Work, and Favorites |
 | **Profile** | `PaymentMethods` | Card, digital wallet, and cash payment management |

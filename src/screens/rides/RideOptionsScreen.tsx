@@ -19,6 +19,8 @@ import {
   WalletIcon,
   CrosshairIcon,
   LayersIcon,
+  CapitecIcon,
+  TargetIcon,
 } from "../../components/common/SvgIcons";
 import {
   StandardTelemetryVector,
@@ -31,34 +33,54 @@ import BottomTabBar, { TabKey } from "../../components/common/BottomTabBar";
 import { useRide, RideTier } from "../../services/RideContext";
 
 interface TierOption {
-  key: RideTier;
+  key: RideTier | "xl";
   name: string;
   desc: string;
   seats: number;
   eta: string;
+  fare: number;
+  oldFare: number;
+  tag?: string;
 }
 
 const tiersData: TierOption[] = [
   {
     key: "standard",
-    name: "Volt Eco",
-    desc: "Swift & economical transit • 100% Electric",
+    name: "Go Eco",
+    desc: "3 min away • Zero Emission",
     seats: 4,
     eta: "3 min away",
+    fare: 75,
+    oldFare: 95,
   },
   {
     key: "comfort",
     name: "Go Comfort",
-    desc: "Extra legroom, enhanced damping & quiet cabin",
+    desc: "5 min away • Spacious legroom",
     seats: 4,
-    eta: "4 min away",
+    eta: "5 min away",
+    fare: 125,
+    oldFare: 155,
+    tag: "Fastest",
   },
   {
     key: "luxury",
-    name: "Go Exec",
-    desc: "Executive mobility with premier silent cruise",
+    name: "Go XL",
+    desc: "7 min away • Luggage & groups",
+    seats: 6,
+    eta: "7 min away",
+    fare: 195,
+    oldFare: 230,
+  },
+  {
+    key: "luxury",
+    name: "Go Black",
+    desc: "8 min away • Executive VIP saloon • Quiet ride",
     seats: 4,
-    eta: "6 min away",
+    eta: "8 min away",
+    fare: 280,
+    oldFare: 320,
+    tag: "VIP Luxury",
   },
 ];
 
@@ -74,6 +96,10 @@ export default function RideOptionsScreen({
     startSearch,
     walletBalance,
   } = useRide();
+
+  const [selectedTierName, setSelectedTierName] = React.useState("Go Comfort");
+  const activeTierObj =
+    tiersData.find((t) => t.name === selectedTierName) || tiersData[1];
 
   const handleConfirm = () => {
     startSearch();
@@ -174,7 +200,7 @@ export default function RideOptionsScreen({
 
         {/* Bottom Sheet Console */}
         <View style={styles.sheetConsole}>
-          {/* Sheet Header */}
+          {/* Sheet Header with Surge Indicator */}
           <View style={styles.sheetHeader}>
             <View>
               <Text style={styles.sheetTitle}>Select Ride Tier</Text>
@@ -182,23 +208,31 @@ export default function RideOptionsScreen({
                 All rides electric & carbon-neutral offset
               </Text>
             </View>
+            <View style={styles.surgeBadge}>
+              <TargetIcon size={12} color={colors.accent.primary} />
+              <Text style={styles.surgeBadgeText}>Surge 1.0x</Text>
+            </View>
           </View>
 
           {/* Vehicle Tier Stack */}
           <View style={styles.tierStack}>
             {tiersData.map((item) => {
-              const isSelected = tier === item.key;
-              const fare = tierFares[item.key];
+              const isSelected = selectedTierName === item.name;
 
               return (
                 <TouchableOpacity
-                  key={item.key}
+                  key={item.name}
                   style={[
                     styles.tierCard,
                     isSelected && styles.tierCardActive,
                   ]}
                   activeOpacity={0.88}
-                  onPress={() => selectTier(item.key)}
+                  onPress={() => {
+                    setSelectedTierName(item.name);
+                    if (item.key !== "xl") {
+                      selectTier(item.key as any);
+                    }
+                  }}
                 >
                   {/* Left Telemetry Vector */}
                   <View style={styles.telemetryBox}>
@@ -220,7 +254,7 @@ export default function RideOptionsScreen({
                         }
                       />
                     )}
-                    {item.key === "luxury" && (
+                    {(item.key === "luxury" || item.key === "xl") && (
                       <LuxuryTelemetryVector
                         width={60}
                         height={28}
@@ -242,8 +276,13 @@ export default function RideOptionsScreen({
                       >
                         {item.name}
                       </Text>
+                      {item.tag && (
+                        <View style={styles.tierTagPill}>
+                          <Text style={styles.tierTagPillText}>{item.tag}</Text>
+                        </View>
+                      )}
                       <View style={styles.seatsBadge}>
-                        <SeatIcon size={12} color={colors.text.secondary} />
+                        <SeatIcon size={11} color={colors.text.secondary} />
                         <Text style={styles.seatsText}>{item.seats}</Text>
                       </View>
                     </View>
@@ -259,38 +298,38 @@ export default function RideOptionsScreen({
                         isSelected && styles.tierFareTextActive,
                       ]}
                     >
-                      R{fare}.00
+                      R{item.fare}
                     </Text>
+                    <Text style={styles.tierOldFareText}>R{item.oldFare}</Text>
                   </View>
                 </TouchableOpacity>
               );
             })}
           </View>
 
-          {/* Payment Method Selector Row */}
-          <TouchableOpacity
-            style={styles.paymentRow}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("PaymentMethods")}
-          >
-            <View style={styles.paymentLeft}>
-              <View style={styles.paymentIconBox}>
-                <WalletIcon size={18} color={colors.accent.primary} />
-              </View>
-              <View>
-                <Text style={styles.paymentTitle}>Ride-Go Wallet</Text>
-                <Text style={styles.paymentBalance}>
-                  Available Balance: R{walletBalance}.00
-                </Text>
-              </View>
+          {/* Payment Method Selector & Promo Row */}
+          <View style={styles.paymentPromoRow}>
+            <TouchableOpacity
+              style={styles.paymentMethodPill}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate("PaymentMethods")}
+            >
+              <CapitecIcon size={16} color={colors.accent.primary} />
+              <Text style={styles.paymentMethodPillText}>
+                Capitec Pay •••• 4282
+              </Text>
+              <ArrowRightIcon size={12} color={colors.text.muted} />
+            </TouchableOpacity>
+
+            <View style={styles.promoDiscountChip}>
+              <Text style={styles.promoDiscountChipText}>-R20 Promo</Text>
             </View>
-            <Text style={styles.paymentChangeText}>Change</Text>
-          </TouchableOpacity>
+          </View>
 
           {/* Interactive Slide to Confirm Slider */}
           <View style={styles.sliderContainer}>
             <SlideToConfirm
-              label="SLIDE TO CONFIRM RIDE"
+              label={`SLIDE TO CONFIRM • R${activeTierObj.fare}`}
               confirmedLabel="CONFIRMED • MATCHING"
               onConfirm={handleConfirm}
             />
@@ -443,6 +482,9 @@ const styles = StyleSheet.create({
   },
   sheetHeader: {
     paddingTop: 4,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   sheetTitle: {
     fontSize: 18,
@@ -454,6 +496,80 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.text.secondary,
     marginTop: 2,
+  },
+  surgeBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: colors.surface.card,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  surgeBadgeText: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: colors.accent.primary,
+    letterSpacing: 0.5,
+  },
+  tierTagPill: {
+    backgroundColor: "rgba(255, 209, 0, 0.15)",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "rgba(255, 209, 0, 0.4)",
+  },
+  tierTagPillText: {
+    fontSize: 9,
+    fontWeight: "800",
+    color: colors.accent.primary,
+    textTransform: "uppercase",
+  },
+  tierOldFareText: {
+    fontSize: 11,
+    color: colors.text.muted,
+    textDecorationLine: "line-through",
+    marginTop: 2,
+  },
+  paymentPromoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  paymentMethodPill: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: colors.surface.card,
+    borderRadius: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  paymentMethodPillText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.text.primary,
+  },
+  promoDiscountChip: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: colors.accent.primary,
+  },
+  promoDiscountChipText: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: colors.accent.primary,
   },
   tierStack: {
     gap: 10,

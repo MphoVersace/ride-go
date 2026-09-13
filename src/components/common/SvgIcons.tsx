@@ -566,3 +566,109 @@ export const SouthAfricaFlagSvg: React.FC<{ width?: number; height?: number }> =
   </Svg>
 );
 
+export const TreeLeafIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76zM16 8l-6.5 6.5"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const ReceiptIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.text.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1zM8 7h8M8 11h8M8 15h5"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const StarIcon: React.FC<IconProps> = ({
+  size = 18,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+      fill={color}
+      stroke={color}
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const PhoneCallIcon: React.FC<IconProps> = ({
+  size = 18,
+  color = colors.text.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const CalendarClockIcon: React.FC<IconProps> = ({
+  size = 18,
+  color = colors.text.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Rect x={3} y={4} width={18} height={18} rx={2} stroke={color} strokeWidth={2} />
+    <Path d="M16 2v4M8 2v4M3 10h18" stroke={color} strokeWidth={2} strokeLinecap="round" />
+    <Circle cx={12} cy={15} r={3} stroke={color} strokeWidth={1.5} />
+    <Path d="M12 14v1.5l1 1" stroke={color} strokeWidth={1.5} strokeLinecap="round" />
+  </Svg>
+);
+
+export const KeypadPinIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Rect x={4} y={3} width={16} height={18} rx={2} stroke={color} strokeWidth={2} />
+    <Circle cx={8} cy={8} r={1.2} fill={color} />
+    <Circle cx={12} cy={8} r={1.2} fill={color} />
+    <Circle cx={16} cy={8} r={1.2} fill={color} />
+    <Circle cx={8} cy={12} r={1.2} fill={color} />
+    <Circle cx={12} cy={12} r={1.2} fill={color} />
+    <Circle cx={16} cy={12} r={1.2} fill={color} />
+    <Circle cx={12} cy={16} r={1.2} fill={color} />
+  </Svg>
+);
+
+export const TagIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+
+
