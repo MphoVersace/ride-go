@@ -12,35 +12,35 @@
 export const colors = {
   // 60% - Dominant Background
   background: {
-    primary: "#071A3D",
-    deep: "#051329",
+    primary: "#000000",
+    deep: "#0A0A0C",
   },
 
-  // 30% - Panel / Surface / Structure
+  // 30% - Panel / Surface / Structure (Carbon & Obsidian)
   surface: {
-    card: "#102A52",
-    cardAlt: "#16325C",
-    elevated: "#16325C",
-    subtle: "#0D2244",
-    border: "#1D3557",
-    divider: "#173056",
+    card: "#16161A",
+    cardAlt: "#202026",
+    elevated: "#24242C",
+    subtle: "#111114",
+    border: "#2E2E36",
+    divider: "#24242C",
   },
 
-  // 10% - Accent & Interactive Highlights
+  // 10% - Accent & Interactive Highlights (Electric Taxi Gold Yellow)
   accent: {
-    primary: "#5BC0FF",
-    secondary: "#38A3E5",
-    hover: "#4AAFEF",
-    subtle: "rgba(91, 192, 255, 0.15)",
-    contrast: "#071A3D", // Text on accent
+    primary: "#FFD100",
+    secondary: "#FFB800",
+    hover: "#FFE033",
+    subtle: "rgba(255, 209, 0, 0.15)",
+    contrast: "#000000", // High-contrast black text on yellow
   },
 
-  // Text & Content Hierarchy (Neutral tone scale aligned with navy palette)
+  // Text & Content Hierarchy (Crisp White & Neutral Grays)
   text: {
     primary: "#FFFFFF",
-    secondary: "#C9D6E8",
-    muted: "#8FA5C1",
-    disabled: "#506784",
+    secondary: "#D1D1D6",
+    muted: "#8E8E93",
+    disabled: "#48484A",
   },
 } as const;
 

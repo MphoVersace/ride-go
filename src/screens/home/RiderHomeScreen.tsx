@@ -22,11 +22,14 @@ import {
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
 import {
-  VehicleSideSvg,
-  CourierBikeSvg,
-  DeliveryBakkieSvg,
-  MovingTruckSvg,
-} from "../../components/common/VehicleSvgs";
+  StandardTelemetryVector,
+  ComfortTelemetryVector,
+  LuxuryTelemetryVector,
+  ExpressParcelVector,
+  CargoCrateVector,
+  FreightPalletVector,
+  PromoCargoVector,
+} from "../../components/common/MobilityTelemetryVectors";
 import BottomTabBar, { TabKey } from "../../components/common/BottomTabBar";
 import { useRide } from "../../services/RideContext";
 
@@ -157,7 +160,7 @@ export default function RiderHomeScreen({
             </View>
             <View style={styles.highlightInfo}>
               <Text style={styles.highlightName}>Ucok Behel</Text>
-              <Text style={styles.highlightVehicle}>Honda CR-V • AB6299ZG</Text>
+              <Text style={styles.highlightVehicle}>Active Transit Unit • Direct Route</Text>
             </View>
             <ArrowRightIcon size={16} color={colors.accent.primary} />
           </TouchableOpacity>
@@ -179,57 +182,69 @@ export default function RiderHomeScreen({
               </View>
             </View>
             <View style={styles.promoIllustration}>
-              <MovingTruckSvg width={72} height={36} color={colors.accent.primary} />
+              <PromoCargoVector width={64} height={36} color={colors.accent.primary} />
             </View>
           </TouchableOpacity>
         )}
 
-        {/* Location Input Cards */}
-        <View style={styles.locationCardGroup}>
+        {/* Unified Location Route Card */}
+        <View style={styles.unifiedRouteCard}>
+          {/* Pickup Point */}
           <TouchableOpacity
-            style={styles.locationInputRow}
+            style={styles.routeItemRow}
             activeOpacity={0.85}
             onPress={() => navigation.navigate("DestinationSearch")}
           >
-            <View style={styles.locationIconWrap}>
-              <PinIcon size={18} color={colors.accent.primary} />
+            <View style={styles.routeIconDot}>
+              <PinIcon size={16} color={colors.accent.primary} />
             </View>
-            <Text style={styles.locationInputText}>
-              {selectedService === "driver" ? pickup.title : `Pickup: ${pickup.title}`}
-            </Text>
+            <View style={styles.routeItemContent}>
+              <Text style={styles.routeLabelSmall}>PICKUP LOCATION</Text>
+              <Text style={styles.routeValueText} numberOfLines={1}>
+                {pickup.title}
+              </Text>
+            </View>
           </TouchableOpacity>
 
-          {/* Inline Flip/Swap Button */}
-          <TouchableOpacity
-            style={styles.swapButton}
-            activeOpacity={0.8}
-          >
-            <SwapArrowsIcon size={16} color={colors.text.secondary} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.locationInputRow}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate("DestinationSearch")}
-          >
-            <View style={styles.locationIconWrap}>
-              <PinIcon size={18} color={colors.text.secondary} />
-            </View>
-            <Text
-              style={
-                destination.title
-                  ? styles.locationInputText
-                  : styles.locationPlaceholderText
-              }
+          {/* Route Divider with Center-Aligned Swap Button */}
+          <View style={styles.routeDividerContainer}>
+            <View style={styles.routeDividerLine} />
+            <TouchableOpacity
+              style={styles.inlineSwapButton}
+              activeOpacity={0.8}
+              accessibilityLabel="Swap pickup and destination"
             >
-              {destination.title
-                ? selectedService === "driver"
+              <SwapArrowsIcon size={14} color={colors.accent.primary} />
+            </TouchableOpacity>
+            <View style={styles.routeDividerLine} />
+          </View>
+
+          {/* Destination Point */}
+          <TouchableOpacity
+            style={styles.routeItemRow}
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate("DestinationSearch")}
+          >
+            <View style={styles.routeIconDotDest}>
+              <PinIcon size={16} color={colors.text.primary} />
+            </View>
+            <View style={styles.routeItemContent}>
+              <Text style={styles.routeLabelSmall}>DESTINATION</Text>
+              <Text
+                style={
+                  destination.title
+                    ? styles.routeValueText
+                    : styles.routePlaceholderText
+                }
+                numberOfLines={1}
+              >
+                {destination.title
                   ? destination.title
-                  : `Drop-off: ${destination.title}`
-                : selectedService === "driver"
-                ? "Add your destination"
-                : "Add recipient address"}
-            </Text>
+                  : selectedService === "driver"
+                  ? "Where do you want to go?"
+                  : "Add recipient drop-off address"}
+              </Text>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -324,9 +339,9 @@ export default function RiderHomeScreen({
                 <Text style={styles.tierEta}>3 min</Text>
 
                 <View style={styles.tierCarPreview}>
-                  <VehicleSideSvg
-                    width={54}
-                    height={24}
+                  <StandardTelemetryVector
+                    width={56}
+                    height={26}
                     color={
                       tier === "standard"
                         ? colors.accent.primary
@@ -375,9 +390,9 @@ export default function RiderHomeScreen({
                 <Text style={styles.tierEta}>4 min</Text>
 
                 <View style={styles.tierCarPreview}>
-                  <VehicleSideSvg
-                    width={54}
-                    height={24}
+                  <ComfortTelemetryVector
+                    width={56}
+                    height={26}
                     color={
                       tier === "comfort"
                         ? colors.accent.primary
@@ -426,9 +441,9 @@ export default function RiderHomeScreen({
                 <Text style={styles.tierEta}>6 min</Text>
 
                 <View style={styles.tierCarPreview}>
-                  <VehicleSideSvg
-                    width={54}
-                    height={24}
+                  <LuxuryTelemetryVector
+                    width={56}
+                    height={26}
                     color={
                       tier === "luxury"
                         ? colors.accent.primary
@@ -484,8 +499,8 @@ export default function RiderHomeScreen({
                 <Text style={styles.tierEta}>15 min</Text>
 
                 <View style={styles.tierCarPreview}>
-                  <CourierBikeSvg
-                    width={50}
+                  <ExpressParcelVector
+                    width={54}
                     height={24}
                     color={
                       selectedParcelTier === "courier"
@@ -535,7 +550,7 @@ export default function RiderHomeScreen({
                 <Text style={styles.tierEta}>25 min</Text>
 
                 <View style={styles.tierCarPreview}>
-                  <DeliveryBakkieSvg
+                  <CargoCrateVector
                     width={54}
                     height={24}
                     color={
@@ -586,7 +601,7 @@ export default function RiderHomeScreen({
                 <Text style={styles.tierEta}>45 min</Text>
 
                 <View style={styles.tierCarPreview}>
-                  <MovingTruckSvg
+                  <FreightPalletVector
                     width={54}
                     height={24}
                     color={
@@ -800,46 +815,82 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.surface.border,
   },
-  locationCardGroup: {
-    position: "relative",
+  unifiedRouteCard: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 20,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
     marginBottom: spacing.md,
-    gap: spacing.xs,
   },
-  locationInputRow: {
+  routeItemRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.surface.card,
-    height: 52,
-    borderRadius: 26,
-    paddingHorizontal: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
+    paddingVertical: 10,
   },
-  locationIconWrap: {
-    marginRight: spacing.sm,
-  },
-  locationInputText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: colors.text.primary,
-  },
-  locationPlaceholderText: {
-    fontSize: 15,
-    color: colors.text.muted,
-  },
-  swapButton: {
-    position: "absolute",
-    right: 18,
-    top: 40,
+  routeIconDot: {
     width: 32,
     height: 32,
     borderRadius: 16,
+    backgroundColor: colors.surface.elevated,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  routeIconDotDest: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.surface.elevated,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.accent.primary,
+  },
+  routeItemContent: {
+    flex: 1,
+  },
+  routeLabelSmall: {
+    fontSize: 9,
+    fontWeight: "800",
+    color: colors.accent.primary,
+    letterSpacing: 1,
+    marginBottom: 2,
+  },
+  routeValueText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: colors.text.primary,
+  },
+  routePlaceholderText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.text.muted,
+  },
+  routeDividerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 2,
+  },
+  routeDividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.surface.border,
+  },
+  inlineSwapButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: colors.surface.elevated,
     borderWidth: 1,
     borderColor: colors.surface.border,
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 10,
+    marginHorizontal: spacing.xs,
   },
   serviceSelector: {
     flexDirection: "row",
