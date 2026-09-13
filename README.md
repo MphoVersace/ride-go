@@ -110,29 +110,29 @@ ride-go/
 │   │   └── index.ts              # Navigation barrel export
 │   ├── screens/                  # Modular domain screen components
 │   │   ├── auth/                 # Authentication & onboarding flow
-│   │   │   ├── AccountScreen.tsx        # Stitch Gateway: Step 01/05 progress, Rider/Driver role switcher, Express Sign Up (Apple, Google, Capitec), SA inputs (+27), POPIA footer, and direct transit launch
+│   │   │   ├── AccountScreen.tsx        # Rider Gateway (Route: AccountGateway): Step 01/05 progress, Rider/Driver role switcher, Express Sign In (Apple, Google, Capitec), SA inputs (+27), POPIA footer, and direct transit launch
 │   │   │   ├── AccountTypeScreen.tsx    # Role selection (Rider vs Driver partner)
 │   │   │   └── RiderRegistrationScreen.tsx # Rider signup form with profile sync
-│   │   ├── home/                 # Main home experience
-│   │   │   └── RiderHomeScreen.tsx # Urban geo-grid map, Cape Town/Sandton focal halo, live fleet counter, prominent 'Where to?' discovery console, SA presets, and locked BottomTabBar
+│   │   ├── home/                 # Main home experience (Core Tab 1: Explore)
+│   │   │   └── RiderHomeScreen.tsx      # Core Tab 1 (Route: Explore): Initial landing screen; urban geo-grid map, Cape Town/Sandton focal halo, live fleet counter, prominent 'Where to?' discovery console, SA presets, and persistent BottomTabBar
 │   │   ├── onboarding/           # Animated splash & introduction
 │   │   │   └── SplashOnboardingScreen.tsx # Ultra-sleek car-free route telemetry carousel & GPS radar loader
-│   │   ├── profile/              # Profile, settings, and support
+│   │   ├── profile/              # Profile, settings, and support (Core Tab 4: Account)
 │   │   │   ├── EditProfileScreen.tsx    # Live name/email/phone editing with avatar generation
 │   │   │   ├── HelpSupportScreen.tsx    # Interactive FAQ accordion & ticket submission
 │   │   │   ├── NotificationsScreen.tsx  # Unread filter tabs & trip/wallet alerts
 │   │   │   ├── PaymentMethodsScreen.tsx # RideGo Wallet in Rands, top-up chips, card selection
-│   │   │   ├── RiderProfileScreen.tsx   # Dark 60-30-10 user card, trip stats, account shortcuts
+│   │   │   ├── RiderProfileScreen.tsx   # Core Tab 4 (Route: Account): Dark 60-30-10 user card, trip stats, account shortcuts (Wallet, Saved Places, Safety, Settings), and persistent BottomTabBar
 │   │   │   ├── SafetyCentreScreen.tsx   # SAPS 10111 / 112 dispatch & trusted contacts
 │   │   │   ├── SavedPlacesScreen.tsx    # Home, Work & favorite destination presets
 │   │   │   └── SettingsScreen.tsx       # Push/SMS toggles, biometrics & South Africa region
-│   │   ├── rides/                # Interactive ride booking, tracking, and receipts
+│   │   ├── rides/                # Interactive ride booking, tracking, and receipts (Core Tabs 2 & 3: Rides & Activity)
 │   │   │   ├── DestinationResultsScreen.tsx # Geocoded results & distance tags
 │   │   │   ├── DestinationSearchScreen.tsx  # Stacked pill inputs & SA suggestions
 │   │   │   ├── DriverFoundScreen.tsx        # Live driver tracking HUD, floating ETA pill, safety PIN security banner, driver console
-│   │   │   ├── RideHistoryScreen.tsx        # Category tabs (Past, Upcoming, Business), Bento stat metrics (Trips, Saved, Transit Score), month-grouped feed
+│   │   │   ├── RideHistoryScreen.tsx        # Core Tab 3 (Route: Activity): Category tabs (Past, Upcoming, Business), Bento stat metrics (Trips, Saved, Transit Score), month-grouped feed, and persistent BottomTabBar
 │   │   │   ├── RideInProgressScreen.tsx     # Real-time animated vector map tracking, floating ETA HUD, safety PIN verification, live route progress scrubber
-│   │   │   ├── RideOptionsScreen.tsx        # Top trip trajectory HUD (time/distance), route pills, carbon tier stack, and interactive SlideToConfirm slider
+│   │   │   ├── RideOptionsScreen.tsx        # Core Tab 2 (Route: Rides): Top trip trajectory HUD (time/distance), route pills, carbon tier stack, interactive SlideToConfirm slider, and persistent BottomTabBar
 │   │   │   ├── RideSearchingScreen.tsx      # Tactical dark geo-grid radar, expanding sonar waves, rotating scanner beam, nearby driver telemetry pings
 │   │   │   ├── TripCompletedScreen.tsx      # Numerical transit feedback score (1–5), Rand tip chips (R10–R100)
 │   │   │   ├── TripDetailsScreen.tsx        # Deep-dive trip summary, rebook CTA
@@ -223,7 +223,20 @@ This repository is maintained collaboratively under strict workflow constraints:
 
 ---
 
-## 8. Vehicle Graphics & Asset Attribution
+## 8. Primary 4-Tab Navigation Architecture
+
+RideGo features a persistent, floating 4-tab bottom navigation bar (`BottomTabBar.tsx`) adhering strictly to the 60-30-10 palette with frozen geometry (height 62px, pill radius 31px, carbon background `#16161A`, border `#2E2E36`, electric yellow active highlights `#FFD100`, and pure SVGs):
+
+| Tab | Screen Component | Route Name | Description |
+| :--- | :--- | :--- | :--- |
+| **Explore** | `RiderHomeScreen.tsx` | `Explore` / `RiderHome` | **Initial landing screen**; interactive Cape Town/Sandton geo-grid map, live fleet counter (24 cars nearby), 'Where to?' discovery console, quick presets (V&A Waterfront, Camps Bay, Sandton City), parcel courier toggle, and locked bottom tab bar. |
+| **Rides** | `RideOptionsScreen.tsx` | `Rides` / `RideOptions` | Ride selection console; top trip trajectory HUD (22 min / 14.2 km), pickup/dropoff overlay pills, Volt Eco / Go Comfort / Go Exec tier cards, and PanResponder `SlideToConfirm` slider. |
+| **Activity** | `RideHistoryScreen.tsx` | `Activity` / `RideHistory` | Ride activity and history console; category tabs (Past, Upcoming, Business), 3-stat Bento grid metrics (28 Trips, R380 Saved, 4.98 Transit Score), month-grouped feed, and statement download. |
+| **Account** | `RiderProfileScreen.tsx` | `Account` / `RiderProfile` | Rider account and profile console; 60-30-10 user card, avatar monogram, trip count, and direct shortcuts to Wallet, Saved Places, Safety Centre, Preferences & Settings, and Help & Support. |
+
+---
+
+## 9. Vehicle Graphics & Asset Attribution
 
 RideGo employs a **hybrid vehicle visualization pipeline**:
 - **Photorealistic 3D Renders**: Hero vehicle showcase cards in `assets/vehicles/` generated for inspection views and driver matching.
@@ -232,7 +245,7 @@ RideGo employs a **hybrid vehicle visualization pipeline**:
 
 ---
 
-## 9. Interactive Ride Engine & State Transitions
+## 10. Interactive Ride Engine & State Transitions
 
 RideGo features an end-to-end interactive mobility workflow driven by `RideContext`:
 
@@ -254,7 +267,7 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
 
 ---
 
-## 10. Wallet, Saved Places & Rider Profile Hub
+## 11. Wallet, Saved Places & Rider Profile Hub
 
 1. **RideGo Wallet & Payments ([PaymentMethodsScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/PaymentMethodsScreen.tsx))**:
    - Live South African Rand balance with auto-deduction upon ride completion.
@@ -270,7 +283,7 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
 
 ---
 
-## 11. Safety Centre, Notifications & App Preferences
+## 12. Safety Centre, Notifications & App Preferences
 
 1. **Safety Centre & Emergency Dispatch ([SafetyCentreScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/profile/SafetyCentreScreen.tsx))**:
    - South African Police Service (SAPS 10111) and National Cellular Emergency (112) quick-dial integration.
@@ -288,7 +301,7 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
 
 ---
 
-## 12. Authentication & Role Selection Flow
+## 13. Authentication & Role Selection Flow
 
 1. **Welcome Portal ([AccountScreen.tsx](file:///d:/deployment_2026/ride-go/src/screens/auth/AccountScreen.tsx))**:
    - Clean 60-30-10 splash branding and vehicle silhouette hero.
@@ -301,7 +314,7 @@ RideGo features an end-to-end interactive mobility workflow driven by `RideConte
 
 ---
 
-## 13. 3D Model Asset Pipeline & Interactive 3D Viewer
+## 14. 3D Model Asset Pipeline & Interactive 3D Viewer
 
 1. **Master 3D Vehicle Models (`assets/models/`)**:
    - **`base.glb`** (4.18 MB): Binary GLTF 2.0 asset containing the complete vehicle geometry and PBR metallic-roughness material for hardware-accelerated WebGL rendering.

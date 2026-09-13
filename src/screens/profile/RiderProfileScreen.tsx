@@ -23,11 +23,24 @@ import {
   EditIcon,
 } from "../../components/common/SvgIcons";
 import { useRide } from "../../services/RideContext";
+import BottomTabBar, { TabKey } from "../../components/common/BottomTabBar";
 
 export default function RiderProfileScreen({
   navigation,
-}: RootStackScreenProps<"RiderProfile">) {
+}: RootStackScreenProps<any>) {
   const { userProfile, rideHistory, walletBalance, savedPlaces } = useRide();
+
+  const handleTabPress = (tab: TabKey) => {
+    if (tab === "explore" || tab === "home") {
+      navigation.navigate("Explore");
+    } else if (tab === "rides") {
+      navigation.navigate("Rides");
+    } else if (tab === "activity" || tab === "trips") {
+      navigation.navigate("Activity");
+    } else if (tab === "account" || tab === "profile") {
+      // Current tab
+    }
+  };
 
   const menuItems = [
     {
@@ -86,11 +99,17 @@ export default function RiderProfileScreen({
         <TouchableOpacity
           style={styles.backButton}
           activeOpacity={0.8}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            if (navigation.canGoBack()) {
+              navigation.goBack();
+            } else {
+              navigation.navigate("Explore");
+            }
+          }}
         >
           <ArrowLeftIcon size={20} color={colors.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.navTitle}>Rider Profile</Text>
+        <Text style={styles.navTitle}>Account</Text>
         <TouchableOpacity
           style={styles.editButton}
           activeOpacity={0.8}
@@ -167,6 +186,9 @@ export default function RiderProfileScreen({
           </TouchableOpacity>
         ))}
       </ScrollView>
+
+      {/* 4-Tab Navigation Bar */}
+      <BottomTabBar activeTab="account" onSelectTab={handleTabPress} />
     </SafeAreaView>
   );
 }
@@ -210,7 +232,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: spacing.md,
-    paddingBottom: spacing.xxl,
+    paddingBottom: 96,
   },
   userCard: {
     flexDirection: "row",

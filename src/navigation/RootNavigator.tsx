@@ -34,26 +34,31 @@ export function RootNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="SplashOnboarding"
+        initialRouteName="Explore"
         screenOptions={{
           headerShown: false,
           animation: "fade_from_bottom",
         }}
       >
+        {/* 4 Core Primary Pages */}
+        <Stack.Screen name="Explore" component={RiderHomeScreen} />
+        <Stack.Screen name="Rides" component={RideOptionsScreen} />
+        <Stack.Screen name="Activity" component={RideHistoryScreen} />
+        <Stack.Screen name="Account" component={RiderProfileScreen} />
+
+        {/* Onboarding & Gateway */}
         <Stack.Screen
           name="SplashOnboarding"
           component={SplashOnboardingScreen}
         />
-
-        {/* Auth Flow */}
-        <Stack.Screen name="Account" component={AccountScreen} />
+        <Stack.Screen name="AccountGateway" component={AccountScreen} />
         <Stack.Screen name="AccountType" component={AccountTypeScreen} />
         <Stack.Screen
           name="RiderRegistration"
           component={RiderRegistrationScreen}
         />
 
-        {/* Main Experience */}
+        {/* Main Experience Aliases */}
         <Stack.Screen name="RiderHome" component={RiderHomeScreen} />
         <Stack.Screen name="RiderProfile" component={RiderProfileScreen} />
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />

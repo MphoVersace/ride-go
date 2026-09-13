@@ -1,8 +1,15 @@
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
-  SplashOnboarding: undefined;
+  // 4 Core Primary Navigation Pages
+  Explore: undefined;
+  Rides: { destination?: string } | undefined;
+  Activity: undefined;
   Account: undefined;
+
+  // Onboarding & Gateway
+  SplashOnboarding: undefined;
+  AccountGateway: undefined;
   AccountType: undefined;
   RiderRegistration: undefined;
   RiderHome: undefined;

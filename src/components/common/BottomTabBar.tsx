@@ -5,11 +5,19 @@ import { spacing } from "../../constants/metrics";
 import {
   HomeIcon,
   SteeringWheelIcon,
-  WalletIcon,
+  CheckCircleIcon,
   UserIcon,
 } from "./SvgIcons";
 
-export type TabKey = "home" | "trips" | "wallet" | "profile";
+export type TabKey =
+  | "explore"
+  | "rides"
+  | "activity"
+  | "account"
+  | "home"
+  | "trips"
+  | "wallet"
+  | "profile";
 
 interface BottomTabBarProps {
   activeTab: TabKey;
@@ -22,25 +30,34 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
   onSelectTab,
   labels,
 }) => {
+  const isExplore = activeTab === "explore" || activeTab === "home";
+  const isRides = activeTab === "rides";
+  const isActivity = activeTab === "activity" || activeTab === "trips";
+  const isAccount = activeTab === "account" || activeTab === "profile" || activeTab === "wallet";
+
   const tabs = [
     {
-      key: "home" as TabKey,
-      label: labels?.home ?? "Home",
+      key: "explore" as TabKey,
+      label: labels?.explore ?? "Explore",
+      isActive: isExplore,
       icon: (color: string) => <HomeIcon size={20} color={color} />,
     },
     {
-      key: "trips" as TabKey,
-      label: labels?.trips ?? "Trips",
+      key: "rides" as TabKey,
+      label: labels?.rides ?? "Rides",
+      isActive: isRides,
       icon: (color: string) => <SteeringWheelIcon size={20} color={color} />,
     },
     {
-      key: "wallet" as TabKey,
-      label: labels?.wallet ?? "Wallet",
-      icon: (color: string) => <WalletIcon size={20} color={color} />,
+      key: "activity" as TabKey,
+      label: labels?.activity ?? "Activity",
+      isActive: isActivity,
+      icon: (color: string) => <CheckCircleIcon size={20} color={color} />,
     },
     {
-      key: "profile" as TabKey,
-      label: labels?.profile ?? "Profile",
+      key: "account" as TabKey,
+      label: labels?.account ?? "Account",
+      isActive: isAccount,
       icon: (color: string) => <UserIcon size={20} color={color} />,
     },
   ];
@@ -49,7 +66,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
     <View style={styles.container}>
       <View style={styles.bar}>
         {tabs.map((tab) => {
-          const isActive = activeTab === tab.key;
+          const isActive = tab.isActive;
           const color = isActive ? colors.accent.primary : colors.text.muted;
 
           return (
@@ -72,6 +89,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
