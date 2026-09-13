@@ -22,6 +22,9 @@ import {
   SearchIcon,
   CrosshairIcon,
   LayersIcon,
+  CalendarClockIcon,
+  PhoneCallIcon,
+  ChatBubbleIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
 import {
@@ -75,6 +78,44 @@ const DESTINATION_PRESETS = [
   { title: "OR Tambo Airport", address: "1 Jones Rd, Kempton Park, Johannesburg", distance: "28.0 km" },
 ];
 
+const FAST_BOOKINGS = [
+  {
+    id: "gardens",
+    title: "Home Gardens",
+    address: "Kloof Street, Gardens, Cape Town",
+    eta: "12 min",
+    distance: "3.8 km",
+  },
+  {
+    id: "waterfront",
+    title: "V&A Waterfront Harbour",
+    address: "Victoria Wharf, Breakwater Blvd",
+    eta: "18 min",
+    distance: "5.4 km",
+  },
+  {
+    id: "airport",
+    title: "Cape Town Int'l Airport CPT",
+    address: "Departures Terminal, Matroosfontein",
+    eta: "26 min",
+    distance: "21.0 km",
+  },
+  {
+    id: "campsbay",
+    title: "Camps Bay Beach Coast",
+    address: "Victoria Road Promenade",
+    eta: "15 min",
+    distance: "7.2 km",
+  },
+];
+
+const QUICK_SERVICES = [
+  { id: "ride", title: "Go Ride", eta: "3 min", tag: "Fastest", type: "driver" as const },
+  { id: "comfort", title: "Go Comfort", eta: "Spacious", tag: "Premium", type: "driver" as const },
+  { id: "suv", title: "Go 4x4", eta: "6 Seats", tag: "SUV", type: "driver" as const },
+  { id: "package", title: "Package", eta: "Courier", tag: "Express", type: "package" as const },
+];
+
 export default function RiderHomeScreen({
   navigation,
 }: RootStackScreenProps<any>) {
@@ -92,6 +133,7 @@ export default function RiderHomeScreen({
   const [selectedService, setSelectedService] = useState<"driver" | "package">(
     "driver"
   );
+  const [selectedQuickService, setSelectedQuickService] = useState("ride");
   const [selectedParcelTier, setSelectedParcelTier] =
     useState<ParcelTierKey>("courier");
 
@@ -130,27 +172,38 @@ export default function RiderHomeScreen({
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
 
-      {/* Top Header Bar */}
+      {/* Top Header Bar with Brand & Actions */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
+        <View style={styles.brandContainer}>
+          <SteeringWheelIcon size={22} color={colors.accent.primary} />
+          <View style={styles.brandTitleWrap}>
+            <Text style={styles.brandTitleRide}>Ride</Text>
+            <View style={styles.brandBadgeGo}>
+              <Text style={styles.brandBadgeGoText}>GO</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.headerActions}>
           <TouchableOpacity
             style={styles.notificationButton}
             activeOpacity={0.8}
             onPress={() => navigation.navigate("Notifications")}
           >
-            <BellIcon size={22} color={colors.text.primary} />
+            <BellIcon size={20} color={colors.text.primary} />
+            <View style={styles.notificationDot} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.profileChip}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("Account")}
+          >
+            <View style={styles.profileAvatar}>
+              <Text style={styles.avatarInitial}>{userProfile.avatar}</Text>
+            </View>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          style={styles.profileChip}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderProfile")}
-        >
-          <View style={styles.profileAvatar}>
-            <Text style={styles.avatarInitial}>{userProfile.avatar}</Text>
-          </View>
-        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -168,7 +221,7 @@ export default function RiderHomeScreen({
           {/* Live Fleet Indicator (Top Left) */}
           <View style={styles.liveFleetPill}>
             <View style={styles.livePulseDot} />
-            <Text style={styles.liveFleetText}>24 RIDE-GO CARS NEARBY</Text>
+            <Text style={styles.liveFleetText}>24 RIDE-GO CARS NEARBY (CAPE TOWN)</Text>
           </View>
 
           {/* Floating Map Quick Controls (Top Right) */}
@@ -200,25 +253,84 @@ export default function RiderHomeScreen({
 
         {/* Primary Discovery Console */}
         <View style={styles.discoveryConsole}>
-          {/* Hero "Where to?" Search Bar */}
+          {/* Hero "Where to?" Search Bar with Schedule Pill */}
           <TouchableOpacity
             style={styles.heroSearchCard}
             activeOpacity={0.88}
             onPress={() => navigation.navigate("DestinationSearch")}
           >
             <View style={styles.searchIconBox}>
-              <SearchIcon size={24} color="#000000" />
+              <SearchIcon size={22} color="#000000" />
             </View>
             <View style={styles.searchContent}>
               <Text style={styles.searchHeading}>Where to?</Text>
               <Text style={styles.searchSubheading} numberOfLines={1}>
-                {destination.title || "Search destination or Camps Bay, V&A, Sandton..."}
+                {destination.title || "Search destination or Camps Bay, Stellenbosch, V&A..."}
               </Text>
             </View>
-            <View style={styles.searchArrowWrap}>
-              <ArrowRightIcon size={18} color={colors.accent.primary} />
-            </View>
+            <TouchableOpacity
+              style={styles.schedulePill}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate("DestinationSearch")}
+            >
+              <CalendarClockIcon size={14} color={colors.accent.primary} />
+              <Text style={styles.schedulePillText}>Now</Text>
+            </TouchableOpacity>
           </TouchableOpacity>
+
+          {/* Stitch Quick Service Carousel */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.quickServicesRow}
+          >
+            {QUICK_SERVICES.map((item) => {
+              const isActive = selectedQuickService === item.id;
+              return (
+                <TouchableOpacity
+                  key={item.id}
+                  style={[
+                    styles.quickServiceCard,
+                    isActive && styles.quickServiceCardActive,
+                  ]}
+                  activeOpacity={0.85}
+                  onPress={() => {
+                    setSelectedQuickService(item.id);
+                    if (item.type === "package") {
+                      setSelectedService("package");
+                    } else {
+                      setSelectedService("driver");
+                    }
+                  }}
+                >
+                  <View
+                    style={[
+                      styles.quickServiceTagWrap,
+                      isActive && styles.quickServiceTagWrapActive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.quickServiceTagText,
+                        isActive && styles.quickServiceTagTextActive,
+                      ]}
+                    >
+                      {item.tag}
+                    </Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.quickServiceTitle,
+                      isActive && styles.quickServiceTitleActive,
+                    ]}
+                  >
+                    {item.title}
+                  </Text>
+                  <Text style={styles.quickServiceEta}>{item.eta}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
 
           {/* Destination Shortcut Preset Chips */}
           <View style={styles.presetsSection}>
@@ -242,210 +354,105 @@ export default function RiderHomeScreen({
             </ScrollView>
           </View>
 
-          {/* Service Type Switcher (Driver vs Package) */}
-          <View style={styles.serviceSelector}>
+          {/* Ride-Go Mzansi Special Promo Card */}
+          <View style={styles.promoCard}>
+            <View style={styles.promoCardHeader}>
+              <View style={styles.promoCodePill}>
+                <Text style={styles.promoCodeText}>MZANSI30</Text>
+              </View>
+              <Text style={styles.promoDiscountText}>30% OFF</Text>
+            </View>
+            <Text style={styles.promoTitle}>Ride-Go Mzansi Special</Text>
+            <Text style={styles.promoDescription}>
+              30% off your first 5 trips across Western Cape. Cape Town Metro & Winelands • Instant dispatch.
+            </Text>
             <TouchableOpacity
-              style={[
-                styles.serviceTabButton,
-                selectedService === "driver" && styles.serviceTabButtonActive,
-              ]}
+              style={styles.promoClaimButton}
               activeOpacity={0.85}
-              onPress={() => setSelectedService("driver")}
+              onPress={() => {
+                setDestinationLocation(FAST_BOOKINGS[1].title, FAST_BOOKINGS[1].address, FAST_BOOKINGS[1].distance);
+                navigation.navigate("RideOptions");
+              }}
             >
-              <SteeringWheelIcon
-                size={18}
-                color={
-                  selectedService === "driver"
-                    ? colors.accent.contrast
-                    : colors.text.secondary
-                }
-              />
-              <Text
-                style={[
-                  styles.serviceTabButtonText,
-                  selectedService === "driver" && styles.serviceTabButtonTextActive,
-                ]}
-              >
-                Ride Transit
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.serviceTabButton,
-                selectedService === "package" && styles.serviceTabButtonActive,
-              ]}
-              activeOpacity={0.85}
-              onPress={() => setSelectedService("package")}
-            >
-              <PackageIcon
-                size={18}
-                color={
-                  selectedService === "package"
-                    ? colors.accent.contrast
-                    : colors.text.muted
-                }
-              />
-              <Text
-                style={[
-                  styles.serviceTabButtonText,
-                  selectedService === "package" && styles.serviceTabButtonTextActive,
-                ]}
-              >
-                Parcel & Freight
-              </Text>
+              <Text style={styles.promoClaimButtonText}>Claim Offer</Text>
+              <ArrowRightIcon size={16} color="#000000" />
             </TouchableOpacity>
           </View>
 
-          {/* Available Rides Tier Stack */}
-          {selectedService === "driver" ? (
-            <View style={styles.tierStackSection}>
-              <View style={styles.tierSectionHeaderRow}>
-                <Text style={styles.sectionHeaderTitle}>Select Mobility Tier</Text>
-                <Text style={styles.sectionHeaderSubtitle}>All electric & zero-emission</Text>
-              </View>
-
-              <View style={styles.tierRow}>
-                {/* Standard Tier */}
-                <TouchableOpacity
-                  style={[
-                    styles.tierCard,
-                    tier === "standard" && styles.tierCardActive,
-                  ]}
-                  activeOpacity={0.85}
-                  onPress={() => selectTier("standard")}
-                >
-                  <Text
-                    style={[
-                      styles.tierTitle,
-                      tier === "standard" && styles.tierTitleActive,
-                    ]}
-                  >
-                    Volt Eco
-                  </Text>
-                  <Text style={styles.tierEta}>3 min</Text>
-
-                  <View style={styles.tierVectorWrap}>
-                    <StandardTelemetryVector
-                      width={52}
-                      height={24}
-                      color={
-                        tier === "standard"
-                          ? colors.accent.primary
-                          : colors.text.muted
-                      }
-                    />
-                  </View>
-
-                  <View style={styles.tierSpecs}>
-                    <SeatIcon size={13} color={colors.text.secondary} />
-                    <Text style={styles.tierSeatCount}>4</Text>
-                  </View>
-
-                  <Text style={styles.tierPrice}>R{tierFares.standard}</Text>
-                </TouchableOpacity>
-
-                {/* Comfort Tier */}
-                <TouchableOpacity
-                  style={[
-                    styles.tierCard,
-                    tier === "comfort" && styles.tierCardActive,
-                  ]}
-                  activeOpacity={0.85}
-                  onPress={() => selectTier("comfort")}
-                >
-                  <Text
-                    style={[
-                      styles.tierTitle,
-                      tier === "comfort" && styles.tierTitleActive,
-                    ]}
-                  >
-                    Go Comfort
-                  </Text>
-                  <Text style={styles.tierEta}>4 min</Text>
-
-                  <View style={styles.tierVectorWrap}>
-                    <ComfortTelemetryVector
-                      width={52}
-                      height={24}
-                      color={
-                        tier === "comfort"
-                          ? colors.accent.primary
-                          : colors.text.muted
-                      }
-                    />
-                  </View>
-
-                  <View style={styles.tierSpecs}>
-                    <SeatIcon size={13} color={colors.text.secondary} />
-                    <Text style={styles.tierSeatCount}>4</Text>
-                  </View>
-
-                  <Text style={styles.tierPrice}>R{tierFares.comfort}</Text>
-                </TouchableOpacity>
-
-                {/* Luxury Tier */}
-                <TouchableOpacity
-                  style={[
-                    styles.tierCard,
-                    tier === "luxury" && styles.tierCardActive,
-                  ]}
-                  activeOpacity={0.85}
-                  onPress={() => selectTier("luxury")}
-                >
-                  <Text
-                    style={[
-                      styles.tierTitle,
-                      tier === "luxury" && styles.tierTitleActive,
-                    ]}
-                  >
-                    Go Exec
-                  </Text>
-                  <Text style={styles.tierEta}>6 min</Text>
-
-                  <View style={styles.tierVectorWrap}>
-                    <LuxuryTelemetryVector
-                      width={52}
-                      height={24}
-                      color={
-                        tier === "luxury"
-                          ? colors.accent.primary
-                          : colors.text.muted
-                      }
-                    />
-                  </View>
-
-                  <View style={styles.tierSpecs}>
-                    <SeatIcon size={13} color={colors.text.secondary} />
-                    <Text style={styles.tierSeatCount}>4</Text>
-                  </View>
-
-                  <Text style={styles.tierPrice}>R{tierFares.luxury}</Text>
-                </TouchableOpacity>
-              </View>
+          {/* Fast Bookings Section */}
+          <View style={styles.fastBookingsSection}>
+            <View style={styles.fastBookingsHeaderRow}>
+              <Text style={styles.fastBookingsHeaderTitle}>Fast Bookings</Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate("SavedPlaces")}
+              >
+                <Text style={styles.fastBookingsEditAction}>Edit</Text>
+              </TouchableOpacity>
             </View>
-          ) : (
-            /* Parcel Promo & Options */
-            <TouchableOpacity
-              style={styles.promoBannerCard}
-              activeOpacity={0.85}
-              onPress={() => setSelectedParcelTier("truck")}
-            >
-              <View style={styles.promoInfo}>
-                <Text style={styles.promoHeading}>Express Freight & Delivery</Text>
-                <Text style={styles.promoSubtext}>
-                  Book verified couriers, delivery bakkies, or moving trucks.
-                </Text>
-                <View style={styles.promoActionRow}>
-                  <Text style={styles.promoActionText}>View Freight Options</Text>
-                  <ArrowRightIcon size={14} color={colors.accent.primary} />
+
+            <View style={styles.fastBookingsList}>
+              {FAST_BOOKINGS.map((booking) => (
+                <TouchableOpacity
+                  key={booking.id}
+                  style={styles.fastBookingItem}
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setDestinationLocation(booking.title, booking.address, booking.distance);
+                    navigation.navigate("RideOptions");
+                  }}
+                >
+                  <View style={styles.fastBookingIconWrap}>
+                    <PinIcon size={18} color={colors.accent.primary} />
+                  </View>
+                  <View style={styles.fastBookingInfo}>
+                    <Text style={styles.fastBookingTitle}>{booking.title}</Text>
+                    <Text style={styles.fastBookingAddress} numberOfLines={1}>
+                      {booking.address}
+                    </Text>
+                  </View>
+                  <View style={styles.fastBookingEtaWrap}>
+                    <Text style={styles.fastBookingEtaText}>{booking.eta}</Text>
+                    <ArrowRightIcon size={14} color={colors.text.muted} />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Live Driver En Route Status HUD */}
+          <View style={styles.activeDriverCard}>
+            <View style={styles.activeDriverPulseWrap}>
+              <View style={styles.activeDriverPulseDot} />
+            </View>
+            <View style={styles.activeDriverInfo}>
+              <View style={styles.activeDriverNameRow}>
+                <Text style={styles.activeDriverName}>Thulane J.</Text>
+                <View style={styles.driverRatingScoreWrap}>
+                  <Text style={styles.driverRatingScoreText}>4.98</Text>
                 </View>
               </View>
-              <View style={styles.promoIllustration}>
-                <PromoCargoVector width={64} height={36} color={colors.accent.primary} />
-              </View>
-            </TouchableOpacity>
-          )}
+              <Text style={styles.activeDriverSubtitle}>
+                Driver en route • VW Polo Vivo (3 min away)
+              </Text>
+            </View>
+            <View style={styles.activeDriverActions}>
+              <TouchableOpacity
+                style={styles.driverActionButton}
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate("RideInProgress")}
+              >
+                <PhoneCallIcon size={16} color={colors.accent.primary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.driverActionButton}
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate("RideInProgress")}
+              >
+                <ChatBubbleIcon size={16} color={colors.accent.primary} />
+              </TouchableOpacity>
+            </View>
+          </View>
 
           {/* Primary Action Button */}
           <TouchableOpacity
@@ -462,7 +469,7 @@ export default function RiderHomeScreen({
         </View>
       </ScrollView>
 
-      {/* Preserved Navigation Bar Locked */}
+      {/* 4-Tab Navigation Bar */}
       <BottomTabBar activeTab="explore" onSelectTab={handleTabPress} />
     </SafeAreaView>
   );
@@ -821,5 +828,309 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: colors.accent.contrast,
     letterSpacing: 1.2,
+  },
+  // Brand Header
+  brandContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  brandTitleWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  brandTitleRide: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: colors.text.primary,
+    letterSpacing: -0.5,
+  },
+  brandBadgeGo: {
+    backgroundColor: colors.accent.primary,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  brandBadgeGoText: {
+    fontSize: 12,
+    fontWeight: "900",
+    color: colors.accent.contrast,
+    letterSpacing: 0.5,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  notificationDot: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    backgroundColor: colors.accent.primary,
+  },
+  // Schedule Pill
+  schedulePill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: colors.surface.elevated,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  schedulePillText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.accent.primary,
+  },
+  // Quick Services Carousel
+  quickServicesRow: {
+    gap: spacing.sm,
+    paddingVertical: 2,
+  },
+  quickServiceCard: {
+    width: 100,
+    backgroundColor: colors.surface.card,
+    borderRadius: 14,
+    padding: spacing.sm,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
+    alignItems: "center",
+  },
+  quickServiceCardActive: {
+    borderColor: colors.accent.primary,
+    backgroundColor: colors.surface.elevated,
+  },
+  quickServiceTagWrap: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    backgroundColor: colors.surface.elevated,
+    marginBottom: 6,
+  },
+  quickServiceTagWrapActive: {
+    backgroundColor: colors.accent.primary,
+  },
+  quickServiceTagText: {
+    fontSize: 9,
+    fontWeight: "800",
+    color: colors.text.secondary,
+    textTransform: "uppercase",
+  },
+  quickServiceTagTextActive: {
+    color: colors.accent.contrast,
+  },
+  quickServiceTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: colors.text.primary,
+    textAlign: "center",
+  },
+  quickServiceTitleActive: {
+    color: colors.accent.primary,
+  },
+  quickServiceEta: {
+    fontSize: 11,
+    color: colors.text.muted,
+    marginTop: 2,
+  },
+  // Promo Card
+  promoCard: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 18,
+    padding: spacing.md,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
+    gap: spacing.xs,
+  },
+  promoCardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  promoCodePill: {
+    backgroundColor: "rgba(255, 209, 0, 0.15)",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255, 209, 0, 0.4)",
+  },
+  promoCodeText: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: colors.accent.primary,
+    letterSpacing: 0.8,
+  },
+  promoDiscountText: {
+    fontSize: 12,
+    fontWeight: "900",
+    color: colors.accent.primary,
+  },
+  promoTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: colors.text.primary,
+    marginTop: 4,
+  },
+  promoDescription: {
+    fontSize: 12,
+    color: colors.text.secondary,
+    lineHeight: 18,
+  },
+  promoClaimButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.accent.primary,
+    paddingVertical: 10,
+    borderRadius: 12,
+    gap: 6,
+    marginTop: spacing.xs,
+  },
+  promoClaimButtonText: {
+    fontSize: 13,
+    fontWeight: "800",
+    color: colors.accent.contrast,
+  },
+  // Fast Bookings
+  fastBookingsSection: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 18,
+    padding: spacing.md,
+    borderWidth: 1.5,
+    borderColor: colors.surface.border,
+    gap: spacing.sm,
+  },
+  fastBookingsHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  fastBookingsHeaderTitle: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: colors.text.primary,
+  },
+  fastBookingsEditAction: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.accent.primary,
+  },
+  fastBookingsList: {
+    gap: 10,
+  },
+  fastBookingItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surface.border,
+  },
+  fastBookingIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surface.elevated,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  fastBookingInfo: {
+    flex: 1,
+  },
+  fastBookingTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: colors.text.primary,
+  },
+  fastBookingAddress: {
+    fontSize: 11,
+    color: colors.text.secondary,
+    marginTop: 1,
+  },
+  fastBookingEtaWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  fastBookingEtaText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: colors.accent.primary,
+  },
+  // Active Driver Card
+  activeDriverCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.surface.card,
+    borderRadius: 16,
+    padding: spacing.md,
+    borderWidth: 1.5,
+    borderColor: colors.accent.primary,
+    gap: spacing.sm,
+  },
+  activeDriverPulseWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "rgba(255, 209, 0, 0.15)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activeDriverPulseDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: colors.accent.primary,
+  },
+  activeDriverInfo: {
+    flex: 1,
+  },
+  activeDriverNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  activeDriverName: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: colors.text.primary,
+  },
+  driverRatingScoreWrap: {
+    backgroundColor: colors.surface.elevated,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 6,
+  },
+  driverRatingScoreText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.accent.primary,
+  },
+  activeDriverSubtitle: {
+    fontSize: 11,
+    color: colors.text.secondary,
+    marginTop: 2,
+  },
+  activeDriverActions: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  driverActionButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surface.elevated,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.surface.border,
   },
 });
