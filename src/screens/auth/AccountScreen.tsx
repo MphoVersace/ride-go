@@ -149,15 +149,10 @@ export default function AccountScreen({
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
 
-      {/* Brand Navigation Header */}
+      {/* Brand Navigation Header - Pure Typography, Zero Badges */}
       <View style={styles.navHeader}>
-        <View>
-          <Text style={styles.brandTitle}>RideGo</Text>
-          <Text style={styles.brandSubtitle}>SOUTH AFRICA • TRANSIT NETWORK</Text>
-        </View>
-        <View style={styles.currencyPill}>
-          <Text style={styles.currencyText}>ZAR • EN</Text>
-        </View>
+        <Text style={styles.brandTitle}>RideGo</Text>
+        <Text style={styles.brandSubtitle}>SOUTH AFRICA • TRANSIT NETWORK</Text>
       </View>
 
       <ScrollView
@@ -272,20 +267,6 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     letterSpacing: 1.2,
     marginTop: 2,
-  },
-  currencyPill: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 6,
-    borderRadius: 14,
-    backgroundColor: colors.surface.card,
-    borderWidth: 1,
-    borderColor: colors.surface.border,
-  },
-  currencyText: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: colors.text.secondary,
-    letterSpacing: 0.8,
   },
   scrollContainer: {
     paddingHorizontal: spacing.md,
