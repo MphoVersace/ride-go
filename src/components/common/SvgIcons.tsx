@@ -426,5 +426,71 @@ export const ShareIcon: React.FC<IconProps> = ({
   </Svg>
 );
 
+export const LayersIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.text.secondary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M12 2L2 7L12 12L22 7L12 2Z"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M2 17L12 22L22 17"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M2 12L12 17L22 12"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
 
+export const CrosshairIcon: React.FC<IconProps> = ({
+  size = 20,
+  color = colors.text.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Circle cx="12" cy="12" r="8" stroke={color} strokeWidth={2} />
+    <Circle cx="12" cy="12" r="3" fill={color} />
+    <Path d="M12 2V4M12 20V22M2 12H4M20 12H22" stroke={color} strokeWidth={2} strokeLinecap="round" />
+  </Svg>
+);
 
+export const DownloadIcon: React.FC<IconProps> = ({
+  size = 18,
+  color = colors.accent.primary,
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M7 10L12 15L17 10"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M12 15V3"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);

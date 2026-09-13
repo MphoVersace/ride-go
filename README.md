@@ -90,7 +90,8 @@ ride-go/
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
 │   │   │   ├── MobilityTelemetryVectors.tsx # Pure geometric mobility vectors (Standard velocity, Comfort wave, Luxury diamond, Express parcel, Cargo crate, Freight pallet, SA Radar)
 │   │   │   ├── RouteTelemetryGraphic.tsx # Pure vector mobility graphics (Network Matrix, Guaranteed Rand Fares, Satellite Dispatch)
-│   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
+│   │   │   ├── SlideToConfirm.tsx # Interactive PanResponder swipe gesture slider with electric yellow thumb
+│   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, layers, crosshairs, download)
 │   │   │   ├── TelemetryPulseLoader.tsx # High-tech geometric GPS radar pulse loader with coordinate locks
 │   │   │   ├── Vehicle3DViewer.tsx # Interactive 3D WebGL viewer (360° orbit, camera transitions, SVG fallback)
 │   │   │   ├── VehicleLoader.tsx # Animated highway and circuit vehicle loading telemetry component
@@ -113,7 +114,7 @@ ride-go/
 │   │   │   ├── AccountTypeScreen.tsx    # Role selection (Rider vs Driver partner)
 │   │   │   └── RiderRegistrationScreen.tsx # Rider signup form with profile sync
 │   │   ├── home/                 # Main home experience
-│   │   │   └── RiderHomeScreen.tsx # Dark map, pill inputs, service tabs, Rand tiers
+│   │   │   └── RiderHomeScreen.tsx # Urban geo-grid map, Cape Town/Sandton focal halo, live fleet counter, prominent 'Where to?' discovery console, SA presets, and locked BottomTabBar
 │   │   ├── onboarding/           # Animated splash & introduction
 │   │   │   └── SplashOnboardingScreen.tsx # Ultra-sleek car-free route telemetry carousel & GPS radar loader
 │   │   ├── profile/              # Profile, settings, and support
@@ -128,11 +129,11 @@ ride-go/
 │   │   ├── rides/                # Interactive ride booking, tracking, and receipts
 │   │   │   ├── DestinationResultsScreen.tsx # Geocoded results & distance tags
 │   │   │   ├── DestinationSearchScreen.tsx  # Stacked pill inputs & SA suggestions
-│   │   │   ├── DriverFoundScreen.tsx        # Driver match, 3D card, live chat trigger
-│   │   │   ├── RideHistoryScreen.tsx        # Trip activity list in Rands
-│   │   │   ├── RideInProgressScreen.tsx     # Live route ticker & SOS trigger
-│   │   │   ├── RideOptionsScreen.tsx        # Vehicle tier picker (Standard, Comfort, Luxury)
-│   │   │   ├── RideSearchingScreen.tsx      # Animated radar pulse & driver search
+│   │   │   ├── DriverFoundScreen.tsx        # Live driver tracking HUD, floating ETA pill, safety PIN security banner, driver console
+│   │   │   ├── RideHistoryScreen.tsx        # Category tabs (Past, Upcoming, Business), Bento stat metrics (Trips, Saved, Transit Score), month-grouped feed
+│   │   │   ├── RideInProgressScreen.tsx     # Real-time animated vector map tracking, floating ETA HUD, safety PIN verification, live route progress scrubber
+│   │   │   ├── RideOptionsScreen.tsx        # Top trip trajectory HUD (time/distance), route pills, carbon tier stack, and interactive SlideToConfirm slider
+│   │   │   ├── RideSearchingScreen.tsx      # Tactical dark geo-grid radar, expanding sonar waves, rotating scanner beam, nearby driver telemetry pings
 │   │   │   ├── TripCompletedScreen.tsx      # Numerical transit feedback score (1–5), Rand tip chips (R10–R100)
 │   │   │   ├── TripDetailsScreen.tsx        # Deep-dive trip summary, rebook CTA
 │   │   │   └── TripReceiptScreen.tsx        # Itemized Rand invoice, wallet verification
@@ -165,16 +166,16 @@ ride-go/
 | **Auth** | `Account` | Welcome screen with panoramic NationalTransitMapCard, 3-pillar telemetry matrix, and yellow action dock |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
-| **Home** | `RiderHome` | Dual mode (Rides & Parcel Delivery), moving hero promo, map, and floating bottom tab bar |
+| **Home** | `RiderHome` | Urban geo-grid map, Cape Town/Sandton focal halo, live fleet counter, prominent 'Where to?' discovery console, SA presets, and locked BottomTabBar |
 | **Rides** | `DestinationSearch` | Destination query input and suggested places |
 | **Rides** | `DestinationResults` | Geocoded destination results and pin selection |
-| **Rides** | `RideOptions` | Ride tier selection (Standard, Comfort, Luxury) with fare quotes |
-| **Rides** | `RideSearching` | Dynamic radar/searching state locating nearby drivers |
-| **Rides** | `DriverFound` | Matched driver info, vehicle details, ETA, plate number |
-| **Rides** | `RideInProgress` | Real-time animated vector map tracking, countdown bubble, route scrubber, distance ticker |
+| **Rides** | `RideOptions` | Top trip trajectory HUD (time/distance), route pills, carbon tier stack with telemetry vectors, and interactive SlideToConfirm slider |
+| **Rides** | `RideSearching` | Tactical dark geo-grid radar, expanding sonar waves, rotating scanner beam, nearby driver telemetry pings, and cycling dispatch status |
+| **Rides** | `DriverFound` | Live driver tracking HUD, floating ETA pill, safety PIN security banner, driver profile console, and upfront Rand fare |
+| **Rides** | `RideInProgress` | Real-time animated vector map tracking, floating ETA HUD, safety PIN verification, and live route progress scrubber |
 | **Rides** | `TripCompleted` | Destination reached summary and numerical transit score feedback (1–5) |
 | **Rides** | `TripReceipt` | Itemized invoice breakdown, payment verification |
-| **Rides** | `RideHistory` | List of past trips with dates, routes, and amounts |
+| **Rides** | `RideHistory` | Category tabs (Past, Upcoming, Business), Bento stat metrics (Trips, Saved, Transit Score), and month-grouped trip receipts |
 | **Rides** | `TripDetails` | Deep-dive trip summary, route map, driver details |
 | **Profile** | `RiderProfile` | User profile overview, rating, shortcuts to settings |
 | **Profile** | `EditProfile` | Form to edit personal info, avatar, email, phone |

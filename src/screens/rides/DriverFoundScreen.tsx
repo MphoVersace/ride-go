@@ -15,18 +15,18 @@ import {
   ArrowLeftIcon,
   ChatBubbleIcon,
   PhoneIcon,
-  SeatIcon,
-  SteeringWheelIcon,
+  LockIcon,
+  CrosshairIcon,
+  LayersIcon,
 } from "../../components/common/SvgIcons";
 import DarkRouteMap from "../../components/common/DarkRouteMap";
 import DriverChatModal from "../../components/common/DriverChatModal";
-import RouteTelemetryGraphic from "../../components/common/RouteTelemetryGraphic";
 import { useRide } from "../../services/RideContext";
 
 export default function DriverFoundScreen({
   navigation,
 }: RootStackScreenProps<"DriverFound">) {
-  const { driver, tier, tierFares, startRide } = useRide();
+  const { pickup, destination, driver, tier, tierFares, startRide } = useRide();
   const [chatVisible, setChatVisible] = useState(false);
   const [countdown, setCountdown] = useState(3);
 
@@ -36,6 +36,7 @@ export default function DriverFoundScreen({
     }, 15000);
     return () => clearInterval(timer);
   }, []);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
@@ -50,7 +51,7 @@ export default function DriverFoundScreen({
           <ArrowLeftIcon size={20} color={colors.text.primary} />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>Driver Matched</Text>
+        <Text style={styles.headerTitle}>Live Driver Tracking</Text>
 
         <TouchableOpacity
           style={styles.callButton}
@@ -64,21 +65,56 @@ export default function DriverFoundScreen({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Route Preview on Dark Vector Map */}
+        {/* Map Viewport Container */}
         <View style={styles.mapContainer}>
           <DarkRouteMap
-            height={180}
+            height={220}
             showRoute={true}
             driverEta={`Arriving in ${countdown} min`}
           />
+
+          {/* Floating Top Live ETA Status Pill */}
+          <View style={styles.floatingEtaPill}>
+            <View style={styles.etaPulseDot} />
+            <Text style={styles.etaDriverText}>
+              {driver.name} is {countdown} mins away
+            </Text>
+          </View>
+
+          {/* Floating Map Controls */}
+          <View style={styles.mapControls}>
+            <TouchableOpacity
+              style={styles.mapControlButton}
+              activeOpacity={0.8}
+              accessibilityLabel="Re-center location"
+            >
+              <CrosshairIcon size={16} color={colors.text.primary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.mapControlButton}
+              activeOpacity={0.8}
+              accessibilityLabel="Layers"
+            >
+              <LayersIcon size={16} color={colors.accent.primary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {/* Floating Bottom Sheet Container */}
-        <View style={styles.sheetCard}>
-          {/* Arrival Status Banner - Pure Typography */}
-          <View style={styles.arrivalBanner}>
-            <Text style={styles.arrivalText}>The driver will arrive in</Text>
-            <Text style={styles.arrivalCountdownText}>{countdown} min</Text>
+        {/* Primary Bottom Sheet Console */}
+        <View style={styles.sheetConsole}>
+          {/* Safety Code PIN Banner */}
+          <View style={styles.safetyPinBanner}>
+            <View style={styles.safetyPinAccentBar} />
+            <View style={styles.safetyPinIconWrap}>
+              <LockIcon size={18} color={colors.accent.primary} />
+            </View>
+            <View style={styles.safetyPinInfo}>
+              <Text style={styles.safetyPinLabel}>SAFETY VERIFICATION PIN</Text>
+              <Text style={styles.safetyPinCode}>4821</Text>
+              <Text style={styles.safetyPinSubtext}>
+                Provide this 4-digit code to your driver before boarding
+              </Text>
+            </View>
           </View>
 
           {/* Driver Profile Card */}
@@ -89,72 +125,67 @@ export default function DriverFoundScreen({
 
             <View style={styles.driverDetails}>
               <Text style={styles.driverName}>{driver.name}</Text>
-              <Text style={styles.driverVehicleModel}>{driver.carModel}</Text>
+              <Text style={styles.driverVehicleModel}>
+                {driver.carModel} • {driver.licensePlate}
+              </Text>
             </View>
 
-            <View style={styles.plateAndStatus}>
-              <Text style={styles.licensePlateText}>{driver.licensePlate}</Text>
+            <View style={styles.driverActionsRow}>
+              <TouchableOpacity
+                style={styles.actionIconButton}
+                activeOpacity={0.8}
+                onPress={() => setChatVisible(true)}
+              >
+                <ChatBubbleIcon size={18} color={colors.accent.primary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.actionIconButton}
+                activeOpacity={0.8}
+              >
+                <PhoneIcon size={18} color={colors.accent.primary} />
+              </TouchableOpacity>
             </View>
           </View>
 
-          {/* Trip Telemetry Overview Card (Zero Cars) */}
-          <View style={styles.vehicleOverviewCard}>
-            <View style={styles.vehicleSpecsRow}>
-              <View style={styles.specItem}>
-                <SeatIcon size={16} color={colors.text.secondary} />
-                <Text style={styles.specLabel}>4 Seats</Text>
-              </View>
-
-              <View style={styles.specItem}>
-                <SteeringWheelIcon size={16} color={colors.text.secondary} />
-                <Text style={styles.specLabel}>{driver.tripsCount} Trips</Text>
-              </View>
-
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Direct Transit</Text>
-              </View>
+          {/* Route & Fare Telemetry Card */}
+          <View style={styles.routeTelemetryCard}>
+            <View style={styles.routeRow}>
+              <View style={styles.routeDotOrigin} />
+              <Text style={styles.routePointText} numberOfLines={1}>
+                {pickup.title || "Current Location"}
+              </Text>
+            </View>
+            <View style={styles.routeDividerLine} />
+            <View style={styles.routeRow}>
+              <View style={styles.routeDotDest} />
+              <Text style={styles.routePointText} numberOfLines={1}>
+                {destination.title || "Destination Point"}
+              </Text>
             </View>
 
-            {/* Live Route Telemetry Graphic */}
-            <View style={styles.telemetryGraphicWrap}>
-              <RouteTelemetryGraphic mode="network" width={280} height={160} />
-            </View>
-
-            {/* Fare Summary in Rands */}
             <View style={styles.fareRow}>
               <View>
-                <Text style={styles.tierName}>
-                  {tier.toUpperCase()} Ride
+                <Text style={styles.tierName}>{tier.toUpperCase()} MOBILITY</Text>
+                <Text style={styles.paymentMethodLabel}>
+                  Upfront Fixed Fare
                 </Text>
-                <Text style={styles.paymentMethodLabel}>Cash or Card on arrival</Text>
               </View>
-              <Text style={styles.fareAmount}>R{tierFares[tier]}</Text>
+              <Text style={styles.fareAmount}>R{tierFares[tier]}.00</Text>
             </View>
           </View>
-
-          {/* Chat with Driver CTA */}
-          <TouchableOpacity
-            style={styles.chatButton}
-            activeOpacity={0.85}
-            onPress={() => setChatVisible(true)}
-          >
-            <View style={styles.chatIconWrap}>
-              <ChatBubbleIcon size={18} color={colors.accent.contrast} />
-            </View>
-            <Text style={styles.chatButtonText}>Chat with driver</Text>
-            <Text style={styles.chatArrows}>›››</Text>
-          </TouchableOpacity>
 
           {/* Start Ride CTA */}
           <TouchableOpacity
             style={styles.startRideButton}
-            activeOpacity={0.85}
+            activeOpacity={0.88}
             onPress={() => {
               startRide();
               navigation.replace("RideInProgress");
             }}
           >
-            <Text style={styles.startRideButtonText}>Start Ride (Driver Arrived)</Text>
+            <Text style={styles.startRideButtonText}>
+              START RIDE (DRIVER ARRIVED)
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -174,11 +205,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background.primary,
   },
   header: {
+    height: 56,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surface.border,
   },
   backButton: {
     width: 40,
@@ -191,9 +224,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "800",
     color: colors.text.primary,
+    letterSpacing: -0.2,
   },
   callButton: {
     width: 40,
@@ -206,183 +240,237 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   scrollContent: {
-    paddingBottom: spacing.xl,
+    paddingBottom: 40,
   },
   mapContainer: {
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.md,
+    position: "relative",
+    width: "100%",
+    height: 220,
   },
-  sheetCard: {
-    backgroundColor: colors.surface.card,
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    padding: spacing.md,
+  floatingEtaPill: {
+    position: "absolute",
+    top: 12,
+    left: spacing.lg,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "rgba(22, 22, 26, 0.95)",
+    paddingVertical: 7,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+    zIndex: 10,
+  },
+  etaPulseDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.accent.primary,
+  },
+  etaDriverText: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: colors.text.primary,
+  },
+  mapControls: {
+    position: "absolute",
+    top: 12,
+    right: spacing.lg,
+    flexDirection: "column",
+    gap: 6,
+    zIndex: 10,
+  },
+  mapControlButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "rgba(22, 22, 26, 0.95)",
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
     borderColor: colors.surface.border,
   },
-  arrivalBanner: {
+  sheetConsole: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    gap: spacing.md,
+  },
+  safetyPinBanner: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: colors.surface.elevated,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    backgroundColor: colors.surface.card,
+    borderRadius: 16,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+    position: "relative",
+    overflow: "hidden",
+    gap: 12,
+  },
+  safetyPinAccentBar: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    backgroundColor: colors.accent.primary,
+  },
+  safetyPinIconWrap: {
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    marginBottom: spacing.md,
+    backgroundColor: "rgba(255, 209, 0, 0.12)",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  arrivalText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: colors.text.primary,
+  safetyPinInfo: {
+    flex: 1,
   },
-  arrivalCountdownText: {
+  safetyPinLabel: {
+    fontSize: 9,
+    fontWeight: "800",
     color: colors.accent.primary,
-    fontSize: 16,
-    fontWeight: "bold",
+    letterSpacing: 1.2,
+  },
+  safetyPinCode: {
+    fontSize: 22,
+    fontWeight: "900",
+    color: colors.text.primary,
+    letterSpacing: 4,
+    marginVertical: 2,
+  },
+  safetyPinSubtext: {
+    fontSize: 11,
+    color: colors.text.secondary,
   },
   driverProfileCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.surface.subtle,
-    borderRadius: 24,
+    backgroundColor: colors.surface.card,
+    borderRadius: 16,
     padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.surface.border,
-    marginBottom: spacing.md,
+    gap: 12,
   },
   driverAvatarWrap: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: colors.surface.elevated,
-    borderWidth: 2,
-    borderColor: colors.accent.primary,
+    backgroundColor: colors.accent.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: spacing.sm,
   },
   driverAvatarText: {
-    color: colors.accent.primary,
-    fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "800",
+    color: colors.accent.contrast,
   },
   driverDetails: {
     flex: 1,
   },
   driverName: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 15,
+    fontWeight: "800",
     color: colors.text.primary,
   },
   driverVehicleModel: {
-    fontSize: 13,
-    color: colors.text.muted,
+    fontSize: 12,
+    color: colors.text.secondary,
     marginTop: 2,
   },
-  plateAndStatus: {
-    alignItems: "flex-end",
+  driverActionsRow: {
+    flexDirection: "row",
+    gap: 8,
   },
-  licensePlateText: {
-    color: colors.accent.primary,
-    fontSize: 13,
-    fontWeight: "bold",
-    letterSpacing: 1,
-  },
-  vehicleOverviewCard: {
+  actionIconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: colors.surface.elevated,
-    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.surface.border,
+  },
+  routeTelemetryCard: {
+    backgroundColor: colors.surface.card,
+    borderRadius: 16,
     padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.surface.border,
-    marginBottom: spacing.md,
+    gap: 8,
   },
-  vehicleSpecsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: spacing.sm,
-    paddingBottom: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.surface.border,
-  },
-  specItem: {
+  routeRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 8,
   },
-  specLabel: {
-    color: colors.text.secondary,
-    fontSize: 13,
+  routeDotOrigin: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.accent.primary,
+  },
+  routeDotDest: {
+    width: 8,
+    height: 8,
+    borderRadius: 2,
+    backgroundColor: colors.text.primary,
+  },
+  routePointText: {
+    fontSize: 12,
     fontWeight: "600",
+    color: colors.text.primary,
+    flex: 1,
   },
-  telemetryGraphicWrap: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: spacing.xs,
+  routeDividerLine: {
+    height: 1,
+    backgroundColor: colors.surface.border,
+    marginLeft: 16,
   },
   fareRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: spacing.sm,
+    marginTop: 4,
+    paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: colors.surface.border,
   },
   tierName: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: colors.text.primary,
+    fontSize: 11,
+    fontWeight: "800",
+    color: colors.accent.primary,
+    letterSpacing: 1,
   },
   paymentMethodLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: colors.text.muted,
-    marginTop: 2,
+    marginTop: 1,
   },
   fareAmount: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: colors.accent.primary,
-  },
-  chatButton: {
-    backgroundColor: colors.accent.primary,
-    height: 56,
-    borderRadius: 28,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
-    justifyContent: "space-between",
-  },
-  chatIconWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "rgba(7, 26, 61, 0.2)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  chatButtonText: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: colors.accent.contrast,
-  },
-  chatArrows: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: colors.accent.contrast,
-    letterSpacing: -2,
+    fontWeight: "800",
+    color: colors.text.primary,
   },
   startRideButton: {
-    backgroundColor: colors.surface.elevated,
-    height: 52,
-    borderRadius: 26,
-    borderWidth: 1.5,
-    borderColor: colors.accent.primary,
+    backgroundColor: colors.accent.primary,
+    height: 54,
+    borderRadius: 27,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: spacing.sm,
+    shadowColor: colors.accent.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   startRideButtonText: {
-    color: colors.accent.primary,
-    fontSize: 15,
-    fontWeight: "bold",
+    fontSize: 14,
+    fontWeight: "800",
+    color: colors.accent.contrast,
+    letterSpacing: 1.2,
   },
 });
