@@ -110,7 +110,7 @@ ride-go/
 │   │   └── index.ts              # Navigation barrel export
 │   ├── screens/                  # Modular domain screen components
 │   │   ├── auth/                 # Authentication & onboarding flow
-│   │   │   ├── AccountScreen.tsx        # Welcome screen with panoramic NationalTransitMapCard, 3-pillar telemetry matrix, and yellow action dock
+│   │   │   ├── AccountScreen.tsx        # Stitch Gateway: Step 01/05 progress, Rider/Driver role switcher, Express Sign Up (Apple, Google, Capitec), SA inputs (+27), POPIA footer, and direct transit launch
 │   │   │   ├── AccountTypeScreen.tsx    # Role selection (Rider vs Driver partner)
 │   │   │   └── RiderRegistrationScreen.tsx # Rider signup form with profile sync
 │   │   ├── home/                 # Main home experience
@@ -163,7 +163,7 @@ ride-go/
 | Module | Screen Name | Description |
 | :--- | :--- | :--- |
 | **Onboarding** | `SplashOnboarding` | Ultra-sleek car-free route telemetry carousel with fluid native-driven sliding active indicator and geometric GPS sonar pulse loading sequence |
-| **Auth** | `Account` | Welcome screen with panoramic NationalTransitMapCard, 3-pillar telemetry matrix, and yellow action dock |
+| **Auth** | `Account` | Stitch Gateway: Step 01/05 progress, Rider/Driver role switcher, Express Sign Up (Apple, Google, Capitec), SA inputs (+27), POPIA footer, and direct transit launch |
 | **Auth** | `AccountType` | Role selection (Rider vs Driver) |
 | **Auth** | `RiderRegistration` | Rider signup form with phone / credentials |
 | **Home** | `RiderHome` | Urban geo-grid map, Cape Town/Sandton focal halo, live fleet counter, prominent 'Where to?' discovery console, SA presets, and locked BottomTabBar |
