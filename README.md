@@ -24,9 +24,10 @@ RideGo adheres strictly to the **60-30-10 visual hierarchy rule** with a maximum
 
 | Distribution | Role | Hex Code | Purpose |
 | :--- | :--- | :--- | :--- |
-| **60%** | **Dominant Background** | `#071A3D` / `#051329` | Deep navy base applied to all screens and container views |
-| **30%** | **Panel & Surface** | `#102A52` / `#16325C` | Cards, elevated sheets, input fields, containers, borders (`#1D3557`) |
-| **10%** | **Accent & Action** | `#5BC0FF` | Primary action buttons, active navigation states, pins, highlights |
+| **60%** | **Dominant Background** | `#000000` / `#0A0A0C` | True black base applied to all screens and container views |
+| **30%** | **Panel & Surface** | `#16161A` / `#202026` | Deep carbon cards, elevated sheets, route cards, borders (`#2E2E36`) |
+| **10%** | **Accent & Action** | `#FFD100` / `#FFB800` | High-contrast electric yellow primary buttons, active route telemetry, pins, highlights |
+| **Text** | **Typography** | `#FFFFFF` / `#D1D1D6` | Crisp white primary headlines, secondary silver labels, muted grey metadata (`#8E8E93`) |
 
 **Strict Policy**: Ad-hoc rainbow status tags, badges (e.g. 'READ ONLY', 'DEMO ONLY', 'OK'), hover glow animations, and badges carrying '5-star' or safety guarantee claims (e.g. 'Verified 5-Star Drivers', 'SAPS 10111 Integrated') or floating shield trust icons are strictly forbidden (Rule 16 & Rule 17).
 
@@ -87,6 +88,7 @@ ride-go/
 │   │   │   ├── BottomTabBar.tsx  # Floating 4-tab navigation bar (Home, Trips, Wallet, Profile)
 │   │   │   ├── DarkRouteMap.tsx  # Vector dark map with GPS waypoint tracking beacon & ETA bubble
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
+│   │   │   ├── MobilityTelemetryVectors.tsx # Pure geometric mobility vectors (Standard velocity, Comfort wave, Luxury diamond, Express parcel, Cargo crate, Freight pallet, SA Radar)
 │   │   │   ├── RouteTelemetryGraphic.tsx # Pure vector mobility graphics (Network Matrix, Guaranteed Rand Fares, Satellite Dispatch)
 │   │   │   ├── SvgIcons.tsx      # Vector SVG library (pins, steer, chat, stars, check)
 │   │   │   ├── TelemetryPulseLoader.tsx # High-tech geometric GPS radar pulse loader with coordinate locks

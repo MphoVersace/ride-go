@@ -6,3 +6,4 @@ export * from "./DriverChatModal";
 export * from "./VehicleLoader";
 export * from "./TelemetryPulseLoader";
 export * from "./RouteTelemetryGraphic";
+export * from "./MobilityTelemetryVectors";

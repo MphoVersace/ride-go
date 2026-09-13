@@ -45,44 +45,49 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
         {/* Dark Background */}
         <Rect width="360" height="240" fill={colors.background.deep} />
 
-        {/* Ambient Map Grids & Secondary Streets */}
+        {/* Ambient Map Grids & Secondary Streets - fill=none avoids black polygon distortion */}
         <Path
           d="M0 60 H360 M0 140 H360 M0 200 H360"
-          stroke="#0D2244"
-          strokeWidth="6"
+          stroke="#1E1E26"
+          strokeWidth="3"
           strokeLinecap="round"
+          fill="none"
         />
         <Path
           d="M80 0 V240 M200 0 V240 M300 0 V240"
-          stroke="#0D2244"
-          strokeWidth="6"
+          stroke="#1E1E26"
+          strokeWidth="3"
           strokeLinecap="round"
+          fill="none"
         />
 
         {/* Diagonal Arterials */}
         <Path
           d="M0 220 L160 80 L360 40"
-          stroke="#132D56"
-          strokeWidth="8"
+          stroke="#2A2A36"
+          strokeWidth="6"
           strokeLinejoin="round"
+          fill="none"
         />
         <Path
           d="M50 0 L150 120 L300 240"
-          stroke="#132D56"
-          strokeWidth="8"
+          stroke="#2A2A36"
+          strokeWidth="6"
           strokeLinejoin="round"
+          fill="none"
         />
 
-        {/* Active Route Trajectory (Electric Cyan Glow) */}
+        {/* Active Route Trajectory (Electric Yellow Glow) */}
         {showRoute && (
           <G>
             {/* Glow Path */}
             <Path
               d="M70 180 L70 100 L180 80 L230 140 L280 140"
               stroke={colors.accent.subtle}
-              strokeWidth="10"
+              strokeWidth="12"
               strokeLinecap="round"
               strokeLinejoin="round"
+              fill="none"
             />
             {/* Core Route Line */}
             <Path
@@ -91,6 +96,7 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
               strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"
+              fill="none"
             />
 
             {/* Pickup Marker (Origin) */}
@@ -118,7 +124,7 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
         )}
       </Svg>
 
-      {/* Realtime Moving GPS Telemetry Waypoint Beacon (Zero Cars) */}
+      {/* Realtime Moving GPS Telemetry Waypoint Beacon (Yellow & Black) */}
       {showRoute && (
         <View
           style={[
@@ -139,7 +145,7 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
         </View>
       )}
 
-      {/* Dynamic Callout Bubble over Destination (matching video reference) */}
+      {/* Dynamic Callout Bubble over Destination */}
       {showRoute && driverEta && (
         <View style={styles.destinationCallout}>
           <View style={styles.calloutBubble}>
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
     top: 24,
     fontSize: 10,
     fontWeight: "600",
-    color: "#1B3B68",
+    color: "#4A4A58",
     letterSpacing: 1.5,
   },
   streetLabelRight: {
@@ -180,7 +186,7 @@ const styles = StyleSheet.create({
     bottom: 24,
     fontSize: 10,
     fontWeight: "600",
-    color: "#1B3B68",
+    color: "#4A4A58",
     letterSpacing: 1.5,
   },
   beaconContainer: {

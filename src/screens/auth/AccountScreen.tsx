@@ -7,45 +7,10 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Svg, { Circle, Path, Line, Defs, LinearGradient, Stop } from "react-native-svg";
 import { RootStackScreenProps } from "../../navigation/types";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/metrics";
-
-// Geometric Mobility Network Hub Graphic (Zero cars)
-const MobilityNetworkGraphic = () => (
-  <Svg width={180} height={180} viewBox="0 0 180 180" fill="none">
-    <Defs>
-      <LinearGradient id="hubGrad" x1="0" y1="0" x2="1" y2="1">
-        <Stop offset="0%" stopColor={colors.accent.primary} stopOpacity="1" />
-        <Stop offset="100%" stopColor={colors.accent.secondary} stopOpacity="0.8" />
-      </LinearGradient>
-      <LinearGradient id="hubGlow" x1="0" y1="0" x2="0" y2="1">
-        <Stop offset="0%" stopColor={colors.accent.primary} stopOpacity="0.25" />
-        <Stop offset="100%" stopColor={colors.accent.primary} stopOpacity="0.02" />
-      </LinearGradient>
-    </Defs>
-    {/* Concentric Transit Orbits */}
-    <Circle cx={90} cy={90} r={76} stroke={colors.surface.border} strokeWidth={1.5} strokeDasharray="5 5" />
-    <Circle cx={90} cy={90} r={52} stroke={colors.surface.border} strokeWidth={1.5} />
-    <Circle cx={90} cy={90} r={28} fill="url(#hubGlow)" stroke={colors.accent.primary} strokeWidth={1.5} />
-
-    {/* Transverse Transit Arcs */}
-    <Path d="M 30 130 C 55 50, 125 50, 150 130" stroke="url(#hubGrad)" strokeWidth="2.5" strokeLinecap="round" />
-    <Path d="M 35 70 C 65 135, 120 135, 145 70" stroke={colors.surface.border} strokeWidth="1.8" strokeDasharray="4 4" strokeLinecap="round" />
-
-    {/* Interconnected Metro Nodes */}
-    <Circle cx={30} cy={130} r={5} fill={colors.accent.primary} />
-    <Circle cx={150} cy={130} r={5} fill={colors.accent.primary} />
-    <Circle cx={35} cy={70} r={4} fill={colors.text.muted} />
-    <Circle cx={145} cy={70} r={4} fill={colors.text.muted} />
-    <Circle cx={90} cy={40} r={4} fill={colors.accent.primary} />
-
-    {/* Central Mobility Core */}
-    <Circle cx={90} cy={90} r={10} fill={colors.accent.primary} />
-    <Circle cx={90} cy={90} r={4} fill="#FFFFFF" />
-  </Svg>
-);
+import { SouthAfricaRadarMatrix } from "../../components/common/MobilityTelemetryVectors";
 
 export default function AccountScreen({
   navigation,
@@ -60,15 +25,15 @@ export default function AccountScreen({
         <Text style={styles.brandTagline}>SOUTH AFRICA</Text>
       </View>
 
-      {/* Hero Visual Card with Geometric Mobility Hub */}
+      {/* Hero Visual Card with South Africa Mobility Radar Matrix */}
       <View style={styles.heroWrap}>
         <View style={styles.heroCircle}>
-          <MobilityNetworkGraphic />
+          <SouthAfricaRadarMatrix size={190} />
         </View>
 
         <Text style={styles.heading}>Move Seamlessly Across South Africa</Text>
         <Text style={styles.description}>
-          Upfront Rand fares, verified professional drivers, live GPS tracking, and instant RideGo Wallet payments.
+          Upfront Rand fares, direct route navigation, real-time GPS tracking, and instant RideGo Wallet payments.
         </Text>
       </View>
 

@@ -16,9 +16,12 @@ import {
   PinIcon,
   TargetIcon,
   SeatIcon,
-  ShieldCheckIcon,
 } from "../../components/common/SvgIcons";
-import { VehicleSideSvg } from "../../components/common/VehicleSvgs";
+import {
+  StandardTelemetryVector,
+  ComfortTelemetryVector,
+  LuxuryTelemetryVector,
+} from "../../components/common/MobilityTelemetryVectors";
 import { useRide, RideTier } from "../../services/RideContext";
 
 interface TierOption {
@@ -33,21 +36,21 @@ const tiersData: TierOption[] = [
   {
     key: "standard",
     name: "Standard",
-    desc: "Everyday Toyota Prius hybrid, swift & economical",
+    desc: "Swift & economical direct transit for everyday travel",
     seats: 4,
     eta: "3 min",
   },
   {
     key: "comfort",
     name: "Comfort",
-    desc: "Spacious legroom, newest models, highly rated",
+    desc: "Spacious legroom, enhanced damping & quiet ride",
     seats: 4,
     eta: "4 min",
   },
   {
     key: "luxury",
     name: "Luxury",
-    desc: "Premium executive ride, quiet & refined comfort",
+    desc: "Executive mobility tier with refined quietness & comfort",
     seats: 4,
     eta: "6 min",
   },
@@ -122,13 +125,29 @@ export default function RideOptionsScreen({
               activeOpacity={0.85}
               onPress={() => selectTier(item.key)}
             >
-              {/* Left Vehicle Vector Art */}
+              {/* Left Telemetry Vector */}
               <View style={styles.vehicleArtBox}>
-                <VehicleSideSvg
-                  width={72}
-                  height={34}
-                  color={isSelected ? colors.accent.primary : colors.text.secondary}
-                />
+                {item.key === "standard" && (
+                  <StandardTelemetryVector
+                    width={64}
+                    height={30}
+                    color={isSelected ? colors.accent.primary : colors.text.muted}
+                  />
+                )}
+                {item.key === "comfort" && (
+                  <ComfortTelemetryVector
+                    width={64}
+                    height={30}
+                    color={isSelected ? colors.accent.primary : colors.text.muted}
+                  />
+                )}
+                {item.key === "luxury" && (
+                  <LuxuryTelemetryVector
+                    width={64}
+                    height={30}
+                    color={isSelected ? colors.accent.primary : colors.text.muted}
+                  />
+                )}
               </View>
 
               {/* Middle Details */}
@@ -152,11 +171,11 @@ export default function RideOptionsScreen({
           );
         })}
 
-        {/* Safety Note */}
-        <View style={styles.safetyCard}>
-          <ShieldCheckIcon size={20} color={colors.accent.primary} />
-          <Text style={styles.safetyText}>
-            All RideGo trips include 24/7 incident response, GPS tracking, and verified drivers.
+        {/* Telemetry Route Info Card (Rule 17 Compliant) */}
+        <View style={styles.telemetryCard}>
+          <Text style={styles.telemetryCardTitle}>LIVE DISPATCH TELEMETRY</Text>
+          <Text style={styles.telemetryCardText}>
+            Upfront Rand fares with dynamic satellite routing and GPS tracking across South Africa.
           </Text>
         </View>
       </ScrollView>
@@ -310,22 +329,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.accent.primary,
   },
-  safetyCard: {
-    flexDirection: "row",
-    alignItems: "center",
+  telemetryCard: {
     backgroundColor: colors.surface.card,
     borderRadius: 16,
-    padding: spacing.sm,
+    padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.surface.border,
     marginTop: spacing.sm,
-    gap: spacing.xs,
   },
-  safetyText: {
-    flex: 1,
+  telemetryCardTitle: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: colors.accent.primary,
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  telemetryCardText: {
     fontSize: 12,
     color: colors.text.secondary,
-    lineHeight: 16,
+    lineHeight: 18,
   },
   bottomBar: {
     position: "absolute",
