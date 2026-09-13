@@ -85,7 +85,7 @@ ride-go/
 │   │   └── .gitkeep
 │   ├── components/
 │   │   ├── common/               # Reusable UI primitives
-│   │   │   ├── BottomTabBar.tsx  # Floating 4-tab navigation bar (Home, Trips, Wallet, Profile)
+│   │   │   ├── BottomTabBar.tsx  # Floating 4-tab navigation bar (locked UI geometry with configurable tab labels)
 │   │   │   ├── DarkRouteMap.tsx  # Vector dark map with GPS waypoint tracking beacon & ETA bubble
 │   │   │   ├── DriverChatModal.tsx # In-app driver chat sheet with quick replies
 │   │   │   ├── MobilityTelemetryVectors.tsx # Pure geometric mobility vectors (Standard velocity, Comfort wave, Luxury diamond, Express parcel, Cargo crate, Freight pallet, SA Radar)

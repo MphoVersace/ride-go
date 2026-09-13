@@ -39,3 +39,14 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Stitch MCP artifacts, screens, and configs (NEVER push to GitHub)
+*stitch*
+*stitch*/**
+*Stitch*
+*Stitch*/**
+.stitch/
+stitch/
+*.stitch.*
+.agents/
+mcp_config.json

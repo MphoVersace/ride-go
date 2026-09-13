@@ -14,31 +14,33 @@ export type TabKey = "home" | "trips" | "wallet" | "profile";
 interface BottomTabBarProps {
   activeTab: TabKey;
   onSelectTab: (tab: TabKey) => void;
+  labels?: Partial<Record<TabKey, string>>;
 }
 
 export const BottomTabBar: React.FC<BottomTabBarProps> = ({
   activeTab,
   onSelectTab,
+  labels,
 }) => {
   const tabs = [
     {
       key: "home" as TabKey,
-      label: "Home",
+      label: labels?.home ?? "Home",
       icon: (color: string) => <HomeIcon size={20} color={color} />,
     },
     {
       key: "trips" as TabKey,
-      label: "Trips",
+      label: labels?.trips ?? "Trips",
       icon: (color: string) => <SteeringWheelIcon size={20} color={color} />,
     },
     {
       key: "wallet" as TabKey,
-      label: "Wallet",
+      label: labels?.wallet ?? "Wallet",
       icon: (color: string) => <WalletIcon size={20} color={color} />,
     },
     {
       key: "profile" as TabKey,
-      label: "Profile",
+      label: labels?.profile ?? "Profile",
       icon: (color: string) => <UserIcon size={20} color={color} />,
     },
   ];
