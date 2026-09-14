@@ -194,52 +194,57 @@ fun VoltTopBar(
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            // Notifications Bell
-            IconButton(
-                onClick = onNotificationsClick,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(VoltSurfaceContainerHigh)
-                    .testTag("notification_button")
-            ) {
-                Box(contentAlignment = Alignment.TopEnd) {
-                    Icon(
-                        imageVector = Icons.Filled.Notifications,
-                        contentDescription = "Notifications",
-                        tint = VoltOnSurface,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .size(6.dp)
-                            .clip(CircleShape)
-                            .background(VoltPrimaryContainer)
+            if (!isRiderVerification && !isDriverOnboarding) {
+                // Notifications Bell
+                IconButton(
+                    onClick = onNotificationsClick,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(VoltSurfaceContainerHigh)
+                        .testTag("notification_button")
+                ) {
+                    Box(contentAlignment = Alignment.TopEnd) {
+                        Icon(
+                            imageVector = Icons.Filled.Notifications,
+                            contentDescription = "Notifications",
+                            tint = VoltOnSurface,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(6.dp)
+                                .clip(CircleShape)
+                                .background(VoltPrimaryContainer)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Profile Picture
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .border(2.dp, VoltPrimaryContainer.copy(alpha = 0.4f), CircleShape)
+                        .clickable(onClick = onProfileClick)
+                        .testTag("profile_avatar"),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(PROFILE_AVATAR_URL)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "User Profile",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            // Profile Picture
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .border(2.dp, VoltPrimaryContainer.copy(alpha = 0.4f), CircleShape)
-                    .clickable(onClick = onProfileClick)
-                    .testTag("profile_avatar"),
-                contentAlignment = Alignment.Center
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(PROFILE_AVATAR_URL)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "User Profile",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
+            } else {
+                // Symmetrical Spacer balancing the 38dp back button on the left
+                Spacer(modifier = Modifier.size(38.dp))
             }
         }
     }

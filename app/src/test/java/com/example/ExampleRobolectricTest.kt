@@ -109,5 +109,80 @@ class ExampleRobolectricTest {
     assertTrue(viewModel.uiState.value.riderState.isVerified)
     assertEquals(VoltScreenTab.RIDES, viewModel.uiState.value.currentTab)
   }
+
+  @Test
+  fun `rider step 1 back navigation returns directly to auth screen and not driver screen`() {
+    val viewModel = VoltViewModel()
+
+    // Initially unauthenticated
+    assertFalse(viewModel.uiState.value.isAuthenticated)
+
+    // User starts rider signup from Auth Screen
+    viewModel.startRiderSignUpFromAuth(name = "Thabo", email = "thabo@ridego.co.za", phone = "0821234567")
+    assertTrue(viewModel.uiState.value.isRiderVerificationActive)
+    assertTrue(viewModel.uiState.value.isSigningUpFromAuth)
+    assertFalse(viewModel.uiState.value.isAuthenticated)
+    assertEquals(VoltScreenTab.EXPLORE, viewModel.uiState.value.currentTab)
+    assertEquals(1, viewModel.uiState.value.riderState.currentStep)
+
+    // User presses back at step 1
+    viewModel.closeRiderVerification()
+
+    // Must return to Auth state: unauthenticated, no active verification, not stuck in DRIVER tab
+    assertFalse(viewModel.uiState.value.isRiderVerificationActive)
+    assertFalse(viewModel.uiState.value.isDriverOnboardingActive)
+    assertFalse(viewModel.uiState.value.isAuthenticated)
+    assertFalse(viewModel.uiState.value.isSigningUpFromAuth)
+    assertEquals(VoltScreenTab.EXPLORE, viewModel.uiState.value.currentTab)
+  }
+
+  @Test
+  fun `driver step 1 back navigation returns directly to auth screen`() {
+    val viewModel = VoltViewModel()
+
+    // Initially unauthenticated
+    assertFalse(viewModel.uiState.value.isAuthenticated)
+
+    // User starts driver signup from Auth Screen
+    viewModel.startDriverSignUpFromAuth(name = "Marcus", phone = "0829876543")
+    assertTrue(viewModel.uiState.value.isDriverOnboardingActive)
+    assertTrue(viewModel.uiState.value.isSigningUpFromAuth)
+    assertFalse(viewModel.uiState.value.isAuthenticated)
+    assertEquals(VoltScreenTab.EXPLORE, viewModel.uiState.value.currentTab)
+    assertEquals(1, viewModel.uiState.value.driverState.currentStep)
+
+    // User presses back at step 1
+    viewModel.closeDriverOnboarding()
+
+    // Must return to Auth state: unauthenticated, no active onboarding, not stuck in DRIVER tab
+    assertFalse(viewModel.uiState.value.isDriverOnboardingActive)
+    assertFalse(viewModel.uiState.value.isRiderVerificationActive)
+    assertFalse(viewModel.uiState.value.isAuthenticated)
+    assertFalse(viewModel.uiState.value.isSigningUpFromAuth)
+    assertEquals(VoltScreenTab.EXPLORE, viewModel.uiState.value.currentTab)
+  }
+
+  @Test
+  fun `switching from rider to driver step 1 and pressing back still returns to auth screen`() {
+    val viewModel = VoltViewModel()
+
+    // User starts rider signup from Auth Screen
+    viewModel.startRiderSignUpFromAuth()
+    assertTrue(viewModel.uiState.value.isSigningUpFromAuth)
+
+    // In step 1, user taps "Driver" role pill
+    viewModel.openDriverOnboarding()
+    assertTrue(viewModel.uiState.value.isDriverOnboardingActive)
+    assertFalse(viewModel.uiState.value.isRiderVerificationActive)
+
+    // User presses back at driver step 1
+    viewModel.closeDriverOnboarding()
+
+    // Must return to Auth screen
+    assertFalse(viewModel.uiState.value.isDriverOnboardingActive)
+    assertFalse(viewModel.uiState.value.isRiderVerificationActive)
+    assertFalse(viewModel.uiState.value.isAuthenticated)
+    assertEquals(VoltScreenTab.EXPLORE, viewModel.uiState.value.currentTab)
+  }
 }
 
