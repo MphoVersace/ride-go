@@ -18,10 +18,7 @@ export default function DriverRideRequestScreen({ navigation }) {
   };
 
   const handleAccept = () => {
-    Alert.alert(
-      "Ride Accepted",
-      "This is a visual prototype. Driver trip flow will be connected later.",
-    );
+    navigation.navigate("DriverNavigation");
   };
 
   return (
