@@ -2523,7 +2523,7 @@ fun DriverStep4Vehicle(
                             fontWeight = FontWeight.SemiBold
                         )
                         Text(
-                            text = "Go Comfort & Go Eco",
+                            text = "Go Comfort & Go Saver",
                             color = VoltOnSurface,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold

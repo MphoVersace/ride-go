@@ -52,11 +52,7 @@ enum class RideTierType(
         feature = "Comfortable sedan • Extra space",
         badge = "PREMIUM",
         badgeIsYellow = false
-    );
-
-    companion object {
-        val ECO = SAVER
-    }
+    )
 }
 
 data class TripHistoryItem(

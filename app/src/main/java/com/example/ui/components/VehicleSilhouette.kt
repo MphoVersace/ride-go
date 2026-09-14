@@ -30,7 +30,7 @@ fun VehicleSilhouette(
     Box(modifier = modifier.size(width, height)) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             when (tier) {
-                RideTierType.ECO -> drawEcoCar(size.width, size.height)
+                RideTierType.SAVER -> drawSaverCar(size.width, size.height)
                 RideTierType.COMFORT -> drawComfortCar(size.width, size.height)
                 RideTierType.XL -> drawXlCar(size.width, size.height)
                 RideTierType.BLACK -> drawBlackCar(size.width, size.height)
@@ -39,7 +39,7 @@ fun VehicleSilhouette(
     }
 }
 
-private fun DrawScope.drawEcoCar(w: Float, h: Float) {
+private fun DrawScope.drawSaverCar(w: Float, h: Float) {
     // Ground shadow
     drawOval(
         brush = Brush.radialGradient(

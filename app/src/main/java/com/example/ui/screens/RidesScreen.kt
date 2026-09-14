@@ -632,29 +632,11 @@ private fun RideTierCard(
                                 .clip(CircleShape)
                                 .background(VoltSecondary)
                         )
-                        if (tier == RideTierType.ECO) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = Icons.Filled.Eco,
-                                    contentDescription = null,
-                                    tint = VoltPrimaryContainer,
-                                    modifier = Modifier.size(11.dp)
-                                )
-                                Spacer(modifier = Modifier.width(2.dp))
-                                Text(
-                                    text = tier.feature,
-                                    color = VoltPrimaryContainer,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            }
-                        } else {
-                            Text(
-                                text = tier.feature,
-                                color = VoltOnSurfaceVariant,
-                                fontSize = 11.sp
-                            )
-                        }
+                        Text(
+                            text = tier.feature,
+                            color = VoltOnSurfaceVariant,
+                            fontSize = 11.sp
+                        )
                     }
                 }
             }
