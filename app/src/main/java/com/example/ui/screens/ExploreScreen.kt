@@ -74,6 +74,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.model.RideTierType
+import com.example.ui.theme.DeepNavyBlue
+import com.example.ui.theme.DeepNavyContainer
+import com.example.ui.theme.DeepNavySurfaceHighest
 import com.example.ui.theme.IceBlue
 import com.example.ui.theme.MediumBlue
 import com.example.ui.theme.MutedBlueGray
@@ -86,6 +89,7 @@ import com.example.ui.theme.VoltSurface
 import com.example.ui.theme.VoltSurfaceContainer
 import com.example.ui.theme.VoltSurfaceContainerHigh
 import com.example.ui.theme.VoltSurfaceContainerHighest
+import com.example.ui.theme.VoltSurfaceDim
 
 private const val DRIVER_AVATAR_URL = "https://lh3.googleusercontent.com/aida-public/AB6AXuDVJixUQtBYgGO1TXvYbqQT_kvmicOQcycCcK3lRVuiMSfocST8EcBQALwxjdozIJp15xKrKMJvEpIy2DfpeW76Mzc0fcaEzp_YorBPmdjtf0_jwY68yR_a9AsIOMlcekpqIIuXbLy18pDmheIlIXolL4KQu30bZpbtY0PxYsKCS8n91BQYwjVURYJjMLy5poU5Ossm351ma6bprlTvcC4eW4NOqLTu-Cbn2MD4enuI2nG1RIne0dzsMRMwBp1deH29xhNNpuGFLGO5rA"
 
@@ -703,16 +707,54 @@ fun ExploreScreen(
                 }
             }
 
-            // Promo Card: High Voltage Electrification Banner
+            // Promo Card: High Voltage Electrification Banner with Aesthetic Gradient
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(VoltSurfaceContainerHigh)
-                    .border(1.dp, Color.White.copy(alpha = 0.06f), RoundedCornerShape(20.dp))
-                    .padding(16.dp)
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                DeepNavySurfaceHighest,
+                                DeepNavyContainer,
+                                DeepNavyBlue,
+                                VoltSurfaceDim
+                            ),
+                            start = Offset(0f, 0f),
+                            end = Offset(900f, 900f)
+                        )
+                    )
+                    .border(
+                        1.dp,
+                        Brush.linearGradient(
+                            listOf(
+                                Color.White.copy(alpha = 0.25f),
+                                DeepNavySurfaceHighest.copy(alpha = 0.60f),
+                                Color.White.copy(alpha = 0.08f)
+                            )
+                        ),
+                        RoundedCornerShape(22.dp)
+                    )
+                    .padding(18.dp)
                     .testTag("ride_go_mzansi_special_promo")
             ) {
+                // Subtle decorative radial glow in the top-right corner
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clip(RoundedCornerShape(22.dp))
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    DeepNavySurfaceHighest.copy(alpha = 0.40f),
+                                    Color.Transparent
+                                ),
+                                center = Offset(750f, 0f),
+                                radius = 550f
+                            )
+                        )
+                )
+
                 Column(modifier = Modifier.fillMaxWidth()) {
                     // Header row: RIDE-GO PROMO badge + MZANSI30 + lightning bolt
                     Row(
@@ -727,12 +769,17 @@ fun ExploreScreen(
                             Box(
                                 modifier = Modifier
                                     .clip(CircleShape)
-                                    .background(VoltPrimaryContainer)
-                                    .padding(horizontal = 9.dp, vertical = 3.dp)
+                                    .background(
+                                        Brush.horizontalGradient(
+                                            listOf(DeepNavySurfaceHighest, DeepNavyContainer)
+                                        )
+                                    )
+                                    .border(1.dp, Color.White.copy(alpha = 0.35f), CircleShape)
+                                    .padding(horizontal = 10.dp, vertical = 4.dp)
                             ) {
                                 Text(
                                     text = "RIDE-GO PROMO",
-                                    color = VoltOnPrimaryFixed,
+                                    color = VoltOnSurface,
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.5.sp
@@ -740,38 +787,47 @@ fun ExploreScreen(
                             }
                             Text(
                                 text = "MZANSI30",
-                                color = VoltPrimaryContainer,
+                                color = VoltOnSurfaceVariant,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 0.5.sp
                             )
                         }
 
-                        Icon(
-                            imageVector = Icons.Filled.Bolt,
-                            contentDescription = "Promo Bolt",
-                            tint = VoltPrimaryContainer,
-                            modifier = Modifier.size(22.dp)
-                        )
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.08f))
+                                .border(1.dp, Color.White.copy(alpha = 0.20f), CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Bolt,
+                                contentDescription = "Promo Bolt",
+                                tint = VoltOnSurface,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
                     // Promo Title & Description
                     Text(
                         text = "Ride-Go Mzansi Special",
                         color = VoltOnSurface,
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(3.dp))
                     Text(
                         text = "30% off your first 5 trips across Western Cape.",
                         color = VoltOnSurfaceVariant,
                         fontSize = 12.sp
                     )
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Bottom Row: Coverage & Claim Offer CTA Button
                     Row(
@@ -796,10 +852,17 @@ fun ExploreScreen(
                         Box(
                             modifier = Modifier
                                 .clip(CircleShape)
-                                .background(VoltPrimaryContainer)
+                                .background(
+                                    Brush.horizontalGradient(
+                                        listOf(
+                                            Color.White,
+                                            Color(0xFFE2E8F0)
+                                        )
+                                    )
+                                )
                                 .clickable { onClaimPromo() }
                                 .padding(horizontal = 16.dp, vertical = 10.dp)
-                                .shadow(6.dp, CircleShape, spotColor = VoltPrimaryContainer)
+                                .shadow(6.dp, CircleShape, spotColor = Color.White)
                                 .testTag("claim_promo_btn")
                         ) {
                             Row(
@@ -808,7 +871,7 @@ fun ExploreScreen(
                             ) {
                                 Text(
                                     text = "CLAIM OFFER",
-                                    color = VoltOnPrimaryFixed,
+                                    color = VoltSurface,
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.5.sp
@@ -816,7 +879,7 @@ fun ExploreScreen(
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                     contentDescription = "Claim",
-                                    tint = VoltOnPrimaryFixed,
+                                    tint = VoltSurface,
                                     modifier = Modifier.size(15.dp)
                                 )
                             }

@@ -87,7 +87,7 @@ ride-go/
 │   │   │   │       │   ├── RideGoLogo.kt         # Official Ride Go brand logo component utilizing RIDEGO.png assets
 │   │   │   │       │   ├── RadarViewport.kt      # Real-time driver radar sweep canvas
 │   │   │   │       │   ├── SlideToConfirm.kt     # Interactive physics-based booking confirmation slider
-│   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Ice Blue underglow
+│   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Deep Navy shadow
 │   │   │   │       │   ├── VoltBottomNav.kt      # 4-core screen bottom navigation bar
 │   │   │   │       │   └── VoltTopBar.kt         # Sticky header with official Ride GO brand mark and telemetry
 │   │   │   │       └── screens/
