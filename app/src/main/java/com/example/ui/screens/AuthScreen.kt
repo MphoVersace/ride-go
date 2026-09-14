@@ -229,7 +229,7 @@ fun AuthScreen(
             ) {
                 Text(
                     text = errorMessage ?: "",
-                    color = VoltPrimaryContainer,
+                    color = Color.White,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -263,7 +263,7 @@ fun AuthScreen(
                                 Icon(
                                     imageVector = if (loginIdentifier.contains("@")) Icons.Filled.Email else Icons.Filled.Phone,
                                     contentDescription = null,
-                                    tint = VoltPrimaryContainer
+                                    tint = Color.White
                                 )
                             },
                             singleLine = true,
@@ -303,7 +303,7 @@ fun AuthScreen(
                                 Icon(
                                     imageVector = Icons.Filled.Lock,
                                     contentDescription = null,
-                                    tint = VoltPrimaryContainer
+                                    tint = Color.White
                                 )
                             },
                             trailingIcon = {
@@ -370,7 +370,7 @@ fun AuthScreen(
 
                         Text(
                             text = "Forgot password?",
-                            color = VoltPrimaryContainer,
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier

@@ -184,20 +184,37 @@ fun RidesScreen(
 
     var recenterTrigger by remember { mutableStateOf(0) }
 
+    // Dynamic coordinate resolution: real GPS fix if available, or SA keyword lookup
+    val (mapLat, mapLon) = remember(state.userLat, state.userLon, state.pickupLocation) {
+        if (state.userLat != null && state.userLon != null) {
+            state.userLat to state.userLon
+        } else {
+            RouteRepository.resolveCoordinates(state.pickupLocation, defaultLat = -26.1076, defaultLon = 28.0567)
+        }
+    }
+
+    // Resolve destination GeoPoint
+    val destinationGeoPoint = remember(state.destinationLocation, mapLat, mapLon) {
+        if (state.destinationLocation.isNotBlank()) {
+            RouteRepository.resolveDestinationGeoPoint(state.destinationLocation, mapLat, mapLon)
+        } else null
+    }
+
     // Real road route points from OSRM, fetched whenever pickup or destination changes
     var routePoints by remember { mutableStateOf<List<GeoPoint>>(emptyList()) }
 
-    LaunchedEffect(state.pickupLocation, state.destinationLocation) {
-        if (state.pickupLocation.isNotBlank() &&
-            state.destinationLocation.isNotBlank() &&
-            !state.pickupLocation.contains("Locating", ignoreCase = true)
-        ) {
+    LaunchedEffect(mapLat, mapLon, destinationGeoPoint) {
+        if (destinationGeoPoint != null) {
             routePoints = withContext(Dispatchers.IO) {
-                RouteRepository.fetchRouteByAddress(
-                    fromAddress = state.pickupLocation,
-                    toAddress = state.destinationLocation
+                RouteRepository.fetchRoute(
+                    fromLat = mapLat,
+                    fromLon = mapLon,
+                    toLat = destinationGeoPoint.latitude,
+                    toLon = destinationGeoPoint.longitude
                 )
             }
+        } else {
+            routePoints = emptyList()
         }
     }
 
@@ -215,13 +232,15 @@ fun RidesScreen(
                 .height(230.dp)
                 .background(VoltSurfaceLowest)
         ) {
-            // Live OpenStreetMap with real road route polyline via OSRM
+            // Live OpenStreetMap with locked pickup ping, destination pin, and real road route polyline
             com.example.ui.components.OsmMapView(
-                latitude = -33.9249,
-                longitude = 18.4241,
+                latitude = mapLat,
+                longitude = mapLon,
                 zoomLevel = 14.5,
                 isDarkMode = true,
                 recenterTrigger = recenterTrigger,
+                showUserLocationMarker = true,
+                destinationPoint = destinationGeoPoint,
                 routePoints = routePoints,
                 modifier = Modifier.fillMaxSize()
             )

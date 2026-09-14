@@ -57,7 +57,7 @@ import com.example.ui.theme.VoltSurfaceContainerHighest
 import com.example.ui.theme.VoltSurfaceContainerLow
 
 private const val PROFILE_AVATAR_URL =
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuD0YxM6ObsFE_glbaPfgO-8ms2C-WFMc2gZzguhnRa8eRX59G9LNumWX_oj7zrAgUBOluiCCEjKGLWsz5U0yI7ysFqF7rl8VcSgzup_ioe89hm54VqCT88IQ1euYGNOCgdJk0TSm7EZhF86pB_7_aeMjB51mm49bPCulYOlRfhue1gvG3j81L6ZBn9i21-xmPFdojEvDzepXEAc8mRDaZsyAUV8K9mr810izLY3MjG_ayGhsJW6g9_Q"
+    "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww"
 
 @Composable
 fun AccountScreen(
@@ -96,7 +96,7 @@ fun AccountScreen(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(if (isRiderVerified) "https://lh3.googleusercontent.com/aida-public/AB6AXuC_hpmAR41urfWSsqQ0q9ZrrwqgF3IiflmE4tJXavqqQIDHmsyg-m8MiqtGYHVze0nn9me6GCM9BU75yHkQWPAEkQe44T4nbQxG1t-gVI9FOle31mF_FmrOm_ioB_j5vFwL8u52NAs5E5sBISruz-LFkgC1zekdsDkCDjQ3w0ErNfCfhrFJvWQ7ndYaoEKvnZzzhaCdP-PN7xQnVs5TeDtP-u-ByaLnJ4Q0nNyqur_BRyWN5Llw73Hg" else PROFILE_AVATAR_URL)
+                        .data(PROFILE_AVATAR_URL)
                         .crossfade(true)
                         .build(),
                     contentDescription = "Profile Picture",

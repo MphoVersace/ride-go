@@ -234,19 +234,19 @@ fun SlideToConfirm(
                         modifier = Modifier
                             .size(24.dp)
                             .clip(CircleShape)
-                            .background(VoltOnPrimaryFixed),
+                            .border(1.5.dp, Color.White, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = null,
-                            tint = VoltPrimaryContainer,
+                            tint = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
                     }
                     Text(
                         text = "  DRIVER DISPATCHED!",
-                        color = VoltOnPrimaryFixed,
+                        color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
                         letterSpacing = 1.sp

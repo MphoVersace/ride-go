@@ -76,6 +76,7 @@ ride-go/
 │   │   │   │   ├── model/
 │   │   │   │   │   └── RideModels.kt             # Data classes, tiers, states, ride telemetry
 │   │   │   │   ├── util/
+│   │   │   │   │   ├── RouteRepository.kt        # OSRM road route geometry, SA location geocoder & curved polyline generator
 │   │   │   │   │   └── UpdateManager.kt          # GitHub Releases API consumer, APK downloader & package installer
 │   │   │   │   ├── viewmodel/
 │   │   │   │   │   └── VoltViewModel.kt          # UI state, destination search, payment methods & update manager
@@ -86,18 +87,18 @@ ride-go/
 │   │   │   │       │   └── Type.kt               # Modern typography scale
 │   │   │   │       ├── components/
 │   │   │   │       │   ├── RideGoLogo.kt         # Official Ride Go brand logo component utilizing RIDEGO.png assets
-│   │   │   │       │   ├── OsmMapView.kt         # Live OpenStreetMap (osmdroid) Compose engine with 60-30-10 dark mode filter
+│   │   │   │       │   ├── OsmMapView.kt         # Live OpenStreetMap (osmdroid) with locked GPS beacon & destination pin markers
 │   │   │   │       │   ├── RadarViewport.kt      # Real-time driver radar sweep canvas
 │   │   │   │       │   ├── SlideToConfirm.kt     # Interactive physics-based booking confirmation slider
 │   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Deep Navy shadow
 │   │   │   │       │   ├── VoltBottomNav.kt      # 4-core screen bottom navigation bar
 │   │   │   │       │   └── VoltTopBar.kt         # Sticky header with official Ride GO brand mark and telemetry
 │   │   │   │       └── screens/
-│   │   │   │           ├── SplashScreen.kt       # Kinetic brand loader with centered Ride Go logo
+│   │   │   │           ├── SplashScreen.kt       # Static centered Ride Go brand logo presentation
 │   │   │   │           ├── AuthScreen.kt         # Direct Rider & Driver sign-up and authentication
 │   │   │   │           ├── DestinationSearchScreen.kt # Real-time South African place search & dual route console
 │   │   │   │           ├── ExploreScreen.kt      # Vector map anchored to current location with quick destination launch
-│   │   │   │           ├── RidesScreen.kt        # Ride tier selection, dynamic distance/duration & slide-up payment sheet
+│   │   │   │           ├── RidesScreen.kt        # Dynamic route polyline, locked pickup & destination pins, tier picker
 │   │   │   │           ├── DispatchScreen.kt     # Live driver radar search & dispatch status
 │   │   │   │           ├── LiveTrackingScreen.kt # Real-time trip tracking with driver marker, ETA & security PIN
 │   │   │   │           ├── ActivityScreen.kt     # Multi-tab activity hub: Past Trips, Upcoming reservations & Business expensing
@@ -135,7 +136,8 @@ ride-go/
    - **Automated Continuous Releases**: GitHub Actions automatically updates the `latest` tag release with fresh `ride-go-debug.apk` binaries on every successful build.
    - **In-App Notification & One-Tap Install**: Checks `https://api.github.com/repos/MphoVersace/ride-go/releases/latest` at startup, displays a floating update banner, downloads the APK with download progress, and triggers native Android package installer via `FileProvider`.
 2. **Live OpenStreetMap (osmdroid) Engine Across Hub & Rides Tabs**:
-   - **Real Multi-Touch Interactive Map**: 100% free, zero-quota OpenStreetMap tile engine powered by `osmdroid`, embedded in both Explore Hub and Rides screens.
+   - **Locked GPS Location Beacon**: True osmdroid `Marker` overlay firmly anchored to exact latitude/longitude coordinates—guaranteeing the user's location ping never drifts or shifts when zooming in, zooming out, or panning.
+   - **Destination Pin & Dotted Route Polyline**: Dynamic pickup to destination trajectory rendering, auto-framing bounding box, and resilient OSRM/curved route generation.
    - **Custom Executive Dark Mode**: Embedded `ColorMatrixColorFilter` inverts light OSM tiles into deep obsidian (`#000000` / `#050811`) and deep navy (`#0B1938`) roads to strictly adhere to the 60-30-10 design system.
    - **Dynamic South African GPS Geofencing**: Automatically anchors coordinates to user's pickup spot (Sandton, Cape Town, Durban, Pretoria, O.R. Tambo Airport) with smooth camera animation upon tapping the recenter FAB.
    - **Real-Time Fleet HUD & Vignette Fade**: Live floating vehicle count, pickup location anchor pin, and top/bottom atmospheric vignette gradients seamlessly layered over live vector tiles.

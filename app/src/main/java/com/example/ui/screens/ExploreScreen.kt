@@ -260,27 +260,6 @@ fun ExploreScreen(
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Live Pulsing Halo Animation
-            val infiniteTransition = rememberInfiniteTransition(label = "pulse_anim")
-            val pulseScale by infiniteTransition.animateFloat(
-                initialValue = 0.8f,
-                targetValue = 1.45f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(2200, easing = FastOutSlowInEasing),
-                    repeatMode = RepeatMode.Restart
-                ),
-                label = "pulseScale"
-            )
-            val pulseAlpha by infiniteTransition.animateFloat(
-                initialValue = 0.45f,
-                targetValue = 0f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(2200, easing = FastOutSlowInEasing),
-                    repeatMode = RepeatMode.Restart
-                ),
-                label = "pulseAlpha"
-            )
-
             // Map Ambience Vignette Gradients (Top & Bottom seamless fade)
             Box(
                 modifier = Modifier
@@ -288,93 +267,44 @@ fun ExploreScreen(
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                VoltSurface.copy(alpha = 0.80f),
+                                VoltSurface.copy(alpha = 0.50f),
                                 Color.Transparent,
                                 Color.Transparent,
-                                VoltSurface
+                                VoltSurface.copy(alpha = 0.70f)
                             )
                         )
                     )
             )
 
-            // Live Position Halo & Pin (Centered at waypoint)
+            // Current Pick-up Pill Tag docked cleanly at bottom center of map
             Box(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .offset(y = (-10).dp),
-                contentAlignment = Alignment.Center
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 12.dp)
+                    .clip(CircleShape)
+                    .background(VoltSurfaceContainerHigh.copy(alpha = 0.95f))
+                    .border(1.dp, Color.White.copy(alpha = 0.12f), CircleShape)
+                    .padding(horizontal = 14.dp, vertical = 6.dp)
+                    .shadow(8.dp, CircleShape)
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    // Pulsing animated pin halo
-                    Box(
-                        modifier = Modifier.size(56.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        // Expanding wave
-                        Box(
-                            modifier = Modifier
-                                .size(54.dp * pulseScale)
-                                .clip(CircleShape)
-                                .background(IceBlue.copy(alpha = pulseAlpha))
-                        )
-                        // Ambient ring
-                        Box(
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clip(CircleShape)
-                                .background(MediumBlue.copy(alpha = 0.30f))
-                        )
-                        // Core Ice Blue beacon
-                        Box(
-                            modifier = Modifier
-                                .size(20.dp)
-                                .shadow(12.dp, CircleShape, spotColor = IceBlue)
-                                .clip(CircleShape)
-                                .background(IceBlue),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(8.dp)
-                                    .clip(CircleShape)
-                                    .background(VoltSurface)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    // Current Pick-up Pill Tag
                     Box(
                         modifier = Modifier
+                            .size(6.dp)
                             .clip(CircleShape)
-                            .background(VoltSurfaceContainerHigh.copy(alpha = 0.95f))
-                            .border(1.dp, Color.White.copy(alpha = 0.08f), CircleShape)
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
-                            .shadow(8.dp, CircleShape)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(6.dp)
-                                    .clip(CircleShape)
-                                    .background(VoltPrimaryContainer)
-                            )
-                            Text(
-                                text = pickupLocation,
-                                color = VoltOnSurface,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
+                            .background(Color.White)
+                    )
+                    Text(
+                        text = pickupLocation,
+                        color = VoltOnSurface,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
 
