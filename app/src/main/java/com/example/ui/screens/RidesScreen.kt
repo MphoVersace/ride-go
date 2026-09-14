@@ -86,6 +86,7 @@ import com.example.ui.theme.VoltOutlineVariant
 import com.example.ui.theme.VoltPrimary
 import com.example.ui.theme.VoltPrimaryContainer
 import com.example.ui.theme.VoltSecondary
+import com.example.ui.theme.VoltSurfaceBright
 import com.example.ui.theme.VoltSurfaceContainer
 import com.example.ui.theme.VoltSurfaceContainerHigh
 import com.example.ui.theme.VoltSurfaceContainerHighest
@@ -625,6 +626,7 @@ fun RidesScreen(
                 )
             }
         }
+    }
 
         // Scrim Overlay: darkened backdrop when payment bottom sheet is open
         AnimatedVisibility(
