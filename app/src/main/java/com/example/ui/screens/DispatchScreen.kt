@@ -108,7 +108,7 @@ fun DispatchScreen(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = VoltOnSurface,
+                    tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -116,7 +116,7 @@ fun DispatchScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "RIDE-GO DISPATCH",
-                    color = VoltPrimaryContainer,
+                    color = Color.White.copy(alpha = 0.8f),
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.6.sp
@@ -140,13 +140,13 @@ fun DispatchScreen(
                     Icon(
                         imageVector = Icons.Filled.Shield,
                         contentDescription = "Safety Center",
-                        tint = VoltOnSurfaceVariant,
+                        tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
                     Icon(
                         imageVector = Icons.Filled.Favorite,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(10.dp)
                     )
                 }
@@ -427,13 +427,13 @@ fun DispatchScreen(
                 Icon(
                     imageVector = Icons.Filled.Close,
                     contentDescription = null,
-                    tint = VoltError,
+                    tint = Color.White,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Cancel Request",
-                    color = VoltOnSurface,
+                    color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -476,12 +476,12 @@ fun DispatchScreen(
                         onCancelRequest()
                     }
                 ) {
-                    Text("Yes, Cancel", color = VoltError, fontWeight = FontWeight.Bold)
+                    Text("Yes, Cancel", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showCancelDialog = false }) {
-                    Text("Keep Searching", color = VoltPrimaryContainer)
+                    Text("Keep Searching", color = Color.White)
                 }
             },
             containerColor = VoltSurfaceContainerHigh

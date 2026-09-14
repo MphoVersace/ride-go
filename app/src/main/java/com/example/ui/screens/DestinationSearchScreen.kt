@@ -289,7 +289,7 @@ fun DestinationSearchScreen(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = VoltOnSurface,
+                    tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -416,7 +416,7 @@ fun DestinationSearchScreen(
                             Icon(
                                 imageVector = Icons.Filled.Search,
                                 contentDescription = "Search",
-                                tint = VoltPrimaryContainer,
+                                tint = Color.White,
                                 modifier = Modifier.size(20.dp)
                             )
                         },
@@ -426,7 +426,7 @@ fun DestinationSearchScreen(
                                     Icon(
                                         imageVector = Icons.Filled.Clear,
                                         contentDescription = "Clear",
-                                        tint = VoltOnSurfaceVariant,
+                                        tint = Color.White,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
@@ -607,12 +607,12 @@ private fun QuickShortcutPill(
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                tint = VoltPrimaryContainer,
+                tint = Color.White,
                 modifier = Modifier.size(15.dp)
             )
             Text(
                 text = label,
-                color = VoltOnSurface,
+                color = Color.White,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -650,7 +650,7 @@ private fun PlaceResultCard(
                 Icon(
                     imageVector = place.icon,
                     contentDescription = null,
-                    tint = VoltPrimaryContainer,
+                    tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
             }

@@ -108,7 +108,7 @@ fun VoltTopBar(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = VoltOnSurface,
+                        tint = Color.White,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -208,7 +208,7 @@ fun VoltTopBar(
                         Icon(
                             imageVector = Icons.Filled.Notifications,
                             contentDescription = "Notifications",
-                            tint = VoltOnSurface,
+                            tint = Color.White,
                             modifier = Modifier.size(20.dp)
                         )
                         Box(

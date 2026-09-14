@@ -634,28 +634,28 @@ fun LiveTrackingScreen(
                         icon = Icons.Filled.Phone,
                         label = "Call",
                         onClick = onCallDriver,
-                        tint = IceBlue,
+                        tint = Color.White,
                         modifier = Modifier.weight(1f)
                     )
                     QuickActionButton(
                         icon = Icons.Filled.Chat,
                         label = "Message",
                         onClick = onMessageDriver,
-                        tint = IceBlue,
+                        tint = Color.White,
                         modifier = Modifier.weight(1f)
                     )
                     QuickActionButton(
                         icon = Icons.Filled.Share,
                         label = "Share",
                         onClick = onShareRide,
-                        tint = VoltOnSurface,
+                        tint = Color.White,
                         modifier = Modifier.weight(1f)
                     )
                     QuickActionButton(
                         icon = Icons.Filled.HealthAndSafety,
                         label = "Safety",
                         onClick = onSafetyCenterClick,
-                        tint = IceBlue,
+                        tint = Color.White,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -815,7 +815,7 @@ fun LiveTrackingScreen(
                     ) {
                         Text(
                             text = "Cancel Ride",
-                            color = VoltOnSurfaceVariant,
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -829,7 +829,7 @@ fun LiveTrackingScreen(
                     ) {
                         Text(
                             text = "Trip details & help",
-                            color = VoltSecondary,
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -837,7 +837,7 @@ fun LiveTrackingScreen(
                         Icon(
                             imageVector = Icons.Filled.ChevronRight,
                             contentDescription = null,
-                            tint = VoltSecondary,
+                            tint = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -874,12 +874,12 @@ fun LiveTrackingScreen(
                         onCancelRide()
                     }
                 ) {
-                    Text("Yes, Cancel Ride", color = VoltOnSurfaceVariant, fontWeight = FontWeight.Bold)
+                    Text("Yes, Cancel Ride", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showCancelDialog = false }) {
-                    Text("Keep Ride", color = IceBlue, fontWeight = FontWeight.Bold)
+                    Text("Keep Ride", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = VoltSurfaceContainerHigh
@@ -892,7 +892,7 @@ fun LiveTrackingScreen(
             onDismissRequest = { showSafetyDialog = false },
             title = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Filled.Shield, contentDescription = null, tint = IceBlue, modifier = Modifier.size(20.dp))
+                    Icon(imageVector = Icons.Filled.Shield, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "Safety Center", color = VoltOnSurface, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
@@ -907,7 +907,7 @@ fun LiveTrackingScreen(
             },
             confirmButton = {
                 TextButton(onClick = { showSafetyDialog = false }) {
-                    Text("Got It", color = IceBlue, fontWeight = FontWeight.Bold)
+                    Text("Got It", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             containerColor = VoltSurfaceContainerHigh
@@ -949,7 +949,7 @@ private fun QuickActionButton(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = label,
-            color = VoltOnSurface,
+            color = Color.White,
             fontSize = 11.sp,
             fontWeight = FontWeight.SemiBold
         )

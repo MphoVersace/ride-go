@@ -171,7 +171,10 @@ ride-go/
 13. **Multi-Tab Activity Hub & Corporate Expensing**:
     - **Past Trips**: Historical rides, digital receipts, rebooking, and stat bento metrics.
     - **Upcoming Reservations**: Advance booking tracking, flight arrival integration, locked fares, and flexible cancellation.
-    - **Business Mobility**: Enterprise corporate profiles, automated SAP Concur / Expensify sync, SARS 15% VAT itemized invoicing, and cost center management.
+14. **Universal High-Contrast White Action Typography & Iconography**:
+    - Strictly implements pure white (`#FFFFFF`) icon tinting and typographic contrast across all interactive buttons, action chips, category selector cards, floating map controls, dialog CTAs, and bottom navigation items.
+15. **Ultra-Low Latency Kinetic Toast Messaging (<= 250ms)**:
+    - Guaranteed rapid dismiss cycle capped at 250ms with accelerated 100ms fade/slide transitions, providing immediate non-intrusive feedback for authentication actions (including sign-out confirmation) and trip dispatch notifications without blocking user interactions.
 
 ---
 
