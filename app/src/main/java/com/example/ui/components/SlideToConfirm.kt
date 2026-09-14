@@ -146,13 +146,13 @@ fun SlideToConfirm(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer.copy(alpha = textAlpha * 0.9f),
+                        tint = Color.White.copy(alpha = textAlpha * 0.9f),
                         modifier = Modifier.size(16.dp)
                     )
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer.copy(alpha = textAlpha * 0.5f),
+                        tint = Color.White.copy(alpha = textAlpha * 0.5f),
                         modifier = Modifier
                             .size(16.dp)
                             .offset(x = (-8).dp)

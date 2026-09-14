@@ -134,6 +134,14 @@ fun VoltAppRoot(
         viewModel.checkForAppUpdates()
     }
 
+    // Auto-dismiss popup toast messages within 250ms
+    LaunchedEffect(uiState.toastMessage) {
+        if (uiState.toastMessage != null) {
+            delay(250)
+            viewModel.clearToast()
+        }
+    }
+
     // Handle back button when in Destination Search, Dispatch screen, Rider Verification, or Driver Onboarding
     BackHandler(
         enabled = uiState.isSearchDestinationActive ||
@@ -195,6 +203,44 @@ fun VoltAppRoot(
                     onDownloadClick = { viewModel.downloadAndInstallUpdate(context) },
                     onDismiss = { viewModel.dismissAppUpdateBanner() }
                 )
+            }
+
+            // Kinetic Toast Banner Overlay on Auth Screen
+            AnimatedVisibility(
+                visible = uiState.toastMessage != null,
+                enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(100)) + fadeIn(animationSpec = tween(100)),
+                exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(100)) + fadeOut(animationSpec = tween(100)),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp)
+                    .navigationBarsPadding()
+            ) {
+                uiState.toastMessage?.let { msg ->
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .shadow(12.dp, spotColor = VoltPrimaryContainer)
+                            .background(VoltPrimaryContainer)
+                            .padding(horizontal = 18.dp, vertical = 10.dp)
+                            .testTag("kinetic_toast_auth"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.CheckCircle,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = "  $msg",
+                                color = Color.White,
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
             }
         }
     } else if (uiState.isSearchDestinationActive) {
@@ -457,8 +503,8 @@ fun VoltAppRoot(
             // Kinetic Toast Banner Overlay
             AnimatedVisibility(
                 visible = uiState.toastMessage != null,
-                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+                enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(100)) + fadeIn(animationSpec = tween(100)),
+                exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(100)) + fadeOut(animationSpec = tween(100)),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 16.dp)
@@ -478,12 +524,12 @@ fun VoltAppRoot(
                             Icon(
                                 imageVector = Icons.Filled.CheckCircle,
                                 contentDescription = null,
-                                tint = VoltOnPrimaryFixed,
+                                tint = Color.White,
                                 modifier = Modifier.size(18.dp)
                             )
                             Text(
                                 text = "  $msg",
-                                color = VoltOnPrimaryFixed,
+                                color = Color.White,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold
                             )

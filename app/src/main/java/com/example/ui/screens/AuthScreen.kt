@@ -448,12 +448,12 @@ fun AuthScreen(
                                         Icon(
                                             imageVector = Icons.Filled.DirectionsCar,
                                             contentDescription = null,
-                                            tint = VoltPrimaryContainer,
+                                            tint = Color.White,
                                             modifier = Modifier.size(16.dp)
                                         )
                                         Text(
                                             text = "Rider Sign Up",
-                                            color = VoltOnSurface,
+                                            color = Color.White,
                                             fontSize = 12.sp,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -479,12 +479,12 @@ fun AuthScreen(
                                         Icon(
                                             imageVector = Icons.Filled.Badge,
                                             contentDescription = null,
-                                            tint = VoltPrimaryContainer,
+                                            tint = Color.White,
                                             modifier = Modifier.size(16.dp)
                                         )
                                         Text(
                                             text = "Driver Sign Up",
-                                            color = VoltPrimaryContainer,
+                                            color = Color.White,
                                             fontSize = 12.sp,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -508,7 +508,7 @@ fun AuthScreen(
         ) {
             Text(
                 text = "Skip for now • Explore as Guest",
-                color = VoltOnSurfaceVariant,
+                color = Color.White,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold
             )

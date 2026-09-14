@@ -133,8 +133,8 @@ private fun NavItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val activeColor = VoltPrimaryContainer
-    val inactiveColor = VoltOnSurfaceVariant
+    val activeColor = Color.White
+    val inactiveColor = Color.White.copy(alpha = 0.6f)
 
     Column(
         modifier = Modifier

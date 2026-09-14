@@ -318,7 +318,7 @@ class VoltViewModel : ViewModel() {
     fun showToast(msg: String) {
         _uiState.update { it.copy(toastMessage = msg) }
         viewModelScope.launch {
-            delay(2800)
+            delay(250)
             _uiState.update { if (it.toastMessage == msg) it.copy(toastMessage = null) else it }
         }
     }
@@ -758,9 +758,9 @@ class VoltViewModel : ViewModel() {
                 userDisplayName = name,
                 userPhone = it.driverState.phoneNumber.ifBlank { it.userPhone },
                 currentTab = VoltScreenTab.DRIVER,
-                toastMessage = "Driver Onboarding Complete! Welcome Partner"
             )
         }
+        showToast("Driver Onboarding Complete! Welcome Partner")
     }
 
     fun finishSplash() {
@@ -775,9 +775,9 @@ class VoltViewModel : ViewModel() {
                 userDisplayName = displayName,
                 userEmail = if (emailOrPhone.contains("@")) emailOrPhone else it.userEmail,
                 userPhone = if (!emailOrPhone.contains("@")) emailOrPhone else it.userPhone,
-                toastMessage = "Welcome back to Ride GO, $displayName!"
             )
         }
+        showToast("Welcome back to Ride GO, $displayName!")
     }
 
     fun signUp(name: String, email: String, phone: String) {
@@ -788,9 +788,9 @@ class VoltViewModel : ViewModel() {
                 userDisplayName = name,
                 userEmail = email,
                 userPhone = phone,
-                toastMessage = "Account created! Welcome to Ride GO, $name!"
             )
         }
+        showToast("Account created! Welcome to Ride GO, $name!")
     }
 
     fun continueAsGuest() {
@@ -798,18 +798,18 @@ class VoltViewModel : ViewModel() {
             it.copy(
                 isAuthenticated = true,
                 isSplashActive = false,
-                toastMessage = "Exploring Ride GO as Guest"
             )
         }
+        showToast("Exploring Ride GO as Guest")
     }
 
     fun signOut() {
         _uiState.update {
             it.copy(
                 isAuthenticated = false,
-                toastMessage = "Signed out successfully"
             )
         }
+        showToast("Signed out successfully")
     }
 }
 

@@ -272,7 +272,7 @@ fun AccountScreen(
                             )
                             Text(
                                 text = "Go",
-                                color = VoltPrimaryContainer,
+                                color = Color.White,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -317,7 +317,7 @@ fun AccountScreen(
                 Column {
                     Text(
                         text = "RIDE GO WALLET",
-                        color = VoltPrimaryContainer,
+                        color = Color.White.copy(alpha = 0.8f),
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.sp
@@ -360,7 +360,7 @@ fun AccountScreen(
                     Icon(
                         imageVector = Icons.Filled.CreditCard,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
@@ -372,7 +372,7 @@ fun AccountScreen(
                 }
                 Text(
                     text = "Manage",
-                    color = VoltPrimaryContainer,
+                    color = Color.White,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable { onActionClick("Manage payment methods") }
@@ -438,7 +438,7 @@ fun AccountScreen(
         ) {
             Text(
                 text = "Sign Out",
-                color = VoltPrimaryContainer,
+                color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -477,7 +477,7 @@ private fun AccountSettingItem(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = VoltPrimaryContainer,
+                    tint = Color.White,
                     modifier = Modifier.size(18.dp)
                 )
             }
@@ -500,7 +500,7 @@ private fun AccountSettingItem(
         Icon(
             imageVector = Icons.Filled.ChevronRight,
             contentDescription = null,
-            tint = VoltSecondary,
+            tint = Color.White.copy(alpha = 0.7f),
             modifier = Modifier.size(18.dp)
         )
     }

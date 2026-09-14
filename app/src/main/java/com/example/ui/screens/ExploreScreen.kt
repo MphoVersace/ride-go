@@ -434,7 +434,7 @@ fun ExploreScreen(
                     Icon(
                         imageVector = Icons.Filled.MyLocation,
                         contentDescription = "Re-center location",
-                        tint = VoltOnSurface,
+                        tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -453,7 +453,7 @@ fun ExploreScreen(
                     Icon(
                         imageVector = Icons.Filled.Layers,
                         contentDescription = "Traffic layer",
-                        tint = if (trafficEnabled) VoltOnPrimaryFixed else VoltOnSurface,
+                        tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -472,7 +472,7 @@ fun ExploreScreen(
                     Icon(
                         imageVector = Icons.Filled.Shield,
                         contentDescription = "Safety toolkit",
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -557,12 +557,12 @@ fun ExploreScreen(
                             Icon(
                                 imageVector = Icons.Filled.Schedule,
                                 contentDescription = "Now",
-                                tint = VoltOnSurface,
+                                tint = Color.White,
                                 modifier = Modifier.size(16.dp)
                             )
                             Text(
                                 text = "Now",
-                                color = VoltOnSurface,
+                                color = Color.White,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -614,7 +614,7 @@ fun ExploreScreen(
                             ) {
                                 Text(
                                     text = category.badge,
-                                    color = if (isSelected) VoltPrimaryContainer else VoltOnSurfaceVariant,
+                                    color = if (isSelected) VoltPrimaryContainer else Color.White,
                                     fontSize = 9.sp,
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.4.sp
@@ -637,7 +637,7 @@ fun ExploreScreen(
                                 Icon(
                                     imageVector = category.icon,
                                     contentDescription = category.title,
-                                    tint = if (isSelected) VoltOnPrimaryFixed else VoltPrimaryContainer,
+                                    tint = if (isSelected) VoltOnPrimaryFixed else Color.White,
                                     modifier = Modifier.size(22.dp)
                                 )
                             }
@@ -647,7 +647,7 @@ fun ExploreScreen(
                             // Title & Subtitle
                             Text(
                                 text = category.title,
-                                color = if (isSelected) VoltOnPrimaryFixed else VoltOnSurface,
+                                color = if (isSelected) VoltOnPrimaryFixed else Color.White,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 0.5.sp,
@@ -655,7 +655,7 @@ fun ExploreScreen(
                             )
                             Text(
                                 text = category.subtitle,
-                                color = if (isSelected) VoltOnPrimaryFixed.copy(alpha = 0.8f) else VoltOnSurfaceVariant,
+                                color = if (isSelected) VoltOnPrimaryFixed.copy(alpha = 0.8f) else Color.White.copy(alpha = 0.75f),
                                 fontSize = 10.sp,
                                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                                 maxLines = 1
@@ -810,17 +810,11 @@ fun ExploreScreen(
                         Box(
                             modifier = Modifier
                                 .clip(CircleShape)
-                                .background(
-                                    Brush.horizontalGradient(
-                                        listOf(
-                                            Color.White,
-                                            Color(0xFFE2E8F0)
-                                        )
-                                    )
-                                )
+                                .background(VoltPrimaryContainer)
+                                .border(1.dp, Color.White.copy(alpha = 0.4f), CircleShape)
                                 .clickable { onClaimPromo() }
                                 .padding(horizontal = 16.dp, vertical = 10.dp)
-                                .shadow(6.dp, CircleShape, spotColor = Color.White)
+                                .shadow(6.dp, CircleShape, spotColor = Color.Black)
                                 .testTag("claim_promo_btn")
                         ) {
                             Row(
@@ -829,7 +823,7 @@ fun ExploreScreen(
                             ) {
                                 Text(
                                     text = "CLAIM OFFER",
-                                    color = VoltSurface,
+                                    color = Color.White,
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.5.sp
@@ -837,7 +831,7 @@ fun ExploreScreen(
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                     contentDescription = "Claim",
-                                    tint = VoltSurface,
+                                    tint = Color.White,
                                     modifier = Modifier.size(15.dp)
                                 )
                             }
@@ -875,12 +869,12 @@ fun ExploreScreen(
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "Edit Fast Bookings",
-                            tint = VoltPrimaryContainer,
+                            tint = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
                         Text(
                             text = "Edit",
-                            color = VoltPrimaryContainer,
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -1091,7 +1085,7 @@ fun ExploreScreen(
                         Icon(
                             imageVector = Icons.Filled.Phone,
                             contentDescription = "Call Driver",
-                            tint = VoltPrimaryContainer,
+                            tint = Color.White,
                             modifier = Modifier.size(20.dp)
                         )
                     }

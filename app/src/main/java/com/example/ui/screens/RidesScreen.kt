@@ -276,7 +276,7 @@ fun RidesScreen(
                     Icon(
                         imageVector = Icons.Filled.MyLocation,
                         contentDescription = "Re-center map",
-                        tint = VoltOnSurface,
+                        tint = Color.White,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -290,7 +290,7 @@ fun RidesScreen(
                     Icon(
                         imageVector = Icons.Filled.Layers,
                         contentDescription = "Map layers",
-                        tint = VoltOnSurface,
+                        tint = Color.White,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -477,21 +477,21 @@ fun RidesScreen(
                                     else -> Icons.Filled.CreditCard
                                 },
                                 contentDescription = null,
-                                tint = VoltOnSurface,
+                                tint = Color.White,
                                 modifier = Modifier.size(12.dp)
                             )
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = state.selectedPaymentMethod,
-                            color = VoltOnSurface,
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                         Icon(
                             imageVector = Icons.Filled.ExpandMore,
                             contentDescription = "Select payment method",
-                            tint = VoltOnSurfaceVariant,
+                            tint = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -507,13 +507,13 @@ fun RidesScreen(
                         Icon(
                             imageVector = Icons.Filled.LocalOffer,
                             contentDescription = null,
-                            tint = VoltOnSurface,
+                            tint = Color.White,
                             modifier = Modifier.size(13.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = if (state.riderPromoApplied) "-R50 RIDEGOFIRST" else "-R20 PROMO",
-                            color = VoltOnSurface,
+                            color = Color.White,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.5.sp
