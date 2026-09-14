@@ -179,8 +179,8 @@ ride-go/
     - Guaranteed rapid dismiss cycle capped at 250ms with accelerated 100ms fade/slide transitions, providing immediate non-intrusive feedback for authentication actions (including sign-out confirmation) and trip dispatch notifications without blocking user interactions.
 16. **Real-Time Dual Radar-Style Location Pings**:
     - Embedded `LocationPulseOverlay` inside `OsmMapView` delivering continuous sonar-style expanding concentric waves for both the rider's current position and destination pin across Hub (Explore), Rides, and Live Tracking. Seamlessly locked to map coordinates during zoom and pan, with clean borderless fleet status typography.
-17. **Floating Stadium Pill Bottom Navigation**:
-    - Floating stadium capsule bar anchored above system navigation gestures with deep drop shadow, dedicated strictly to the 4 core navigation destinations: **Hub**, **Rides**, **Activity**, and **Account**. Features a smooth physics-animated sliding active tab indicator with pure white active dot and high-contrast vector iconography.
+17. **Floating Stadium Pill Bottom Navigation with 100% Transparent Footer**:
+    - Floating stadium capsule bar anchored above system navigation gestures with deep drop shadow, dedicated strictly to the 4 core navigation destinations: **Hub**, **Rides**, **Activity**, and **Account**. Overlaid with a 100% transparent host eliminating the solid black Scaffold bottom bar footer, allowing live map tiles and content to extend edge-to-edge behind the floating capsule. Features a smooth physics-animated sliding active tab indicator with pure white active dot and high-contrast vector iconography.
 18. **Crisp Pure White Driver Rating Stars & Verification Badges**:
     - Replaced all legacy blue and navy container tints on driver rating stars, verification checkmarks, and rating pills with crisp pure white (`#FFFFFF`), ensuring AAA visual legibility across Live Tracking, Explore dispatch sheets, and Driver Onboarding without ad-hoc tint pollution.
 
