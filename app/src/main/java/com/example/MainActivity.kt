@@ -335,9 +335,8 @@ fun VoltAppRoot(
                         }
 
                         VoltScreenTab.DRIVER -> {
-                            // Fallback if ever triggered
                             LaunchedEffect(Unit) {
-                                viewModel.openDriverOnboarding()
+                                viewModel.selectTab(VoltScreenTab.EXPLORE)
                             }
                         }
                     }

@@ -51,7 +51,8 @@ data class VoltUiState(
     val isRiderVerificationActive: Boolean = false,
     val riderState: RiderVerificationState = RiderVerificationState(),
     val isRiderVerified: Boolean = false,
-    val riderPromoApplied: Boolean = false
+    val riderPromoApplied: Boolean = false,
+    val isSigningUpFromAuth: Boolean = false
 )
 
 class VoltViewModel : ViewModel() {
@@ -118,11 +119,19 @@ class VoltViewModel : ViewModel() {
 
     fun selectTab(tab: VoltScreenTab) {
         _uiState.update {
-            it.copy(
-                currentTab = tab,
-                isDriverOnboardingActive = (tab == VoltScreenTab.DRIVER),
-                isRiderVerificationActive = false
-            )
+            if (tab == VoltScreenTab.DRIVER) {
+                it.copy(
+                    isDriverOnboardingActive = true,
+                    isRiderVerificationActive = false,
+                    currentTab = VoltScreenTab.EXPLORE
+                )
+            } else {
+                it.copy(
+                    currentTab = tab,
+                    isDriverOnboardingActive = false,
+                    isRiderVerificationActive = false
+                )
+            }
         }
     }
 
@@ -241,13 +250,24 @@ class VoltViewModel : ViewModel() {
             it.copy(
                 isDriverOnboardingActive = true,
                 isRiderVerificationActive = false,
+                currentTab = VoltScreenTab.EXPLORE,
                 driverState = it.driverState.copy(currentStep = step.coerceIn(1, 5))
             )
         }
     }
 
     fun closeDriverOnboarding() {
-        _uiState.update { it.copy(isDriverOnboardingActive = false) }
+        _uiState.update {
+            val shouldReturnToAuth = it.isSigningUpFromAuth || !it.isAuthenticated
+            it.copy(
+                isDriverOnboardingActive = false,
+                isRiderVerificationActive = false,
+                isAuthenticated = if (shouldReturnToAuth) false else it.isAuthenticated,
+                isSigningUpFromAuth = false,
+                currentTab = VoltScreenTab.EXPLORE,
+                driverState = it.driverState.copy(currentStep = 1)
+            )
+        }
     }
 
     fun setDriverStep(step: Int) {
@@ -365,13 +385,24 @@ class VoltViewModel : ViewModel() {
             it.copy(
                 isRiderVerificationActive = true,
                 isDriverOnboardingActive = false,
+                currentTab = VoltScreenTab.EXPLORE,
                 riderState = it.riderState.copy(currentStep = step)
             )
         }
     }
 
     fun closeRiderVerification() {
-        _uiState.update { it.copy(isRiderVerificationActive = false) }
+        _uiState.update {
+            val shouldReturnToAuth = it.isSigningUpFromAuth || !it.isAuthenticated
+            it.copy(
+                isRiderVerificationActive = false,
+                isDriverOnboardingActive = false,
+                isAuthenticated = if (shouldReturnToAuth) false else it.isAuthenticated,
+                isSigningUpFromAuth = false,
+                currentTab = VoltScreenTab.EXPLORE,
+                riderState = it.riderState.copy(currentStep = 1)
+            )
+        }
     }
 
     fun setRiderStep(step: Int) {
@@ -506,6 +537,9 @@ class VoltViewModel : ViewModel() {
             it.copy(
                 isRiderVerificationActive = true,
                 isDriverOnboardingActive = false,
+                isSigningUpFromAuth = true,
+                isAuthenticated = false,
+                currentTab = VoltScreenTab.EXPLORE,
                 riderState = it.riderState.copy(
                     currentStep = 1,
                     fullName = if (name.isNotBlank()) name else it.riderState.fullName,
@@ -521,6 +555,9 @@ class VoltViewModel : ViewModel() {
             it.copy(
                 isDriverOnboardingActive = true,
                 isRiderVerificationActive = false,
+                isSigningUpFromAuth = true,
+                isAuthenticated = false,
+                currentTab = VoltScreenTab.EXPLORE,
                 driverState = it.driverState.copy(
                     currentStep = 1,
                     fullName = if (name.isNotBlank()) name else it.driverState.fullName,

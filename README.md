@@ -131,7 +131,8 @@ ride-go/
    - Biometric facial scan with Ice Blue alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.
 5. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
-6. **Multi-Tab Activity Hub & Corporate Expensing**:
+6. **Streamlined Auth & Reliable Back Navigation**: Direct sign-in and sign-up pathways with robust BackHandler and top-bar back button routing returning directly to the authentication screen without role loop traps.
+7. **Multi-Tab Activity Hub & Corporate Expensing**:
    - **Past Trips**: Historical rides, digital receipts, rebooking, and stat bento metrics.
    - **Upcoming Reservations**: Advance booking tracking, flight arrival integration, locked fares, and flexible cancellation.
    - **Business Mobility**: Enterprise corporate profiles, automated SAP Concur / Expensify sync, SARS 15% VAT itemized invoicing, and cost center management.
