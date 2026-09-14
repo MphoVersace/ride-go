@@ -1,0 +1,8 @@
+{
+  "name": "Ride Go",
+  "description": "Ride Go ride-hailing app with live driver dispatch radar, ride tier selection with interactive confirmation slider, trip activity, and driver onboarding across South Africa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -2,45 +2,58 @@
  * RideGo Design System - 60-30-10 Color System
  *
  * Strict Color Distribution:
- * - 60% Dominant Background: Primary background dark navy
- * - 30% Panel / Surface: Cards, panels, inputs, secondary layers, borders
- * - 10% Accent: Primary calls to action, highlights, active states
+ * - 60% Dominant Background: Pure Black (#000000 / Obsidian)
+ * - 30% Panel / Surface: Deep Navy Blue (#0B1938 / #0E2454) - Swapped Yellow
+ * - 10% Accent / Text: Crisp Pure White (#FFFFFF) & Supporting Blue Harmony:
+ *   • Ice Blue (#7DD3FC, #BAE6FD) - Telemetry, radar pulses, highlights
+ *   • Medium Blue (#2563EB) - Navigation trajectory, interactive accents
+ *   • Muted Blue-Gray (#94A3B8, #1E293B) - Secondary text, outlines, borders
  *
  * Ad-hoc rainbow status colors are strictly prohibited.
  */
 
 export const colors = {
-  // 60% - Dominant Background
+  // 60% - Dominant Background (Pure Black)
   background: {
     primary: "#000000",
-    deep: "#0A0A0C",
+    deep: "#050811",
   },
 
-  // 30% - Panel / Surface / Structure (Carbon & Obsidian)
+  // 30% - Panel / Surface / Structure (Deep Navy Blue)
   surface: {
-    card: "#16161A",
-    cardAlt: "#202026",
-    elevated: "#24242C",
-    subtle: "#111114",
-    border: "#2E2E36",
-    divider: "#24242C",
+    card: "#0D172E",
+    cardAlt: "#101F3D",
+    elevated: "#16294E",
+    subtle: "#080D1A",
+    border: "#1E293B",
+    divider: "#0F172A",
   },
 
-  // 10% - Accent & Interactive Highlights (Electric Taxi Gold Yellow)
+  // 30% / 10% - Deep Navy Brand Primary Action (Swapping Yellow)
   accent: {
-    primary: "#FFD100",
-    secondary: "#FFB800",
-    hover: "#FFE033",
-    subtle: "rgba(255, 209, 0, 0.15)",
-    contrast: "#000000", // High-contrast black text on yellow
+    primary: "#0E2454", // Deep Navy primary container
+    secondary: "#0B1938",
+    hover: "#132B60",
+    subtle: "rgba(14, 36, 84, 0.4)",
+    contrast: "#FFFFFF", // High-contrast crisp white text on deep navy
   },
 
-  // Text & Content Hierarchy (Crisp White & Neutral Grays)
+  // Supporting Blue Harmony Scale
+  blue: {
+    ice: "#7DD3FC",
+    iceSoft: "#BAE6FD",
+    medium: "#2563EB",
+    mediumDark: "#1D4ED8",
+    mutedGray: "#94A3B8",
+    mutedGrayDark: "#64748B",
+  },
+
+  // Text & Content Hierarchy (Crisp White & Muted Blue-Gray)
   text: {
     primary: "#FFFFFF",
-    secondary: "#D1D1D6",
-    muted: "#8E8E93",
-    disabled: "#48484A",
+    secondary: "#94A3B8", // Muted blue-gray
+    muted: "#64748B",
+    disabled: "#334155",
   },
 } as const;
 
