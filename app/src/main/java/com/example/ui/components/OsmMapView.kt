@@ -85,6 +85,7 @@ fun OsmMapView(
     }
 
     val pulseOverlay = remember { LocationPulseOverlay() }
+    var hasFramedRoute by remember(destinationPoint, latitude, longitude) { mutableStateOf(false) }
 
     val mapView = remember {
         MapView(context).apply {
@@ -213,10 +214,13 @@ fun OsmMapView(
             mapView.overlays.add(shadowLine)
             mapView.overlays.add(routeLine)
 
-            // Auto frame camera to fit all points with comfortable padding
-            val boundingBox = BoundingBox.fromGeoPoints(pointsToDraw)
-            mapView.post {
-                mapView.zoomToBoundingBox(boundingBox, true, 110)
+            // Auto frame camera to fit all points with comfortable padding (framed once per route)
+            if (!hasFramedRoute) {
+                hasFramedRoute = true
+                val boundingBox = BoundingBox.fromGeoPoints(pointsToDraw)
+                mapView.post {
+                    mapView.zoomToBoundingBox(boundingBox, true, 110)
+                }
             }
             mapView.invalidate()
         }

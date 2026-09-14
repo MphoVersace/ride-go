@@ -128,19 +128,27 @@ fun LiveTrackingScreen(
     val scrollState = rememberScrollState()
 
     // Real-time animation of driver heading towards rider's pickup location
+    // Speed: moves slowly at exactly 0.1 km per 1.7 seconds (17,000 ms per 1.0 km)
+    val startDistanceKm = remember(state.driverStartDistanceKm) {
+        state.driverStartDistanceKm.coerceAtLeast(1.0f)
+    }
+    val totalTripDurationMs = remember(startDistanceKm) {
+        ((startDistanceKm / 0.1f) * 1700L).toLong().coerceAtLeast(10000L)
+    }
+
     val infiniteTransition = rememberInfiniteTransition(label = "driver_live_approach_anim")
     val carProgress by infiniteTransition.animateFloat(
-        initialValue = 0.05f,
-        targetValue = 0.92f,
+        initialValue = 0f,
+        targetValue = 0.98f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 10000, easing = LinearEasing),
+            animation = tween(durationMillis = totalTripDurationMs.toInt(), easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ),
         label = "car_progress"
     )
 
-    // Calculate dynamic real-time distance and time remaining as driver heads to you
-    val liveDistanceRemainingKm = (state.driverStartDistanceKm * (1f - carProgress * 0.90f)).coerceAtLeast(0.1f)
+    // Calculate dynamic real-time distance and time remaining: decreases by 0.1 km every 1.7 seconds
+    val liveDistanceRemainingKm = (startDistanceKm * (1f - carProgress)).coerceAtLeast(0.1f)
     val liveEtaMinutes = (liveDistanceRemainingKm * 1.5f).roundToInt().coerceAtLeast(1)
 
     Column(
@@ -271,6 +279,14 @@ fun LiveTrackingScreen(
                     }
                 }
 
+                val remainingRoutePoints = remember(trackingRoutePoints, carProgress) {
+                    if (trackingRoutePoints.size >= 2) {
+                        RouteRepository.getRemainingRoutePoints(trackingRoutePoints, carProgress)
+                    } else {
+                        listOf(currentDriverPoint, pickupGeoPoint)
+                    }
+                }
+
                 OsmMapView(
                     latitude = pickupGeoPoint.latitude,
                     longitude = pickupGeoPoint.longitude,
@@ -278,25 +294,25 @@ fun LiveTrackingScreen(
                     zoomLevel = 13.0,
                     isDarkMode = true,
                     showUserLocationMarker = true,
-                    destinationPoint = GeoPoint(WOODMEAD_LAT, WOODMEAD_LON),
-                    routePoints = trackingRoutePoints,
+                    destinationPoint = pickupGeoPoint,
+                    routePoints = remainingRoutePoints,
                     driverPoint = currentDriverPoint,
                     driverHeading = (driverBearing - 90f)
                 )
 
-                // Floating Top Live ETA Status Pill
+                // Floating Top Live Distance & ETA Pill (no redundant heading signs)
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .padding(top = 14.dp)
                         .clip(CircleShape)
                         .background(VoltSurface.copy(alpha = 0.94f))
-                        .border(1.dp, VoltPrimaryContainer.copy(alpha = 0.6f), CircleShape)
-                        .padding(horizontal = 14.dp, vertical = 8.dp)
+                        .border(1.dp, VoltSurfaceContainerHighest, CircleShape)
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Box(
                             modifier = Modifier
@@ -305,54 +321,10 @@ fun LiveTrackingScreen(
                                 .background(Color.White)
                         )
                         Text(
-                            text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Thulane"} is heading to you",
-                            color = VoltOnSurface,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "• ${String.format(java.util.Locale.US, "%.1f km", liveDistanceRemainingKm)} ($liveEtaMinutes min)",
+                            text = "${String.format(java.util.Locale.US, "%.1f km", liveDistanceRemainingKm)} • $liveEtaMinutes min away",
                             color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                // Floating Pickup Destination Overlay (Bottom Left of Map)
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(start = 14.dp, bottom = 14.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(VoltSurface.copy(alpha = 0.92f))
-                        .border(1.dp, VoltSurfaceContainerHighest, RoundedCornerShape(10.dp))
-                        .padding(horizontal = 10.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(7.dp)
-                            .clip(CircleShape)
-                            .background(Color.White)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Column {
-                        Text(
-                            text = "HEADING TO YOU",
-                            color = Color.White,
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.5.sp
-                        )
-                        Text(
-                            text = state.pickupLocation,
-                            color = VoltOnSurface,
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.width(180.dp)
                         )
                     }
                 }

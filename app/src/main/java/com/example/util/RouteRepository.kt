@@ -217,6 +217,34 @@ object RouteRepository {
     }
 
     /**
+     * Returns the remaining uncompleted portion of the route from the driver's current interpolated
+     * position forward to the destination, dynamically removing the traversed road behind the vehicle.
+     */
+    fun getRemainingRoutePoints(points: List<GeoPoint>, progress: Float): List<GeoPoint> {
+        if (points.size <= 1) return points
+
+        val clamped = progress.coerceIn(0f, 0.999f)
+        val totalSegments = points.size - 1
+        val floatIndex = clamped * totalSegments
+        val index = floatIndex.toInt().coerceIn(0, totalSegments - 1)
+        val t = floatIndex - index
+
+        val p1 = points[index]
+        val p2 = points[index + 1]
+
+        val currentLat = p1.latitude + (p2.latitude - p1.latitude) * t
+        val currentLon = p1.longitude + (p2.longitude - p1.longitude) * t
+        val currentPoint = GeoPoint(currentLat, currentLon)
+
+        val remaining = ArrayList<GeoPoint>(points.size - index + 1)
+        remaining.add(currentPoint)
+        for (i in (index + 1) until points.size) {
+            remaining.add(points[i])
+        }
+        return remaining
+    }
+
+    /**
      * Calculates true compass bearing (0°..360°) from [from] to [to].
      */
     fun calculateBearing(from: GeoPoint, to: GeoPoint): Float {
