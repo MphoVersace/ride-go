@@ -58,6 +58,20 @@ import com.example.ui.screens.LiveTrackingScreen
 import com.example.ui.screens.RiderVerificationScreen
 import com.example.ui.screens.RidesScreen
 import com.example.ui.screens.SplashScreen
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.SystemUpdate
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.platform.LocalContext
+import com.example.ui.screens.DestinationSearchScreen
+import com.example.ui.theme.IceBlue
 import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.theme.VoltOnPrimaryFixed
 import com.example.ui.theme.VoltPrimaryContainer
@@ -82,13 +96,21 @@ fun VoltAppRoot(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // Handle back button when in Dispatch screen, Rider Verification, or Driver Onboarding
+    // Automatically check for GitHub Actions updates on app start
+    LaunchedEffect(Unit) {
+        viewModel.checkForAppUpdates()
+    }
+
+    // Handle back button when in Destination Search, Dispatch screen, Rider Verification, or Driver Onboarding
     BackHandler(
-        enabled = uiState.isDispatchActive ||
+        enabled = uiState.isSearchDestinationActive ||
+            uiState.isDispatchActive ||
             uiState.isRiderVerificationActive ||
             uiState.isDriverOnboardingActive
     ) {
-        if (uiState.isDispatchActive) {
+        if (uiState.isSearchDestinationActive) {
+            viewModel.closeDestinationSearch()
+        } else if (uiState.isDispatchActive) {
             viewModel.cancelDispatch()
         } else if (uiState.isRiderVerificationActive) {
             if (uiState.riderState.currentStep > 1) {
@@ -121,6 +143,15 @@ fun VoltAppRoot(
                 viewModel.startDriverSignUpFromAuth(name, phone)
             },
             onContinueAsGuest = { viewModel.continueAsGuest() }
+        )
+    } else if (uiState.isSearchDestinationActive) {
+        // Destination Search screen with current location and South Africa place filtering
+        DestinationSearchScreen(
+            state = uiState,
+            onBack = { viewModel.closeDestinationSearch() },
+            onSelectDestination = { destination, pickup ->
+                viewModel.selectDestination(destination, pickup)
+            }
         )
     } else {
         Scaffold(
@@ -296,7 +327,9 @@ fun VoltAppRoot(
                                 onTierSelected = { viewModel.selectTier(it) },
                                 onConfirmDispatch = { viewModel.startDispatch() },
                                 onPromoClick = { viewModel.showToast("R20 Promo applied to this booking!") },
-                                onPaymentClick = { viewModel.showToast("Payment: Capitec Pay (•••• 4282) selected") }
+                                onPaymentSelected = { viewModel.selectPaymentMethod(it) },
+                                onEditPickup = { viewModel.openDestinationSearch() },
+                                onEditDestination = { viewModel.openDestinationSearch() }
                             )
                         }
 
@@ -318,8 +351,11 @@ fun VoltAppRoot(
 
                         VoltScreenTab.EXPLORE -> {
                             ExploreScreen(
+                                pickupLocation = uiState.pickupLocation,
                                 onBookToLocation = { dest -> viewModel.rebookRide(dest) },
                                 onBookFastRide = { dest, tier -> viewModel.bookFastRide(dest, tier) },
+                                onOpenSearch = { viewModel.openDestinationSearch() },
+                                onRecenterLocation = { viewModel.showToast("Calibrated GPS on ${uiState.pickupLocation}") },
                                 onClaimPromo = { viewModel.showToast("MZANSI30 Applied! 30% off your next 5 trips across Western Cape") }
                             )
                         }
@@ -337,6 +373,97 @@ fun VoltAppRoot(
                         VoltScreenTab.DRIVER -> {
                             LaunchedEffect(Unit) {
                                 viewModel.selectTab(VoltScreenTab.EXPLORE)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // App Update Available Floating Banner
+            AnimatedVisibility(
+                visible = uiState.appUpdateAvailable,
+                enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                val context = LocalContext.current
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(VoltPrimaryContainer)
+                        .border(1.dp, IceBlue.copy(alpha = 0.5f), RoundedCornerShape(14.dp))
+                        .padding(horizontal = 14.dp, vertical = 10.dp)
+                        .clickable {
+                            if (!uiState.isDownloadingUpdate) {
+                                viewModel.downloadAndInstallUpdate(context)
+                            }
+                        }
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(CircleShape)
+                                    .background(VoltOnPrimaryFixed.copy(alpha = 0.2f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (uiState.isDownloadingUpdate) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(18.dp),
+                                        color = VoltOnPrimaryFixed,
+                                        strokeWidth = 2.dp
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Filled.SystemUpdate,
+                                        contentDescription = "Update available",
+                                        tint = VoltOnPrimaryFixed,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    text = if (uiState.isDownloadingUpdate) {
+                                        "Downloading update... ${(uiState.updateDownloadProgress * 100).toInt()}%"
+                                    } else {
+                                        "New update ready • ${uiState.latestReleaseInfo?.tagName ?: "v1.1"}"
+                                    },
+                                    color = VoltOnPrimaryFixed,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = if (uiState.isDownloadingUpdate) "Please wait while APK downloads..." else "Tap to download & install update",
+                                    color = VoltOnPrimaryFixed.copy(alpha = 0.85f),
+                                    fontSize = 11.sp
+                                )
+                            }
+                        }
+
+                        if (!uiState.isDownloadingUpdate) {
+                            IconButton(
+                                onClick = { viewModel.dismissAppUpdateBanner() },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = "Dismiss",
+                                    tint = VoltOnPrimaryFixed,
+                                    modifier = Modifier.size(16.dp)
+                                )
                             }
                         }
                     }

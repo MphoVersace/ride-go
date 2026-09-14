@@ -110,8 +110,11 @@ private data class FastBookingItem(
 
 @Composable
 fun ExploreScreen(
+    pickupLocation: String = "Sandton City (Rivonia Rd Entrance)",
     onBookToLocation: (String) -> Unit = {},
     onBookFastRide: (destination: String, tier: RideTierType) -> Unit = { dest, _ -> onBookToLocation(dest) },
+    onOpenSearch: () -> Unit = {},
+    onRecenterLocation: () -> Unit = {},
     onClaimPromo: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -404,10 +407,12 @@ fun ExploreScreen(
                                     .background(VoltPrimaryContainer)
                             )
                             Text(
-                                text = "Cape Town City Bowl",
+                                text = pickupLocation,
                                 color = VoltOnSurface,
                                 fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     }
@@ -435,11 +440,13 @@ fun ExploreScreen(
                             .background(VoltPrimaryContainer)
                     )
                     Text(
-                        text = "24 RIDE-GO CARS NEARBY (CAPE TOWN)",
+                        text = "24 RIDE-GO CARS NEARBY (${pickupLocation.split(",").firstOrNull()?.trim()?.uppercase() ?: "CURRENT LOCATION"})",
                         color = VoltOnSurface,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.6.sp
+                        letterSpacing = 0.6.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
@@ -453,7 +460,7 @@ fun ExploreScreen(
             ) {
                 // Re-center Location
                 IconButton(
-                    onClick = { /* Recenters map */ },
+                    onClick = onRecenterLocation,
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
@@ -527,7 +534,7 @@ fun ExploreScreen(
                     .clip(RoundedCornerShape(20.dp))
                     .shadow(16.dp, RoundedCornerShape(20.dp), spotColor = Color.Black)
                     .background(VoltSurfaceContainerHigh)
-                    .clickable { onBookToLocation("Camps Bay, Cape Town") }
+                    .clickable { onOpenSearch() }
                     .padding(12.dp)
                     .testTag("hero_where_to_search_bar")
             ) {
@@ -543,7 +550,9 @@ fun ExploreScreen(
                             .clip(RoundedCornerShape(14.dp))
                             .background(VoltPrimaryContainer)
                             .border(1.dp, IceBlue.copy(alpha = 0.3f), RoundedCornerShape(14.dp))
-                            .shadow(6.dp, RoundedCornerShape(14.dp), spotColor = Color.Black),
+                            .shadow(6.dp, RoundedCornerShape(14.dp), spotColor = Color.Black)
+                            .clickable { onOpenSearch() }
+                            .testTag("hero_search_icon_btn"),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(

@@ -184,5 +184,80 @@ class ExampleRobolectricTest {
     assertFalse(viewModel.uiState.value.isAuthenticated)
     assertEquals(VoltScreenTab.EXPLORE, viewModel.uiState.value.currentTab)
   }
+
+  @Test
+  fun `destination search opens closes and selects destination with auto-transition to Rides tab`() {
+    val viewModel = VoltViewModel()
+
+    // 1. Open destination search
+    viewModel.openDestinationSearch()
+    assertTrue(viewModel.uiState.value.isSearchDestinationActive)
+
+    // 2. Close destination search without selecting
+    viewModel.closeDestinationSearch()
+    assertFalse(viewModel.uiState.value.isSearchDestinationActive)
+
+    // 3. Re-open and select destination
+    viewModel.openDestinationSearch()
+    viewModel.selectDestination(
+        destination = "Cape Town International Airport (CPT)",
+        pickup = "1 Thibault Square, Cape Town CBD"
+    )
+
+    assertFalse(viewModel.uiState.value.isSearchDestinationActive)
+    assertEquals("Cape Town International Airport (CPT)", viewModel.uiState.value.destinationLocation)
+    assertEquals("1 Thibault Square, Cape Town CBD", viewModel.uiState.value.pickupLocation)
+    assertEquals(VoltScreenTab.RIDES, viewModel.uiState.value.currentTab)
+  }
+
+  @Test
+  fun `payment method selection updates state correctly`() {
+    val viewModel = VoltViewModel()
+
+    assertEquals("Capitec Pay •••• 4282", viewModel.uiState.value.selectedPaymentMethod)
+
+    viewModel.selectPaymentMethod("FNB Cheque Card •••• 3381")
+    assertEquals("FNB Cheque Card •••• 3381", viewModel.uiState.value.selectedPaymentMethod)
+
+    viewModel.selectPaymentMethod("Ride Go Wallet")
+    assertEquals("Ride Go Wallet", viewModel.uiState.value.selectedPaymentMethod)
+  }
+
+  @Test
+  fun `route distance and duration calculation returns empty if no destination and formatted strings when selected`() {
+    val viewModel = VoltViewModel()
+
+    // With no destination
+    viewModel.selectDestination("", "Sandton City")
+    val (distEmpty, timeEmpty) = viewModel.getRouteDistanceAndDuration()
+    assertEquals("", distEmpty)
+    assertEquals("", timeEmpty)
+
+    // With OR Tambo
+    viewModel.selectDestination("O.R. Tambo International Airport", "Sandton City")
+    val (distOrTambo, timeOrTambo) = viewModel.getRouteDistanceAndDuration()
+    assertEquals("24.0 km", distOrTambo)
+    assertEquals("28 mins", timeOrTambo)
+
+    // With Cape Town International
+    viewModel.selectDestination("Cape Town International Airport (CPT)", "V&A Waterfront")
+    val (distCpt, timeCpt) = viewModel.getRouteDistanceAndDuration()
+    assertEquals("21.4 km", distCpt)
+    assertEquals("24 mins", timeCpt)
+  }
+
+  @Test
+  fun `update pickup location changes state`() {
+    val viewModel = VoltViewModel()
+    viewModel.updatePickupLocation("Sandton City (Rivonia Rd Entrance)")
+    assertEquals("Sandton City (Rivonia Rd Entrance)", viewModel.uiState.value.pickupLocation)
+  }
+
+  @Test
+  fun `app update banner dismisses properly`() {
+    val viewModel = VoltViewModel()
+    viewModel.dismissAppUpdateBanner()
+    assertFalse(viewModel.uiState.value.appUpdateAvailable)
+  }
 }
 

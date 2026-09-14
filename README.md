@@ -63,17 +63,20 @@ Built using modern **Android Jetpack Compose**, **Kotlin Coroutines / Flow**, an
 ride-go/
 ├── .github/
 │   └── workflows/
-│       └── build-apk.yml                         # Automated cloud APK compilation & packaging
+│       └── build-apk.yml                         # Automated cloud APK compilation, packaging & latest GitHub release
 ├── app/
+│   ├── debug.keystore                            # Fixed debug signing keystore for continuous in-place updates
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── AndroidManifest.xml
+│   │   │   ├── AndroidManifest.xml               # REQUEST_INSTALL_PACKAGES and FileProvider declarations
 │   │   │   ├── java/com/example/
-│   │   │   │   ├── MainActivity.kt               # Main navigation host & state coordinator
+│   │   │   │   ├── MainActivity.kt               # Main navigation host, update banner & state coordinator
 │   │   │   │   ├── model/
 │   │   │   │   │   └── RideModels.kt             # Data classes, tiers, states, ride telemetry
+│   │   │   │   ├── util/
+│   │   │   │   │   └── UpdateManager.kt          # GitHub Releases API consumer, APK downloader & package installer
 │   │   │   │   ├── viewmodel/
-│   │   │   │   │   └── VoltViewModel.kt          # UI state, ride dispatch, auth, and trip flow
+│   │   │   │   │   └── VoltViewModel.kt          # UI state, destination search, payment methods & update manager
 │   │   │   │   └── ui/
 │   │   │   │       ├── theme/
 │   │   │   │       │   ├── Color.kt              # 60-30-10 Design tokens (Black, Deep Navy, White)
@@ -89,17 +92,22 @@ ride-go/
 │   │   │   │       └── screens/
 │   │   │   │           ├── SplashScreen.kt       # Kinetic brand loader with centered Ride Go logo
 │   │   │   │           ├── AuthScreen.kt         # Direct Rider & Driver sign-up and authentication
-│   │   │   │           ├── ExploreScreen.kt      # Vector map with Medium Blue route trajectory
-│   │   │   │           ├── RidesScreen.kt        # Ride tier selection (Saver, Comfort, XL, Black)
+│   │   │   │           ├── DestinationSearchScreen.kt # Real-time South African place search & dual route console
+│   │   │   │           ├── ExploreScreen.kt      # Vector map anchored to current location with quick destination launch
+│   │   │   │           ├── RidesScreen.kt        # Ride tier selection, dynamic distance/duration & slide-up payment sheet
 │   │   │   │           ├── DispatchScreen.kt     # Live driver radar search & dispatch status
 │   │   │   │           ├── LiveTrackingScreen.kt # Real-time trip tracking with driver marker, ETA & security PIN
 │   │   │   │           ├── ActivityScreen.kt     # Multi-tab activity hub: Past Trips, Upcoming reservations & Business expensing
 │   │   │   │           ├── AccountScreen.kt      # User profile, wallet, security, South Africa SOS
 │   │   │   │           ├── RiderVerificationScreen.kt # Biometric selfie & SA Smart ID card scan
 │   │   │   │           └── DriverOnboardingScreen.kt  # Driver PDP, license, vehicle inspection & streamlined progress
-│   │   │   └── res/                              # Android launcher mipmaps, official RIDEGO assets, and strings
-│   │   └── test/                                 # Unit tests and automated assertions
-│   └── build.gradle.kts                          # Module dependencies and Android SDK config
+│   │   │   └── res/
+│   │   │       ├── xml/
+│   │   │       │   └── file_paths.xml            # FileProvider cache paths for secure APK installation
+│   │   │       └── ...                           # Android launcher mipmaps, official RIDEGO assets, and strings
+│   │   └── test/                                 # Robolectric unit tests and automated state assertions
+│   └── build.gradle.kts                          # Module dependencies, signingConfigs and Android SDK config
+├── debug.keystore                                # Root fixed debug signing keystore
 ├── gradle/
 │   ├── wrapper/
 │   │   ├── gradle-wrapper.jar                    # Gradle wrapper bootstrap jar
@@ -117,25 +125,44 @@ ride-go/
 
 ## Key Features
 
-[![Core Features](https://img.shields.io/badge/Capabilities-Driver_Radar_%7C_ID_Verification_%7C_Dynamic_Tiers-0E2454?style=flat-square&logo=googlemaps&logoColor=7DD3FC&labelColor=0B1938)](#)
+[![Core Features](https://img.shields.io/badge/Capabilities-Driver_Radar_%7C_In--App_Updater_%7C_Destination_Search-0E2454?style=flat-square&logo=googlemaps&logoColor=7DD3FC&labelColor=0B1938)](#)
 
-1. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with Medium Blue trajectory lines and pulsating Ice Blue GPS waypoint halos.
-2. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, Ice Blue trail fill, and haptic feedback.
-3. **Live Driver Tracking (Post-Confirmation)**:
+1. **Native In-App Self-Updater (GitHub Releases Integration)**:
+   - **Fixed Keystore Security**: Committed `debug.keystore` guarantees persistent cryptographic signature consistency across all automated CI builds, preventing Android "App not installed: signature mismatch" errors.
+   - **Automated Continuous Releases**: GitHub Actions automatically updates the `latest` tag release with fresh `ride-go-debug.apk` binaries on every successful build.
+   - **In-App Notification & One-Tap Install**: Checks `https://api.github.com/repos/MphoVersace/ride-go/releases/latest` at startup, displays a floating update banner, downloads the APK with download progress, and triggers native Android package installer via `FileProvider`.
+2. **Current Location Map & Hub Telemetry**:
+   - Interactive vector map centered on the rider's actual current location (`uiState.pickupLocation`).
+   - Real-time GPS calibration button and localized active vehicle fleet telemetry.
+3. **South African Destination & Dual Route Search Screen**:
+   - Full-screen search console with dual text inputs for editing pickup and destination.
+   - Real-time instant filtering across South African international airports (O.R. Tambo, CPT, King Shaka), business hubs (Sandton, Rosebank, Foreshore), and shopping landmarks (Mall of Africa, Canal Walk, Menlyn Maine, Gateway Theatre of Shopping).
+   - Direct one-tap transition into the Rides screen with route metrics pre-loaded.
+4. **Dynamic Route Metrics & Interactive Location Editing in Rides Tab**:
+   - Contextual distance and duration calculation (e.g. `24.0 km • 28 mins`) between current location and destination.
+   - Conceals route metrics until destination is explicitly configured.
+   - Fully clickable pickup and destination pills enabling immediate modification without losing trip context.
+5. **Slide-Up Payment Methods Sheet**:
+   - Tapping the payment pill triggers an animated slide-up bottom sheet with darkened scrim backdrop overlay.
+   - Authentic South African payment options (Capitec Pay, Standard Bank Visa, FNB Cheque Card, Absa Debit, Ride Go Wallet, and Cash).
+   - Dismissible via tap-outside scrim, "Done" action, or payment selection.
+6. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with Medium Blue trajectory lines and pulsating Ice Blue GPS waypoint halos.
+7. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, Ice Blue trail fill, and haptic feedback.
+8. **Live Driver Tracking (Post-Confirmation)**:
    - Dynamic map canvas with animated traveling route polyline and real-time moving driver vehicle puck.
    - Floating ETA pill with driver approach countdown and arrival timestamp.
    - 4-digit Ride Security PIN banner to verify driver identity before departure.
    - Verified driver profile card with authentic South African number plate (`JM 42 KL • GP`), vehicle specs, and rating.
    - Quick-action communications suite (Call, In-App Message, Trip Share, Safety Center).
-4. **South African Verification Suite**:
+9. **South African Verification Suite**:
    - Biometric facial scan with Ice Blue alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.
-5. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
-6. **Streamlined Auth & Reliable Back Navigation**: Direct sign-in and sign-up pathways with robust BackHandler and top-bar back button routing returning directly to the authentication screen without role loop traps.
-7. **Multi-Tab Activity Hub & Corporate Expensing**:
-   - **Past Trips**: Historical rides, digital receipts, rebooking, and stat bento metrics.
-   - **Upcoming Reservations**: Advance booking tracking, flight arrival integration, locked fares, and flexible cancellation.
-   - **Business Mobility**: Enterprise corporate profiles, automated SAP Concur / Expensify sync, SARS 15% VAT itemized invoicing, and cost center management.
+10. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
+11. **Streamlined Auth & Reliable Back Navigation**: Direct sign-in and sign-up pathways with robust BackHandler and top-bar back button routing returning directly to the authentication screen without role loop traps.
+12. **Multi-Tab Activity Hub & Corporate Expensing**:
+    - **Past Trips**: Historical rides, digital receipts, rebooking, and stat bento metrics.
+    - **Upcoming Reservations**: Advance booking tracking, flight arrival integration, locked fares, and flexible cancellation.
+    - **Business Mobility**: Enterprise corporate profiles, automated SAP Concur / Expensify sync, SARS 15% VAT itemized invoicing, and cost center management.
 
 ---
 
