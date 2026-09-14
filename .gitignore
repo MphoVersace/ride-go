@@ -9,8 +9,25 @@ dist/
 web-build/
 expo-env.d.ts
 
-# Native
+# Android Gradle & IDE
+*.iml
+.gradle/
 .kotlin/
+local.properties
+/local.properties
+.idea/
+.DS_Store
+build/
+/build
+captures/
+/captures
+.externalNativeBuild
+.cxx
+debug.keystore
+*.apk
+*.aab
+
+# Native certs & keys
 *.orig.*
 *.jks
 *.p8
@@ -26,19 +43,12 @@ npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# macOS
-.DS_Store
-*.pem
-
 # local env files
+.env
 .env*.local
 
 # typescript
 *.tsbuildinfo
-
-# generated native folders
-/ios
-/android
 
 # Stitch MCP artifacts, screens, and configs (NEVER push to GitHub)
 *stitch*
