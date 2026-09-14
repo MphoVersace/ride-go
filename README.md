@@ -61,6 +61,9 @@ Built using modern **Android Jetpack Compose**, **Kotlin Coroutines / Flow**, an
 
 ```
 ride-go/
+├── .github/
+│   └── workflows/
+│       └── build-apk.yml                         # Automated cloud APK compilation & packaging
 ├── app/
 │   ├── src/
 │   │   ├── main/
@@ -97,7 +100,13 @@ ride-go/
 │   │   │   └── res/                              # Android app icons, drawables, and strings
 │   │   └── test/                                 # Unit tests and automated assertions
 │   └── build.gradle.kts                          # Module dependencies and Android SDK config
-├── gradle/                                       # Gradle wrapper and version catalog
+├── gradle/
+│   ├── wrapper/
+│   │   ├── gradle-wrapper.jar                    # Gradle wrapper bootstrap jar
+│   │   └── gradle-wrapper.properties             # Gradle distribution definition
+│   └── libs.versions.toml                        # Version catalog
+├── gradlew                                       # Gradle wrapper executable script (Linux/macOS)
+├── gradlew.bat                                   # Gradle wrapper batch script (Windows)
 ├── build.gradle.kts                              # Project-level build script
 ├── settings.gradle.kts                           # Module and plugin management
 ├── metadata.json                                 # App metadata descriptor
@@ -129,18 +138,36 @@ ride-go/
 
 ---
 
-## Getting Started & Local Development
+## Cloud CI/CD & Device Installation (No Android Studio Required)
+
+[![CI Build](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-0E2454?style=for-the-badge&logo=githubactions&logoColor=7DD3FC&labelColor=000000)](#)
+[![Artifact](https://img.shields.io/badge/Build_Artifact-ride--go--debug--apk-0B1938?style=for-the-badge&logo=android&logoColor=7DD3FC&labelColor=000000)](#)
+[![Workflow](https://img.shields.io/badge/Workflow-build--apk.yml-0E2454?style=for-the-badge&logo=yaml&logoColor=7DD3FC&labelColor=000000)](#)
+
+For lightweight development machines or rapid on-device testing without running heavy local Android Studio emulators and Gradle daemons, Ride Go provides automated cloud compilation via GitHub Actions:
+
+### How to Download & Install on Your Physical Android Device
+1. Navigate to the **Actions** tab in the GitHub repository: [`MphoVersace/ride-go/actions`](https://github.com/MphoVersace/ride-go/actions).
+2. Select the latest workflow run under **Build Android APK** (triggered on every push to `dev`, pull request, or manually via **Run workflow**).
+3. Scroll down to the **Artifacts** section at the bottom of the summary page.
+4. Download the `ride-go-debug-apk` archive (contains `app-debug.apk`).
+5. Transfer `app-debug.apk` to your phone (via USB cable, Google Drive, WhatsApp, or browser download directly on your phone).
+6. Tap `app-debug.apk` on your phone, permit "Install from unknown sources" if prompted, and launch Ride Go directly.
+
+---
+
+## Local Development (Optional)
 
 [![Environment](https://img.shields.io/badge/Build_Tool-Gradle_Kotlin_DSL-0E2454?style=flat-square&logo=gradle&logoColor=7DD3FC&labelColor=0B1938)](#)
 [![Min SDK](https://img.shields.io/badge/Min_SDK-API_26-0B1938?style=flat-square&labelColor=000000)](#)
 [![Target SDK](https://img.shields.io/badge/Target_SDK-API_34-0B1938?style=flat-square&labelColor=000000)](#)
 
 ### Prerequisites
-- **Android Studio** (Koala / Ladybug or newer)
+- **Android Studio** (Ladybug / Koala or newer)
 - **JDK 17+**
 - **Android SDK** (API 34 / Android 14+)
 
-### Steps to Run
+### Steps to Run Locally
 1. Open Android Studio.
 2. Select **Open** and choose the `ride-go` root directory.
 3. Allow Gradle to synchronize dependencies.
