@@ -1911,7 +1911,7 @@ private fun RiderStep5VerifiedProfile(
             letterSpacing = (-0.5).sp
         )
         Text(
-            text = "Welcome Nomvula, your verified Ride Go account is fully active and cleared for urban dispatch.",
+            text = "Welcome Thulane, your verified Ride Go account is fully active and cleared for urban dispatch.",
             color = VoltOnSurfaceVariant,
             fontSize = 13.sp,
             textAlign = TextAlign.Center,
@@ -1949,7 +1949,7 @@ private fun RiderStep5VerifiedProfile(
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "Nomvula Zungu",
+                        text = "Thulane J. Sigasa",
                         color = VoltOnSurface,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
