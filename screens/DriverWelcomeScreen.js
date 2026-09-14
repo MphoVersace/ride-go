@@ -91,7 +91,7 @@ export default function DriverWelcomeScreen({ navigation }) {
           <TouchableOpacity
             style={styles.primaryButton}
             activeOpacity={0.8}
-            onPress={() => {}}
+            onPress={() => navigation.navigate("DriverProfileSetup")}
           >
             <Text style={styles.primaryButtonText}>Get Started →</Text>
           </TouchableOpacity>

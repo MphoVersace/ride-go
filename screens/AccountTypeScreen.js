@@ -39,6 +39,7 @@ export default function AccountTypeScreen({ navigation }) {
           <TouchableOpacity
             style={styles.optionCard}
             activeOpacity={0.85}
+            onPress={() => navigation.navigate("DriverWelcome")}
           >
             <View style={styles.iconCircle}>
               <Text style={styles.icon}>🚘</Text>
@@ -164,3 +165,4 @@ const styles = StyleSheet.create({
     marginBottom: 35,
   },
 });
+

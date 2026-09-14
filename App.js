@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 
 import DriverWelcomeScreen from "./screens/DriverWelcomeScreen";
+import DriverProfileSetupScreen from "./screens/DriverProfileSetupScreen";
 import SavedPlacesScreen from "./screens/SavedPlacesScreen";
 import PaymentMethodsScreen from "./screens/PaymentMethodsScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
@@ -226,8 +227,13 @@ export default function App() {
         <Stack.Screen name="TripReceipt" component={TripReceiptScreen} />
 
         <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
-        
+
         <Stack.Screen name="DriverWelcome" component={DriverWelcomeScreen} />
+
+        <Stack.Screen
+          name="DriverProfileSetup"
+          component={DriverProfileSetupScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
