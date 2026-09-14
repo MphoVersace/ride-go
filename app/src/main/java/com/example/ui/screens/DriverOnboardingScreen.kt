@@ -3113,7 +3113,7 @@ fun DriverStep5Review(
                                     .background(VoltSurfaceContainerLowest.copy(alpha = 0.85f))
                                     .padding(horizontal = 8.dp, vertical = 2.dp)
                             ) {
-                                Text("+5 Star Badge", color = VoltPrimaryContainer, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                                Text("+5 Star Badge", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
