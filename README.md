@@ -1,10 +1,22 @@
 # Ride Go - Intelligent Ride-Hailing Application
 
+[![Platform](https://img.shields.io/badge/Platform-Android_Native-0B1938?style=for-the-badge&logo=android&logoColor=7DD3FC&labelColor=000000)](https://developer.android.com/)
+[![Language](https://img.shields.io/badge/Language-Kotlin_1.9-0B1938?style=for-the-badge&logo=kotlin&logoColor=7DD3FC&labelColor=000000)](https://kotlinlang.org/)
+[![UI Toolkit](https://img.shields.io/badge/UI-Jetpack_Compose-0B1938?style=for-the-badge&logo=jetpackcompose&logoColor=7DD3FC&labelColor=000000)](https://developer.android.com/jetpack/compose)
+[![Architecture](https://img.shields.io/badge/Architecture-MVVM_%2B_Flow-0B1938?style=for-the-badge&logo=androidstudio&logoColor=7DD3FC&labelColor=000000)](https://developer.android.com/topic/architecture)
+[![Design System](https://img.shields.io/badge/Design_System-60--30--10_Navy_Palette-0E2454?style=for-the-badge&logo=materialdesign&logoColor=7DD3FC&labelColor=000000)](#design-architecture)
+[![Region](https://img.shields.io/badge/Region-South_Africa-0B1938?style=for-the-badge&logo=googlemaps&logoColor=7DD3FC&labelColor=000000)](#key-features)
+[![License](https://img.shields.io/badge/License-Proprietary-0B1938?style=for-the-badge&logo=shield&logoColor=7DD3FC&labelColor=000000)](#)
+
 Ride Go is a state-of-the-art native Android ride-hailing and mobility application crafted for South Africa. Featuring real-time driver dispatch radar telemetry, dynamic ride tier selection with interactive confirmation slider, passenger trip history bento grids, and comprehensive rider verification and driver onboarding workflows.
 
 ---
 
-## 🎨 60-30-10 Design Architecture
+## Design Architecture
+
+[![Design System](https://img.shields.io/badge/Design_Standard-60--30--10_Rule-0E2454?style=flat-square&logo=materialdesign&logoColor=7DD3FC&labelColor=0B1938)](#)
+[![Primary Palette](https://img.shields.io/badge/Primary_Palette-Deep_Navy_%230B1938-0B1938?style=flat-square&logoColor=7DD3FC&labelColor=000000)](#)
+[![Accent](https://img.shields.io/badge/Accent-Ice_Blue_%237DD3FC-7DD3FC?style=flat-square&logoColor=0B1938&labelColor=0B1938)](#)
 
 Ride Go strictly adheres to the **60-30-10 rule** with a refined, cohesive color palette designed for night-mode visual comfort, telemetry clarity, and accessible contrast:
 
@@ -40,7 +52,10 @@ Ride Go strictly adheres to the **60-30-10 rule** with a refined, cohesive color
 
 ---
 
-## 🏗 Project Architecture & Directory Structure
+## Project Architecture & Directory Structure
+
+[![Architecture](https://img.shields.io/badge/Pattern-Clean_Architecture_%2F_MVVM-0E2454?style=flat-square&logo=androidstudio&logoColor=7DD3FC&labelColor=0B1938)](#)
+[![Concurrency](https://img.shields.io/badge/Async-Kotlin_Coroutines_%26_Flow-0E2454?style=flat-square&logo=kotlin&logoColor=7DD3FC&labelColor=0B1938)](#)
 
 Built using modern **Android Jetpack Compose**, **Kotlin Coroutines / Flow**, and **MVVM architecture**:
 
@@ -90,7 +105,9 @@ ride-go/
 
 ---
 
-## 🚀 Key Features
+## Key Features
+
+[![Core Features](https://img.shields.io/badge/Capabilities-Driver_Radar_%7C_ID_Verification_%7C_Dynamic_Tiers-0E2454?style=flat-square&logo=googlemaps&logoColor=7DD3FC&labelColor=0B1938)](#)
 
 1. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with Medium Blue trajectory lines and pulsating Ice Blue GPS waypoint halos.
 2. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, Ice Blue trail fill, and haptic feedback.
@@ -102,7 +119,11 @@ ride-go/
 
 ---
 
-## 🛠 Getting Started & Local Development
+## Getting Started & Local Development
+
+[![Environment](https://img.shields.io/badge/Build_Tool-Gradle_Kotlin_DSL-0E2454?style=flat-square&logo=gradle&logoColor=7DD3FC&labelColor=0B1938)](#)
+[![Min SDK](https://img.shields.io/badge/Min_SDK-API_26-0B1938?style=flat-square&labelColor=000000)](#)
+[![Target SDK](https://img.shields.io/badge/Target_SDK-API_34-0B1938?style=flat-square&labelColor=000000)](#)
 
 ### Prerequisites
 - **Android Studio** (Koala / Ladybug or newer)
