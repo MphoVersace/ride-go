@@ -127,7 +127,7 @@ private const val DRIVER_AVATAR_URL =
     "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww"
 
 private const val SMART_ID_IMG =
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuB8l8vGCwB0uISUb78OiJ0Hpn_K5yuYiEoEqIKdvkqqFp_wd0pieGVn3WNr58nlKG2OWM1eoxlT-mPhHpdGW0LF0o2NRrEkr-97CmNY6Cpq1hUaH9OUxNY-bTYNBQmZIcXO8IBk1nYjLvdSZRkXzItj0_dtJUeWdqBKcCOcH01C0P1Rkpeczl3oLdIoersp-rj1Kto5dslX278ZZFH7916yC3Nto1qNi4AEh6GbWFtnKC9shRxKbmBY"
+    "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww"
 
 private const val CAR_FRONT_IMG =
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCwsJbhyGCmQbiiwadgiHBFmqPVYOtz1NU4zJy-hSnuf9Bt3ZWaOj8lpphRy9kg0bIDi6UdGc-6LAmqxtr82Gg3zDLeaUarqsfrh34My_NGKzKthNSh_y_zdA5rUoOcri1JT2YOAVjqA0xhW-a6Agn1ffh5CHxny-6jdBqLHzpKIfHFQB0Apd9i7kjxU8HvIZ5IvVDbR5mHcg84wAK_R2_s3QBU0c6Yzn_svUCsF9kMEFLgK66bBc9A"
@@ -2702,7 +2702,7 @@ fun DriverStep5Review(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Welcome Marcus, your Ride Go driver profile is being verified.",
+                text = "Welcome Thulane, your Ride Go driver profile is being verified.",
                 color = VoltOnSurfaceVariant,
                 fontSize = 13.sp
             )

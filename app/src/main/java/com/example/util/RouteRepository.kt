@@ -36,6 +36,7 @@ object RouteRepository {
         return when {
             // Gauteng / Johannesburg / Pretoria
             q.contains("sandton") || q.contains("rivonia") || q.contains("nelson mandela square") -> -26.1076 to 28.0567
+            q.contains("woodmead") || q.contains("woodmead retail") || q.contains("woodlands") -> -26.0550 to 28.1033
             q.contains("rosebank") || q.contains("oxford") -> -26.1456 to 28.0436
             q.contains("or tambo") || q.contains("o.r. tambo") || q.contains("tambo") || q.contains("kempton") -> -26.1367 to 28.2411
             q.contains("mall of africa") || q.contains("waterfall") || q.contains("midrand") -> -25.9983 to 28.1094

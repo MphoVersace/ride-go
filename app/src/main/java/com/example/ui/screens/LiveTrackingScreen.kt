@@ -49,10 +49,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.ui.components.OsmMapView
+import com.example.util.RouteRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.osmdroid.util.GeoPoint
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -99,7 +105,11 @@ import com.example.ui.theme.VoltSurfaceVariant
 import com.example.viewmodel.VoltUiState
 
 private const val RIDER_AVATAR =
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBL7X1YVUs996Wkj8TC5HJay5Q4FgzBiMoJuv_Kd97lyXZwUI-uAn4oTW_rrp6JyjElTrY6jZ3_Llcu9eraNUyAcIZbVbR3brMF8XYqoq6Bq64BfmlZzHzHb8kHfDyjRg5oln4cOLvkoBUyzei25ZxK2AY4fpA4lNhShiWaTePK339EpMnsp-8N5s5rC2TbBg_PmsyH3ZbL3bskMHYyhmoz4JAEbdFO-duM_LKDDr96dEX9n12KaKZPSD6tz55RHWSPEQ"
+    "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww"
+
+// Woodmead Retail Shopping Centre — all driver trips originate here
+private const val WOODMEAD_LAT = -26.0550
+private const val WOODMEAD_LON = 28.1033
 
 @Composable
 fun LiveTrackingScreen(
@@ -231,11 +241,31 @@ fun LiveTrackingScreen(
                     .height(340.dp)
                     .background(VoltSurfaceContainerLowest)
             ) {
-                // Interactive Vector Route Canvas with Driver Heading to You
-                TrackingMapCanvas(
-                    state = state,
-                    carProgress = carProgress,
-                    modifier = Modifier.fillMaxSize()
+                // Real OSM map: route from Woodmead Retail to pickup location
+                var trackingRoutePoints by remember { mutableStateOf(emptyList<GeoPoint>()) }
+                val pickupGeoPoint = remember(state.pickupLocation) {
+                    val (lat, lon) = RouteRepository.resolveCoordinates(state.pickupLocation,
+                        defaultLat = -26.1076, defaultLon = 28.0567)
+                    GeoPoint(lat, lon)
+                }
+                LaunchedEffect(state.pickupLocation) {
+                    val pts = withContext(Dispatchers.IO) {
+                        RouteRepository.fetchRoute(
+                            WOODMEAD_LAT, WOODMEAD_LON,
+                            pickupGeoPoint.latitude, pickupGeoPoint.longitude
+                        )
+                    }
+                    trackingRoutePoints = pts
+                }
+                OsmMapView(
+                    latitude = WOODMEAD_LAT,
+                    longitude = WOODMEAD_LON,
+                    modifier = Modifier.fillMaxSize(),
+                    zoomLevel = 13.0,
+                    isDarkMode = true,
+                    showUserLocationMarker = true,
+                    destinationPoint = pickupGeoPoint,
+                    routePoints = trackingRoutePoints
                 )
 
                 // Floating Top Live ETA Status Pill
@@ -425,7 +455,7 @@ fun LiveTrackingScreen(
                                 )
                             }
                             Text(
-                                text = "Share with Marcus before departure",
+                                text = "Share with ${state.matchedDriverName.split(" ").firstOrNull() ?: "Driver"} before departure",
                                 color = VoltOnSurfaceVariant,
                                 fontSize = 11.sp
                             )
@@ -711,7 +741,7 @@ fun LiveTrackingScreen(
                                 fontWeight = FontWeight.SemiBold
                             )
                             Text(
-                                text = "Wait near curb for Marcus",
+                                text = "Wait near curb for ${state.matchedDriverName.split(" ").firstOrNull() ?: "Driver"}",
                                 color = VoltSecondary,
                                 fontSize = 11.sp
                             )
@@ -862,7 +892,7 @@ fun LiveTrackingScreen(
             },
             text = {
                 Text(
-                    text = "Marcus Vance is already en route. Free cancellation applies within 2 minutes of booking.",
+                    text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Driver"} is already en route. Free cancellation applies within 2 minutes of booking.",
                     color = VoltOnSurfaceVariant,
                     fontSize = 13.sp
                 )

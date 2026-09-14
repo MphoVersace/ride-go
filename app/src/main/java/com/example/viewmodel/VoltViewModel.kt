@@ -27,20 +27,20 @@ data class VoltUiState(
     val currentTab: VoltScreenTab = VoltScreenTab.EXPLORE,
     val isSplashActive: Boolean = true,
     val isAuthenticated: Boolean = false,
-    val userDisplayName: String = "Sipho M.",
-    val userEmail: String = "sipho.m@capetown.co.za",
-    val userPhone: String = "+27 82 492 1093",
+    val userDisplayName: String = "Thulane J. Sigasa",
+    val userEmail: String = "thulane.sigasa@ridego.co.za",
+    val userPhone: String = "+27 71 839 2041",
     val selectedTier: RideTierType = RideTierType.COMFORT,
     val isDispatchActive: Boolean = false,
     val dispatchStatusText: String = "Securing priority lane dispatch...",
     val dispatchProgress: Float = 0.45f,
     val isDriverMatched: Boolean = false,
-    val matchedDriverName: String = "Marcus Vance",
+    val matchedDriverName: String = "Thulane J. Sigasa",
     val matchedVehicle: String = "Toyota Corolla Quest",
     val driverRating: String = "4.97",
     val driverTripsCount: String = "1,420 trips",
-    val driverPhotoUrl: String = "https://lh3.googleusercontent.com/aida-public/AB6AXuDbNJ6swvCY1onaSSJdXSEvu2F89aEMyTQSAAqafOSvzSXe31lB_6zXU3nRdps2Iw6kxkBcdR2BVfy5oOvwmnUiqg10MYml42CCf_HKPXuj0nQRmhu-WUYPQZZHdu-4LIcWsqMZiiE0sspJZbShLG-0UQ2crJYTwEW3uc9rmst3kZl2zTiw5wX4R9EdRN-rC05fFqr2DxFCjp0fPNYP7yEQK_V3jMKRhQLxSuJHkwwjAWG-1lA5oNBJIDCuMYONcAN3Ew",
-    val driverLicensePlate: String = "JM 42 KL • GP",
+    val driverPhotoUrl: String = "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww",
+    val driverLicensePlate: String = "TJS 001 GP",
     val driverProvince: String = "Gauteng",
     val driverVehicleColor: String = "Midnight Silver Metallic",
     val rideSecurityPin: String = "4819",
@@ -236,7 +236,7 @@ class VoltViewModel : ViewModel() {
             driverEtaMinutes = randomEtaMinutes,
             driverEtaTimeFormatted = formattedTime,
             driverApproachAngle = randomAngle,
-            dispatchStatusText = "Marcus Vance confirmed your ride request!",
+            dispatchStatusText = "Thulane J. Sigasa confirmed your ride request!",
             dispatchProgress = 1.0f
         )
     }
@@ -263,7 +263,7 @@ class VoltViewModel : ViewModel() {
             _uiState.update { generateRandomDriverDispatch(it) }
             val dist = _uiState.value.driverDistanceText
             val mins = _uiState.value.driverEtaMinutes
-            showToast("Driver confirmed! Marcus is heading to you ($dist away).")
+            showToast("Driver confirmed! Thulane is heading to you ($dist away).")
         }
     }
 
@@ -272,7 +272,7 @@ class VoltViewModel : ViewModel() {
         _uiState.update { generateRandomDriverDispatch(it) }
         val dist = _uiState.value.driverDistanceText
         val mins = _uiState.value.driverEtaMinutes
-        showToast("Marcus Vance is on the way! $dist away ($mins mins).")
+        showToast("Thulane J. Sigasa is on the way! $dist away ($mins mins).")
     }
 
     fun cancelDispatch() {

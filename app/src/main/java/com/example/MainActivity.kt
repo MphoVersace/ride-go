@@ -312,8 +312,8 @@ fun VoltAppRoot(
                         state = uiState,
                         onBack = { viewModel.cancelDispatch() },
                         onCancelRide = { viewModel.cancelDispatch() },
-                        onCallDriver = { viewModel.showToast("Calling Marcus Vance (+27 82 555 0192)...") },
-                        onMessageDriver = { viewModel.showToast("Opening in-app chat with Marcus Vance...") },
+                        onCallDriver = { viewModel.showToast("Calling Thulane J. Sigasa (+27 71 839 2041)...") },
+                        onMessageDriver = { viewModel.showToast("Opening in-app chat with Thulane J. Sigasa...") },
                         onShareRide = { viewModel.showToast("Live trip tracking link copied to clipboard!") },
                         onSafetyCenterClick = { viewModel.showToast("Ride Go Safety Hotline: 0800 000 000") },
                         onTripDetailsClick = { viewModel.showToast("Trip Ref: #RG-LIVE-9920 • Fixed Fare R145.00") }
