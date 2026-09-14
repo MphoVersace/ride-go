@@ -28,14 +28,23 @@ data class VoltUiState(
     val dispatchStatusText: String = "Securing priority lane dispatch...",
     val dispatchProgress: Float = 0.45f,
     val isDriverMatched: Boolean = false,
-    val matchedDriverName: String = "Aurora-09",
-    val matchedVehicle: String = "Toyota Corolla Cross (CA 582-914)",
+    val matchedDriverName: String = "Marcus Vance",
+    val matchedVehicle: String = "Toyota Corolla Quest",
+    val driverRating: String = "4.97",
+    val driverTripsCount: String = "1,420 trips",
+    val driverPhotoUrl: String = "https://lh3.googleusercontent.com/aida-public/AB6AXuDbNJ6swvCY1onaSSJdXSEvu2F89aEMyTQSAAqafOSvzSXe31lB_6zXU3nRdps2Iw6kxkBcdR2BVfy5oOvwmnUiqg10MYml42CCf_HKPXuj0nQRmhu-WUYPQZZHdu-4LIcWsqMZiiE0sspJZbShLG-0UQ2crJYTwEW3uc9rmst3kZl2zTiw5wX4R9EdRN-rC05fFqr2DxFCjp0fPNYP7yEQK_V3jMKRhQLxSuJHkwwjAWG-1lA5oNBJIDCuMYONcAN3Ew",
+    val driverLicensePlate: String = "JM 42 KL • GP",
+    val driverProvince: String = "Gauteng",
+    val driverVehicleColor: String = "Midnight Silver Metallic",
+    val rideSecurityPin: String = "4819",
+    val driverEtaMinutes: Int = 3,
+    val driverEtaTimeFormatted: String = "09:42 AM",
     val activeActivityTab: String = "Past Trips", // Past Trips, Upcoming (1), Business
     val activeFilter: String = "Last 30 Days",
     val toastMessage: String? = null,
     val selectedReceipt: TripHistoryItem? = null,
-    val pickupLocation: String = "V&A Waterfront (Breakwater Blvd, Gate 3)",
-    val destinationLocation: String = "Cape Town International Airport (CPT Terminal 2)",
+    val pickupLocation: String = "Sandton City (Rivonia Rd Entrance)",
+    val destinationLocation: String = "O.R. Tambo Int'l Airport (Terminal A)",
     val trips: List<TripHistoryItem> = emptyList(),
     val isDriverOnboardingActive: Boolean = false,
     val driverState: DriverOnboardingState = DriverOnboardingState(),
@@ -136,31 +145,52 @@ class VoltViewModel : ViewModel() {
             it.copy(
                 isDispatchActive = true,
                 isDriverMatched = false,
-                dispatchStatusText = "Securing priority lane dispatch...",
+                dispatchStatusText = "Scanning nearby verified drivers...",
                 dispatchProgress = 0.35f
             )
         }
         dispatchJob?.cancel()
         dispatchJob = viewModelScope.launch {
-            var idx = 0
-            var progress = 0.35f
-            while (true) {
-                delay(3000)
-                idx = (idx + 1) % dispatchStates.size
-                progress = (progress + 0.18f).let { if (it > 0.92f) 0.35f else it }
-                _uiState.update {
-                    it.copy(
-                        dispatchStatusText = dispatchStates[idx],
-                        dispatchProgress = progress
-                    )
-                }
+            delay(1800)
+            _uiState.update {
+                it.copy(
+                    dispatchStatusText = "Connecting with nearest Go Comfort vehicle...",
+                    dispatchProgress = 0.65f
+                )
             }
+            delay(1800)
+            _uiState.update {
+                it.copy(
+                    dispatchStatusText = "Marcus Vance confirmed your ride request!",
+                    dispatchProgress = 1.0f,
+                    isDriverMatched = true
+                )
+            }
+            showToast("Driver confirmed! Marcus is 3 mins away.")
         }
+    }
+
+    fun confirmDriverNow() {
+        dispatchJob?.cancel()
+        _uiState.update {
+            it.copy(
+                isDispatchActive = true,
+                isDriverMatched = true,
+                dispatchStatusText = "Driver Marcus Vance confirmed your booking!",
+                dispatchProgress = 1.0f
+            )
+        }
+        showToast("Marcus Vance confirmed! Live trip tracking started.")
     }
 
     fun cancelDispatch() {
         dispatchJob?.cancel()
-        _uiState.update { it.copy(isDispatchActive = false) }
+        _uiState.update {
+            it.copy(
+                isDispatchActive = false,
+                isDriverMatched = false
+            )
+        }
         showToast("Ride request cancelled")
     }
 
