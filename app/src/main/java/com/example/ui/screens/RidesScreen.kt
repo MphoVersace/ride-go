@@ -2,17 +2,11 @@ package com.example.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -47,22 +41,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import com.example.util.RouteRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.osmdroid.util.GeoPoint
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -188,19 +182,24 @@ fun RidesScreen(
         )
     }
 
-    // Route dash pulse animation
-    val infiniteTransition = rememberInfiniteTransition(label = "route_pulse")
-    val dashOffset by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 40f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "dash_offset"
-    )
-
     var recenterTrigger by remember { mutableStateOf(0) }
+
+    // Real road route points from OSRM, fetched whenever pickup or destination changes
+    var routePoints by remember { mutableStateOf<List<GeoPoint>>(emptyList()) }
+
+    LaunchedEffect(state.pickupLocation, state.destinationLocation) {
+        if (state.pickupLocation.isNotBlank() &&
+            state.destinationLocation.isNotBlank() &&
+            !state.pickupLocation.contains("Locating", ignoreCase = true)
+        ) {
+            routePoints = withContext(Dispatchers.IO) {
+                RouteRepository.fetchRouteByAddress(
+                    fromAddress = state.pickupLocation,
+                    toAddress = state.destinationLocation
+                )
+            }
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -216,108 +215,16 @@ fun RidesScreen(
                 .height(230.dp)
                 .background(VoltSurfaceLowest)
         ) {
-            // Live OpenStreetMap with 60-30-10 Dark Mode ColorMatrix
+            // Live OpenStreetMap with real road route polyline via OSRM
             com.example.ui.components.OsmMapView(
                 latitude = -33.9249,
                 longitude = 18.4241,
                 zoomLevel = 14.5,
                 isDarkMode = true,
                 recenterTrigger = recenterTrigger,
+                routePoints = routePoints,
                 modifier = Modifier.fillMaxSize()
             )
-
-            // Dark subtle gradient overlay
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Black.copy(alpha = 0.35f),
-                                Color.Transparent,
-                                Color.Black.copy(alpha = 0.7f)
-                            )
-                        )
-                    )
-            )
-
-            // Animated Glowing Route Polyline Layer
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                val path = Path().apply {
-                    moveTo(size.width * 0.16f, size.height * 0.75f)
-                    cubicTo(
-                        size.width * 0.35f, size.height * 0.65f,
-                        size.width * 0.42f, size.height * 0.85f,
-                        size.width * 0.62f, size.height * 0.45f
-                    )
-                    cubicTo(
-                        size.width * 0.72f, size.height * 0.22f,
-                        size.width * 0.82f, size.height * 0.35f,
-                        size.width * 0.88f, size.height * 0.18f
-                    )
-                }
-
-                // Dark backing road stroke
-                drawPath(
-                    path = path,
-                    color = Color(0xFF1F2022),
-                    style = Stroke(
-                        width = 16f,
-                        cap = StrokeCap.Round,
-                        join = StrokeJoin.Round
-                    )
-                )
-
-                // Outer canary glow stroke
-                drawPath(
-                    path = path,
-                    color = VoltPrimaryContainer.copy(alpha = 0.4f),
-                    style = Stroke(
-                        width = 10f,
-                        cap = StrokeCap.Round,
-                        join = StrokeJoin.Round
-                    )
-                )
-
-                // Pulsing dashed canary trajectory
-                drawPath(
-                    path = path,
-                    color = VoltPrimaryContainer,
-                    style = Stroke(
-                        width = 6f,
-                        cap = StrokeCap.Round,
-                        join = StrokeJoin.Round,
-                        pathEffect = PathEffect.dashPathEffect(
-                            floatArrayOf(18f, 14f),
-                            dashOffset
-                        )
-                    )
-                )
-
-                // Start Station Node (Downtown Plaza)
-                drawCircle(
-                    color = VoltPrimaryContainer,
-                    radius = 9f,
-                    center = Offset(size.width * 0.16f, size.height * 0.75f)
-                )
-                drawCircle(
-                    color = Color.White,
-                    radius = 4f,
-                    center = Offset(size.width * 0.16f, size.height * 0.75f)
-                )
-
-                // Destination Node (Terminal 2)
-                drawCircle(
-                    color = Color.White,
-                    radius = 9f,
-                    center = Offset(size.width * 0.88f, size.height * 0.18f)
-                )
-                drawCircle(
-                    color = Color.Black,
-                    radius = 4f,
-                    center = Offset(size.width * 0.88f, size.height * 0.18f)
-                )
-            }
 
             // Floating Trip Trajectory HUD (Top Left) - shown only when destination selected
             if (hasDestination) {
