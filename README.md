@@ -1,12 +1,12 @@
 # Ride Go - Intelligent Ride-Hailing Application
 
-[![Platform](https://img.shields.io/badge/Platform-Android_Native-0B1938?style=for-the-badge&logo=android&logoColor=7DD3FC&labelColor=000000)](https://developer.android.com/)
-[![Language](https://img.shields.io/badge/Language-Kotlin_1.9-0B1938?style=for-the-badge&logo=kotlin&logoColor=7DD3FC&labelColor=000000)](https://kotlinlang.org/)
-[![UI Toolkit](https://img.shields.io/badge/UI-Jetpack_Compose-0B1938?style=for-the-badge&logo=jetpackcompose&logoColor=7DD3FC&labelColor=000000)](https://developer.android.com/jetpack/compose)
-[![Architecture](https://img.shields.io/badge/Architecture-MVVM_%2B_Flow-0B1938?style=for-the-badge&logo=androidstudio&logoColor=7DD3FC&labelColor=000000)](https://developer.android.com/topic/architecture)
-[![Design System](https://img.shields.io/badge/Design_System-60--30--10_Navy_Palette-0E2454?style=for-the-badge&logo=materialdesign&logoColor=7DD3FC&labelColor=000000)](#design-architecture)
-[![Region](https://img.shields.io/badge/Region-South_Africa-0B1938?style=for-the-badge&logo=googlemaps&logoColor=7DD3FC&labelColor=000000)](#key-features)
-[![License](https://img.shields.io/badge/License-Proprietary-0B1938?style=for-the-badge&logo=shield&logoColor=7DD3FC&labelColor=000000)](#)
+[![Platform](https://img.shields.io/badge/Platform-Android_Native-0B1938?style=for-the-badge&logo=android&logoColor=FFFFFF&labelColor=000000)](https://developer.android.com/)
+[![Language](https://img.shields.io/badge/Language-Kotlin_1.9-0B1938?style=for-the-badge&logo=kotlin&logoColor=FFFFFF&labelColor=000000)](https://kotlinlang.org/)
+[![UI Toolkit](https://img.shields.io/badge/UI-Jetpack_Compose-0B1938?style=for-the-badge&logo=jetpackcompose&logoColor=FFFFFF&labelColor=000000)](https://developer.android.com/jetpack/compose)
+[![Architecture](https://img.shields.io/badge/Architecture-MVVM_%2B_Flow-0B1938?style=for-the-badge&logo=androidstudio&logoColor=FFFFFF&labelColor=000000)](https://developer.android.com/topic/architecture)
+[![Design System](https://img.shields.io/badge/Design_System-Strict_60--30--10_Black_Navy_White-0E2454?style=for-the-badge&logo=materialdesign&logoColor=FFFFFF&labelColor=000000)](#design-architecture)
+[![Region](https://img.shields.io/badge/Region-South_Africa-0B1938?style=for-the-badge&logo=googlemaps&logoColor=FFFFFF&labelColor=000000)](#key-features)
+[![License](https://img.shields.io/badge/License-Proprietary-0B1938?style=for-the-badge&logo=shield&logoColor=FFFFFF&labelColor=000000)](#)
 
 Ride Go is a state-of-the-art native Android ride-hailing and mobility application crafted for South Africa. Featuring real-time driver dispatch radar telemetry, dynamic ride tier selection with interactive confirmation slider, passenger trip history bento grids, and comprehensive rider verification and driver onboarding workflows.
 
@@ -14,24 +14,23 @@ Ride Go is a state-of-the-art native Android ride-hailing and mobility applicati
 
 ## Design Architecture
 
-[![Design System](https://img.shields.io/badge/Design_Standard-60--30--10_Rule-0E2454?style=flat-square&logo=materialdesign&logoColor=7DD3FC&labelColor=0B1938)](#)
-[![Primary Palette](https://img.shields.io/badge/Primary_Palette-Deep_Navy_%230B1938-0B1938?style=flat-square&logoColor=7DD3FC&labelColor=000000)](#)
-[![Accent](https://img.shields.io/badge/Accent-Ice_Blue_%237DD3FC-7DD3FC?style=flat-square&logoColor=0B1938&labelColor=0B1938)](#)
+[![Design System](https://img.shields.io/badge/Design_Standard-Strict_60--30--10_Rule-0E2454?style=flat-square&logo=materialdesign&logoColor=FFFFFF&labelColor=0B1938)](#)
+[![Dominant Background](https://img.shields.io/badge/60%25_Background-Black_%23000000-000000?style=flat-square&logoColor=FFFFFF&labelColor=050811)](#)
+[![Panel Surface](https://img.shields.io/badge/30%25_Surface-Deep_Navy_%230B1938-0B1938?style=flat-square&logoColor=FFFFFF&labelColor=0E2454)](#)
+[![High Contrast Accent](https://img.shields.io/badge/10%25_Accent-Pure_White_%23FFFFFF-FFFFFF?style=flat-square&logoColor=000000&labelColor=0E2454)](#)
 
-Ride Go strictly adheres to the **60-30-10 rule** with a refined, cohesive color palette designed for night-mode visual comfort, telemetry clarity, and accessible contrast:
+Ride Go strictly adheres to the **60-30-10 rule** with a maximum of 3 core primary color families across the entire design system, eliminating saturated cyan, royal blue, or rainbow status badges to ensure AAA readability and sleek executive aesthetics:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ 60% Dominant Canvas: Pure Black (#000000 / Obsidian Base)   │
 ├─────────────────────────────────────────────────────────────┤
 │ 30% Panels & Action Surfaces: Deep Navy Blue (#0B1938,      │
-│     #0E2454) - Replaces yellow primary containers           │
+│     #0E2454, #132B60) - Cards, sheets, nav, containers      │
 ├─────────────────────────────────────────────────────────────┤
-│ 10% High-Contrast Typography: Crisp Pure White (#FFFFFF)   │
-│     + Blue Harmony Scale:                                   │
-│     • Ice Blue (#7DD3FC, #BAE6FD) - Telemetry & Radar      │
-│     • Medium Blue (#2563EB) - Navigation Polylines         │
-│     • Muted Blue-Gray (#94A3B8, #1E293B) - Secondary Labels│
+│ 10% High-Contrast Typography & Accent: Crisp Pure White     │
+│     (#FFFFFF) - Razor-sharp text headers, primary labels,   │
+│     radar pins, and telemetry (+ #94A3B8 secondary white)   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -43,12 +42,14 @@ Ride Go strictly adheres to the **60-30-10 rule** with a refined, cohesive color
 | **60% Base** | `VoltSurfaceDim` | `#050811` | Deep obsidian shadow gradients |
 | **30% Panel** | `VoltSurfaceContainer` | `#0D172E` | Card containers, modal sheets, bento blocks |
 | **30% Action** | `VoltPrimaryContainer` | `#0E2454` | Primary brand containers, buttons, squircle pills |
+| **30% Elevated** | `DeepNavySurfaceHigh` | `#132B60` | Elevated surfaces, timeline base vectors |
 | **10% Contrast** | `VoltOnSurface` | `#FFFFFF` | Primary headers, body text, high-contrast labels |
-| **10% Contrast** | `VoltOnPrimaryContainer` | `#FFFFFF` | Text/icons on Deep Navy primary containers |
-| **Highlight** | `IceBlue` / `IceBlueSoft` | `#7DD3FC` / `#BAE6FD` | Radar pulses, GPS waypoint halo, laser reticles |
-| **Trajectory** | `MediumBlue` | `#2563EB` | Active route vector polyline, selected indicator borders |
-| **Secondary** | `MutedBlueGray` | `#94A3B8` | Secondary labels, ETA subtitles, inactive icons |
-| **Border** | `VoltOutline` | `#1E293B` | Structural divider strokes, container outlines |
+| **10% Accent** | `VoltPrimary` | `#FFFFFF` | Radiant pure white highlight and interactive accents |
+| **10% Contrast** | `VoltOnPrimaryContainer` | `#FFFFFF` | Text and icons on Deep Navy primary containers |
+| **Highlight** | `IceBlue` (Mapped) | `#FFFFFF` | Pure white telemetry pulses, GPS waypoint halo, reticles |
+| **Trajectory** | `MediumBlue` (Mapped) | `#FFFFFF` | Crisp white active route polyline on dark navy base |
+| **Secondary** | `VoltOnSurfaceVariant` | `#94A3B8` | Secondary labels, ETA subtitles, inactive icons |
+| **Border** | `VoltOutline` | `#1E293B` | Structural divider strokes, subtle container outlines |
 
 ---
 
@@ -146,17 +147,17 @@ ride-go/
    - Tapping the payment pill triggers an animated slide-up bottom sheet with darkened scrim backdrop overlay.
    - Authentic South African payment options (Capitec Pay, Standard Bank Visa, FNB Cheque Card, Absa Debit, Ride Go Wallet, and Cash).
    - Dismissible via tap-outside scrim, "Done" action, or payment selection.
-6. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with Medium Blue trajectory lines and pulsating Ice Blue GPS waypoint halos.
-7. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, Ice Blue trail fill, and haptic feedback.
+6. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with crisp white trajectory lines and pulsating waypoint halos on deep navy road grids.
+7. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, pure white trail fill, and haptic feedback.
 8. **Live Driver Tracking & Approach Telemetry (Post-Confirmation)**:
    - **Dynamic Vector Approach from Random Distance**: When ride request is confirmed, driver is initialized at a realistic randomized starting distance (1.6 km to 3.8 km) away from rider's current or selected pickup location.
-   - **Real-Time Heading & Directional Rotation**: Vector map canvas continuously steers driver vehicle puck towards the rider's pickup coordinate with forward headlights beam, pulsing Ice Blue radar ring, and directional tangent angle orientation.
+   - **Real-Time Heading & Directional Rotation**: Vector map canvas continuously steers driver vehicle puck towards the rider's pickup coordinate with forward headlights beam, pulsing radar ring, and directional tangent angle orientation.
    - **Live Distance & ETA Countdown**: Live ETA HUD dynamically calculates remaining distance and arrival countdown in real-time as the driver advances towards the user.
    - **Pickup Location Waypoint Marker**: Pulsing concentric GPS beacon and destination overlay pill anchoring the driver's heading target directly to the rider's current or selected pickup spot.
    - **4-Digit Ride Security PIN Banner**: Pre-departure identity verification code before vehicle departure.
    - **Verified Driver Profile Card**: Authentic South African number plate (`JM 42 KL • GP`), vehicle specs, rating, and quick communications suite (Call, In-App Message, Trip Share, Safety Center).
 9. **South African Verification Suite**:
-   - Biometric facial scan with Ice Blue alignment reticles.
+   - Biometric facial scan with high-contrast alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.
 10. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
 11. **Streamlined Auth & Reliable Back Navigation**: Direct sign-in and sign-up pathways with robust BackHandler and top-bar back button routing returning directly to the authentication screen without role loop traps.

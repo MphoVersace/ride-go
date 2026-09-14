@@ -124,7 +124,7 @@ fun RadarViewport(
             var gx = 0f
             while (gx < size.width) {
                 drawLine(
-                    color = Color(0x18D1C6AB),
+                    color = VoltPrimaryContainer.copy(alpha = 0.25f),
                     start = Offset(gx, 0f),
                     end = Offset(gx, size.height),
                     strokeWidth = 0.75f
@@ -134,7 +134,7 @@ fun RadarViewport(
             var gy = 0f
             while (gy < size.height) {
                 drawLine(
-                    color = Color(0x18D1C6AB),
+                    color = VoltPrimaryContainer.copy(alpha = 0.25f),
                     start = Offset(0f, gy),
                     end = Offset(size.width, gy),
                     strokeWidth = 0.75f
@@ -392,7 +392,7 @@ fun RadarViewport(
             ) {
                 Text(
                     text = "PICKUP SPOT",
-                    color = VoltPrimaryContainer,
+                    color = VoltOnSurface,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.5.sp

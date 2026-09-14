@@ -884,13 +884,13 @@ private fun UpcomingScreenContent(
                     Icon(
                         imageVector = Icons.Filled.Cancel,
                         contentDescription = null,
-                        tint = Color(0xFFF87171),
+                        tint = VoltOnSurfaceVariant,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Cancel Ride",
-                        color = Color(0xFFF87171),
+                        color = VoltOnSurfaceVariant,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
                     )
