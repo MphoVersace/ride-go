@@ -10,7 +10,10 @@ import com.example.model.RiderVerificationState
 import com.example.model.TripHistoryItem
 import com.example.model.VoltScreenTab
 import com.example.util.AppReleaseInfo
+import com.example.util.LocationRepository
 import com.example.util.UpdateManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +53,11 @@ data class VoltUiState(
     val activeFilter: String = "Last 30 Days",
     val toastMessage: String? = null,
     val selectedReceipt: TripHistoryItem? = null,
-    val pickupLocation: String = "Sandton City (Rivonia Rd Entrance)",
+    // Real GPS coordinates resolved from the device (null = not yet resolved)
+    val userLat: Double? = null,
+    val userLon: Double? = null,
+    val isLocating: Boolean = false,
+    val pickupLocation: String = "Locating...",
     val destinationLocation: String = "O.R. Tambo Int'l Airport (Terminal A)",
     val trips: List<TripHistoryItem> = emptyList(),
     val isDriverOnboardingActive: Boolean = false,
@@ -129,6 +136,52 @@ class VoltViewModel : ViewModel() {
         "Driver confirming route clearance...",
         "Securing route dispatch..."
     )
+
+    /**
+     * Resolves the device's real GPS location and reverse-geocodes it to a human-readable
+     * street address. Call this from the UI layer after location permissions are granted.
+     * Safe to call multiple times — skips if a fix is already in progress.
+     */
+    fun resolveUserLocation(context: Context) {
+        if (_uiState.value.isLocating) return
+        _uiState.update { it.copy(isLocating = true, pickupLocation = "Locating...") }
+        viewModelScope.launch {
+            try {
+                val location = LocationRepository.getCurrentLocation(context)
+                if (location != null) {
+                    val lat = location.latitude
+                    val lon = location.longitude
+                    // Run reverse-geocoding on IO dispatcher (network call)
+                    val address = withContext(Dispatchers.IO) {
+                        LocationRepository.reverseGeocode(lat, lon)
+                    }
+                    _uiState.update {
+                        it.copy(
+                            isLocating = false,
+                            userLat = lat,
+                            userLon = lon,
+                            pickupLocation = address
+                        )
+                    }
+                } else {
+                    // GPS unavailable – fall back to Sandton City default
+                    _uiState.update {
+                        it.copy(
+                            isLocating = false,
+                            pickupLocation = "Sandton City (Rivonia Rd Entrance)"
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLocating = false,
+                        pickupLocation = "Sandton City (Rivonia Rd Entrance)"
+                    )
+                }
+            }
+        }
+    }
 
     fun selectTab(tab: VoltScreenTab) {
         _uiState.update {
