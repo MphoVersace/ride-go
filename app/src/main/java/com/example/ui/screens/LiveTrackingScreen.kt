@@ -596,28 +596,28 @@ fun LiveTrackingScreen(
                                 )
                             }
 
-                            // South African Plate Box
+                            // South African Plate Box (compact)
                             Box(
                                 modifier = Modifier
-                                    .clip(RoundedCornerShape(4.dp))
+                                    .clip(RoundedCornerShape(3.dp))
                                     .background(Color(0xFFE2E8F0))
-                                    .border(1.dp, Color(0xFF94A3B8), RoundedCornerShape(4.dp))
-                                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                                    .border(1.dp, Color(0xFF94A3B8), RoundedCornerShape(3.dp))
+                                    .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(
                                         text = state.driverProvince.uppercase(),
                                         color = Color(0xFF475569),
-                                        fontSize = 8.sp,
+                                        fontSize = 7.sp,
                                         fontWeight = FontWeight.Bold,
-                                        letterSpacing = 1.sp
+                                        letterSpacing = 0.8.sp
                                     )
                                     Text(
                                         text = state.driverLicensePlate,
                                         color = Color(0xFF0F172A),
-                                        fontSize = 12.sp,
+                                        fontSize = 10.sp,
                                         fontWeight = FontWeight.Bold,
-                                        letterSpacing = 0.8.sp
+                                        letterSpacing = 0.5.sp
                                     )
                                 }
                             }
@@ -1057,11 +1057,11 @@ private fun TrackingMapCanvas(
                     end = p3
                 ),
                 style = Stroke(
-                    width = 4.dp.toPx(),
+                    width = 5.dp.toPx(),
                     cap = StrokeCap.Round,
                     join = StrokeJoin.Round,
                     pathEffect = PathEffect.dashPathEffect(
-                        intervals = floatArrayOf(24f, 16f),
+                        intervals = floatArrayOf(20f, 12f),
                         phase = dashPhase
                     )
                 )
@@ -1224,16 +1224,16 @@ private fun TrackingMapCanvas(
             }
         }
 
-        // Vignette Ambient Gradient Overlays
+        // Vignette Ambient Gradient Overlays (keep subtle so car/route stay visible)
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            VoltSurface.copy(alpha = 0.70f),
+                            VoltSurface.copy(alpha = 0.55f),
                             Color.Transparent,
-                            VoltSurface.copy(alpha = 0.80f)
+                            VoltSurface.copy(alpha = 0.45f)
                         )
                     )
                 )

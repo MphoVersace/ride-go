@@ -134,10 +134,10 @@ fun VoltAppRoot(
         viewModel.checkForAppUpdates()
     }
 
-    // Auto-dismiss popup toast messages within 250ms
+    // Auto-dismiss popup toast messages within 150ms
     LaunchedEffect(uiState.toastMessage) {
         if (uiState.toastMessage != null) {
-            delay(250)
+            delay(150)
             viewModel.clearToast()
         }
     }

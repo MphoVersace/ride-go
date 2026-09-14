@@ -318,7 +318,7 @@ class VoltViewModel : ViewModel() {
     fun showToast(msg: String) {
         _uiState.update { it.copy(toastMessage = msg) }
         viewModelScope.launch {
-            delay(250)
+            delay(150)
             _uiState.update { if (it.toastMessage == msg) it.copy(toastMessage = null) else it }
         }
     }
