@@ -2,6 +2,7 @@ package com.example.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,17 +16,16 @@ import com.example.R
 
 /**
  * Ride Go Official Brand Logo Badge.
- * Uses the official RIDEGO.png asset.
+ * Uses the official RIDEGO.png / ridego_wide.png asset.
  */
 @Composable
 fun RideGoLogo(
     modifier: Modifier = Modifier,
     size: Dp = 38.dp,
-    useWide: Boolean = false
+    useWide: Boolean = true
 ) {
     Box(
         modifier = modifier
-            .size(size)
             .testTag("ride_go_logo_badge"),
         contentAlignment = Alignment.Center
     ) {
@@ -33,7 +33,8 @@ fun RideGoLogo(
             painter = painterResource(id = if (useWide) R.drawable.ridego_wide else R.drawable.ridego),
             contentDescription = "Ride Go Official Logo",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.size(size)
+            modifier = if (useWide) Modifier.height(size) else Modifier.size(size)
         )
     }
 }
+

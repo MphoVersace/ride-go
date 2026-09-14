@@ -974,45 +974,8 @@ fun DriverStep2DocCapture(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Progress Header
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "STEP 2 OF 5",
-                    color = VoltPrimaryContainer,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-                Text(
-                    text = "40% Completed",
-                    color = VoltOnSurfaceVariant,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(RoundedCornerShape(3.dp))
-                    .background(VoltSurfaceContainerHighest)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.40f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(3.dp))
-                        .background(VoltPrimaryContainer)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
+        // Step Title
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = "Upload Identity Documents",
                 color = VoltOnSurface,
@@ -1595,52 +1558,8 @@ fun DriverStep3Biometrics(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Progress Header
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "STEP 3 OF 5",
-                    color = VoltPrimaryContainer,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(VoltSurfaceContainerHigh)
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
-                ) {
-                    Text(
-                        text = "Identity Gate",
-                        color = VoltOnSurfaceVariant,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(RoundedCornerShape(3.dp))
-                    .background(VoltSurfaceContainerHighest)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.60f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(3.dp))
-                        .background(VoltPrimaryContainer)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
+        // Step Title
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = "Driver Biometric Check",
                 color = VoltOnSurface,
@@ -2094,54 +2013,8 @@ fun DriverStep4Vehicle(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Progress Header
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(VoltPrimaryContainer)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "STEP 4 OF 5",
-                        color = VoltPrimaryContainer,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
-                }
-                Text(
-                    text = "80% Completed",
-                    color = VoltOnSurfaceVariant,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(RoundedCornerShape(3.dp))
-                    .background(VoltSurfaceContainerHighest)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.80f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(3.dp))
-                        .background(VoltPrimaryContainer)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
+        // Step Title
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = "Register Your Vehicle",
                 color = VoltOnSurface,
@@ -2820,45 +2693,8 @@ fun DriverStep5Review(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Progress Milestone Header
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "ONBOARDING STEP 5 OF 5",
-                    color = VoltPrimaryContainer,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-                Text(
-                    text = "100% Submitted",
-                    color = VoltOnSurfaceVariant,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(RoundedCornerShape(3.dp))
-                    .background(VoltSurfaceContainerHighest)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(3.dp))
-                        .background(VoltPrimaryContainer)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
+        // Step Title
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = "Application in Review",
                 color = VoltOnSurface,

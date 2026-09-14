@@ -200,6 +200,8 @@ fun RidesScreen(
         label = "dash_offset"
     )
 
+    var recenterTrigger by remember { mutableStateOf(0) }
+
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -207,24 +209,21 @@ fun RidesScreen(
                 .verticalScroll(scrollState)
                 .testTag("rides_screen")
         ) {
-        // Top Map Viewport Section
+        // Top Map Viewport Section with OpenStreetMap (osmdroid)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(230.dp)
                 .background(VoltSurfaceLowest)
         ) {
-            // Map Satellite / Terrain background
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(MAP_BACKGROUND_URL)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "Ride Map View",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(VoltSurfaceLowest)
+            // Live OpenStreetMap with 60-30-10 Dark Mode ColorMatrix
+            com.example.ui.components.OsmMapView(
+                latitude = -33.9249,
+                longitude = 18.4241,
+                zoomLevel = 14.5,
+                isDarkMode = true,
+                recenterTrigger = recenterTrigger,
+                modifier = Modifier.fillMaxSize()
             )
 
             // Dark subtle gradient overlay
@@ -234,7 +233,7 @@ fun RidesScreen(
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                Color.Black.copy(alpha = 0.45f),
+                                Color.Black.copy(alpha = 0.35f),
                                 Color.Transparent,
                                 Color.Black.copy(alpha = 0.7f)
                             )
@@ -361,7 +360,7 @@ fun RidesScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 IconButton(
-                    onClick = { /* Recenter */ },
+                    onClick = { recenterTrigger++ },
                     modifier = Modifier
                         .size(38.dp)
                         .clip(CircleShape)
