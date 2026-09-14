@@ -815,7 +815,7 @@ fun LiveTrackingScreen(
                     ) {
                         Text(
                             text = "Cancel Ride",
-                            color = Color(0xFFF87171),
+                            color = VoltOnSurfaceVariant,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -874,7 +874,7 @@ fun LiveTrackingScreen(
                         onCancelRide()
                     }
                 ) {
-                    Text("Yes, Cancel Ride", color = Color(0xFFF87171), fontWeight = FontWeight.Bold)
+                    Text("Yes, Cancel Ride", color = VoltOnSurfaceVariant, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {

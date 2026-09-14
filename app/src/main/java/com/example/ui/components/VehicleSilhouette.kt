@@ -102,10 +102,10 @@ private fun DrawScope.drawSaverCar(w: Float, h: Float) {
 }
 
 private fun DrawScope.drawComfortCar(w: Float, h: Float) {
-    // Ice blue luminous ground illumination
+    // Deep navy ground shadow
     drawOval(
         brush = Brush.radialGradient(
-            colors = listOf(Color(0x887DD3FC), Color(0x222563EB), Color.Transparent),
+            colors = listOf(VoltPrimaryContainer.copy(alpha = 0.35f), Color.Transparent),
             center = Offset(w * 0.5f, h * 0.88f),
             radius = w * 0.48f
         ),
@@ -129,14 +129,14 @@ private fun DrawScope.drawComfortCar(w: Float, h: Float) {
     drawPath(
         path = bodyPath,
         brush = Brush.linearGradient(
-            colors = listOf(Color(0xFF3A3528), Color(0xFF222019), Color(0xFF141312), Color(0xFF080807)),
+            colors = listOf(Color(0xFF2E2E32), Color(0xFF1E1E22), Color(0xFF121216), Color(0xFF08080A)),
             start = Offset(w * 0.1f, h * 0.2f),
             end = Offset(w * 0.95f, h * 0.7f)
         )
     )
     drawPath(path = bodyPath, color = VoltPrimaryContainer, style = Stroke(width = 1.8f))
 
-    // Ice blue tinted glass
+    // Tinted glass
     val windowPath = Path().apply {
         moveTo(w * 0.32f, h * 0.32f)
         lineTo(w * 0.44f, h * 0.17f)
@@ -149,7 +149,7 @@ private fun DrawScope.drawComfortCar(w: Float, h: Float) {
     drawPath(
         path = windowPath,
         brush = Brush.linearGradient(
-            colors = listOf(Color(0xFFBAE6FD), Color(0x667DD3FC), Color(0xDD0D172E))
+            colors = listOf(Color(0xFFE2E8F0), Color(0x66CBD5E1), Color(0xDD0D172E))
         )
     )
     drawPath(path = windowPath, color = VoltPrimaryContainer, style = Stroke(width = 1f))
@@ -249,10 +249,10 @@ private fun DrawScope.drawXlCar(w: Float, h: Float) {
 }
 
 private fun DrawScope.drawBlackCar(w: Float, h: Float) {
-    // Subtle luxury VIP Ice Blue underglow
+    // Subtle luxury VIP Deep Navy ground shadow
     drawOval(
         brush = Brush.radialGradient(
-            colors = listOf(Color(0x667DD3FC), Color(0x222563EB), Color.Transparent),
+            colors = listOf(VoltPrimaryContainer.copy(alpha = 0.35f), Color.Transparent),
             center = Offset(w * 0.5f, h * 0.88f),
             radius = w * 0.50f
         ),

@@ -1520,7 +1520,7 @@ private fun RiderStep4FacialLiveness(
 
                     // Mouth guide line
                     drawLine(
-                        color = Color(0xFFD1C6AB).copy(alpha = 0.6f),
+                        color = VoltOnSurfaceVariant.copy(alpha = 0.6f),
                         start = Offset(center.x - 14.dp.toPx(), center.y + 28.dp.toPx()),
                         end = Offset(center.x + 14.dp.toPx(), center.y + 28.dp.toPx()),
                         strokeWidth = 2.5.dp.toPx()
