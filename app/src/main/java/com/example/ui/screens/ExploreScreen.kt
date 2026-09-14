@@ -961,12 +961,12 @@ fun ExploreScreen(
                                 Box(
                                     modifier = Modifier
                                         .clip(CircleShape)
-                                        .background(VoltPrimaryContainer.copy(alpha = 0.2f))
+                                        .background(Color.White.copy(alpha = 0.15f))
                                         .padding(horizontal = 6.dp, vertical = 2.dp)
                                 ) {
                                     Text(
                                         text = "4.98 ★",
-                                        color = VoltPrimaryContainer,
+                                        color = Color.White,
                                         fontSize = 10.sp,
                                         fontWeight = FontWeight.Bold
                                     )

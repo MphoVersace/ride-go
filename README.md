@@ -181,6 +181,8 @@ ride-go/
     - Embedded `LocationPulseOverlay` inside `OsmMapView` delivering continuous sonar-style expanding concentric waves for both the rider's current position and destination pin across Hub (Explore), Rides, and Live Tracking. Seamlessly locked to map coordinates during zoom and pan, with clean borderless fleet status typography.
 17. **Floating Stadium Pill Bottom Navigation**:
     - Floating stadium capsule bar anchored above system navigation gestures with deep drop shadow, dedicated strictly to the 4 core navigation destinations: **Hub**, **Rides**, **Activity**, and **Account**. Features a smooth physics-animated sliding active tab indicator with pure white active dot and high-contrast vector iconography.
+18. **Crisp Pure White Driver Rating Stars & Verification Badges**:
+    - Replaced all legacy blue and navy container tints on driver rating stars, verification checkmarks, and rating pills with crisp pure white (`#FFFFFF`), ensuring AAA visual legibility across Live Tracking, Explore dispatch sheets, and Driver Onboarding without ad-hoc tint pollution.
 
 ---
 

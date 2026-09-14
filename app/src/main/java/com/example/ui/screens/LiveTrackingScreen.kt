@@ -204,7 +204,7 @@ fun LiveTrackingScreen(
                     Icon(
                         imageVector = Icons.Filled.Shield,
                         contentDescription = "Safety Center",
-                        tint = IceBlue,
+                        tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -213,7 +213,7 @@ fun LiveTrackingScreen(
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape)
-                        .border(1.dp, IceBlue.copy(alpha = 0.4f), CircleShape)
+                        .border(1.dp, Color.White.copy(alpha = 0.4f), CircleShape)
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
@@ -302,7 +302,7 @@ fun LiveTrackingScreen(
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(IceBlue)
+                                .background(Color.White)
                         )
                         Text(
                             text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Thulane"} is heading to you",
@@ -312,7 +312,7 @@ fun LiveTrackingScreen(
                         )
                         Text(
                             text = "• ${String.format(java.util.Locale.US, "%.1f km", liveDistanceRemainingKm)} ($liveEtaMinutes min)",
-                            color = IceBlue,
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -334,13 +334,13 @@ fun LiveTrackingScreen(
                         modifier = Modifier
                             .size(7.dp)
                             .clip(CircleShape)
-                            .background(IceBlue)
+                            .background(Color.White)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Column {
                         Text(
                             text = "HEADING TO YOU",
-                            color = IceBlue,
+                            color = Color.White,
                             fontSize = 9.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.5.sp
@@ -375,7 +375,7 @@ fun LiveTrackingScreen(
                         Icon(
                             imageVector = Icons.Filled.MyLocation,
                             contentDescription = "Recenter Map",
-                            tint = IceBlue,
+                            tint = Color.White,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -448,7 +448,7 @@ fun LiveTrackingScreen(
                             Icon(
                                 imageVector = Icons.Filled.Lock,
                                 contentDescription = null,
-                                tint = IceBlue,
+                                tint = Color.White,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -466,7 +466,7 @@ fun LiveTrackingScreen(
                                 Icon(
                                     imageVector = Icons.Filled.Shield,
                                     contentDescription = null,
-                                    tint = IceBlue,
+                                    tint = Color.White,
                                     modifier = Modifier.size(12.dp)
                                 )
                             }
@@ -533,49 +533,49 @@ fun LiveTrackingScreen(
                                         .align(Alignment.BottomEnd)
                                         .size(18.dp)
                                         .clip(CircleShape)
-                                        .background(VoltPrimaryContainer),
+                                        .background(VoltSurfaceContainerHigh),
                                     contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Verified,
-                                        contentDescription = "Verified Driver",
-                                        tint = IceBlue,
-                                        modifier = Modifier.size(12.dp)
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Column {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(
-                                        text = state.matchedDriverName,
-                                        color = VoltOnSurface,
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Icon(
-                                        imageVector = Icons.Filled.Verified,
-                                        contentDescription = null,
-                                        tint = IceBlue,
-                                        modifier = Modifier.size(14.dp)
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Star,
-                                        contentDescription = null,
-                                        tint = IceBlue,
-                                        modifier = Modifier.size(14.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(4.dp))
-                                    Text(
-                                        text = state.driverRating,
-                                        color = VoltOnSurface,
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
+                                 ) {
+                                     Icon(
+                                         imageVector = Icons.Filled.Verified,
+                                         contentDescription = "Verified Driver",
+                                         tint = Color.White,
+                                         modifier = Modifier.size(12.dp)
+                                     )
+                                 }
+                             }
+                             Spacer(modifier = Modifier.width(16.dp))
+                             Column {
+                                 Row(verticalAlignment = Alignment.CenterVertically) {
+                                     Text(
+                                         text = state.matchedDriverName,
+                                         color = VoltOnSurface,
+                                         fontSize = 16.sp,
+                                         fontWeight = FontWeight.Bold
+                                     )
+                                     Spacer(modifier = Modifier.width(6.dp))
+                                     Icon(
+                                         imageVector = Icons.Filled.Verified,
+                                         contentDescription = null,
+                                         tint = Color.White,
+                                         modifier = Modifier.size(14.dp)
+                                     )
+                                 }
+                                 Spacer(modifier = Modifier.height(2.dp))
+                                 Row(verticalAlignment = Alignment.CenterVertically) {
+                                     Icon(
+                                         imageVector = Icons.Filled.Star,
+                                         contentDescription = null,
+                                         tint = Color.White,
+                                         modifier = Modifier.size(14.dp)
+                                     )
+                                     Spacer(modifier = Modifier.width(4.dp))
+                                     Text(
+                                         text = state.driverRating,
+                                         color = Color.White,
+                                         fontSize = 12.sp,
+                                         fontWeight = FontWeight.Bold
+                                     )
                                     Text(
                                         text = " • ${state.driverTripsCount}",
                                         color = VoltSecondary,
@@ -611,7 +611,7 @@ fun LiveTrackingScreen(
                                 Icon(
                                     imageVector = Icons.Filled.AirlineSeatReclineExtra,
                                     contentDescription = null,
-                                    tint = IceBlue,
+                                    tint = Color.White,
                                     modifier = Modifier.size(14.dp)
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -745,7 +745,7 @@ fun LiveTrackingScreen(
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = "PICKUP SPOT",
-                                color = IceBlue,
+                                color = Color.White,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 1.sp
@@ -836,7 +836,7 @@ fun LiveTrackingScreen(
                         )
                         Text(
                             text = "Fixed Fare",
-                            color = IceBlue,
+                            color = Color.White,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -1098,7 +1098,7 @@ private fun TrackingMapCanvas(
             drawPath(
                 path = routePath,
                 brush = Brush.linearGradient(
-                    colors = listOf(IceBlue, MediumBlue, IceBlueSoft),
+                    colors = listOf(Color.White, Color.White, Color(0xFFE2E8F0)),
                     start = p0,
                     end = p3
                 ),
@@ -1120,7 +1120,7 @@ private fun TrackingMapCanvas(
                 center = p0
             )
             drawCircle(
-                color = IceBlue.copy(alpha = 0.5f),
+                color = Color.White.copy(alpha = 0.5f),
                 radius = 3.dp.toPx(),
                 center = p0
             )
@@ -1128,12 +1128,12 @@ private fun TrackingMapCanvas(
             // 4. User Location Marker (at p3: You / Current or Selected Pickup)
             // Pulsing Concentric GPS Halo
             drawCircle(
-                color = IceBlue.copy(alpha = 0.22f),
+                color = Color.White.copy(alpha = 0.22f),
                 radius = 22.dp.toPx() * (pulseScale - 0.1f),
                 center = p3
             )
             drawCircle(
-                color = IceBlue.copy(alpha = 0.35f),
+                color = Color.White.copy(alpha = 0.35f),
                 radius = 12.dp.toPx(),
                 center = p3
             )
@@ -1143,7 +1143,7 @@ private fun TrackingMapCanvas(
                 center = p3
             )
             drawCircle(
-                color = IceBlue,
+                color = Color.White,
                 radius = 5.dp.toPx(),
                 center = p3
             )
@@ -1173,16 +1173,16 @@ private fun TrackingMapCanvas(
             val headingAngleRad = kotlin.math.atan2(dy, dx)
             val headingAngleDeg = Math.toDegrees(headingAngleRad.toDouble()).toFloat()
 
-            // Pulsing Ice Blue Radar Ring around Driver Vehicle
+            // Pulsing White Radar Ring around Driver Vehicle
             drawCircle(
-                color = IceBlue.copy(alpha = 0.25f),
+                color = Color.White.copy(alpha = 0.25f),
                 radius = 22.dp.toPx() * pulseScale,
                 center = carCenter
             )
 
             // Rotated Vehicle Puck with Headlights & Directional Pointer heading towards You
             rotate(degrees = headingAngleDeg, pivot = carCenter) {
-                // Forward headlights beam in Ice Blue
+                // Forward headlights beam in White
                 val beamPath = Path().apply {
                     moveTo(carCenter.x + 12.dp.toPx(), carCenter.y)
                     lineTo(carCenter.x + 36.dp.toPx(), carCenter.y - 14.dp.toPx())
@@ -1192,7 +1192,7 @@ private fun TrackingMapCanvas(
                 drawPath(
                     path = beamPath,
                     brush = Brush.horizontalGradient(
-                        colors = listOf(IceBlue.copy(alpha = 0.35f), Color.Transparent),
+                        colors = listOf(Color.White.copy(alpha = 0.35f), Color.Transparent),
                         startX = carCenter.x + 12.dp.toPx(),
                         endX = carCenter.x + 36.dp.toPx()
                     )
@@ -1220,7 +1220,7 @@ private fun TrackingMapCanvas(
                 }
                 drawPath(
                     path = pointerPath,
-                    color = IceBlue
+                    color = Color.White
                 )
             }
         }
@@ -1250,7 +1250,7 @@ private fun TrackingMapCanvas(
                 .padding(end = 14.dp, bottom = 68.dp)
                 .clip(RoundedCornerShape(6.dp))
                 .background(VoltSurfaceContainerHigh.copy(alpha = 0.90f))
-                .border(0.5.dp, IceBlue.copy(alpha = 0.5f), RoundedCornerShape(6.dp))
+                .border(0.5.dp, Color.White.copy(alpha = 0.5f), RoundedCornerShape(6.dp))
                 .padding(horizontal = 6.dp, vertical = 3.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -1258,7 +1258,7 @@ private fun TrackingMapCanvas(
                     modifier = Modifier
                         .size(6.dp)
                         .clip(CircleShape)
-                        .background(IceBlue)
+                        .background(Color.White)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
