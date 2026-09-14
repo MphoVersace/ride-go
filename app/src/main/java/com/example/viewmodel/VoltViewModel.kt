@@ -498,7 +498,7 @@ class VoltViewModel : ViewModel() {
                 currentTab = VoltScreenTab.RIDES
             )
         }
-        showToast("R50 Voucher Activated! Ready to ride ⚡")
+        showToast("R50 Voucher Activated! Ready to ride")
     }
 
     fun startRiderSignUpFromAuth(name: String = "", email: String = "", phone: String = "") {
@@ -539,7 +539,7 @@ class VoltViewModel : ViewModel() {
                 userDisplayName = name,
                 userPhone = it.driverState.phoneNumber.ifBlank { it.userPhone },
                 currentTab = VoltScreenTab.DRIVER,
-                toastMessage = "Driver Onboarding Complete! Welcome Partner ⚡"
+                toastMessage = "Driver Onboarding Complete! Welcome Partner"
             )
         }
     }

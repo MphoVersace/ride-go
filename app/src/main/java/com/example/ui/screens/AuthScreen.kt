@@ -146,50 +146,15 @@ fun AuthScreen(
     ) {
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Official Ride GO Brand Emblem
+        // Official Ride GO Brand Logo (@RIDEGO.png)
         RideGoLogo(
-            size = 60.dp
+            size = 90.dp
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Brand Name Wordmark: Ride + Deep Navy Blue GO Pill
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = "Ride",
-                color = VoltOnSurface,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = (-0.5).sp
-            )
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(VoltPrimaryContainer)
-                    .border(1.dp, IceBlue.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 10.dp, vertical = 3.dp)
-            ) {
-                Text(
-                    text = "GO",
-                    color = Color.White,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = 0.5.sp
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = if (selectedTab == AuthTab.SIGN_IN) {
-                "Welcome back • Reliable Rides Across South Africa"
-            } else {
-                "Join Ride GO • Choose Rider or Driver Onboarding"
-            },
+            text = "Welcome to Ride Go • South Africa",
             color = VoltOnSurfaceVariant,
             fontSize = 13.sp,
             textAlign = TextAlign.Center
@@ -249,22 +214,21 @@ fun AuthScreen(
                     )
                 }
 
-                // Sign Up Tab
+                // Sign Up Tab - directly opens the Rider Sign Up screen where user can also switch to Driver
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .height(44.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .clickable {
-                            selectedTab = AuthTab.SIGN_UP
-                            errorMessage = null
+                            onStartRiderSignUp("", "", "")
                         }
                         .testTag("auth_tab_sign_up"),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Sign Up",
-                        color = if (selectedTab == AuthTab.SIGN_UP) VoltOnPrimaryFixed else VoltOnSurfaceVariant,
+                        color = VoltOnSurfaceVariant,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )

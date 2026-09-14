@@ -176,10 +176,10 @@ fun DriverOnboardingScreen(
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .testTag("driver_onboarding_screen")
     ) {
-        // Step Tracker Interactive Header
-        DriverStepNavigationPill(
+        // Step Tracker Interactive Header (matches Rider progress bar)
+        DriverProgressHeader(
             currentStep = state.currentStep,
-            onStepClick = onStepSelected
+            onStepSelected = onStepSelected
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -234,27 +234,25 @@ fun DriverOnboardingScreen(
     }
 }
 
-// Interactive Header Pill letting users click step 1-5
+// Progress Header Component (identically styled to RiderProgressHeader)
 @Composable
-fun DriverStepNavigationPill(
+private fun DriverProgressHeader(
     currentStep: Int,
-    onStepClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    onStepSelected: (Int) -> Unit
 ) {
-    val stepTitles = listOf(
-        "1. Credentials",
-        "2. Documents",
-        "3. Biometrics",
-        "4. Vehicle & Disc",
-        "5. Verification"
-    )
+    val progressPercent = when (currentStep) {
+        1 -> 20
+        2 -> 40
+        3 -> 60
+        4 -> 80
+        else -> 100
+    }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(VoltSurfaceContainer)
-            .padding(horizontal = 12.dp, vertical = 10.dp)
+            .padding(top = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -262,53 +260,44 @@ fun DriverStepNavigationPill(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "ONBOARDING PIPELINE",
+                text = "STEP 0$currentStep / 05",
                 color = VoltPrimaryContainer,
-                fontSize = 10.sp,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.sp
             )
-            Text(
-                text = "Step $currentStep of 5",
-                color = VoltOnSurfaceVariant,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.VerifiedUser,
+                    contentDescription = null,
+                    tint = if (currentStep == 5) VoltGreen else VoltPrimaryContainer,
+                    modifier = Modifier.size(13.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "$progressPercent% COMPLETED",
+                    color = VoltOnSurfaceVariant,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        // Progress bar line
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(6.dp)
+                .clip(CircleShape)
+                .background(VoltSurfaceContainerHigh)
         ) {
-            for (step in 1..5) {
-                val isCurrent = step == currentStep
-                val isCompleted = step < currentStep
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(30.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(
-                            when {
-                                isCurrent -> VoltPrimaryContainer
-                                isCompleted -> VoltPrimaryContainer.copy(alpha = 0.35f)
-                                else -> VoltSurfaceContainerHighest
-                            }
-                        )
-                        .clickable { onStepClick(step) }
-                        .padding(horizontal = 2.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "S$step",
-                        color = if (isCurrent) VoltOnPrimaryFixed else VoltOnSurface,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(progressPercent / 100f)
+                    .height(6.dp)
+                    .clip(CircleShape)
+                    .background(VoltPrimaryContainer)
+            )
         }
     }
 }
@@ -335,57 +324,7 @@ fun DriverStep1Credentials(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Progress Header
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(VoltPrimaryContainer)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "REGISTRATION PIPELINE",
-                        color = VoltPrimaryContainer,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
-                }
-                Text(
-                    text = "Step 1 of 5",
-                    color = VoltOnSurfaceVariant,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            // 20% Progress bar
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(RoundedCornerShape(3.dp))
-                    .background(VoltSurfaceContainerHighest)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.20f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(3.dp))
-                        .background(VoltPrimaryContainer)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Role Selector Segmented Pill (Switch to Rider Sign-Up vs Driver)
+        // Role Selector Segmented Pill (Switch to Rider Sign-Up vs Driver)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -577,7 +516,7 @@ fun DriverStep1Credentials(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "🇿🇦 +27",
+                        text = "+27",
                         color = VoltOnSurface,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
@@ -1018,57 +957,6 @@ fun DriverStep1Credentials(
             }
         }
 
-        // Trust Badges Footer
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(VoltSurfaceContainer)
-                        .padding(horizontal = 10.dp, vertical = 5.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Filled.Verified,
-                            contentDescription = null,
-                            tint = VoltPrimaryContainer,
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text("SAPS Verified", color = VoltOnSurfaceVariant, fontSize = 10.sp)
-                    }
-                }
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(VoltSurfaceContainer)
-                        .padding(horizontal = 10.dp, vertical = 5.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Filled.Lock,
-                            contentDescription = null,
-                            tint = VoltPrimaryContainer,
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text("256-bit Encrypted", color = VoltOnSurfaceVariant, fontSize = 10.sp)
-                    }
-                }
-            }
-            Text(
-                text = "Licensed under South African National Land Transport Act",
-                color = VoltSecondary,
-                fontSize = 10.sp
-            )
-        }
     }
 }
 
@@ -3553,27 +3441,7 @@ fun DriverStep5Review(
             )
         }
 
-        // Security Stamp Footer
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Lock,
-                contentDescription = null,
-                tint = VoltOnSurfaceVariant,
-                modifier = Modifier.size(13.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = "Ride Go Driver Protection & POPIA Encrypted",
-                color = VoltOnSurfaceVariant,
-                fontSize = 11.sp
-            )
-        }
+
     }
 }
 

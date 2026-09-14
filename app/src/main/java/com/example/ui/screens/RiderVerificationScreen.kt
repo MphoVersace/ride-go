@@ -44,6 +44,7 @@ import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.LocalActivity
+import androidx.compose.material.icons.filled.LocalOffer
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MarkEmailRead
 import androidx.compose.material.icons.filled.MenuBook
@@ -370,63 +371,6 @@ private fun RiderStep1SignUp(
             }
         }
 
-        // Express Sign Up Buttons
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                text = "EXPRESS SIGN UP",
-                color = VoltOnSurfaceVariant,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.sp
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                ExpressAuthButton(
-                    label = "Apple",
-                    icon = "",
-                    modifier = Modifier.weight(1f)
-                )
-                ExpressAuthButton(
-                    label = "Google",
-                    icon = "G",
-                    modifier = Modifier.weight(1f)
-                )
-                ExpressAuthButton(
-                    label = "Capitec",
-                    icon = "🏦",
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        // Divider
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(1.dp)
-                    .background(VoltSurfaceContainerHighest)
-            )
-            Text(
-                text = "  OR REGISTER MANUALLY  ",
-                color = VoltOnSurfaceVariant,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.sp
-            )
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(1.dp)
-                    .background(VoltSurfaceContainerHighest)
-            )
-        }
-
         // Form Fields
         // 1. Full Legal Name
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -491,8 +435,6 @@ private fun RiderStep1SignUp(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(start = 12.dp, end = 6.dp)
                     ) {
-                        Text(text = "🇿🇦", fontSize = 16.sp)
-                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = "+27",
                             color = VoltOnSurface,
@@ -667,57 +609,6 @@ private fun RiderStep1SignUp(
             }
         }
 
-        // POPIA Trust Guarantee
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(VoltSurfaceContainerLow)
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Security,
-                contentDescription = null,
-                tint = VoltPrimaryContainer,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = "POPIA Compliant • 256-Bit SSL Encryption • Bank-Grade Safety",
-                color = VoltOnSurfaceVariant,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-    }
-}
-
-@Composable
-private fun ExpressAuthButton(
-    label: String,
-    icon: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(VoltSurfaceContainer)
-            .clickable { }
-            .padding(vertical = 12.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = icon, fontSize = 14.sp)
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = label,
-                color = VoltOnSurface,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
     }
 }
 
@@ -1069,27 +960,7 @@ private fun RiderStep2ContactsVerification(
             )
         }
 
-        // Footer Trust
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Lock,
-                contentDescription = null,
-                tint = VoltOnSurfaceVariant,
-                modifier = Modifier.size(13.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = "END-TO-END 256-BIT SSL PROTECTED",
-                color = VoltOnSurfaceVariant,
-                fontSize = 9.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.sp
-            )
-        }
+
     }
 }
 
@@ -1471,25 +1342,7 @@ private fun RiderStep3SmartIdCapture(
             )
         }
 
-        // POPIA Trust Guarantee
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Filled.VerifiedUser,
-                contentDescription = null,
-                tint = VoltOnSurfaceVariant,
-                modifier = Modifier.size(13.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = "Encrypted with 256-bit biometrics under POPIA privacy standards",
-                color = VoltOnSurfaceVariant,
-                fontSize = 10.sp
-            )
-        }
+
     }
 }
 
@@ -2166,7 +2019,12 @@ private fun RiderStep5VerifiedProfile(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "🎉", fontSize = 20.sp)
+                    Icon(
+                        imageVector = Icons.Filled.LocalOffer,
+                        contentDescription = null,
+                        tint = VoltPrimaryContainer,
+                        modifier = Modifier.size(22.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
