@@ -547,7 +547,7 @@ fun RidesScreen(
                 SlideToConfirm(
                     price = "R$finalPrice",
                     onConfirmed = onConfirmDispatch,
-                    modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(top = 4.dp, bottom = 84.dp)
                 )
             }
         }

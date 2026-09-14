@@ -290,20 +290,12 @@ fun VoltAppRoot(
                 )
             }
         },
-        bottomBar = {
-            if (!uiState.isDispatchActive && !uiState.isRiderVerificationActive && !uiState.isDriverOnboardingActive) {
-                VoltBottomNav(
-                    currentTab = uiState.currentTab,
-                    onTabSelected = { viewModel.selectTab(it) }
-                )
-            }
-        },
         containerColor = VoltSurface
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding())
         ) {
             // Main Screen content switcher
             if (uiState.isDispatchActive) {
@@ -503,13 +495,14 @@ fun VoltAppRoot(
             }
 
             // Kinetic Toast Banner Overlay
+            val hasBottomNav = !uiState.isDispatchActive && !uiState.isRiderVerificationActive && !uiState.isDriverOnboardingActive
             AnimatedVisibility(
                 visible = uiState.toastMessage != null,
                 enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(100)) + fadeIn(animationSpec = tween(100)),
                 exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(100)) + fadeOut(animationSpec = tween(100)),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = if (hasBottomNav) 88.dp else 16.dp)
                     .navigationBarsPadding()
             ) {
                 uiState.toastMessage?.let { msg ->
@@ -538,6 +531,15 @@ fun VoltAppRoot(
                         }
                     }
                 }
+            }
+
+            // Floating Stadium Pill Bottom Navigation Bar (Overlaid directly with 100% transparent footer)
+            if (hasBottomNav) {
+                VoltBottomNav(
+                    currentTab = uiState.currentTab,
+                    onTabSelected = { viewModel.selectTab(it) },
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
             }
         }
     }
