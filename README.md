@@ -4,6 +4,7 @@
 [![Language](https://img.shields.io/badge/Language-Kotlin_1.9-0B1938?style=for-the-badge&logo=kotlin&logoColor=FFFFFF&labelColor=000000)](https://kotlinlang.org/)
 [![UI Toolkit](https://img.shields.io/badge/UI-Jetpack_Compose-0B1938?style=for-the-badge&logo=jetpackcompose&logoColor=FFFFFF&labelColor=000000)](https://developer.android.com/jetpack/compose)
 [![Architecture](https://img.shields.io/badge/Architecture-MVVM_%2B_Flow-0B1938?style=for-the-badge&logo=androidstudio&logoColor=FFFFFF&labelColor=000000)](https://developer.android.com/topic/architecture)
+[![Map Engine](https://img.shields.io/badge/Map_Engine-OpenStreetMap_%2F_osmdroid-0E2454?style=for-the-badge&logo=openstreetmap&logoColor=FFFFFF&labelColor=000000)](https://www.openstreetmap.org/)
 [![Design System](https://img.shields.io/badge/Design_System-Strict_60--30--10_Black_Navy_White-0E2454?style=for-the-badge&logo=materialdesign&logoColor=FFFFFF&labelColor=000000)](#design-architecture)
 [![Region](https://img.shields.io/badge/Region-South_Africa-0B1938?style=for-the-badge&logo=googlemaps&logoColor=FFFFFF&labelColor=000000)](#key-features)
 [![License](https://img.shields.io/badge/License-Proprietary-0B1938?style=for-the-badge&logo=shield&logoColor=FFFFFF&labelColor=000000)](#)
@@ -85,6 +86,7 @@ ride-go/
 │   │   │   │       │   └── Type.kt               # Modern typography scale
 │   │   │   │       ├── components/
 │   │   │   │       │   ├── RideGoLogo.kt         # Official Ride Go brand logo component utilizing RIDEGO.png assets
+│   │   │   │       │   ├── OsmMapView.kt         # Live OpenStreetMap (osmdroid) Compose engine with 60-30-10 dark mode filter
 │   │   │   │       │   ├── RadarViewport.kt      # Real-time driver radar sweep canvas
 │   │   │   │       │   ├── SlideToConfirm.kt     # Interactive physics-based booking confirmation slider
 │   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Deep Navy shadow
@@ -132,9 +134,11 @@ ride-go/
    - **Fixed Keystore Security**: Committed `debug.keystore` guarantees persistent cryptographic signature consistency across all automated CI builds, preventing Android "App not installed: signature mismatch" errors.
    - **Automated Continuous Releases**: GitHub Actions automatically updates the `latest` tag release with fresh `ride-go-debug.apk` binaries on every successful build.
    - **In-App Notification & One-Tap Install**: Checks `https://api.github.com/repos/MphoVersace/ride-go/releases/latest` at startup, displays a floating update banner, downloads the APK with download progress, and triggers native Android package installer via `FileProvider`.
-2. **Current Location Map & Hub Telemetry**:
-   - Interactive vector map centered on the rider's actual current location (`uiState.pickupLocation`).
-   - Real-time GPS calibration button and localized active vehicle fleet telemetry.
+2. **Live OpenStreetMap (osmdroid) Engine & Hub Telemetry**:
+   - **Real Multi-Touch Interactive Map**: 100% free, zero-quota OpenStreetMap tile engine powered by `osmdroid`, replacing static canvas with interactive pan, tilt, and pinch-to-zoom.
+   - **Custom Executive Dark Mode**: Embedded `ColorMatrixColorFilter` inverts light OSM tiles into deep obsidian (`#000000` / `#050811`) and deep navy (`#0B1938`) roads to strictly adhere to the 60-30-10 design system.
+   - **Dynamic South African GPS Geofencing**: Automatically anchors coordinates to user's pickup spot (Sandton, Cape Town, Durban, Pretoria, O.R. Tambo Airport) with smooth camera animation upon tapping the recenter FAB.
+   - **Real-Time Fleet HUD & Vignette Fade**: Live floating vehicle count, pickup location anchor pin, and top/bottom atmospheric vignette gradients seamlessly layered over live vector tiles.
 3. **South African Destination & Dual Route Search Screen**:
    - Full-screen search console with dual text inputs for editing pickup and destination.
    - Real-time instant filtering across South African international airports (O.R. Tambo, CPT, King Shaka), business hubs (Sandton, Rosebank, Foreshore), and shopping landmarks (Mall of Africa, Canal Walk, Menlyn Maine, Gateway Theatre of Shopping).
