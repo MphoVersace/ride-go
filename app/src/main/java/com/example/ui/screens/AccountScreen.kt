@@ -109,7 +109,7 @@ fun AccountScreen(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = if (isRiderVerified) "Nomvula Zungu" else "Nomvula Zungu",
+                    text = if (isRiderVerified) "Thulane J. Sigasa" else "Thulane J. Sigasa",
                     color = VoltOnSurface,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold

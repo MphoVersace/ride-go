@@ -92,7 +92,8 @@ import com.example.ui.theme.VoltSurfaceContainerHigh
 import com.example.ui.theme.VoltSurfaceContainerHighest
 import com.example.ui.theme.VoltSurfaceDim
 
-private const val DRIVER_AVATAR_URL = "https://lh3.googleusercontent.com/aida-public/AB6AXuDVJixUQtBYgGO1TXvYbqQT_kvmicOQcycCcK3lRVuiMSfocST8EcBQALwxjdozIJp15xKrKMJvEpIy2DfpeW76Mzc0fcaEzp_YorBPmdjtf0_jwY68yR_a9AsIOMlcekpqIIuXbLy18pDmheIlIXolL4KQu30bZpbtY0PxYsKCS8n91BQYwjVURYJjMLy5poU5Ossm351ma6bprlTvcC4eW4NOqLTu-Cbn2MD4enuI2nG1RIne0dzsMRMwBp1deH29xhNNpuGFLGO5rA"
+private const val DRIVER_AVATAR_URL =
+    "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww"
 
 private data class QuickCategoryItem(
     val id: String,
@@ -1016,7 +1017,7 @@ fun ExploreScreen(
                                     .data(DRIVER_AVATAR_URL)
                                     .crossfade(true)
                                     .build(),
-                                contentDescription = "Driver Thulane J.",
+                                contentDescription = "Driver Thulane J. Sigasa",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .size(48.dp)
@@ -1046,7 +1047,7 @@ fun ExploreScreen(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 Text(
-                                    text = "Thulane J.",
+                                    text = "Thulane J. Sigasa",
                                     color = VoltOnSurface,
                                     fontSize = 15.sp,
                                     fontWeight = FontWeight.Bold

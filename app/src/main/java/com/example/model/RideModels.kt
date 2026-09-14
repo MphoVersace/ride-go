@@ -144,9 +144,9 @@ data class RiderVerificationState(
     val currentStep: Int = 1, // 1 to 5
     // Step 1: Sign Up & Gateway
     val isDriverSelected: Boolean = false,
-    val fullName: String = "Nomvula Zungu",
-    val phone: String = "071 839 2041",
-    val email: String = "nomvula.zungu@icloud.com",
+    val fullName: String = "Thulane J. Sigasa",
+    val phone: String = "079 123 4567",
+    val email: String = "pharezsigasa@gmail.com",
     val tosAccepted: Boolean = true,
     val promoAccepted: Boolean = true,
     val isSendingOtp: Boolean = false,
