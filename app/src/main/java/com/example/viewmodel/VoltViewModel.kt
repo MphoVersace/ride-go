@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 data class VoltUiState(
     val currentTab: VoltScreenTab = VoltScreenTab.EXPLORE,
@@ -40,6 +41,9 @@ data class VoltUiState(
     val driverProvince: String = "Gauteng",
     val driverVehicleColor: String = "Midnight Silver Metallic",
     val rideSecurityPin: String = "4819",
+    val driverStartDistanceKm: Float = 2.4f,
+    val driverDistanceText: String = "2.4 km",
+    val driverApproachAngle: Float = 45f,
     val driverEtaMinutes: Int = 3,
     val driverEtaTimeFormatted: String = "09:42 AM",
     val activeActivityTab: String = "Past Trips", // Past Trips, Upcoming (1), Business
@@ -158,6 +162,32 @@ class VoltViewModel : ViewModel() {
         showToast("Filtering by: $filter")
     }
 
+    private fun generateRandomDriverDispatch(currentState: VoltUiState): VoltUiState {
+        // Random starting distance between 1.6 km and 3.8 km
+        val randomDistanceTenths = (16..38).random()
+        val randomDistanceKm = randomDistanceTenths / 10f
+        val randomEtaMinutes = (randomDistanceKm * 1.5f).roundToInt().coerceAtLeast(3)
+
+        val calendar = java.util.Calendar.getInstance()
+        calendar.add(java.util.Calendar.MINUTE, randomEtaMinutes)
+        val timeFormat = java.text.SimpleDateFormat("hh:mm a", java.util.Locale.US)
+        val formattedTime = timeFormat.format(calendar.time)
+
+        val randomAngle = listOf(30f, 55f, 125f, 215f, 310f).random()
+
+        return currentState.copy(
+            isDispatchActive = true,
+            isDriverMatched = true,
+            driverStartDistanceKm = randomDistanceKm,
+            driverDistanceText = String.format(java.util.Locale.US, "%.1f km", randomDistanceKm),
+            driverEtaMinutes = randomEtaMinutes,
+            driverEtaTimeFormatted = formattedTime,
+            driverApproachAngle = randomAngle,
+            dispatchStatusText = "Marcus Vance confirmed your ride request!",
+            dispatchProgress = 1.0f
+        )
+    }
+
     fun startDispatch() {
         _uiState.update {
             it.copy(
@@ -177,28 +207,19 @@ class VoltViewModel : ViewModel() {
                 )
             }
             delay(1800)
-            _uiState.update {
-                it.copy(
-                    dispatchStatusText = "Marcus Vance confirmed your ride request!",
-                    dispatchProgress = 1.0f,
-                    isDriverMatched = true
-                )
-            }
-            showToast("Driver confirmed! Marcus is 3 mins away.")
+            _uiState.update { generateRandomDriverDispatch(it) }
+            val dist = _uiState.value.driverDistanceText
+            val mins = _uiState.value.driverEtaMinutes
+            showToast("Driver confirmed! Marcus is heading to you ($dist away).")
         }
     }
 
     fun confirmDriverNow() {
         dispatchJob?.cancel()
-        _uiState.update {
-            it.copy(
-                isDispatchActive = true,
-                isDriverMatched = true,
-                dispatchStatusText = "Driver Marcus Vance confirmed your booking!",
-                dispatchProgress = 1.0f
-            )
-        }
-        showToast("Marcus Vance confirmed! Live trip tracking started.")
+        _uiState.update { generateRandomDriverDispatch(it) }
+        val dist = _uiState.value.driverDistanceText
+        val mins = _uiState.value.driverEtaMinutes
+        showToast("Marcus Vance is on the way! $dist away ($mins mins).")
     }
 
     fun cancelDispatch() {

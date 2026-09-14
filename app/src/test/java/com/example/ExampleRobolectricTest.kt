@@ -259,5 +259,23 @@ class ExampleRobolectricTest {
     viewModel.dismissAppUpdateBanner()
     assertFalse(viewModel.uiState.value.appUpdateAvailable)
   }
+
+  @Test
+  fun `rider confirms ride and driver matches with random distance and heading towards pickup location`() {
+    val viewModel = VoltViewModel()
+    viewModel.updatePickupLocation("Camps Bay Promenade (Victoria Rd)")
+
+    // Confirm driver booking
+    viewModel.confirmDriverNow()
+
+    val state = viewModel.uiState.value
+    assertTrue(state.isDriverMatched)
+    assertTrue(state.isDispatchActive)
+    assertTrue("Driver distance should be > 1.0 km, was ${state.driverStartDistanceKm}", state.driverStartDistanceKm >= 1.0f)
+    assertTrue("Driver distance should be <= 4.0 km, was ${state.driverStartDistanceKm}", state.driverStartDistanceKm <= 4.0f)
+    assertTrue(state.driverDistanceText.endsWith("km"))
+    assertTrue("ETA minutes should be >= 3, was ${state.driverEtaMinutes}", state.driverEtaMinutes >= 3)
+    assertEquals("Camps Bay Promenade (Victoria Rd)", state.pickupLocation)
+  }
 }
 
