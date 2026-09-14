@@ -919,7 +919,7 @@ fun ExploreScreen(
                                     Icon(
                                         imageVector = booking.icon,
                                         contentDescription = booking.title,
-                                        tint = VoltPrimaryContainer,
+                                        tint = Color.White,
                                         modifier = Modifier.size(22.dp)
                                     )
                                 }
@@ -970,14 +970,14 @@ fun ExploreScreen(
                             ) {
                                 Text(
                                     text = booking.eta,
-                                    color = VoltPrimaryContainer,
+                                    color = Color.White,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                                     contentDescription = "Navigate to ${booking.title}",
-                                    tint = VoltOnSurfaceVariant,
+                                    tint = Color.White,
                                     modifier = Modifier.size(20.dp)
                                 )
                             }
