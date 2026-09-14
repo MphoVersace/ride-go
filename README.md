@@ -183,6 +183,10 @@ ride-go/
     - Floating stadium capsule bar anchored above system navigation gestures with deep drop shadow, dedicated strictly to the 4 core navigation destinations: **Hub**, **Rides**, **Activity**, and **Account**. Overlaid with a 100% transparent host eliminating the solid black Scaffold bottom bar footer, allowing live map tiles and content to extend edge-to-edge behind the floating capsule. Features a smooth physics-animated sliding active tab indicator with pure white active dot and high-contrast vector iconography.
 18. **Crisp Pure White Driver Rating Stars & Verification Badges**:
     - Replaced all legacy blue and navy container tints on driver rating stars, verification checkmarks, and rating pills with crisp pure white (`#FFFFFF`), ensuring AAA visual legibility across Live Tracking, Explore dispatch sheets, and Driver Onboarding without ad-hoc tint pollution.
+19. **Real-Time Dynamic Route Shortening & Calibrated Approach Speed (0.1 km / 1.7s)**:
+    - Implemented `RouteRepository.getRemainingRoutePoints` dynamically slicing the OpenStreetMap road polyline in real time as the driver advances from Woodmead toward the rider. The traversed dotted road behind the vehicle is dynamically removed, while driver speed is calibrated to exactly 0.1 km per 1.7 seconds with clean live distance and ETA telemetry.
+20. **Streamlined Live Tracking Telemetry & Identity Alignment**:
+    - Removed redundant duplicate "heading your way" status overlays in favor of a single floating distance & ETA status pill. Aligned driver historical trip cards in the Activity hub to use Thulane's verified profile avatar.
 
 ---
 

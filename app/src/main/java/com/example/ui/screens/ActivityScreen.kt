@@ -90,8 +90,8 @@ import com.example.ui.theme.VoltSurfaceContainerLow
 import com.example.ui.theme.VoltSurfaceVariant
 import com.example.viewmodel.VoltUiState
 
-private const val DRIVER_MARCUS_AVATAR =
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBFxyFub9GqL0mV38n2lHCZnraw-mkm5fHCGrsSx68k-rPtVo5G_a5AjDi-0wf_D36Lnxa3A9v-7alIFwlQY-IYvNlDXNRpQx-3ZXFSAsAX-DDVBwhXa_umaQu_5OwUQ_KwzvEGJACRtCqjL9Tjpq_IkuCdKlqmefA_cEQQZ_6pDrx_u0xOU-oETQfjJoyB7JEasChf5gf-N1dAoR7QZKYuELQr6wH1wkXm-wTU2QpR1aT61EmD-nWn"
+private const val DRIVER_AVATAR_URL =
+    "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww"
 
 @Composable
 fun ActivityScreen(
@@ -1840,7 +1840,7 @@ private fun Trip1Card(
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(DRIVER_MARCUS_AVATAR)
+                            .data(DRIVER_AVATAR_URL)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Driver Avatar",
