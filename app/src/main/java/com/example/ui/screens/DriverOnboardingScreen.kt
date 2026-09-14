@@ -407,7 +407,6 @@ fun DriverStep1Credentials(
                 fontSize = 13.sp,
                 lineHeight = 18.sp
             )
-        }
 
         // Hero Earnings Accent Card
         Box(
@@ -956,7 +955,6 @@ fun DriverStep1Credentials(
                 )
             }
         }
-
     }
 }
 
