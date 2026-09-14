@@ -74,6 +74,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.model.RideTierType
+import com.example.ui.components.OsmMapView
 import com.example.ui.theme.DeepNavyBlue
 import com.example.ui.theme.DeepNavyContainer
 import com.example.ui.theme.DeepNavySurfaceHighest
@@ -204,6 +205,25 @@ fun ExploreScreen(
         )
     }
 
+    var recenterTrigger by remember { mutableStateOf(0) }
+
+    // Dynamic South African GPS coordinates anchored to rider's current location
+    val (mapLat, mapLon) = remember(pickupLocation) {
+        when {
+            pickupLocation.contains("Cape Town", ignoreCase = true) ||
+            pickupLocation.contains("Camps Bay", ignoreCase = true) ||
+            pickupLocation.contains("Waterfront", ignoreCase = true) -> -33.9249 to 18.4241
+            pickupLocation.contains("Durban", ignoreCase = true) ||
+            pickupLocation.contains("Umhlanga", ignoreCase = true) ||
+            pickupLocation.contains("King Shaka", ignoreCase = true) -> -29.8587 to 31.0218
+            pickupLocation.contains("Pretoria", ignoreCase = true) ||
+            pickupLocation.contains("Menlyn", ignoreCase = true) -> -25.7479 to 28.2293
+            pickupLocation.contains("Airport", ignoreCase = true) ||
+            pickupLocation.contains("Tambo", ignoreCase = true) -> -26.1367 to 28.2411
+            else -> -26.1076 to 28.0567 // Sandton City / Rivonia Rd, Johannesburg (Default)
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -212,15 +232,25 @@ fun ExploreScreen(
             .testTag("explore_hub_screen")
     ) {
         // ==========================================
-        // 1. Interactive Map Viewport Layer (340dp)
+        // 1. Interactive OpenStreetMap Viewport Layer (340dp)
         // ==========================================
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(340.dp)
-                .background(Color(0xFF0D0E10))
+                .background(VoltSurface)
                 .testTag("map_viewport_layer")
         ) {
+            // Real OpenStreetMap (osmdroid) interactive map engine
+            OsmMapView(
+                latitude = mapLat,
+                longitude = mapLon,
+                zoomLevel = 15.5,
+                isDarkMode = true,
+                recenterTrigger = recenterTrigger,
+                modifier = Modifier.fillMaxSize()
+            )
+
             // Live Pulsing Halo Animation
             val infiniteTransition = rememberInfiniteTransition(label = "pulse_anim")
             val pulseScale by infiniteTransition.animateFloat(
@@ -242,90 +272,6 @@ fun ExploreScreen(
                 label = "pulseAlpha"
             )
 
-            // Vector Map Canvas: Grid, Roads & Medium Blue Trajectory
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                val w = size.width
-                val h = size.height
-
-                // Dark grid lines
-                val gridStep = 48.dp.toPx()
-                var x = 0f
-                while (x <= w) {
-                    drawLine(
-                        color = Color(0xFF343537).copy(alpha = 0.25f),
-                        start = Offset(x, 0f),
-                        end = Offset(x, h),
-                        strokeWidth = 0.8f
-                    )
-                    x += gridStep
-                }
-                var y = 0f
-                while (y <= h) {
-                    drawLine(
-                        color = Color(0xFF343537).copy(alpha = 0.25f),
-                        start = Offset(0f, y),
-                        end = Offset(w, y),
-                        strokeWidth = 0.8f
-                    )
-                    y += gridStep
-                }
-
-                // Ambient Secondary Road Arteries
-                drawLine(
-                    color = Color(0xFF292A2C).copy(alpha = 0.7f),
-                    start = Offset(-20f, h * 0.35f),
-                    end = Offset(w + 20f, h * 0.45f),
-                    strokeWidth = 6.dp.toPx()
-                )
-                drawLine(
-                    color = Color(0xFF292A2C).copy(alpha = 0.7f),
-                    start = Offset(w * 0.25f, -10f),
-                    end = Offset(w * 0.75f, h + 10f),
-                    strokeWidth = 5.dp.toPx()
-                )
-                drawLine(
-                    color = Color(0xFF292A2C).copy(alpha = 0.5f),
-                    start = Offset(-10f, h * 0.8f),
-                    end = Offset(w + 10f, h * 0.2f),
-                    strokeWidth = 4.dp.toPx()
-                )
-
-                // Active Route Polyline (Curved Dashed Medium Blue Line with Ice Blue Glow)
-                val routePath = Path().apply {
-                    moveTo(-20f, h * 0.58f)
-                    cubicTo(
-                        w * 0.25f, h * 0.72f,
-                        w * 0.42f, h * 0.52f,
-                        w * 0.50f, h * 0.48f // Pin waypoint location
-                    )
-                    cubicTo(
-                        w * 0.65f, h * 0.42f,
-                        w * 0.85f, h * 0.32f,
-                        w + 30f, h * 0.25f
-                    )
-                }
-
-                // Route background glow stroke
-                drawPath(
-                    path = routePath,
-                    color = IceBlue.copy(alpha = 0.35f),
-                    style = Stroke(
-                        width = 8.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(24f, 16f), 0f)
-                    )
-                )
-
-                // Active crisp medium blue dashed trajectory
-                drawPath(
-                    path = routePath,
-                    color = MediumBlue,
-                    style = Stroke(
-                        width = 4.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(24f, 16f), 0f)
-                    )
-                )
-            }
-
             // Map Ambience Vignette Gradients (Top & Bottom seamless fade)
             Box(
                 modifier = Modifier
@@ -333,7 +279,7 @@ fun ExploreScreen(
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                VoltSurface.copy(alpha = 0.85f),
+                                VoltSurface.copy(alpha = 0.80f),
                                 Color.Transparent,
                                 Color.Transparent,
                                 VoltSurface
@@ -464,7 +410,10 @@ fun ExploreScreen(
             ) {
                 // Re-center Location
                 IconButton(
-                    onClick = onRecenterLocation,
+                    onClick = {
+                        onRecenterLocation()
+                        recenterTrigger++
+                    },
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
