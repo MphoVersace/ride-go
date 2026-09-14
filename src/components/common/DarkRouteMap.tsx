@@ -77,7 +77,7 @@ export const DarkRouteMap: React.FC<DarkRouteMapProps> = ({
           fill="none"
         />
 
-        {/* Active Route Trajectory (Electric Yellow Glow) */}
+        {/* Active Route Trajectory (Medium Blue Path) */}
         {showRoute && (
           <G>
             {/* Glow Path */}

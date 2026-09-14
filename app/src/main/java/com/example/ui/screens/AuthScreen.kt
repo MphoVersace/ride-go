@@ -186,7 +186,7 @@ fun AuthScreen(
 
         Text(
             text = if (selectedTab == AuthTab.SIGN_IN) {
-                "Welcome back • Electric Rides Across South Africa"
+                "Welcome back • Reliable Rides Across South Africa"
             } else {
                 "Join Ride GO • Choose Rider or Driver Onboarding"
             },
@@ -654,7 +654,7 @@ fun AuthScreen(
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
-                                    text = "Book electric rides & unlock R50 voucher",
+                                    text = "Book rides & unlock R50 voucher",
                                     color = VoltOnSurfaceVariant,
                                     fontSize = 11.sp,
                                     lineHeight = 15.sp
@@ -823,7 +823,7 @@ fun AuthScreen(
                                 }
 
                                 Text(
-                                    text = "• Step 1: Personal credentials & City\n• Step 2: License card & PrDP upload\n• Step 3: SAPS biometric background check\n• Step 4: EV Vehicle review & Dekra disc\n• Step 5: Partner activation & Payout bank",
+                                    text = "• Step 1: Personal credentials & City\n• Step 2: License card & PrDP upload\n• Step 3: SAPS biometric background check\n• Step 4: Vehicle review & Dekra disc\n• Step 5: Partner activation & Payout bank",
                                     color = VoltOnSurfaceVariant,
                                     fontSize = 12.sp,
                                     lineHeight = 18.sp

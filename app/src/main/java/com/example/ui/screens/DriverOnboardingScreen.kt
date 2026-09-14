@@ -3398,14 +3398,14 @@ fun DriverStep5Review(
 
                     Column(modifier = Modifier.padding(14.dp)) {
                         Text(
-                            text = "Top Driver Ratings & EV Range Mastery",
+                            text = "Top Driver Ratings & Route Mastery",
                             color = VoltOnSurface,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = "Learn urban battery management tips and how five-star etiquette secures Cape Town's highest tipping corporate routes.",
+                            text = "Learn urban route efficiency tips and how five-star etiquette secures Cape Town's highest tipping corporate routes.",
                             color = VoltOnSurfaceVariant,
                             fontSize = 11.sp,
                             lineHeight = 15.sp
