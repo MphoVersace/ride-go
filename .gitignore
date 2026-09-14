@@ -60,3 +60,12 @@ stitch/
 *.stitch.*
 .agents/
 mcp_config.json
+
+# AI assistant configs and guidelines
+.claude/
+.claude
+CLAUDE.md
+claude.md
+AGENTS.md
+agents.md
+
