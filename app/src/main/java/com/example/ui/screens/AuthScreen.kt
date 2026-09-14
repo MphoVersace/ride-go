@@ -138,7 +138,7 @@ fun AuthScreen(
 
         // Official Ride GO Brand Logo (@RIDEGO.png)
         RideGoLogo(
-            size = 90.dp
+            size = 48.dp
         )
 
         Spacer(modifier = Modifier.height(8.dp))

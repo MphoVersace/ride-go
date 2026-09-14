@@ -134,8 +134,8 @@ ride-go/
    - **Fixed Keystore Security**: Committed `debug.keystore` guarantees persistent cryptographic signature consistency across all automated CI builds, preventing Android "App not installed: signature mismatch" errors.
    - **Automated Continuous Releases**: GitHub Actions automatically updates the `latest` tag release with fresh `ride-go-debug.apk` binaries on every successful build.
    - **In-App Notification & One-Tap Install**: Checks `https://api.github.com/repos/MphoVersace/ride-go/releases/latest` at startup, displays a floating update banner, downloads the APK with download progress, and triggers native Android package installer via `FileProvider`.
-2. **Live OpenStreetMap (osmdroid) Engine & Hub Telemetry**:
-   - **Real Multi-Touch Interactive Map**: 100% free, zero-quota OpenStreetMap tile engine powered by `osmdroid`, replacing static canvas with interactive pan, tilt, and pinch-to-zoom.
+2. **Live OpenStreetMap (osmdroid) Engine Across Hub & Rides Tabs**:
+   - **Real Multi-Touch Interactive Map**: 100% free, zero-quota OpenStreetMap tile engine powered by `osmdroid`, embedded in both Explore Hub and Rides screens.
    - **Custom Executive Dark Mode**: Embedded `ColorMatrixColorFilter` inverts light OSM tiles into deep obsidian (`#000000` / `#050811`) and deep navy (`#0B1938`) roads to strictly adhere to the 60-30-10 design system.
    - **Dynamic South African GPS Geofencing**: Automatically anchors coordinates to user's pickup spot (Sandton, Cape Town, Durban, Pretoria, O.R. Tambo Airport) with smooth camera animation upon tapping the recenter FAB.
    - **Real-Time Fleet HUD & Vignette Fade**: Live floating vehicle count, pickup location anchor pin, and top/bottom atmospheric vignette gradients seamlessly layered over live vector tiles.
@@ -151,21 +151,24 @@ ride-go/
    - Tapping the payment pill triggers an animated slide-up bottom sheet with darkened scrim backdrop overlay.
    - Authentic South African payment options (Capitec Pay, Standard Bank Visa, FNB Cheque Card, Absa Debit, Ride Go Wallet, and Cash).
    - Dismissible via tap-outside scrim, "Done" action, or payment selection.
-6. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with crisp white trajectory lines and pulsating waypoint halos on deep navy road grids.
-7. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, pure white trail fill, and haptic feedback.
-8. **Live Driver Tracking & Approach Telemetry (Post-Confirmation)**:
+6. **Unified Driver & Rider Progress Telemetry & Official Branding**:
+   - **Unified Onboarding Progress**: Step progress bar identically styled across Rider Verification and Driver Onboarding (`STEP 0X / 05` with percentage completion pill), eliminating duplicate sub-step bars.
+   - **Official Wide Brand Logo & Splash Screen**: Displays the official `(R) RIDE [GO]` wide brand mark (`ridego_wide.png`) across splash screen, authentication, and top navigation bar, with native Android 12+ `values-v31` splash theme integration.
+7. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with crisp white trajectory lines and pulsating waypoint halos on deep navy road grids.
+8. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, pure white trail fill, and haptic feedback.
+9. **Live Driver Tracking & Approach Telemetry (Post-Confirmation)**:
    - **Dynamic Vector Approach from Random Distance**: When ride request is confirmed, driver is initialized at a realistic randomized starting distance (1.6 km to 3.8 km) away from rider's current or selected pickup location.
    - **Real-Time Heading & Directional Rotation**: Vector map canvas continuously steers driver vehicle puck towards the rider's pickup coordinate with forward headlights beam, pulsing radar ring, and directional tangent angle orientation.
    - **Live Distance & ETA Countdown**: Live ETA HUD dynamically calculates remaining distance and arrival countdown in real-time as the driver advances towards the user.
    - **Pickup Location Waypoint Marker**: Pulsing concentric GPS beacon and destination overlay pill anchoring the driver's heading target directly to the rider's current or selected pickup spot.
    - **4-Digit Ride Security PIN Banner**: Pre-departure identity verification code before vehicle departure.
    - **Verified Driver Profile Card**: Authentic South African number plate (`JM 42 KL • GP`), vehicle specs, rating, and quick communications suite (Call, In-App Message, Trip Share, Safety Center).
-9. **South African Verification Suite**:
+10. **South African Verification Suite**:
    - Biometric facial scan with high-contrast alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.
-10. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
-11. **Streamlined Auth & Reliable Back Navigation**: Direct sign-in and sign-up pathways with robust BackHandler and top-bar back button routing returning directly to the authentication screen without role loop traps.
-12. **Multi-Tab Activity Hub & Corporate Expensing**:
+11. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
+12. **Streamlined Auth & Reliable Back Navigation**: Direct sign-in and sign-up pathways with robust BackHandler and top-bar back button routing returning directly to the authentication screen without role loop traps.
+13. **Multi-Tab Activity Hub & Corporate Expensing**:
     - **Past Trips**: Historical rides, digital receipts, rebooking, and stat bento metrics.
     - **Upcoming Reservations**: Advance booking tracking, flight arrival integration, locked fares, and flexible cancellation.
     - **Business Mobility**: Enterprise corporate profiles, automated SAP Concur / Expensify sync, SARS 15% VAT itemized invoicing, and cost center management.
