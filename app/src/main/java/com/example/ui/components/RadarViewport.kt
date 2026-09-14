@@ -259,13 +259,13 @@ fun RadarViewport(
                         .size(32.dp)
                         .clip(CircleShape)
                         .background(VoltSurfaceContainerHigh)
-                        .border(1.dp, VoltPrimaryContainer.copy(alpha = 0.4f), CircleShape),
+                        .border(1.dp, Color.White.copy(alpha = 0.4f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Filled.DirectionsCar,
                         contentDescription = "Driver",
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -278,7 +278,7 @@ fun RadarViewport(
                 ) {
                     Text(
                         text = "3m",
-                        color = VoltPrimaryContainer,
+                        color = Color.White,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -299,13 +299,13 @@ fun RadarViewport(
                         .size(30.dp)
                         .clip(CircleShape)
                         .background(VoltSurfaceContainerHigh)
-                        .border(1.dp, VoltSecondary.copy(alpha = 0.4f), CircleShape),
+                        .border(1.dp, Color.White.copy(alpha = 0.4f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Filled.DirectionsCar,
                         contentDescription = "Nearby Driver",
-                        tint = VoltSecondary,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -318,7 +318,7 @@ fun RadarViewport(
                 ) {
                     Text(
                         text = "4m",
-                        color = VoltSecondary,
+                        color = Color.White,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -343,7 +343,7 @@ fun RadarViewport(
                 Icon(
                     imageVector = Icons.Filled.DirectionsCar,
                     contentDescription = null,
-                    tint = VoltSecondary.copy(alpha = 0.8f),
+                    tint = Color.White,
                     modifier = Modifier.size(14.dp)
                 )
             }
@@ -365,7 +365,7 @@ fun RadarViewport(
                         .clip(CircleShape)
                         .background(VoltPrimaryContainer.copy(alpha = 0.25f))
                 )
-                // Center canary pin
+                // Center pin
                 Box(
                     modifier = Modifier
                         .size(38.dp)
@@ -377,7 +377,7 @@ fun RadarViewport(
                     Icon(
                         imageVector = Icons.Filled.LocationOn,
                         contentDescription = "Pickup Location",
-                        tint = VoltOnPrimaryFixed,
+                        tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -392,7 +392,7 @@ fun RadarViewport(
             ) {
                 Text(
                     text = "PICKUP SPOT",
-                    color = VoltOnSurface,
+                    color = Color.White,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.5.sp
@@ -419,7 +419,7 @@ fun RadarViewport(
             )
             Text(
                 text = "  RADAR: 4 DRIVERS IN RANGE",
-                color = VoltOnSurface,
+                color = Color.White,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.5.sp
@@ -439,7 +439,7 @@ fun RadarViewport(
             Icon(
                 imageVector = Icons.Filled.Explore,
                 contentDescription = "Compass",
-                tint = VoltSecondary,
+                tint = Color.White,
                 modifier = Modifier.size(16.dp)
             )
         }

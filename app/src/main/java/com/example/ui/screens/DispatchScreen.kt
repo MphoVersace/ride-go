@@ -116,14 +116,14 @@ fun DispatchScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "RIDE-GO DISPATCH",
-                    color = Color.White.copy(alpha = 0.8f),
+                    color = Color.White,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.6.sp
                 )
                 Text(
                     text = "Finding Your Driver",
-                    color = VoltOnSurface,
+                    color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -183,14 +183,14 @@ fun DispatchScreen(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = state.dispatchStatusText,
-                    color = VoltOnSurface,
+                    color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1
                 )
                 Text(
                     text = "Tap to simulate instant driver confirmation",
-                    color = VoltOnSurfaceVariant,
+                    color = Color.White,
                     fontSize = 12.sp
                 )
             }
@@ -213,7 +213,7 @@ fun DispatchScreen(
             ) {
                 Text(
                     text = state.selectedTier.title,
-                    color = VoltOnSurface,
+                    color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -221,13 +221,13 @@ fun DispatchScreen(
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = "R${state.selectedTier.price}",
-                        color = VoltPrimaryContainer,
+                        color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Capitec Pay",
-                        color = VoltOnSurfaceVariant,
+                        color = Color.White,
                         fontSize = 11.sp
                     )
                 }
@@ -251,7 +251,7 @@ fun DispatchScreen(
                 ) {
                     Text(
                         text = "PICKUP IN",
-                        color = VoltOnSurfaceVariant,
+                        color = Color.White,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
@@ -259,7 +259,7 @@ fun DispatchScreen(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "3-5 min",
-                        color = VoltPrimaryContainer,
+                        color = Color.White,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -276,7 +276,7 @@ fun DispatchScreen(
                 ) {
                     Text(
                         text = "TRIP DISTANCE",
-                        color = VoltOnSurfaceVariant,
+                        color = Color.White,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
@@ -284,7 +284,7 @@ fun DispatchScreen(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "14.2 km",
-                        color = VoltOnSurface,
+                        color = Color.White,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -301,7 +301,7 @@ fun DispatchScreen(
                 ) {
                     Text(
                         text = "EST. DURATION",
-                        color = VoltOnSurfaceVariant,
+                        color = Color.White,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
@@ -309,7 +309,7 @@ fun DispatchScreen(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "22 mins",
-                        color = VoltOnSurface,
+                        color = Color.White,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -349,7 +349,7 @@ fun DispatchScreen(
                         modifier = Modifier
                             .size(10.dp)
                             .clip(RoundedCornerShape(2.dp))
-                            .background(VoltOnSurface)
+                            .background(Color.White)
                     )
                 }
 
@@ -358,14 +358,14 @@ fun DispatchScreen(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "PICKUP POINT",
-                        color = VoltOnSurfaceVariant,
+                        color = Color.White,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
                     Text(
                         text = state.pickupLocation,
-                        color = VoltOnSurface,
+                        color = Color.White,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1
@@ -375,14 +375,14 @@ fun DispatchScreen(
 
                     Text(
                         text = "DESTINATION",
-                        color = VoltOnSurfaceVariant,
+                        color = Color.White,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
                     Text(
                         text = state.destinationLocation,
-                        color = VoltOnSurface,
+                        color = Color.White,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1
@@ -444,7 +444,7 @@ fun DispatchScreen(
 
         Text(
             text = "Free cancellation within 2 minutes of driver match.",
-            color = VoltOnSurfaceVariant,
+            color = Color.White,
             fontSize = 11.sp,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
@@ -459,14 +459,14 @@ fun DispatchScreen(
             title = {
                 Text(
                     text = "Cancel Search?",
-                    color = VoltOnSurface,
+                    color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
             },
             text = {
                 Text(
                     text = "Are you sure you want to cancel dispatch for ${state.selectedTier.title}?",
-                    color = VoltOnSurfaceVariant
+                    color = Color.White
                 )
             },
             confirmButton = {

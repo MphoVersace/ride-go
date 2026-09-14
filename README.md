@@ -187,6 +187,8 @@ ride-go/
     - Implemented `RouteRepository.getRemainingRoutePoints` dynamically slicing the OpenStreetMap road polyline in real time as the driver advances from Woodmead toward the rider. The traversed dotted road behind the vehicle is dynamically removed, while driver speed is calibrated to exactly 0.1 km per 1.7 seconds with clean live distance and ETA telemetry.
 20. **Streamlined Live Tracking Telemetry & Identity Alignment**:
     - Removed redundant duplicate "heading your way" status overlays in favor of a single floating distance & ETA status pill. Aligned driver historical trip cards in the Activity hub to use Thulane's verified profile avatar.
+21. **Crisp Pure White Typography & Iconography Across Dispatch & Radar Telemetry**:
+    - Converted all labels, fares, ETA metrics, subheadings, radar vehicle pins, compass controls, and waypoint badges across `DispatchScreen` and `RadarViewport` to crisp pure white (`#FFFFFF`), maximizing visual contrast, clarity, and readability on AMOLED screens in strict accordance with the 60-30-10 design system.
 
 ---
 
