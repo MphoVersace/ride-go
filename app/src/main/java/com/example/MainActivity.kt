@@ -127,6 +127,7 @@ fun VoltAppRoot(
         }
     }
 
+    Box(modifier = Modifier.fillMaxSize().background(VoltSurface)) {
     if (uiState.isSplashActive) {
         // Loading / Splash Screen showing just the brand logo
         SplashScreen(
@@ -379,6 +380,10 @@ fun VoltAppRoot(
                 }
             }
 
+        }
+    }
+}
+
             // App Update Available Floating Banner
             AnimatedVisibility(
                 visible = uiState.appUpdateAvailable,
@@ -386,6 +391,7 @@ fun VoltAppRoot(
                 exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
                 modifier = Modifier
                     .align(Alignment.TopCenter)
+                    .statusBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 val context = LocalContext.current
@@ -507,7 +513,6 @@ fun VoltAppRoot(
                     }
                 }
             }
-        }
+
     }
-}
 }
