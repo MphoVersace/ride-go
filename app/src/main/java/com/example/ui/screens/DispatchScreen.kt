@@ -210,7 +210,7 @@ fun DispatchScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${state.selectedTier.title} EV",
+                    text = state.selectedTier.title,
                     color = VoltOnSurface,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold

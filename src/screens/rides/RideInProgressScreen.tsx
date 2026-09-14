@@ -133,7 +133,7 @@ export default function RideInProgressScreen({
               <Text style={styles.safetyPinLabel}>ACTIVE TRANSIT CODE</Text>
               <Text style={styles.safetyPinCode}>4821</Text>
               <Text style={styles.safetyPinSubtext}>
-                Verified onboard • Electric transit tracking active
+                Verified onboard • Live ride tracking active
               </Text>
             </View>
           </View>

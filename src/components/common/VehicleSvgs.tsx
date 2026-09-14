@@ -318,7 +318,7 @@ export const MovingTruckSvg: React.FC<{
 };
 
 /**
- * Photorealistic 3D Shaded Side-Profile Electric Sedan Vector SVG.
+ * Photorealistic 3D Shaded Side-Profile Sedan Vector SVG.
  * Features realistic metallic gradients, 8-spoke alloy wheels with brake calipers,
  * tinted aerodynamic glass, and illuminated cyan LED headlights.
  */
@@ -536,7 +536,7 @@ export const Vehicle3DShadedSideSvg: React.FC<{
 };
 
 /**
- * Photorealistic 3D Front-Perspective Electric Sedan Vector SVG.
+ * Photorealistic 3D Front-Perspective Sedan Vector SVG.
  * Features aggressive front stance, dual illuminated LED projector lamps,
  * aerodynamic side mirrors, and wide low-profile front tires.
  */
@@ -652,7 +652,7 @@ export const Vehicle3DFrontSvg: React.FC<{
 };
 
 /**
- * Photorealistic 3D Rear-Perspective Electric Sedan Vector SVG.
+ * Photorealistic 3D Rear-Perspective Sedan Vector SVG.
  * Features full-width horizontal illuminated crimson LED light bar,
  * rear lip spoiler, sporty aerodynamic diffuser, and wide rear tires.
  */

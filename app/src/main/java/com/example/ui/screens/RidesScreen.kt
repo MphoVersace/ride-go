@@ -28,10 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.LocalOffer
@@ -400,7 +397,7 @@ fun RidesScreen(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "All rides electric & carbon-neutral offset",
+                            text = "Affordable, reliable rides across South Africa",
                             color = VoltOnSurfaceVariant,
                             fontSize = 12.sp
                         )
@@ -414,7 +411,7 @@ fun RidesScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Bolt,
+                            imageVector = Icons.Filled.LocalOffer,
                             contentDescription = null,
                             tint = VoltPrimaryContainer,
                             modifier = Modifier.size(13.dp)

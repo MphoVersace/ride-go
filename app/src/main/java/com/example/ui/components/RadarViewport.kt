@@ -22,9 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.ElectricCar
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
@@ -265,8 +263,8 @@ fun RadarViewport(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ElectricCar,
-                        contentDescription = "EV Driver",
+                        imageVector = Icons.Filled.DirectionsCar,
+                        contentDescription = "Driver",
                         tint = VoltPrimaryContainer,
                         modifier = Modifier.size(18.dp)
                     )
@@ -305,8 +303,8 @@ fun RadarViewport(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Bolt,
-                        contentDescription = "Fast EV Driver",
+                        imageVector = Icons.Filled.DirectionsCar,
+                        contentDescription = "Nearby Driver",
                         tint = VoltSecondary,
                         modifier = Modifier.size(16.dp)
                     )

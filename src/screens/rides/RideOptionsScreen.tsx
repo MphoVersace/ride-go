@@ -46,8 +46,8 @@ interface TierOption {
 const tiersData: TierOption[] = [
   {
     key: "standard",
-    name: "Go Eco",
-    desc: "3 min away • Zero Emission",
+    name: "Go Saver",
+    desc: "3 min away • Affordable everyday ride",
     seats: 4,
     eta: "3 min away",
     fare: 75,
@@ -75,7 +75,7 @@ const tiersData: TierOption[] = [
   {
     key: "luxury",
     name: "Go Black",
-    desc: "8 min away • Executive VIP saloon • Quiet ride",
+    desc: "8 min away • Premium sedan • Extra space",
     seats: 4,
     eta: "8 min away",
     fare: 280,
@@ -205,7 +205,7 @@ export default function RideOptionsScreen({
             <View>
               <Text style={styles.sheetTitle}>Select Ride Tier</Text>
               <Text style={styles.sheetSubtitle}>
-                All rides electric & carbon-neutral offset
+                Affordable, reliable rides across South Africa
               </Text>
             </View>
             <View style={styles.surgeBadge}>

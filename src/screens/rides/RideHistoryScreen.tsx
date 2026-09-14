@@ -51,7 +51,7 @@ export default function RideHistoryScreen({
     { key: "all", label: "All Rides" },
     { key: "30days", label: "Last 30 Days" },
     { key: "personal", label: "Personal" },
-    { key: "eco", label: "Eco / Electric" },
+    { key: "saver", label: "Saver" },
   ];
 
   return (
@@ -156,7 +156,7 @@ export default function RideHistoryScreen({
             </View>
             <View style={styles.bentoValueWrap}>
               <Text style={styles.bentoValueYellow}>R380</Text>
-              <Text style={styles.bentoSubtext}>EV Pass</Text>
+              <Text style={styles.bentoSubtext}>Ride Pass</Text>
             </View>
           </View>
 
@@ -221,7 +221,7 @@ export default function RideHistoryScreen({
           rideHistory.map((trip) => {
             const tierLabel =
               trip.tier === "standard"
-                ? "Volt Eco"
+                ? "Go Saver"
                 : trip.tier === "comfort"
                 ? "Go Comfort"
                 : "Go Exec";
@@ -280,11 +280,11 @@ export default function RideHistoryScreen({
           })
         ) : (
           <View style={styles.stitchTripsStack}>
-            {/* Featured Trip 1: Volt Comfort EV */}
+            {/* Featured Trip 1: Go Comfort */}
             <View style={styles.tripCard}>
               <View style={styles.tripTopRow}>
                 <View>
-                  <Text style={styles.tripTier}>Volt Comfort EV</Text>
+                  <Text style={styles.tripTier}>Go Comfort</Text>
                   <Text style={styles.tripDate}>Yesterday • 8:15 PM</Text>
                 </View>
                 <View style={styles.priceContainer}>
@@ -311,7 +311,7 @@ export default function RideHistoryScreen({
 
               <View style={styles.tripFooter}>
                 <Text style={styles.driverInfoText}>
-                  Driven by Marcus (Polestar 2) • 5.0
+                  Driven by Marcus (Toyota Corolla) • 5.0
                 </Text>
                 <View style={styles.viewDetailsRow}>
                   <Text style={styles.viewDetailsText}>Rebook Ride</Text>
@@ -320,11 +320,11 @@ export default function RideHistoryScreen({
               </View>
             </View>
 
-            {/* Featured Trip 2: Volt Black Exec */}
+            {/* Featured Trip 2: Go Black */}
             <View style={styles.tripCard}>
               <View style={styles.tripTopRow}>
                 <View>
-                  <Text style={styles.tripTier}>Volt Black Exec</Text>
+                  <Text style={styles.tripTier}>Go Black</Text>
                   <Text style={styles.tripDate}>Oct 12 • 11:30 AM</Text>
                 </View>
                 <View style={styles.priceContainer}>
@@ -351,7 +351,7 @@ export default function RideHistoryScreen({
 
               <View style={styles.tripFooter}>
                 <Text style={styles.driverInfoText}>
-                  You rated: 5.0 • Exec Saloon
+                  You rated: 5.0 • Sedan
                 </Text>
                 <View style={styles.viewDetailsRow}>
                   <Text style={styles.viewDetailsText}>View Receipt</Text>
@@ -360,11 +360,11 @@ export default function RideHistoryScreen({
               </View>
             </View>
 
-            {/* Featured Trip 3: Volt Eco Zero CO2 */}
+            {/* Featured Trip 3: Go Saver */}
             <View style={styles.tripCard}>
               <View style={styles.tripTopRow}>
                 <View>
-                  <Text style={styles.tripTier}>Volt Eco Zero CO2</Text>
+                  <Text style={styles.tripTier}>Go Saver</Text>
                   <Text style={styles.tripDate}>Oct 9 • 6:45 PM</Text>
                 </View>
                 <View style={styles.priceContainer}>
@@ -402,20 +402,19 @@ export default function RideHistoryScreen({
           </View>
         )}
 
-        {/* Environmental Impact Summary Card */}
+        {/* Driver & Vehicle Verification Summary Card */}
         <View style={styles.environmentalCard}>
           <View style={styles.environmentalHeader}>
             <View style={styles.environmentalIconBox}>
-              <TreeLeafIcon size={20} color={colors.accent.primary} />
+              <CheckCircleIcon size={20} color={colors.accent.primary} />
             </View>
             <View style={styles.environmentalTitleWrap}>
-              <Text style={styles.environmentalTitle}>114 kg CO2 Saved</Text>
-              <Text style={styles.environmentalTag}>100% Electric Fleets</Text>
+              <Text style={styles.environmentalTitle}>100% Verified Drivers</Text>
+              <Text style={styles.environmentalTag}>Verified Fleet</Text>
             </View>
           </View>
           <Text style={styles.environmentalDescription}>
-            Your EV rides this month equivalent to planting 6 indigenous
-            yellowwood trees in Kirstenbosch Gardens.
+            Every driver partner on Ride Go undergoes strict background checks, vehicle roadworthiness tests, and continuous rating reviews.
           </Text>
         </View>
 

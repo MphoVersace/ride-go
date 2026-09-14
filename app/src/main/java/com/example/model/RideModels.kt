@@ -49,7 +49,7 @@ enum class RideTierType(
         price = 280,
         originalPrice = 320,
         eta = "8 min away",
-        feature = "Executive saloon • Quiet ride",
+        feature = "Comfortable sedan • Extra space",
         badge = "PREMIUM",
         badgeIsYellow = false
     );
