@@ -71,6 +71,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.SystemUpdate
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
 import com.example.ui.screens.DestinationSearchScreen
 import com.example.ui.theme.IceBlue
@@ -97,9 +101,36 @@ fun VoltAppRoot(
     viewModel: VoltViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
-    // Automatically check for GitHub Actions updates on app start
+    // Request location permissions as soon as the root composable enters composition.
+    // If already granted, resolve immediately. If not, the launcher requests them.
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+        if (granted) {
+            viewModel.resolveUserLocation(context)
+        }
+    }
+
+    // Trigger permission request once (and resolve immediately if already granted)
     LaunchedEffect(Unit) {
+        val fineGranted = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+        val coarseGranted = context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+        if (fineGranted || coarseGranted) {
+            viewModel.resolveUserLocation(context)
+        } else {
+            locationPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
         viewModel.checkForAppUpdates()
     }
 
@@ -374,10 +405,15 @@ fun VoltAppRoot(
                         VoltScreenTab.EXPLORE -> {
                             ExploreScreen(
                                 pickupLocation = uiState.pickupLocation,
+                                userLat = uiState.userLat,
+                                userLon = uiState.userLon,
                                 onBookToLocation = { dest -> viewModel.rebookRide(dest) },
                                 onBookFastRide = { dest, tier -> viewModel.bookFastRide(dest, tier) },
                                 onOpenSearch = { viewModel.openDestinationSearch() },
-                                onRecenterLocation = { viewModel.showToast("Calibrated GPS on ${uiState.pickupLocation}") },
+                                onRecenterLocation = {
+                                    // Re-acquire GPS on recenter tap
+                                    viewModel.resolveUserLocation(context)
+                                },
                                 onClaimPromo = { viewModel.showToast("MZANSI30 Applied! 30% off your next 5 trips across Western Cape") }
                             )
                         }

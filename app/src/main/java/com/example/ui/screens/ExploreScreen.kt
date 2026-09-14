@@ -115,7 +115,9 @@ private data class FastBookingItem(
 
 @Composable
 fun ExploreScreen(
-    pickupLocation: String = "Sandton City (Rivonia Rd Entrance)",
+    pickupLocation: String = "Locating...",
+    userLat: Double? = null,
+    userLon: Double? = null,
     onBookToLocation: (String) -> Unit = {},
     onBookFastRide: (destination: String, tier: RideTierType) -> Unit = { dest, _ -> onBookToLocation(dest) },
     onOpenSearch: () -> Unit = {},
@@ -207,20 +209,26 @@ fun ExploreScreen(
 
     var recenterTrigger by remember { mutableStateOf(0) }
 
-    // Dynamic South African GPS coordinates anchored to rider's current location
-    val (mapLat, mapLon) = remember(pickupLocation) {
-        when {
-            pickupLocation.contains("Cape Town", ignoreCase = true) ||
-            pickupLocation.contains("Camps Bay", ignoreCase = true) ||
-            pickupLocation.contains("Waterfront", ignoreCase = true) -> -33.9249 to 18.4241
-            pickupLocation.contains("Durban", ignoreCase = true) ||
-            pickupLocation.contains("Umhlanga", ignoreCase = true) ||
-            pickupLocation.contains("King Shaka", ignoreCase = true) -> -29.8587 to 31.0218
-            pickupLocation.contains("Pretoria", ignoreCase = true) ||
-            pickupLocation.contains("Menlyn", ignoreCase = true) -> -25.7479 to 28.2293
-            pickupLocation.contains("Airport", ignoreCase = true) ||
-            pickupLocation.contains("Tambo", ignoreCase = true) -> -26.1367 to 28.2411
-            else -> -26.1076 to 28.0567 // Sandton City / Rivonia Rd, Johannesburg (Default)
+    // Use real device GPS coordinates if available; fall back to keyword-based South African lookup
+    val (mapLat, mapLon) = remember(userLat, userLon, pickupLocation) {
+        if (userLat != null && userLon != null) {
+            // Real GPS fix from device
+            userLat to userLon
+        } else {
+            // Fallback: keyword-based South African city mapping
+            when {
+                pickupLocation.contains("Cape Town", ignoreCase = true) ||
+                pickupLocation.contains("Camps Bay", ignoreCase = true) ||
+                pickupLocation.contains("Waterfront", ignoreCase = true) -> -33.9249 to 18.4241
+                pickupLocation.contains("Durban", ignoreCase = true) ||
+                pickupLocation.contains("Umhlanga", ignoreCase = true) ||
+                pickupLocation.contains("King Shaka", ignoreCase = true) -> -29.8587 to 31.0218
+                pickupLocation.contains("Pretoria", ignoreCase = true) ||
+                pickupLocation.contains("Menlyn", ignoreCase = true) -> -25.7479 to 28.2293
+                pickupLocation.contains("Airport", ignoreCase = true) ||
+                pickupLocation.contains("Tambo", ignoreCase = true) -> -26.1367 to 28.2411
+                else -> -26.1076 to 28.0567 // Sandton City / Rivonia Rd, Johannesburg (Default)
+            }
         }
     }
 
