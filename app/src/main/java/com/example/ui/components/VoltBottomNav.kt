@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -44,15 +45,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.VoltScreenTab
-import com.example.ui.theme.VoltPrimaryContainer
 import com.example.ui.theme.VoltSurfaceContainerHigh
 
 /**
- * Floating Pill Bottom Navigation Bar inspired by modern luxury mobility UI.
+ * Floating Stadium Pill Bottom Navigation Bar.
+ * Contains exclusively the 4 primary app tabs: Hub, Rides, Activity, and Account.
  * Features:
- * - Floating Stadium/Capsule geometry with deep obsidian shadow.
- * - Circular Ride Go Brand Emblem on far-left.
- * - Smooth physics-inspired sliding active tab squircle with active dot indicator.
+ * - Floating Stadium/Capsule geometry with deep obsidian drop shadow.
+ * - Sliding active tab indicator with elevated squircle and pure white active dot.
  * - Strict 60-30-10 Black/Deep Navy/Pure White color palette.
  */
 @Composable
@@ -75,13 +75,13 @@ fun VoltBottomNav(
         label = "bottom_nav_slider"
     )
 
-    // Outer transparent host to position the floating pill above navigation bar
+    // Outer transparent host to position the floating pill above the system navigation bar
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(Color.Transparent)
             .navigationBarsPadding()
-            .padding(horizontal = 14.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .testTag("volt_bottom_nav"),
         contentAlignment = Alignment.Center
     ) {
@@ -94,104 +94,65 @@ fun VoltBottomNav(
                 .clip(CircleShape)
                 .background(VoltSurfaceContainerHigh.copy(alpha = 0.96f))
                 .border(1.dp, Color.White.copy(alpha = 0.14f), CircleShape)
-                .padding(start = 8.dp, end = 8.dp, top = 5.dp, bottom = 5.dp)
+                .padding(horizontal = 6.dp, vertical = 6.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                // Far-Left: Elevated Circular Brand Emblem
+                val tabCount = 4
+                val itemWidth = maxWidth / tabCount
+                val pillWidth = itemWidth - 8.dp
+
+                // Sliding Active Tab Indicator Capsule
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
-                        .shadow(elevation = 4.dp, shape = CircleShape, spotColor = Color.Black)
-                        .clip(CircleShape)
-                        .background(VoltPrimaryContainer)
-                        .border(1.dp, Color.White.copy(alpha = 0.22f), CircleShape)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            onTabSelected(VoltScreenTab.EXPLORE)
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    RideGoLogo(size = 28.dp, useWide = false)
-                }
-
-                Spacer(modifier = Modifier.width(6.dp))
-
-                // Subtle vertical separator
-                Box(
-                    modifier = Modifier
-                        .width(1.dp)
-                        .height(28.dp)
-                        .background(Color.White.copy(alpha = 0.10f))
+                        .align(Alignment.CenterStart)
+                        .offset(x = itemWidth * animatedIndex + 4.dp)
+                        .width(pillWidth)
+                        .height(52.dp)
+                        .clip(RoundedCornerShape(22.dp))
+                        .background(Color(0xFF162A54))
+                        .border(1.dp, Color.White.copy(alpha = 0.20f), RoundedCornerShape(22.dp))
                 )
 
-                Spacer(modifier = Modifier.width(2.dp))
-
-                // Navigation Tabs Container
-                BoxWithConstraints(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    contentAlignment = Alignment.Center
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val tabCount = 4
-                    val itemWidth = maxWidth / tabCount
-                    val pillWidth = itemWidth - 4.dp
-
-                    // Sliding Active Tab Indicator Capsule
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .offset(x = itemWidth * animatedIndex + 2.dp)
-                            .width(pillWidth)
-                            .height(52.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color(0xFF162A54))
-                            .border(1.dp, Color.White.copy(alpha = 0.20f), RoundedCornerShape(20.dp))
+                    NavItem(
+                        tab = VoltScreenTab.EXPLORE,
+                        label = "Hub",
+                        icon = Icons.Filled.NearMe,
+                        isSelected = currentTab == VoltScreenTab.EXPLORE,
+                        onClick = { onTabSelected(VoltScreenTab.EXPLORE) },
+                        modifier = Modifier.weight(1f)
                     )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        NavItem(
-                            tab = VoltScreenTab.EXPLORE,
-                            label = "Hub",
-                            icon = Icons.Filled.NearMe,
-                            isSelected = currentTab == VoltScreenTab.EXPLORE,
-                            onClick = { onTabSelected(VoltScreenTab.EXPLORE) },
-                            modifier = Modifier.weight(1f)
-                        )
-                        NavItem(
-                            tab = VoltScreenTab.RIDES,
-                            label = "Rides",
-                            icon = Icons.Filled.LocalTaxi,
-                            isSelected = currentTab == VoltScreenTab.RIDES || currentTab == VoltScreenTab.DRIVER,
-                            onClick = { onTabSelected(VoltScreenTab.RIDES) },
-                            modifier = Modifier.weight(1f)
-                        )
-                        NavItem(
-                            tab = VoltScreenTab.ACTIVITY,
-                            label = "Activity",
-                            icon = Icons.Filled.History,
-                            isSelected = currentTab == VoltScreenTab.ACTIVITY,
-                            onClick = { onTabSelected(VoltScreenTab.ACTIVITY) },
-                            modifier = Modifier.weight(1f)
-                        )
-                        NavItem(
-                            tab = VoltScreenTab.ACCOUNT,
-                            label = "Account",
-                            icon = Icons.Filled.Person,
-                            isSelected = currentTab == VoltScreenTab.ACCOUNT,
-                            onClick = { onTabSelected(VoltScreenTab.ACCOUNT) },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+                    NavItem(
+                        tab = VoltScreenTab.RIDES,
+                        label = "Rides",
+                        icon = Icons.Filled.LocalTaxi,
+                        isSelected = currentTab == VoltScreenTab.RIDES || currentTab == VoltScreenTab.DRIVER,
+                        onClick = { onTabSelected(VoltScreenTab.RIDES) },
+                        modifier = Modifier.weight(1f)
+                    )
+                    NavItem(
+                        tab = VoltScreenTab.ACTIVITY,
+                        label = "Activity",
+                        icon = Icons.Filled.History,
+                        isSelected = currentTab == VoltScreenTab.ACTIVITY,
+                        onClick = { onTabSelected(VoltScreenTab.ACTIVITY) },
+                        modifier = Modifier.weight(1f)
+                    )
+                    NavItem(
+                        tab = VoltScreenTab.ACCOUNT,
+                        label = "Account",
+                        icon = Icons.Filled.Person,
+                        isSelected = currentTab == VoltScreenTab.ACCOUNT,
+                        onClick = { onTabSelected(VoltScreenTab.ACCOUNT) },
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }
@@ -213,7 +174,7 @@ private fun NavItem(
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(22.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
