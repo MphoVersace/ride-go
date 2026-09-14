@@ -292,7 +292,11 @@ fun VoltAppRoot(
                                 onReceiptClick = { viewModel.showReceipt(it) },
                                 onRebookClick = { viewModel.rebookRide(it) },
                                 onDismissReceipt = { viewModel.dismissReceipt() },
-                                onDownloadStatement = { viewModel.showToast("Downloading October statement PDF...") }
+                                onDownloadStatement = { viewModel.showToast("Downloading October statement PDF...") },
+                                onScheduleRide = { viewModel.showToast("Opening Schedule Ride picker...") },
+                                onCancelReservation = { viewModel.showToast("Reservation #RG-RES-8821 cancelled successfully.") },
+                                onEditReservation = { viewModel.showToast("Editing reservation #RG-RES-8821 details...") },
+                                onDownloadExpenseReport = { viewModel.showToast("Exporting SARS-compliant VAT expense report...") }
                             )
                         }
 

@@ -89,7 +89,7 @@ ride-go/
 │   │   │   │           ├── ExploreScreen.kt      # Vector map with Medium Blue route trajectory
 │   │   │   │           ├── RidesScreen.kt        # Ride tier selection (Saver, Comfort, XL, Black)
 │   │   │   │           ├── DispatchScreen.kt     # Live driver radar search & dispatch status
-│   │   │   │           ├── ActivityScreen.kt     # Trip history, metrics bento grid & receipts
+│   │   │   │           ├── ActivityScreen.kt     # Multi-tab activity hub: Past Trips, Upcoming reservations & Business expensing
 │   │   │   │           ├── AccountScreen.kt      # User profile, wallet, security, South Africa SOS
 │   │   │   │           ├── RiderVerificationScreen.kt # Biometric selfie & SA Smart ID card scan
 │   │   │   │           └── DriverOnboardingScreen.kt  # Driver PDP, license, vehicle inspection
@@ -115,7 +115,10 @@ ride-go/
    - Biometric facial scan with Ice Blue alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.
 4. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
-5. **Wallet & Trip Activity**: Digital fare payment, detailed receipt breakdowns, and metric bento grids.
+5. **Multi-Tab Activity Hub & Corporate Expensing**:
+   - **Past Trips**: Historical rides, digital receipts, rebooking, and stat bento metrics.
+   - **Upcoming Reservations**: Advance booking tracking, flight arrival integration, locked fares, and flexible cancellation.
+   - **Business Mobility**: Enterprise corporate profiles, automated SAP Concur / Expensify sync, SARS 15% VAT itemized invoicing, and cost center management.
 
 ---
 
