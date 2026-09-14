@@ -87,7 +87,7 @@ ride-go/
 │   │   │   │       │   └── Type.kt               # Modern typography scale
 │   │   │   │       ├── components/
 │   │   │   │       │   ├── RideGoLogo.kt         # Official Ride Go brand logo component utilizing RIDEGO.png assets
-│   │   │   │       │   ├── OsmMapView.kt         # Live OpenStreetMap (osmdroid) with locked GPS beacon & destination pin markers
+│   │   │   │       │   ├── OsmMapView.kt         # Live OpenStreetMap (osmdroid) with animated dual radar ping overlays & locked GPS pins
 │   │   │   │       │   ├── RadarViewport.kt      # Real-time driver radar sweep canvas
 │   │   │   │       │   ├── SlideToConfirm.kt     # Interactive physics-based booking confirmation slider
 │   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Deep Navy shadow
@@ -177,6 +177,8 @@ ride-go/
     - Strictly implements pure white (`#FFFFFF`) icon tinting and typographic contrast across all interactive buttons, action chips, category selector cards, floating map controls, dialog CTAs, and bottom navigation items.
 15. **Ultra-Low Latency Kinetic Toast Messaging (<= 250ms)**:
     - Guaranteed rapid dismiss cycle capped at 250ms with accelerated 100ms fade/slide transitions, providing immediate non-intrusive feedback for authentication actions (including sign-out confirmation) and trip dispatch notifications without blocking user interactions.
+16. **Real-Time Dual Radar-Style Location Pings**:
+    - Embedded `LocationPulseOverlay` inside `OsmMapView` delivering continuous sonar-style expanding concentric waves for both the rider's current position and destination pin across Hub (Explore), Rides, and Live Tracking. Seamlessly locked to map coordinates during zoom and pan, with clean borderless fleet status typography.
 
 ---
 
