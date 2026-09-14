@@ -59,6 +59,7 @@ export default function DriverHomeScreen({ navigation }) {
             <TouchableOpacity
               style={styles.goOnlineButton}
               activeOpacity={0.85}
+              onPress={() => navigation.navigate("DriverRideRequest")}
             >
               <Text style={styles.goOnlineButtonText}>Go Online</Text>
             </TouchableOpacity>
