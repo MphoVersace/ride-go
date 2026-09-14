@@ -91,7 +91,7 @@ ride-go/
 │   │   │   │       │   ├── RadarViewport.kt      # Real-time driver radar sweep canvas
 │   │   │   │       │   ├── SlideToConfirm.kt     # Interactive physics-based booking confirmation slider
 │   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Deep Navy shadow
-│   │   │   │       │   ├── VoltBottomNav.kt      # 4-core screen bottom navigation bar
+│   │   │   │       │   ├── VoltBottomNav.kt      # Floating stadium pill bottom nav with circular brand emblem & sliding active dot indicator
 │   │   │   │       │   └── VoltTopBar.kt         # Sticky header with official Ride GO brand mark and telemetry
 │   │   │   │       └── screens/
 │   │   │   │           ├── SplashScreen.kt       # Static centered Ride Go brand logo presentation
@@ -179,6 +179,8 @@ ride-go/
     - Guaranteed rapid dismiss cycle capped at 250ms with accelerated 100ms fade/slide transitions, providing immediate non-intrusive feedback for authentication actions (including sign-out confirmation) and trip dispatch notifications without blocking user interactions.
 16. **Real-Time Dual Radar-Style Location Pings**:
     - Embedded `LocationPulseOverlay` inside `OsmMapView` delivering continuous sonar-style expanding concentric waves for both the rider's current position and destination pin across Hub (Explore), Rides, and Live Tracking. Seamlessly locked to map coordinates during zoom and pan, with clean borderless fleet status typography.
+17. **Floating Stadium Pill Bottom Navigation**:
+    - Floating stadium capsule bar anchored above system navigation gestures with deep drop shadow, circular Ride Go brand mark button on the far left, smooth animated sliding active tab squircle with active dot indicator, and high-contrast white vector iconography.
 
 ---
 
