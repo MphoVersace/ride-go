@@ -234,7 +234,7 @@ private fun createUserBeaconDrawable(context: Context): Drawable {
         color = android.graphics.Color.argb(90, 14, 36, 84) // Deep navy 35% alpha
         style = Paint.Style.FILL
     }
-    canvas.drawCircle(center, center * 0.96f, haloPaint)
+    canvas.drawCircle(center, center, center * 0.90f, haloPaint)
 
     // 2. High-contrast white outer ring
     val ringPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -242,21 +242,21 @@ private fun createUserBeaconDrawable(context: Context): Drawable {
         style = Paint.Style.STROKE
         strokeWidth = 3f * density
     }
-    canvas.drawCircle(center, center * 0.68f, ringPaint)
+    canvas.drawCircle(center, center, center * 0.68f, ringPaint)
 
     // 3. Crisp white beacon core
     val corePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = android.graphics.Color.WHITE
         style = Paint.Style.FILL
     }
-    canvas.drawCircle(center, center * 0.54f, corePaint)
+    canvas.drawCircle(center, center, center * 0.52f, corePaint)
 
     // 4. Center obsidian black / deep navy indicator dot
     val centerDotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = android.graphics.Color.rgb(11, 25, 56) // Deep Navy #0B1938
         style = Paint.Style.FILL
     }
-    canvas.drawCircle(center, center * 0.24f, centerDotPaint)
+    canvas.drawCircle(center, center, center * 0.24f, centerDotPaint)
 
     return BitmapDrawable(context.resources, bitmap)
 }

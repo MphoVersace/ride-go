@@ -55,6 +55,7 @@ import com.example.ui.theme.VoltSurfaceContainer
 import com.example.ui.theme.VoltSurfaceContainerHigh
 import com.example.ui.theme.VoltSurfaceContainerHighest
 import com.example.ui.theme.VoltSurfaceContainerLow
+import androidx.compose.ui.graphics.Color
 
 private const val PROFILE_AVATAR_URL =
     "https://lh3.googleusercontent.com/aida/AEtjO1VXAw8bNm11zgxl6J_ZJcmZClK6WZy2m8yCamAD0Pywbo0TpybXWRmifk7uO0LcyjwXFBiHSAa0e3gqQUCeomu0vqokffoEY1hU1gHMzQJAAzxZHPLV8LNTEr3PJvNV4uXwxuihe9E8Jw_pnHG0rNh32Qa-a8qb89oEIULV_a8w87C1_Q_M4WDi1ss9nExL7jS0FGDRiNKujBXUDtFPcTfZMJ74wCT3lghmRsD__3r5PSKcCjYvdz-7mbQmx5hwD8ZxovCmHoW5Ww"

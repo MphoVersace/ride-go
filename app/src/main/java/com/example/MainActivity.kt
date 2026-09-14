@@ -83,6 +83,8 @@ import com.example.ui.theme.VoltOnPrimaryFixed
 import com.example.ui.theme.VoltPrimaryContainer
 import com.example.ui.theme.VoltSurface
 import com.example.viewmodel.VoltViewModel
+import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
