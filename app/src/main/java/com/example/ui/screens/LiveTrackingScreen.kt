@@ -128,12 +128,12 @@ fun LiveTrackingScreen(
     val scrollState = rememberScrollState()
 
     // Real-time animation of driver heading towards rider's pickup location
-    // Speed: moves slowly at exactly 0.1 km per 1.7 seconds (17,000 ms per 1.0 km)
+    // Speed: moves slowly at exactly 0.1 km per 2.5 seconds (25,000 ms per 1.0 km)
     val startDistanceKm = remember(state.driverStartDistanceKm) {
         state.driverStartDistanceKm.coerceAtLeast(1.0f)
     }
     val totalTripDurationMs = remember(startDistanceKm) {
-        ((startDistanceKm / 0.1f) * 1700L).toLong().coerceAtLeast(10000L)
+        ((startDistanceKm / 0.1f) * 2500L).toLong().coerceAtLeast(10000L)
     }
 
     val infiniteTransition = rememberInfiniteTransition(label = "driver_live_approach_anim")
@@ -147,7 +147,7 @@ fun LiveTrackingScreen(
         label = "car_progress"
     )
 
-    // Calculate dynamic real-time distance and time remaining: decreases by 0.1 km every 1.7 seconds
+    // Calculate dynamic real-time distance and time remaining: decreases by 0.1 km every 2.5 seconds
     val liveDistanceRemainingKm = (startDistanceKm * (1f - carProgress)).coerceAtLeast(0.1f)
     val liveEtaMinutes = (liveDistanceRemainingKm * 1.5f).roundToInt().coerceAtLeast(1)
 
