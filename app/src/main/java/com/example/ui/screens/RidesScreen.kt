@@ -383,7 +383,7 @@ fun RidesScreen(
                     Icon(
                         imageVector = Icons.Filled.Layers,
                         contentDescription = "Map layers",
-                        tint = VoltPrimaryContainer,
+                        tint = VoltOnSurface,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -412,7 +412,7 @@ fun RidesScreen(
                         modifier = Modifier
                             .size(8.dp)
                             .clip(CircleShape)
-                            .background(VoltPrimaryContainer)
+                            .background(VoltOnSurface)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
@@ -514,12 +514,12 @@ fun RidesScreen(
                         Icon(
                             imageVector = Icons.Filled.LocalOffer,
                             contentDescription = null,
-                            tint = VoltPrimaryContainer,
+                            tint = VoltOnSurfaceVariant,
                             modifier = Modifier.size(13.dp)
                         )
                         Text(
                             text = "SURGE 1.0X",
-                            color = VoltPrimaryContainer,
+                            color = VoltOnSurfaceVariant,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.5.sp
@@ -592,7 +592,7 @@ fun RidesScreen(
                     Row(
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(if (state.riderPromoApplied) VoltGreen.copy(alpha = 0.2f) else VoltPrimaryContainer.copy(alpha = 0.15f))
+                            .background(if (state.riderPromoApplied) VoltSurfaceBright else VoltSurfaceContainerHighest)
                             .clickable(onClick = onPromoClick)
                             .padding(horizontal = 10.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -600,13 +600,13 @@ fun RidesScreen(
                         Icon(
                             imageVector = Icons.Filled.LocalOffer,
                             contentDescription = null,
-                            tint = if (state.riderPromoApplied) VoltGreen else VoltPrimaryContainer,
+                            tint = VoltOnSurface,
                             modifier = Modifier.size(13.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = if (state.riderPromoApplied) "-R50 RIDEGOFIRST" else "-R20 PROMO",
-                            color = if (state.riderPromoApplied) VoltGreen else VoltPrimaryContainer,
+                            color = VoltOnSurface,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.5.sp
@@ -685,7 +685,7 @@ fun RidesScreen(
                     )
                     Text(
                         text = "Done",
-                        color = VoltPrimaryContainer,
+                        color = VoltOnSurface,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 13.sp,
                         modifier = Modifier
@@ -707,7 +707,7 @@ fun RidesScreen(
                             .background(if (isSelected) VoltSurfaceContainerHigh else Color.Transparent)
                             .border(
                                 1.dp,
-                                if (isSelected) VoltPrimaryContainer.copy(alpha = 0.4f) else Color.Transparent,
+                                if (isSelected) VoltOnSurface.copy(alpha = 0.35f) else Color.Transparent,
                                 RoundedCornerShape(14.dp)
                             )
                             .clickable {
@@ -726,13 +726,13 @@ fun RidesScreen(
                                 modifier = Modifier
                                     .size(36.dp)
                                     .clip(CircleShape)
-                                    .background(if (isSelected) VoltPrimaryContainer.copy(alpha = 0.2f) else VoltSurfaceContainerHighest),
+                                    .background(if (isSelected) VoltSurfaceBright else VoltSurfaceContainerHighest),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
                                     imageVector = method.icon,
                                     contentDescription = null,
-                                    tint = if (isSelected) VoltPrimaryContainer else VoltOnSurface,
+                                    tint = VoltOnSurface,
                                     modifier = Modifier.size(18.dp)
                                 )
                             }
@@ -750,12 +750,12 @@ fun RidesScreen(
                                         Box(
                                             modifier = Modifier
                                                 .clip(CircleShape)
-                                                .background(VoltPrimaryContainer.copy(alpha = 0.15f))
+                                                .background(VoltSurfaceBright)
                                                 .padding(horizontal = 6.dp, vertical = 2.dp)
                                         ) {
                                             Text(
                                                 text = "DEFAULT",
-                                                color = VoltPrimaryContainer,
+                                                color = VoltOnSurfaceVariant,
                                                 fontSize = 9.sp,
                                                 fontWeight = FontWeight.Bold
                                             )
@@ -775,13 +775,13 @@ fun RidesScreen(
                                 modifier = Modifier
                                     .size(20.dp)
                                     .clip(CircleShape)
-                                    .background(VoltPrimaryContainer),
+                                    .background(VoltOnSurface),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Check,
                                     contentDescription = "Selected",
-                                    tint = VoltOnPrimaryFixed,
+                                    tint = VoltSurfaceLowest,
                                     modifier = Modifier.size(14.dp)
                                 )
                             }
@@ -802,7 +802,7 @@ private fun RideTierCard(
     onClick: () -> Unit
 ) {
     val borderColor by animateColorAsState(
-        targetValue = if (isSelected) VoltPrimaryContainer else Color.Transparent,
+        targetValue = if (isSelected) VoltOnSurface.copy(alpha = 0.45f) else Color.Transparent,
         label = "border_color"
     )
     val cardBackground by animateColorAsState(
@@ -921,7 +921,7 @@ private fun RideTierCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "R${tier.price}",
-                        color = if (isSelected) VoltPrimaryContainer else VoltOnSurface,
+                        color = VoltOnSurface,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -931,13 +931,13 @@ private fun RideTierCard(
                             modifier = Modifier
                                 .size(16.dp)
                                 .clip(CircleShape)
-                                .background(VoltPrimaryContainer),
+                                .background(VoltOnSurface),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = "Selected",
-                                tint = VoltOnPrimaryFixed,
+                                tint = VoltSurfaceLowest,
                                 modifier = Modifier.size(12.dp)
                             )
                         }
