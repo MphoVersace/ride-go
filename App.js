@@ -35,7 +35,7 @@ import RideInProgressScreen from "./screens/RideInProgressScreen";
 import TripCompletedScreen from "./screens/TripCompletedScreen";
 import TripReceiptScreen from "./screens/TripReceiptScreen";
 import DriverHomeScreen from "./screens/DriverHomeScreen";
-
+import DriverVehicleSetupScreen from "./screens/DriverVehicleSetupScreen";
 const Stack = createNativeStackNavigator();
 
 function SplashOnboardingScreen({ navigation }) {
@@ -233,6 +233,11 @@ export default function App() {
         <Stack.Screen
           name="DriverProfileSetup"
           component={DriverProfileSetupScreen}
+        />
+
+        <Stack.Screen
+          name="DriverVehicleSetup"
+          component={DriverVehicleSetupScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
