@@ -67,12 +67,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.model.TripHistoryItem
 import com.example.ui.theme.IceBlue
+import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.theme.VoltGreen
 import com.example.ui.theme.VoltOnPrimaryFixed
 import com.example.ui.theme.VoltOnSurface
@@ -2270,6 +2272,58 @@ private fun SettingRow(
             contentDescription = null,
             tint = VoltSecondary,
             modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+// ==========================================
+// COMPOSE PREVIEWS (Android Studio Split / Design View)
+// ==========================================
+
+@Preview(name = "Activity - Past Trips", showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun ActivityScreenPastTripsPreview() {
+    MyApplicationTheme {
+        ActivityScreen(
+            state = VoltUiState(activeActivityTab = "Past Trips"),
+            onTabSelected = {},
+            onFilterSelected = {},
+            onReceiptClick = {},
+            onRebookClick = {},
+            onDismissReceipt = {},
+            onDownloadStatement = {}
+        )
+    }
+}
+
+@Preview(name = "Activity - Upcoming Reservations", showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun ActivityScreenUpcomingPreview() {
+    MyApplicationTheme {
+        ActivityScreen(
+            state = VoltUiState(activeActivityTab = "Upcoming (1)"),
+            onTabSelected = {},
+            onFilterSelected = {},
+            onReceiptClick = {},
+            onRebookClick = {},
+            onDismissReceipt = {},
+            onDownloadStatement = {}
+        )
+    }
+}
+
+@Preview(name = "Activity - Business Mobility", showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun ActivityScreenBusinessPreview() {
+    MyApplicationTheme {
+        ActivityScreen(
+            state = VoltUiState(activeActivityTab = "Business"),
+            onTabSelected = {},
+            onFilterSelected = {},
+            onReceiptClick = {},
+            onRebookClick = {},
+            onDismissReceipt = {},
+            onDownloadStatement = {}
         )
     }
 }

@@ -68,11 +68,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.ui.components.RideGoLogo
+import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.theme.IceBlue
 import com.example.ui.theme.IceBlueSoft
 import com.example.ui.theme.MediumBlue
@@ -1080,6 +1082,37 @@ private fun TrackingMapCanvas(
                         )
                     )
                 )
+        )
+    }
+}
+
+// ==========================================
+// COMPOSE PREVIEWS (Android Studio Split / Design View)
+// ==========================================
+
+@Preview(name = "Live Driver Tracking", showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun LiveTrackingScreenPreview() {
+    MyApplicationTheme {
+        LiveTrackingScreen(
+            state = VoltUiState(
+                isDispatchActive = true,
+                isDriverMatched = true,
+                matchedDriverName = "Marcus Vance",
+                matchedVehicle = "Toyota Corolla Quest",
+                driverRating = "4.97",
+                driverTripsCount = "1,420 trips",
+                driverLicensePlate = "JM 42 KL • GP",
+                driverProvince = "Gauteng",
+                driverVehicleColor = "Midnight Silver Metallic",
+                rideSecurityPin = "4819",
+                driverEtaMinutes = 3,
+                driverEtaTimeFormatted = "09:42 AM",
+                pickupLocation = "Sandton City (Rivonia Rd Entrance)",
+                destinationLocation = "O.R. Tambo Int'l Airport (Terminal A)"
+            ),
+            onBack = {},
+            onCancelRide = {}
         )
     }
 }
