@@ -68,6 +68,7 @@ fun DispatchScreen(
     state: VoltUiState,
     onCancelRequest: () -> Unit,
     onBack: () -> Unit,
+    onConfirmNow: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var showCancelDialog by remember { mutableStateOf(false) }
@@ -167,7 +168,8 @@ fun DispatchScreen(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(VoltSurfaceContainerLow)
-                .padding(12.dp),
+                .clickable(onClick = onConfirmNow)
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -187,7 +189,7 @@ fun DispatchScreen(
                     maxLines = 1
                 )
                 Text(
-                    text = "Average accept time: 28 seconds",
+                    text = "Tap to simulate instant driver confirmation",
                     color = VoltOnSurfaceVariant,
                     fontSize = 12.sp
                 )

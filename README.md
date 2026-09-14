@@ -89,6 +89,7 @@ ride-go/
 │   │   │   │           ├── ExploreScreen.kt      # Vector map with Medium Blue route trajectory
 │   │   │   │           ├── RidesScreen.kt        # Ride tier selection (Saver, Comfort, XL, Black)
 │   │   │   │           ├── DispatchScreen.kt     # Live driver radar search & dispatch status
+│   │   │   │           ├── LiveTrackingScreen.kt # Real-time trip tracking with driver marker, ETA & security PIN
 │   │   │   │           ├── ActivityScreen.kt     # Multi-tab activity hub: Past Trips, Upcoming reservations & Business expensing
 │   │   │   │           ├── AccountScreen.kt      # User profile, wallet, security, South Africa SOS
 │   │   │   │           ├── RiderVerificationScreen.kt # Biometric selfie & SA Smart ID card scan
@@ -111,11 +112,17 @@ ride-go/
 
 1. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with Medium Blue trajectory lines and pulsating Ice Blue GPS waypoint halos.
 2. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, Ice Blue trail fill, and haptic feedback.
-3. **South African Verification Suite**:
+3. **Live Driver Tracking (Post-Confirmation)**:
+   - Dynamic map canvas with animated traveling route polyline and real-time moving driver vehicle puck.
+   - Floating ETA pill with driver approach countdown and arrival timestamp.
+   - 4-digit Ride Security PIN banner to verify driver identity before departure.
+   - Verified driver profile card with authentic South African number plate (`JM 42 KL • GP`), vehicle specs, and rating.
+   - Quick-action communications suite (Call, In-App Message, Trip Share, Safety Center).
+4. **South African Verification Suite**:
    - Biometric facial scan with Ice Blue alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.
-4. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
-5. **Multi-Tab Activity Hub & Corporate Expensing**:
+5. **Driver Onboarding Flow**: Multi-step document verification, vehicle inspection, and PDP clearance.
+6. **Multi-Tab Activity Hub & Corporate Expensing**:
    - **Past Trips**: Historical rides, digital receipts, rebooking, and stat bento metrics.
    - **Upcoming Reservations**: Advance booking tracking, flight arrival integration, locked fares, and flexible cancellation.
    - **Business Mobility**: Enterprise corporate profiles, automated SAP Concur / Expensify sync, SARS 15% VAT itemized invoicing, and cost center management.

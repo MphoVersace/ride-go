@@ -53,6 +53,7 @@ import com.example.ui.screens.AuthScreen
 import com.example.ui.screens.DispatchScreen
 import com.example.ui.screens.DriverOnboardingScreen
 import com.example.ui.screens.ExploreScreen
+import com.example.ui.screens.LiveTrackingScreen
 import com.example.ui.screens.RiderVerificationScreen
 import com.example.ui.screens.RidesScreen
 import com.example.ui.screens.SplashScreen
@@ -173,11 +174,25 @@ fun VoltAppRoot(
         ) {
             // Main Screen content switcher
             if (uiState.isDispatchActive) {
-                DispatchScreen(
-                    state = uiState,
-                    onCancelRequest = { viewModel.cancelDispatch() },
-                    onBack = { viewModel.cancelDispatch() }
-                )
+                if (uiState.isDriverMatched) {
+                    LiveTrackingScreen(
+                        state = uiState,
+                        onBack = { viewModel.cancelDispatch() },
+                        onCancelRide = { viewModel.cancelDispatch() },
+                        onCallDriver = { viewModel.showToast("Calling Marcus Vance (+27 82 555 0192)...") },
+                        onMessageDriver = { viewModel.showToast("Opening in-app chat with Marcus Vance...") },
+                        onShareRide = { viewModel.showToast("Live trip tracking link copied to clipboard!") },
+                        onSafetyCenterClick = { viewModel.showToast("Ride Go Safety Hotline: 0800 000 000") },
+                        onTripDetailsClick = { viewModel.showToast("Trip Ref: #RG-LIVE-9920 • Fixed Fare R145.00") }
+                    )
+                } else {
+                    DispatchScreen(
+                        state = uiState,
+                        onCancelRequest = { viewModel.cancelDispatch() },
+                        onBack = { viewModel.cancelDispatch() },
+                        onConfirmNow = { viewModel.confirmDriverNow() }
+                    )
+                }
             } else if (uiState.isRiderVerificationActive) {
                 RiderVerificationScreen(
                     state = uiState.riderState,
