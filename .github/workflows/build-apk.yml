@@ -11,6 +11,9 @@ on:
       - dev
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-apk:
     name: Compile & Package Debug APK
@@ -68,3 +71,23 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 14
           if-no-files-found: error
+
+      - name: Prepare APK for Release
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        run: |
+          cp ${{ steps.find-apk.outputs.apk_path }} ./ride-go-debug.apk
+
+      - name: Publish or Update GitHub Release (Latest)
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Ride Go Latest Build"
+          body: |
+            Automated CI build from commit ${{ github.sha }} on dev branch.
+            Download `ride-go-debug.apk` to update your Ride Go app directly.
+          draft: false
+          prerelease: false
+          files: ./ride-go-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

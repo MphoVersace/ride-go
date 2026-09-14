@@ -1,5 +1,6 @@
 package com.example.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.model.DriverOnboardingState
@@ -8,6 +9,8 @@ import com.example.model.RiderIdDocType
 import com.example.model.RiderVerificationState
 import com.example.model.TripHistoryItem
 import com.example.model.VoltScreenTab
+import com.example.util.AppReleaseInfo
+import com.example.util.UpdateManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +55,13 @@ data class VoltUiState(
     val riderState: RiderVerificationState = RiderVerificationState(),
     val isRiderVerified: Boolean = false,
     val riderPromoApplied: Boolean = false,
-    val isSigningUpFromAuth: Boolean = false
+    val isSigningUpFromAuth: Boolean = false,
+    val isSearchDestinationActive: Boolean = false,
+    val selectedPaymentMethod: String = "Capitec Pay •••• 4282",
+    val appUpdateAvailable: Boolean = false,
+    val latestReleaseInfo: AppReleaseInfo? = null,
+    val isDownloadingUpdate: Boolean = false,
+    val updateDownloadProgress: Float = 0f
 )
 
 class VoltViewModel : ViewModel() {
@@ -243,6 +252,105 @@ class VoltViewModel : ViewModel() {
     fun clearToast() {
         _uiState.update { it.copy(toastMessage = null) }
     }
+
+    // ==========================================
+    // Destination Search & Route Routing Actions
+    // ==========================================
+    fun openDestinationSearch() {
+        _uiState.update { it.copy(isSearchDestinationActive = true) }
+    }
+
+    fun closeDestinationSearch() {
+        _uiState.update { it.copy(isSearchDestinationActive = false) }
+    }
+
+    fun selectDestination(destination: String, pickup: String? = null) {
+        _uiState.update {
+            it.copy(
+                destinationLocation = destination,
+                pickupLocation = if (!pickup.isNullOrBlank()) pickup else it.pickupLocation,
+                isSearchDestinationActive = false,
+                currentTab = VoltScreenTab.RIDES
+            )
+        }
+        showToast("Route updated: $destination")
+    }
+
+    fun updatePickupLocation(pickup: String) {
+        _uiState.update { it.copy(pickupLocation = pickup) }
+        showToast("Pickup updated: $pickup")
+    }
+
+    fun selectPaymentMethod(method: String) {
+        _uiState.update { it.copy(selectedPaymentMethod = method) }
+        showToast("Payment set to: $method")
+    }
+
+    fun getRouteDistanceAndDuration(pickup: String, destination: String): Pair<String, String> {
+        val d = destination.lowercase()
+        return when {
+            d.contains("or tambo") || d.contains("o.r. tambo") -> Pair("24.0 km", "28 mins")
+            d.contains("cape town international") || d.contains("cpt") -> Pair("21.4 km", "24 mins")
+            d.contains("king shaka") || d.contains("dur") -> Pair("32.1 km", "26 mins")
+            d.contains("camps bay") -> Pair("8.4 km", "15 mins")
+            d.contains("v&a") || d.contains("waterfront") -> Pair("5.8 km", "14 mins")
+            d.contains("rosebank") -> Pair("6.2 km", "12 mins")
+            d.contains("sandton") -> Pair("1.2 km", "5 mins")
+            d.contains("mall of africa") -> Pair("16.5 km", "18 mins")
+            d.contains("canal walk") || d.contains("century city") -> Pair("14.2 km", "18 mins")
+            d.contains("menlyn") -> Pair("42.0 km", "38 mins")
+            d.contains("table mountain") -> Pair("7.1 km", "16 mins")
+            else -> {
+                val dist = (8 + (pickup.length + destination.length) % 18)
+                val time = (10 + dist * 1.3).toInt()
+                Pair("$dist.2 km", "$time mins")
+            }
+        }
+    }
+
+    // ==========================================
+    // In-App Self Updater Actions (GitHub Releases)
+    // ==========================================
+    fun checkForAppUpdates() {
+        viewModelScope.launch {
+            val release = UpdateManager.checkLatestRelease()
+            if (release != null) {
+                _uiState.update {
+                    it.copy(
+                        appUpdateAvailable = true,
+                        latestReleaseInfo = release
+                    )
+                }
+            }
+        }
+    }
+
+    fun dismissAppUpdateBanner() {
+        _uiState.update { it.copy(appUpdateAvailable = false) }
+    }
+
+    fun downloadAndInstallUpdate(context: Context) {
+        val downloadUrl = _uiState.value.latestReleaseInfo?.downloadUrl ?: return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isDownloadingUpdate = true, updateDownloadProgress = 0f) }
+            showToast("Downloading Ride Go update...")
+            val apkFile = UpdateManager.downloadApk(context, downloadUrl) { progress ->
+                _uiState.update { it.copy(updateDownloadProgress = progress) }
+            }
+            _uiState.update { it.copy(isDownloadingUpdate = false) }
+            if (apkFile != null && apkFile.exists()) {
+                val launched = UpdateManager.launchApkInstaller(context, apkFile)
+                if (launched) {
+                    showToast("Installing update...")
+                } else {
+                    showToast("Please allow installing apps from Ride Go in Settings")
+                }
+            } else {
+                showToast("Failed to download update APK")
+            }
+        }
+    }
+
 
     // Driver Onboarding Actions
     fun openDriverOnboarding(step: Int = 1) {

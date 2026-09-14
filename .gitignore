@@ -22,8 +22,8 @@ build/
 captures/
 /captures
 .externalNativeBuild
-.cxx
-debug.keystore
+# debug.keystore is tracked for consistent CI/CD in-app update signatures
+!debug.keystore
 *.apk
 *.aab
 
