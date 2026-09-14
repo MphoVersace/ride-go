@@ -224,7 +224,7 @@ fun ActivityScreen(
                     )
                     Text(
                         text = receipt.fareFormatted,
-                        color = VoltPrimaryContainer,
+                        color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp
                     )
@@ -302,7 +302,7 @@ private fun PastTripsContent(
                     Icon(
                         imageVector = Icons.Filled.LocalTaxi,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -335,7 +335,7 @@ private fun PastTripsContent(
                 ) {
                     Text(
                         text = "SAVED",
-                        color = VoltPrimaryContainer,
+                        color = VoltSecondary,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
@@ -343,14 +343,14 @@ private fun PastTripsContent(
                     Icon(
                         imageVector = Icons.Filled.LocalOffer,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "R380",
-                    color = VoltPrimaryContainer,
+                    color = VoltOnSurface,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -384,7 +384,7 @@ private fun PastTripsContent(
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -445,7 +445,7 @@ private fun PastTripsContent(
                 ) {
                     Text(
                         text = chip,
-                        color = if (isSelected) VoltOnPrimaryFixed else VoltSecondary,
+                        color = if (isSelected) Color.White else VoltOnSurface,
                         fontSize = 11.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                     )
@@ -600,7 +600,7 @@ private fun PastTripsContent(
                 Icon(
                     imageVector = Icons.Filled.Star,
                     contentDescription = null,
-                    tint = VoltPrimaryContainer,
+                    tint = Color.White,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -655,7 +655,7 @@ private fun UpcomingScreenContent(
             ) {
                 Text(
                     text = "1 Active Booking",
-                    color = IceBlue,
+                    color = Color.White,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -689,7 +689,7 @@ private fun UpcomingScreenContent(
                         Icon(
                             imageVector = Icons.Filled.DateRange,
                             contentDescription = null,
-                            tint = VoltPrimaryContainer,
+                            tint = Color.White,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -711,7 +711,7 @@ private fun UpcomingScreenContent(
                             ) {
                                 Text(
                                     text = "COMFORT",
-                                    color = VoltPrimaryContainer,
+                                    color = Color.White,
                                     fontSize = 9.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -779,7 +779,7 @@ private fun UpcomingScreenContent(
                     Icon(
                         imageVector = Icons.Filled.Schedule,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -794,13 +794,13 @@ private fun UpcomingScreenContent(
                     Icon(
                         imageVector = Icons.Filled.Flight,
                         contentDescription = null,
-                        tint = IceBlue,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "SAA 322",
-                        color = IceBlue,
+                        color = Color.White,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -1028,7 +1028,7 @@ private fun UpcomingBenefitBento(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = VoltPrimaryContainer,
+                tint = Color.White,
                 modifier = Modifier.size(16.dp)
             )
         }
@@ -1079,7 +1079,7 @@ private fun BusinessScreenContent(
             ) {
                 Text(
                     text = "Verified Enterprise",
-                    color = IceBlue,
+                    color = Color.White,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -1113,7 +1113,7 @@ private fun BusinessScreenContent(
                         Icon(
                             imageVector = Icons.Filled.Business,
                             contentDescription = null,
-                            tint = VoltPrimaryContainer,
+                            tint = Color.White,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -1135,7 +1135,7 @@ private fun BusinessScreenContent(
                             ) {
                                 Text(
                                     text = "CORP",
-                                    color = VoltPrimaryContainer,
+                                    color = Color.White,
                                     fontSize = 9.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -1306,7 +1306,7 @@ private fun BusinessScreenContent(
                     Icon(
                         imageVector = Icons.Filled.TrendingUp,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -1339,7 +1339,7 @@ private fun BusinessScreenContent(
                 ) {
                     Text(
                         text = "VAT (15%)",
-                        color = VoltPrimaryContainer,
+                        color = Color.White,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
@@ -1347,14 +1347,14 @@ private fun BusinessScreenContent(
                     Icon(
                         imageVector = Icons.Filled.ReceiptLong,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "R323.48",
-                    color = VoltPrimaryContainer,
+                    color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -1388,7 +1388,7 @@ private fun BusinessScreenContent(
                     Icon(
                         imageVector = Icons.Filled.Tune,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -1579,7 +1579,7 @@ private fun BusinessTripCard(
                     Icon(
                         imageVector = Icons.Filled.DirectionsCar,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -1601,7 +1601,7 @@ private fun BusinessTripCard(
                         ) {
                             Text(
                                 text = item.tierTag,
-                                color = VoltPrimaryContainer,
+                                color = Color.White,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -1624,7 +1624,7 @@ private fun BusinessTripCard(
                 )
                 Text(
                     text = "Incl. 15% VAT",
-                    color = IceBlue,
+                    color = Color.White,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -1734,7 +1734,7 @@ private fun Trip1Card(
                     Icon(
                         imageVector = Icons.Filled.DirectionsCar,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -1756,7 +1756,7 @@ private fun Trip1Card(
                         ) {
                             Text(
                                 text = item.tierTag,
-                                color = VoltPrimaryContainer,
+                                color = Color.White,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -1860,13 +1860,13 @@ private fun Trip1Card(
                 Icon(
                     imageVector = Icons.Filled.Star,
                     contentDescription = null,
-                    tint = VoltPrimaryContainer,
+                    tint = Color.White,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "5.0",
-                    color = VoltPrimaryContainer,
+                    color = Color.White,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -1960,7 +1960,7 @@ private fun Trip2Card(
                     Icon(
                         imageVector = Icons.Filled.DirectionsCar,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -2057,14 +2057,14 @@ private fun Trip2Card(
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(14.dp)
                     )
                 }
             }
             Text(
                 text = "View Receipt",
-                color = VoltPrimaryContainer,
+                color = Color.White,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable { onReceiptClick(item) }
@@ -2102,7 +2102,7 @@ private fun Trip3Card(
                     Icon(
                         imageVector = Icons.Filled.LocalTaxi,
                         contentDescription = null,
-                        tint = VoltPrimaryContainer,
+                        tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -2124,7 +2124,7 @@ private fun Trip3Card(
                         ) {
                             Text(
                                 text = item.tierTag,
-                                color = VoltPrimaryContainer,
+                                color = Color.White,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -2247,7 +2247,7 @@ private fun SettingRow(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = VoltPrimaryContainer,
+                    tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
             }

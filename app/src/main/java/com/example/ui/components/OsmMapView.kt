@@ -31,6 +31,10 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
+import android.graphics.Point
+import android.os.SystemClock
+import org.osmdroid.views.overlay.Overlay
+
 /**
  * High-performance Jetpack Compose wrapper for OpenStreetMap via osmdroid.
  * Features:
@@ -40,6 +44,7 @@ import org.osmdroid.views.overlay.Polyline
  * - Locked User Location Ping: Genuine osmdroid Marker anchored to exact GPS coordinates,
  *   so the ping stays 100% locked to the road/building when zooming or panning.
  * - Destination Pin & Dotted Destination Route Polyline Overlay support.
+ * - Real-time animated radar-style ping pulses for both user position and destination pin.
  */
 @Composable
 fun OsmMapView(
@@ -75,6 +80,8 @@ fun OsmMapView(
         }
     }
 
+    val pulseOverlay = remember { LocationPulseOverlay() }
+
     val mapView = remember {
         MapView(context).apply {
             setTileSource(TileSourceFactory.MAPNIK)
@@ -98,6 +105,7 @@ fun OsmMapView(
 
             controller.setZoom(zoomLevel)
             controller.setCenter(GeoPoint(latitude, longitude))
+            overlays.add(pulseOverlay)
             onMapReady(this)
         }
     }
@@ -109,6 +117,13 @@ fun OsmMapView(
             mapView.onPause()
             mapView.onDetach()
         }
+    }
+
+    // Keep pulse overlay coordinates synced with current state
+    LaunchedEffect(latitude, longitude, showUserLocationMarker, destinationPoint) {
+        pulseOverlay.userLocation = if (showUserLocationMarker) GeoPoint(latitude, longitude) else null
+        pulseOverlay.destinationLocation = destinationPoint
+        mapView.invalidate()
     }
 
     // Locked User Location Ping Marker overlay (stays strictly pinned on zoom & pan)
@@ -312,4 +327,84 @@ private fun createDestinationPinDrawable(context: Context): Drawable {
     canvas.drawCircle(r, r, r * 0.18f, innerDotPaint)
 
     return BitmapDrawable(context.resources, bitmap)
+}
+
+/**
+ * High-performance animated radar pulse overlay for OpenStreetMap.
+ * Renders expanding sonar ping ripples for both user location and destination location
+ * strictly adhering to Ride Go's 60-30-10 palette.
+ */
+private class LocationPulseOverlay : Overlay() {
+    var userLocation: GeoPoint? = null
+    var destinationLocation: GeoPoint? = null
+
+    private val userPoint = Point()
+    private val destPoint = Point()
+
+    private val pulseStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+    }
+
+    private val pulseFillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+
+    override fun draw(canvas: Canvas, mapView: MapView, shadow: Boolean) {
+        if (shadow) return
+
+        val now = SystemClock.uptimeMillis()
+        val density = mapView.context.resources.displayMetrics.density
+
+        // 1. Draw animated ping waves for user location
+        userLocation?.let { geo ->
+            mapView.projection.toPixels(geo, userPoint)
+            drawPingWaves(canvas, userPoint.x.toFloat(), userPoint.y.toFloat(), now, density, isDestination = false)
+        }
+
+        // 2. Draw animated ping waves for destination location
+        destinationLocation?.let { geo ->
+            mapView.projection.toPixels(geo, destPoint)
+            drawPingWaves(canvas, destPoint.x.toFloat(), destPoint.y.toFloat(), now, density, isDestination = true)
+        }
+
+        // Request next animation frame smoothly if view is attached
+        if (mapView.isAttachedToWindow) {
+            mapView.postInvalidateDelayed(33)
+        }
+    }
+
+    private fun drawPingWaves(
+        canvas: Canvas,
+        cx: Float,
+        cy: Float,
+        now: Long,
+        density: Float,
+        isDestination: Boolean
+    ) {
+        val duration = 2200L
+        val waves = 3
+        val maxRadius = (if (isDestination) 38f else 46f) * density
+        val baseRadius = (if (isDestination) 8f else 14f) * density
+
+        for (i in 0 until waves) {
+            val waveOffset = i * (duration / waves)
+            val progress = ((now + waveOffset) % duration) / duration.toFloat()
+
+            val radius = baseRadius + (maxRadius - baseRadius) * progress
+            val alpha = ((1f - progress) * 190).toInt().coerceIn(0, 255)
+
+            // Outer ring stroke (crisp white ping)
+            pulseStrokePaint.color = android.graphics.Color.argb(alpha, 255, 255, 255)
+            pulseStrokePaint.strokeWidth = (2.4f - 1.4f * progress) * density
+            canvas.drawCircle(cx, cy, radius, pulseStrokePaint)
+
+            // Inner translucent halo fill
+            pulseFillPaint.color = if (isDestination) {
+                android.graphics.Color.argb(alpha / 4, 255, 255, 255)
+            } else {
+                android.graphics.Color.argb(alpha / 4, 11, 25, 56) // Deep navy halo
+            }
+            canvas.drawCircle(cx, cy, radius, pulseFillPaint)
+        }
+    }
 }

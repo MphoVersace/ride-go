@@ -308,37 +308,19 @@ fun ExploreScreen(
                 }
             }
 
-            // Live Fleet Status Pill (Top-Left)
-            Box(
+            // Live Fleet Status Text (Top-Left) - no card/badge container
+            Text(
+                text = "24 RIDE-GO CARS NEARBY (${pickupLocation.split(",").firstOrNull()?.trim()?.uppercase() ?: "CURRENT LOCATION"})",
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(start = 16.dp, top = 16.dp)
-                    .clip(CircleShape)
-                    .background(VoltSurfaceContainerHigh.copy(alpha = 0.92f))
-                    .border(1.dp, Color.White.copy(alpha = 0.08f), CircleShape)
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(7.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(7.dp)
-                            .clip(CircleShape)
-                            .background(VoltPrimaryContainer)
-                    )
-                    Text(
-                        text = "24 RIDE-GO CARS NEARBY (${pickupLocation.split(",").firstOrNull()?.trim()?.uppercase() ?: "CURRENT LOCATION"})",
-                        color = VoltOnSurface,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.6.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+                    .padding(start = 16.dp, top = 16.dp),
+                color = VoltOnSurface,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.6.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
             // Floating Map Quick Control Buttons (Top-Right)
             Column(
