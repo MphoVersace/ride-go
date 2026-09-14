@@ -257,15 +257,31 @@ fun LiveTrackingScreen(
                     }
                     trackingRoutePoints = pts
                 }
+
+                // Interpolate driver vehicle coordinate & road heading in real time
+                val (currentDriverPoint, driverBearing) = remember(trackingRoutePoints, carProgress) {
+                    if (trackingRoutePoints.size >= 2) {
+                        RouteRepository.interpolateAlongRoute(trackingRoutePoints, carProgress)
+                    } else {
+                        val woodmead = GeoPoint(WOODMEAD_LAT, WOODMEAD_LON)
+                        val bearing = RouteRepository.calculateBearing(woodmead, pickupGeoPoint)
+                        val lat = WOODMEAD_LAT + (pickupGeoPoint.latitude - WOODMEAD_LAT) * carProgress
+                        val lon = WOODMEAD_LON + (pickupGeoPoint.longitude - WOODMEAD_LON) * carProgress
+                        GeoPoint(lat, lon) to bearing
+                    }
+                }
+
                 OsmMapView(
-                    latitude = WOODMEAD_LAT,
-                    longitude = WOODMEAD_LON,
+                    latitude = pickupGeoPoint.latitude,
+                    longitude = pickupGeoPoint.longitude,
                     modifier = Modifier.fillMaxSize(),
                     zoomLevel = 13.0,
                     isDarkMode = true,
                     showUserLocationMarker = true,
-                    destinationPoint = pickupGeoPoint,
-                    routePoints = trackingRoutePoints
+                    destinationPoint = GeoPoint(WOODMEAD_LAT, WOODMEAD_LON),
+                    routePoints = trackingRoutePoints,
+                    driverPoint = currentDriverPoint,
+                    driverHeading = (driverBearing - 90f)
                 )
 
                 // Floating Top Live ETA Status Pill
@@ -289,7 +305,7 @@ fun LiveTrackingScreen(
                                 .background(IceBlue)
                         )
                         Text(
-                            text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Marcus"} is heading to you",
+                            text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Thulane"} is heading to you",
                             color = VoltOnSurface,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
@@ -1220,7 +1236,7 @@ private fun TrackingMapCanvas(
                 .padding(horizontal = 6.dp, vertical = 3.dp)
         ) {
             Text(
-                text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Marcus"} (${state.driverDistanceText})",
+                text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Thulane"} (${state.driverDistanceText})",
                 color = VoltOnSurfaceVariant,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium
@@ -1283,7 +1299,7 @@ private fun LiveTrackingScreenPreview() {
             state = VoltUiState(
                 isDispatchActive = true,
                 isDriverMatched = true,
-                matchedDriverName = "Marcus Vance",
+                matchedDriverName = "Thulane J. Sigasa",
                 matchedVehicle = "Toyota Corolla Quest",
                 driverRating = "4.97",
                 driverTripsCount = "1,420 trips",

@@ -191,4 +191,44 @@ object RouteRepository {
         val (toLat, toLon) = resolveCoordinates(toAddress, defaultLat = fromLat + 0.05, defaultLon = fromLon + 0.05)
         return fetchRoute(fromLat, fromLon, toLat, toLon)
     }
+
+    /**
+     * Calculates the interpolated coordinate and compass bearing along a sequence of route points
+     * for a given progression fraction (0.0 to 1.0).
+     */
+    fun interpolateAlongRoute(points: List<GeoPoint>, progress: Float): Pair<GeoPoint, Float> {
+        if (points.isEmpty()) return GeoPoint(-26.0550, 28.1033) to 0f
+        if (points.size == 1) return points[0] to 0f
+
+        val clamped = progress.coerceIn(0f, 0.999f)
+        val totalSegments = points.size - 1
+        val floatIndex = clamped * totalSegments
+        val index = floatIndex.toInt().coerceIn(0, totalSegments - 1)
+        val t = floatIndex - index
+
+        val p1 = points[index]
+        val p2 = points[index + 1]
+
+        val lat = p1.latitude + (p2.latitude - p1.latitude) * t
+        val lon = p1.longitude + (p2.longitude - p1.longitude) * t
+
+        val bearing = calculateBearing(p1, p2)
+        return GeoPoint(lat, lon) to bearing
+    }
+
+    /**
+     * Calculates true compass bearing (0°..360°) from [from] to [to].
+     */
+    fun calculateBearing(from: GeoPoint, to: GeoPoint): Float {
+        val lat1 = Math.toRadians(from.latitude)
+        val lon1 = Math.toRadians(from.longitude)
+        val lat2 = Math.toRadians(to.latitude)
+        val lon2 = Math.toRadians(to.longitude)
+
+        val dLon = lon2 - lon1
+        val y = sin(dLon) * cos(lat2)
+        val x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
+        val bearingRad = kotlin.math.atan2(y, x)
+        return ((Math.toDegrees(bearingRad) + 360.0) % 360.0).toFloat()
+    }
 }

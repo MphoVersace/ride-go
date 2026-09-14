@@ -31,7 +31,9 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
+import android.graphics.LinearGradient
 import android.graphics.Point
+import android.graphics.Shader
 import android.os.SystemClock
 import org.osmdroid.views.overlay.Overlay
 
@@ -57,6 +59,8 @@ fun OsmMapView(
     showUserLocationMarker: Boolean = true,
     destinationPoint: GeoPoint? = null,
     routePoints: List<GeoPoint> = emptyList(),
+    driverPoint: GeoPoint? = null,
+    driverHeading: Float = 0f,
     onMapReady: (MapView) -> Unit = {}
 ) {
     val isInspection = LocalInspectionMode.current
@@ -120,9 +124,11 @@ fun OsmMapView(
     }
 
     // Keep pulse overlay coordinates synced with current state
-    LaunchedEffect(latitude, longitude, showUserLocationMarker, destinationPoint) {
+    LaunchedEffect(latitude, longitude, showUserLocationMarker, destinationPoint, driverPoint, driverHeading) {
         pulseOverlay.userLocation = if (showUserLocationMarker) GeoPoint(latitude, longitude) else null
         pulseOverlay.destinationLocation = destinationPoint
+        pulseOverlay.driverLocation = driverPoint
+        pulseOverlay.driverHeading = driverHeading
         mapView.invalidate()
     }
 
@@ -337,9 +343,12 @@ private fun createDestinationPinDrawable(context: Context): Drawable {
 private class LocationPulseOverlay : Overlay() {
     var userLocation: GeoPoint? = null
     var destinationLocation: GeoPoint? = null
+    var driverLocation: GeoPoint? = null
+    var driverHeading: Float = 0f
 
     private val userPoint = Point()
     private val destPoint = Point()
+    private val driverScreenPoint = Point()
 
     private val pulseStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -367,10 +376,101 @@ private class LocationPulseOverlay : Overlay() {
             drawPingWaves(canvas, destPoint.x.toFloat(), destPoint.y.toFloat(), now, density, isDestination = true)
         }
 
+        // 3. Draw animated moving driver vehicle puck with directional chevron & headlights
+        driverLocation?.let { geo ->
+            mapView.projection.toPixels(geo, driverScreenPoint)
+            drawDriverVehiclePuck(
+                canvas,
+                driverScreenPoint.x.toFloat(),
+                driverScreenPoint.y.toFloat(),
+                driverHeading,
+                density,
+                now
+            )
+        }
+
         // Request next animation frame smoothly if view is attached
         if (mapView.isAttachedToWindow) {
             mapView.postInvalidateDelayed(33)
         }
+    }
+
+    private fun drawDriverVehiclePuck(
+        canvas: Canvas,
+        cx: Float,
+        cy: Float,
+        headingDeg: Float,
+        density: Float,
+        now: Long
+    ) {
+        // 1. Sonar pulse ripple around vehicle
+        val pulseProgress = (now % 1600L) / 1600f
+        val pulseRadius = (16f + 16f * pulseProgress) * density
+        val pulseAlpha = ((1f - pulseProgress) * 140).toInt().coerceIn(0, 255)
+        pulseStrokePaint.color = android.graphics.Color.argb(pulseAlpha, 255, 255, 255)
+        pulseStrokePaint.strokeWidth = 1.5f * density
+        canvas.drawCircle(cx, cy, pulseRadius, pulseStrokePaint)
+
+        // Save canvas state for rotated vehicle graphics
+        canvas.save()
+        canvas.rotate(headingDeg, cx, cy)
+
+        // 2. Forward headlight beam cone (translucent pure white gradient spreading forward)
+        val beamPath = Path().apply {
+            moveTo(cx + 8f * density, cy)
+            lineTo(cx + 36f * density, cy - 14f * density)
+            lineTo(cx + 36f * density, cy + 14f * density)
+            close()
+        }
+        val beamPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.FILL
+            shader = LinearGradient(
+                cx + 8f * density, cy,
+                cx + 36f * density, cy,
+                android.graphics.Color.argb(75, 255, 255, 255),
+                android.graphics.Color.TRANSPARENT,
+                Shader.TileMode.CLAMP
+            )
+        }
+        canvas.drawPath(beamPath, beamPaint)
+
+        // 3. Vehicle base circle (Deep Navy #0B1938 with drop shadow)
+        val basePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = android.graphics.Color.rgb(11, 25, 56) // Deep Navy #0B1938
+            style = Paint.Style.FILL
+        }
+        canvas.drawCircle(cx, cy, 14f * density, basePaint)
+
+        // 4. Vehicle outer crisp white ring
+        val ringPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = android.graphics.Color.WHITE
+            style = Paint.Style.STROKE
+            strokeWidth = 2.2f * density
+        }
+        canvas.drawCircle(cx, cy, 14f * density, ringPaint)
+
+        // 5. Vehicle inner elevated core
+        val corePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = android.graphics.Color.rgb(22, 42, 84) // Elevated navy #162A54
+            style = Paint.Style.FILL
+        }
+        canvas.drawCircle(cx, cy, 10f * density, corePaint)
+
+        // 6. Crisp White Navigation Chevron Arrow pointing forward (+X direction, rotated by heading)
+        val arrowPath = Path().apply {
+            moveTo(cx + 7f * density, cy)
+            lineTo(cx - 5f * density, cy - 5f * density)
+            lineTo(cx - 2f * density, cy)
+            lineTo(cx - 5f * density, cy + 5f * density)
+            close()
+        }
+        val arrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = android.graphics.Color.WHITE
+            style = Paint.Style.FILL
+        }
+        canvas.drawPath(arrowPath, arrowPaint)
+
+        canvas.restore()
     }
 
     private fun drawPingWaves(

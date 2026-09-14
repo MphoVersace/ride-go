@@ -159,12 +159,12 @@ ride-go/
 7. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with crisp white trajectory lines and pulsating waypoint halos on deep navy road grids.
 8. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, pure white trail fill, and haptic feedback.
 9. **Live Driver Tracking & Approach Telemetry (Post-Confirmation)**:
-   - **Dynamic Vector Approach from Random Distance**: When ride request is confirmed, driver is initialized at a realistic randomized starting distance (1.6 km to 3.8 km) away from rider's current or selected pickup location.
-   - **Real-Time Heading & Directional Rotation**: Vector map canvas continuously steers driver vehicle puck towards the rider's pickup coordinate with forward headlights beam, pulsing radar ring, and directional tangent angle orientation.
+   - **Real-Road Animated Driver Arrow Navigation**: The driver vehicle puck with directional navigation arrow and forward headlight beam actively drives along the real OSRM OpenStreetMap road route from Woodmead Retail Shopping Centre to the rider's pickup location, dynamically rotating with the road's curves and heading angles.
+   - **Real-Time Heading & Directional Rotation**: OpenStreetMap canvas continuously steers driver vehicle puck towards the rider's pickup coordinate with forward headlights beam, pulsing radar ring, and compass bearing orientation.
    - **Live Distance & ETA Countdown**: Live ETA HUD dynamically calculates remaining distance and arrival countdown in real-time as the driver advances towards the user.
-   - **Pickup Location Waypoint Marker**: Pulsing concentric GPS beacon and destination overlay pill anchoring the driver's heading target directly to the rider's current or selected pickup spot.
+   - **Pickup Location Waypoint Marker**: Pulsing concentric GPS beacon anchoring the driver's heading target directly to the rider's current pickup spot.
    - **4-Digit Ride Security PIN Banner**: Pre-departure identity verification code before vehicle departure.
-   - **Verified Driver Profile Card**: Authentic South African number plate (`JM 42 KL • GP`), vehicle specs, rating, and quick communications suite (Call, In-App Message, Trip Share, Safety Center).
+   - **Verified Driver Profile Card**: Authentic South African number plate (`TJS 001 GP`), vehicle specs, rating, and quick communications suite (Call, In-App Message, Trip Share, Safety Center).
 10. **South African Verification Suite**:
    - Biometric facial scan with high-contrast alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.
