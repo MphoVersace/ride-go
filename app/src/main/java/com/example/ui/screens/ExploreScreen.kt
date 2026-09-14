@@ -126,7 +126,7 @@ fun ExploreScreen(
                 subtitle = "3 min",
                 badge = "FASTEST",
                 icon = Icons.Filled.LocalTaxi,
-                tier = RideTierType.ECO
+                tier = RideTierType.SAVER
             ),
             QuickCategoryItem(
                 id = "COMFORT",
@@ -150,7 +150,7 @@ fun ExploreScreen(
                 subtitle = "Courier",
                 badge = "EXPRESS",
                 icon = Icons.Filled.LocalShipping,
-                tier = RideTierType.ECO
+                tier = RideTierType.SAVER
             )
         )
     }
@@ -164,7 +164,7 @@ fun ExploreScreen(
                 address = "Kloof Street, Gardens, Cape Town",
                 eta = "12 min",
                 icon = Icons.Filled.Home,
-                tier = RideTierType.ECO
+                tier = RideTierType.SAVER
             ),
             FastBookingItem(
                 id = "waterfront",
@@ -191,7 +191,7 @@ fun ExploreScreen(
                 address = "Victoria Road Promenade",
                 eta = "15 min",
                 icon = Icons.Filled.BeachAccess,
-                tier = RideTierType.ECO
+                tier = RideTierType.SAVER
             )
         )
     }
