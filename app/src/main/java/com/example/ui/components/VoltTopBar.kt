@@ -1,8 +1,11 @@
 package com.example.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.res.painterResource
+import com.example.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -111,33 +114,15 @@ fun VoltTopBar(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
             } else {
-                // Ride GO Brand Name
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text(
-                        text = "Ride",
-                        color = VoltOnSurface,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-0.5).sp
-                    )
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(VoltPrimaryContainer)
-                            .padding(horizontal = 7.dp, vertical = 2.dp)
-                    ) {
-                        Text(
-                            text = "GO",
-                            color = VoltOnPrimaryFixed,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Black,
-                            letterSpacing = 0.5.sp
-                        )
-                    }
-                }
+                // Official Ride GO Brand Logo (RIDEGO.png)
+                Image(
+                    painter = painterResource(id = R.drawable.ridego_wide),
+                    contentDescription = "Ride Go Logo",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .height(34.dp)
+                        .testTag("top_bar_ridego_logo")
+                )
             }
 
             // Center or Spacer

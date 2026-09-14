@@ -80,15 +80,15 @@ ride-go/
 │   │   │   │       │   ├── Theme.kt              # MaterialTheme colorScheme and configurations
 │   │   │   │       │   └── Type.kt               # Modern typography scale
 │   │   │   │       ├── components/
-│   │   │   │       │   ├── RideGoLogo.kt         # Official Deep Navy squircle logo with white "GO"
+│   │   │   │       │   ├── RideGoLogo.kt         # Official Ride Go brand logo component utilizing RIDEGO.png assets
 │   │   │   │       │   ├── RadarViewport.kt      # Real-time driver radar sweep canvas
 │   │   │   │       │   ├── SlideToConfirm.kt     # Interactive physics-based booking confirmation slider
 │   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Ice Blue underglow
 │   │   │   │       │   ├── VoltBottomNav.kt      # 4-core screen bottom navigation bar
-│   │   │   │       │   └── VoltTopBar.kt         # Sticky header with telemetry indicators
+│   │   │   │       │   └── VoltTopBar.kt         # Sticky header with official Ride GO brand mark and telemetry
 │   │   │   │       └── screens/
-│   │   │   │           ├── SplashScreen.kt       # Kinetic brand loader
-│   │   │   │           ├── AuthScreen.kt         # Sign-in & sign-up segmented flow
+│   │   │   │           ├── SplashScreen.kt       # Kinetic brand loader with centered Ride Go logo
+│   │   │   │           ├── AuthScreen.kt         # Direct Rider & Driver sign-up and authentication
 │   │   │   │           ├── ExploreScreen.kt      # Vector map with Medium Blue route trajectory
 │   │   │   │           ├── RidesScreen.kt        # Ride tier selection (Saver, Comfort, XL, Black)
 │   │   │   │           ├── DispatchScreen.kt     # Live driver radar search & dispatch status
@@ -96,8 +96,8 @@ ride-go/
 │   │   │   │           ├── ActivityScreen.kt     # Multi-tab activity hub: Past Trips, Upcoming reservations & Business expensing
 │   │   │   │           ├── AccountScreen.kt      # User profile, wallet, security, South Africa SOS
 │   │   │   │           ├── RiderVerificationScreen.kt # Biometric selfie & SA Smart ID card scan
-│   │   │   │           └── DriverOnboardingScreen.kt  # Driver PDP, license, vehicle inspection
-│   │   │   └── res/                              # Android app icons, drawables, and strings
+│   │   │   │           └── DriverOnboardingScreen.kt  # Driver PDP, license, vehicle inspection & streamlined progress
+│   │   │   └── res/                              # Android launcher mipmaps, official RIDEGO assets, and strings
 │   │   └── test/                                 # Unit tests and automated assertions
 │   └── build.gradle.kts                          # Module dependencies and Android SDK config
 ├── gradle/

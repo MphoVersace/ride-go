@@ -73,7 +73,7 @@ fun SplashScreen(
             contentAlignment = Alignment.Center
         ) {
             RideGoLogo(
-                size = 120.dp
+                size = 220.dp
             )
         }
     }
