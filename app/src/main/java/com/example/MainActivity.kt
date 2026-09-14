@@ -127,24 +127,43 @@ fun VoltAppRoot(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(VoltSurface)) {
     if (uiState.isSplashActive) {
         // Loading / Splash Screen showing just the brand logo
         SplashScreen(
             onSplashComplete = { viewModel.finishSplash() }
         )
     } else if (!uiState.isAuthenticated && !uiState.isRiderVerificationActive && !uiState.isDriverOnboardingActive) {
-        // Sign Up / Login Screen with direct pathways to Rider & Driver onboarding
-        AuthScreen(
-            onSignInSuccess = { emailOrPhone -> viewModel.login(emailOrPhone) },
-            onStartRiderSignUp = { name, email, phone ->
-                viewModel.startRiderSignUpFromAuth(name, email, phone)
-            },
-            onStartDriverSignUp = { name, phone ->
-                viewModel.startDriverSignUpFromAuth(name, phone)
-            },
-            onContinueAsGuest = { viewModel.continueAsGuest() }
-        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Sign Up / Login Screen with direct pathways to Rider & Driver onboarding
+            AuthScreen(
+                onSignInSuccess = { emailOrPhone -> viewModel.login(emailOrPhone) },
+                onStartRiderSignUp = { name, email, phone ->
+                    viewModel.startRiderSignUpFromAuth(name, email, phone)
+                },
+                onStartDriverSignUp = { name, phone ->
+                    viewModel.startDriverSignUpFromAuth(name, phone)
+                },
+                onContinueAsGuest = { viewModel.continueAsGuest() }
+            )
+
+            // App Update Available Floating Banner on Auth Screen
+            AnimatedVisibility(
+                visible = uiState.appUpdateAvailable,
+                enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                val context = LocalContext.current
+                UpdateBannerContent(
+                    uiState = uiState,
+                    onDownloadClick = { viewModel.downloadAndInstallUpdate(context) },
+                    onDismiss = { viewModel.dismissAppUpdateBanner() }
+                )
+            }
+        }
     } else if (uiState.isSearchDestinationActive) {
         // Destination Search screen with current location and South Africa place filtering
         DestinationSearchScreen(
@@ -380,10 +399,6 @@ fun VoltAppRoot(
                 }
             }
 
-        }
-    }
-}
-
             // App Update Available Floating Banner
             AnimatedVisibility(
                 visible = uiState.appUpdateAvailable,
@@ -391,89 +406,14 @@ fun VoltAppRoot(
                 exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .statusBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 val context = LocalContext.current
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(VoltPrimaryContainer)
-                        .border(1.dp, IceBlue.copy(alpha = 0.5f), RoundedCornerShape(14.dp))
-                        .padding(horizontal = 14.dp, vertical = 10.dp)
-                        .clickable {
-                            if (!uiState.isDownloadingUpdate) {
-                                viewModel.downloadAndInstallUpdate(context)
-                            }
-                        }
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(CircleShape)
-                                    .background(VoltOnPrimaryFixed.copy(alpha = 0.2f)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (uiState.isDownloadingUpdate) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(18.dp),
-                                        color = VoltOnPrimaryFixed,
-                                        strokeWidth = 2.dp
-                                    )
-                                } else {
-                                    Icon(
-                                        imageVector = Icons.Filled.SystemUpdate,
-                                        contentDescription = "Update available",
-                                        tint = VoltOnPrimaryFixed,
-                                        modifier = Modifier.size(18.dp)
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Column {
-                                Text(
-                                    text = if (uiState.isDownloadingUpdate) {
-                                        "Downloading update... ${(uiState.updateDownloadProgress * 100).toInt()}%"
-                                    } else {
-                                        "New update ready • ${uiState.latestReleaseInfo?.tagName ?: "v1.1"}"
-                                    },
-                                    color = VoltOnPrimaryFixed,
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = if (uiState.isDownloadingUpdate) "Please wait while APK downloads..." else "Tap to download & install update",
-                                    color = VoltOnPrimaryFixed.copy(alpha = 0.85f),
-                                    fontSize = 11.sp
-                                )
-                            }
-                        }
-
-                        if (!uiState.isDownloadingUpdate) {
-                            IconButton(
-                                onClick = { viewModel.dismissAppUpdateBanner() },
-                                modifier = Modifier.size(24.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Close,
-                                    contentDescription = "Dismiss",
-                                    tint = VoltOnPrimaryFixed,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
-                        }
-                    }
-                }
+                UpdateBannerContent(
+                    uiState = uiState,
+                    onDownloadClick = { viewModel.downloadAndInstallUpdate(context) },
+                    onDismiss = { viewModel.dismissAppUpdateBanner() }
+                )
             }
 
             // Kinetic Toast Banner Overlay
@@ -513,6 +453,96 @@ fun VoltAppRoot(
                     }
                 }
             }
+        }
+    }
+}
+}
 
+
+@Composable
+private fun UpdateBannerContent(
+    uiState: VoltUiState,
+    onDownloadClick: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(VoltPrimaryContainer)
+            .border(1.dp, IceBlue.copy(alpha = 0.5f), RoundedCornerShape(14.dp))
+            .padding(horizontal = 14.dp, vertical = 10.dp)
+            .clickable {
+                if (!uiState.isDownloadingUpdate) {
+                    onDownloadClick()
+                }
+            }
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(VoltOnPrimaryFixed.copy(alpha = 0.2f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (uiState.isDownloadingUpdate) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            color = VoltOnPrimaryFixed,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Filled.SystemUpdate,
+                            contentDescription = "Update available",
+                            tint = VoltOnPrimaryFixed,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Column {
+                    Text(
+                        text = if (uiState.isDownloadingUpdate) {
+                            "Downloading update... ${(uiState.updateDownloadProgress * 100).toInt()}%"
+                        } else {
+                            "New update ready • ${uiState.latestReleaseInfo?.tagName ?: "v1.1"}"
+                        },
+                        color = VoltOnPrimaryFixed,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = if (uiState.isDownloadingUpdate) "Please wait while APK downloads..." else "Tap to download & install update",
+                        color = VoltOnPrimaryFixed.copy(alpha = 0.85f),
+                        fontSize = 11.sp
+                    )
+                }
+            }
+
+            if (!uiState.isDownloadingUpdate) {
+                IconButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Dismiss",
+                        tint = VoltOnPrimaryFixed,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+        }
     }
 }
