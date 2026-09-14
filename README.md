@@ -148,12 +148,13 @@ ride-go/
    - Dismissible via tap-outside scrim, "Done" action, or payment selection.
 6. **Vector Radar & Dynamic Map Canvas**: Live animated driver telemetry with Medium Blue trajectory lines and pulsating Ice Blue GPS waypoint halos.
 7. **Interactive Slide-To-Confirm**: Physical drag gesture slider with Deep Navy thumb, Ice Blue trail fill, and haptic feedback.
-8. **Live Driver Tracking (Post-Confirmation)**:
-   - Dynamic map canvas with animated traveling route polyline and real-time moving driver vehicle puck.
-   - Floating ETA pill with driver approach countdown and arrival timestamp.
-   - 4-digit Ride Security PIN banner to verify driver identity before departure.
-   - Verified driver profile card with authentic South African number plate (`JM 42 KL • GP`), vehicle specs, and rating.
-   - Quick-action communications suite (Call, In-App Message, Trip Share, Safety Center).
+8. **Live Driver Tracking & Approach Telemetry (Post-Confirmation)**:
+   - **Dynamic Vector Approach from Random Distance**: When ride request is confirmed, driver is initialized at a realistic randomized starting distance (1.6 km to 3.8 km) away from rider's current or selected pickup location.
+   - **Real-Time Heading & Directional Rotation**: Vector map canvas continuously steers driver vehicle puck towards the rider's pickup coordinate with forward headlights beam, pulsing Ice Blue radar ring, and directional tangent angle orientation.
+   - **Live Distance & ETA Countdown**: Live ETA HUD dynamically calculates remaining distance and arrival countdown in real-time as the driver advances towards the user.
+   - **Pickup Location Waypoint Marker**: Pulsing concentric GPS beacon and destination overlay pill anchoring the driver's heading target directly to the rider's current or selected pickup spot.
+   - **4-Digit Ride Security PIN Banner**: Pre-departure identity verification code before vehicle departure.
+   - **Verified Driver Profile Card**: Authentic South African number plate (`JM 42 KL • GP`), vehicle specs, rating, and quick communications suite (Call, In-App Message, Trip Share, Safety Center).
 9. **South African Verification Suite**:
    - Biometric facial scan with Ice Blue alignment reticles.
    - Smart ID Card OCR viewport with corner boundary detection.

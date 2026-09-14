@@ -64,13 +64,17 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.atan2
+import kotlin.math.roundToInt
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.ui.components.RideGoLogo
@@ -112,6 +116,22 @@ fun LiveTrackingScreen(
     var showCancelDialog by remember { mutableStateOf(false) }
     var showSafetyDialog by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
+
+    // Real-time animation of driver heading towards rider's pickup location
+    val infiniteTransition = rememberInfiniteTransition(label = "driver_live_approach_anim")
+    val carProgress by infiniteTransition.animateFloat(
+        initialValue = 0.05f,
+        targetValue = 0.92f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 10000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "car_progress"
+    )
+
+    // Calculate dynamic real-time distance and time remaining as driver heads to you
+    val liveDistanceRemainingKm = (state.driverStartDistanceKm * (1f - carProgress * 0.90f)).coerceAtLeast(0.1f)
+    val liveEtaMinutes = (liveDistanceRemainingKm * 1.5f).roundToInt().coerceAtLeast(1)
 
     Column(
         modifier = modifier
@@ -211,22 +231,26 @@ fun LiveTrackingScreen(
                     .height(340.dp)
                     .background(VoltSurfaceContainerLowest)
             ) {
-                // Interactive Vector Route Canvas
-                TrackingMapCanvas(modifier = Modifier.fillMaxSize())
+                // Interactive Vector Route Canvas with Driver Heading to You
+                TrackingMapCanvas(
+                    state = state,
+                    carProgress = carProgress,
+                    modifier = Modifier.fillMaxSize()
+                )
 
                 // Floating Top Live ETA Status Pill
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(top = 16.dp)
+                        .padding(top = 14.dp)
                         .clip(CircleShape)
                         .background(VoltSurface.copy(alpha = 0.94f))
-                        .border(1.dp, VoltPrimaryContainer.copy(alpha = 0.4f), CircleShape)
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .border(1.dp, VoltPrimaryContainer.copy(alpha = 0.6f), CircleShape)
+                        .padding(horizontal = 14.dp, vertical = 8.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Box(
                             modifier = Modifier
@@ -235,16 +259,54 @@ fun LiveTrackingScreen(
                                 .background(IceBlue)
                         )
                         Text(
-                            text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Driver"} is ${state.driverEtaMinutes} mins away",
+                            text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Marcus"} is heading to you",
                             color = VoltOnSurface,
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = state.driverEtaTimeFormatted,
+                            text = "• ${String.format(java.util.Locale.US, "%.1f km", liveDistanceRemainingKm)} ($liveEtaMinutes min)",
                             color = IceBlue,
                             fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                // Floating Pickup Destination Overlay (Bottom Left of Map)
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(start = 14.dp, bottom = 14.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(VoltSurface.copy(alpha = 0.92f))
+                        .border(1.dp, VoltSurfaceContainerHighest, RoundedCornerShape(10.dp))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(7.dp)
+                            .clip(CircleShape)
+                            .background(IceBlue)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Column {
+                        Text(
+                            text = "HEADING TO YOU",
+                            color = IceBlue,
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.5.sp
+                        )
+                        Text(
+                            text = state.pickupLocation,
+                            color = VoltOnSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.width(180.dp)
                         )
                     }
                 }
@@ -896,6 +958,8 @@ private fun QuickActionButton(
 
 @Composable
 private fun TrackingMapCanvas(
+    state: VoltUiState,
+    carProgress: Float,
     modifier: Modifier = Modifier
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "tracking_map_anim")
@@ -907,16 +971,6 @@ private fun TrackingMapCanvas(
             repeatMode = RepeatMode.Restart
         ),
         label = "dash_phase"
-    )
-
-    val carProgress by infiniteTransition.animateFloat(
-        initialValue = 0.40f,
-        targetValue = 0.60f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 6000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "car_progress"
     )
 
     val pulseScale by infiniteTransition.animateFloat(
@@ -957,7 +1011,7 @@ private fun TrackingMapCanvas(
                 )
             }
 
-            // Diagonal major avenue
+            // Diagonal major avenues
             drawLine(
                 color = streetColor,
                 start = Offset(0f, height * 0.2f),
@@ -971,18 +1025,19 @@ private fun TrackingMapCanvas(
                 strokeWidth = 2f
             )
 
-            // 2. Build Bezier Planned Route Curve
+            // 2. Bezier Planned Route: from Driver Start (p0) to You / Pickup Location (p3)
+            // Driver starts at a random distance away and heads directly to You (bottom-right p3)
             val p0 = Offset(width * 0.16f, height * 0.22f)
-            val p1 = Offset(width * 0.45f, height * 0.38f)
+            val p1 = Offset(width * 0.45f, height * 0.36f)
             val p2 = Offset(width * 0.62f, height * 0.65f)
-            val p3 = Offset(width * 0.82f, height * 0.82f)
+            val p3 = Offset(width * 0.78f, height * 0.78f)
 
             val routePath = Path().apply {
                 moveTo(p0.x, p0.y)
                 cubicTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
             }
 
-            // Route Base Line (Dark Navy Surface)
+            // Route Base Line (Dark Navy Surface #132B60)
             drawPath(
                 path = routePath,
                 color = Color(0xFF132B60),
@@ -993,7 +1048,7 @@ private fun TrackingMapCanvas(
                 )
             )
 
-            // Animated Traveling Polyline
+            // Animated Traveling Polyline in Ice Blue / Medium Blue pulsing towards You
             drawPath(
                 path = routePath,
                 brush = Brush.linearGradient(
@@ -1012,10 +1067,28 @@ private fun TrackingMapCanvas(
                 )
             )
 
-            // 3. User Pickup Point Marker (at p3)
+            // 3. Driver Starting Origin Marker (at p0)
             drawCircle(
-                color = IceBlue.copy(alpha = 0.25f),
-                radius = 16.dp.toPx() * (pulseScale - 0.2f),
+                color = VoltPrimaryContainer,
+                radius = 7.dp.toPx(),
+                center = p0
+            )
+            drawCircle(
+                color = IceBlue.copy(alpha = 0.5f),
+                radius = 3.dp.toPx(),
+                center = p0
+            )
+
+            // 4. User Location Marker (at p3: You / Current or Selected Pickup)
+            // Pulsing Concentric GPS Halo
+            drawCircle(
+                color = IceBlue.copy(alpha = 0.22f),
+                radius = 22.dp.toPx() * (pulseScale - 0.1f),
+                center = p3
+            )
+            drawCircle(
+                color = IceBlue.copy(alpha = 0.35f),
+                radius = 12.dp.toPx(),
                 center = p3
             )
             drawCircle(
@@ -1029,7 +1102,7 @@ private fun TrackingMapCanvas(
                 center = p3
             )
 
-            // 4. Calculate Vehicle Marker Position along Bezier Curve
+            // 5. Calculate Vehicle Position and Heading Angle along Bezier Curve
             val t = carProgress
             val oneMinusT = 1f - t
             val carX = oneMinusT * oneMinusT * oneMinusT * p0.x +
@@ -1044,29 +1117,111 @@ private fun TrackingMapCanvas(
 
             val carCenter = Offset(carX, carY)
 
-            // Pulsing Ring around Car
+            // Calculate tangent angle along curve to orient the vehicle heading towards you
+            val dx = 3f * oneMinusT * oneMinusT * (p1.x - p0.x) +
+                    6f * oneMinusT * t * (p2.x - p1.x) +
+                    3f * t * t * (p3.x - p2.x)
+            val dy = 3f * oneMinusT * oneMinusT * (p1.y - p0.y) +
+                    6f * oneMinusT * t * (p2.y - p1.y) +
+                    3f * t * t * (p3.y - p2.y)
+            val headingAngleRad = kotlin.math.atan2(dy, dx)
+            val headingAngleDeg = Math.toDegrees(headingAngleRad.toDouble()).toFloat()
+
+            // Pulsing Ice Blue Radar Ring around Driver Vehicle
             drawCircle(
-                color = IceBlue.copy(alpha = 0.30f),
+                color = IceBlue.copy(alpha = 0.25f),
                 radius = 22.dp.toPx() * pulseScale,
                 center = carCenter
             )
 
-            // Outer Car Ring Puck
-            drawCircle(
-                color = VoltSurface,
-                radius = 18.dp.toPx(),
-                center = carCenter
+            // Rotated Vehicle Puck with Headlights & Directional Pointer heading towards You
+            rotate(degrees = headingAngleDeg, pivot = carCenter) {
+                // Forward headlights beam in Ice Blue
+                val beamPath = Path().apply {
+                    moveTo(carCenter.x + 12.dp.toPx(), carCenter.y)
+                    lineTo(carCenter.x + 36.dp.toPx(), carCenter.y - 14.dp.toPx())
+                    lineTo(carCenter.x + 36.dp.toPx(), carCenter.y + 14.dp.toPx())
+                    close()
+                }
+                drawPath(
+                    path = beamPath,
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(IceBlue.copy(alpha = 0.35f), Color.Transparent),
+                        startX = carCenter.x + 12.dp.toPx(),
+                        endX = carCenter.x + 36.dp.toPx()
+                    )
+                )
+
+                // Vehicle Outer Puck Base
+                drawCircle(
+                    color = VoltSurface,
+                    radius = 16.dp.toPx(),
+                    center = carCenter
+                )
+                // Vehicle Inner Primary Container
+                drawCircle(
+                    color = VoltPrimaryContainer,
+                    radius = 12.dp.toPx(),
+                    center = carCenter
+                )
+                // Vehicle Directional Arrow Pointer pointing forward
+                val pointerPath = Path().apply {
+                    moveTo(carCenter.x + 7.dp.toPx(), carCenter.y)
+                    lineTo(carCenter.x - 5.dp.toPx(), carCenter.y - 5.dp.toPx())
+                    lineTo(carCenter.x - 2.dp.toPx(), carCenter.y)
+                    lineTo(carCenter.x - 5.dp.toPx(), carCenter.y + 5.dp.toPx())
+                    close()
+                }
+                drawPath(
+                    path = pointerPath,
+                    color = IceBlue
+                )
+            }
+        }
+
+        // Floating Origin Label (Top Left near p0)
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 14.dp, top = 56.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .background(VoltSurfaceContainerHigh.copy(alpha = 0.90f))
+                .border(0.5.dp, VoltSurfaceContainerHighest, RoundedCornerShape(6.dp))
+                .padding(horizontal = 6.dp, vertical = 3.dp)
+        ) {
+            Text(
+                text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Marcus"} (${state.driverDistanceText})",
+                color = VoltOnSurfaceVariant,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium
             )
-            drawCircle(
-                color = VoltPrimaryContainer,
-                radius = 14.dp.toPx(),
-                center = carCenter
-            )
-            drawCircle(
-                color = IceBlue,
-                radius = 4.dp.toPx(),
-                center = carCenter
-            )
+        }
+
+        // Floating Destination Marker Label (near p3: You / Pickup Location)
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 14.dp, bottom = 68.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .background(VoltSurfaceContainerHigh.copy(alpha = 0.90f))
+                .border(0.5.dp, IceBlue.copy(alpha = 0.5f), RoundedCornerShape(6.dp))
+                .padding(horizontal = 6.dp, vertical = 3.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .clip(CircleShape)
+                        .background(IceBlue)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "You (${state.pickupLocation.split(",").first().trim()})",
+                    color = VoltOnSurface,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
         // Vignette Ambient Gradient Overlays
@@ -1076,9 +1231,9 @@ private fun TrackingMapCanvas(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            VoltSurface.copy(alpha = 0.75f),
+                            VoltSurface.copy(alpha = 0.70f),
                             Color.Transparent,
-                            VoltSurface.copy(alpha = 0.85f)
+                            VoltSurface.copy(alpha = 0.80f)
                         )
                     )
                 )
@@ -1106,6 +1261,8 @@ private fun LiveTrackingScreenPreview() {
                 driverProvince = "Gauteng",
                 driverVehicleColor = "Midnight Silver Metallic",
                 rideSecurityPin = "4819",
+                driverStartDistanceKm = 2.4f,
+                driverDistanceText = "2.4 km",
                 driverEtaMinutes = 3,
                 driverEtaTimeFormatted = "09:42 AM",
                 pickupLocation = "Sandton City (Rivonia Rd Entrance)",
