@@ -89,7 +89,7 @@ class VoltViewModel : ViewModel() {
                     isCompleted = true,
                     pickupLocation = "V&A Waterfront (Breakwater Blvd, Cape Town)",
                     dropoffLocation = "Camps Bay Promenade (Victoria Rd)",
-                    driverName = "Marcus",
+                    driverName = "Thulane J. Sigasa",
                     driverCar = "Toyota Corolla",
                     driverRating = 5.0,
                     paymentMethod = "Capitec Pay (•••• 4282)",

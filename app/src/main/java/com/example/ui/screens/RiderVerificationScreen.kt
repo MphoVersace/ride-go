@@ -812,7 +812,7 @@ private fun RiderStep2ContactsVerification(
                         Icon(
                             imageVector = Icons.Filled.MarkEmailRead,
                             contentDescription = null,
-                            tint = VoltPrimaryContainer,
+                            tint = Color.White,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -826,7 +826,7 @@ private fun RiderStep2ContactsVerification(
                             letterSpacing = 0.5.sp
                         )
                         Text(
-                            text = "nomvula.zungu@icloud.com",
+                            text = "thulanesigasa@gmail.com",
                             color = VoltOnSurface,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
@@ -836,12 +836,12 @@ private fun RiderStep2ContactsVerification(
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(VoltPrimaryContainer.copy(alpha = 0.2f))
+                        .background(VoltSurfaceContainerHighest)
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = "Pending",
-                        color = VoltPrimaryContainer,
+                        color = Color.White,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -1174,7 +1174,7 @@ private fun RiderStep3SmartIdCapture(
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "DLAMINI",
+                                text = "SIGASA",
                                 color = VoltOnSurface,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold
@@ -1186,7 +1186,7 @@ private fun RiderStep3SmartIdCapture(
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "THANDIWE NOKUTHULA",
+                                text = "THULANE J.",
                                 color = VoltOnSurface,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold
@@ -1199,7 +1199,7 @@ private fun RiderStep3SmartIdCapture(
                             )
                             Text(
                                 text = "960412 0241 08 3",
-                                color = VoltPrimaryContainer,
+                                color = Color.White,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = FontFamily.Monospace

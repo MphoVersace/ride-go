@@ -85,7 +85,7 @@ enum class VoltScreenTab(val label: String) {
 data class DriverOnboardingState(
     val currentStep: Int = 1,
     // Step 1
-    val fullName: String = "Marcus Thabo Dlamini",
+    val fullName: String = "Thulane J. Sigasa",
     val phoneNumber: String = "82 491 8204",
     val selectedCity: String = "cpt",
     val licenseCode: String = "code8",
