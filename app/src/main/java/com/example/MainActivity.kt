@@ -62,6 +62,15 @@ import com.example.ui.screens.SafetyCenterScreen
 import com.example.ui.screens.ShareRideScreen
 import com.example.ui.screens.TripCompletedScreen
 import com.example.model.RidePhase
+import com.example.model.UserRole
+import com.example.model.DriverStatus
+import com.example.model.DriverScreenTab
+import com.example.ui.components.DriverBottomNav
+import com.example.ui.screens.driver.DriverDashboardScreen
+import com.example.ui.screens.driver.DriverIncomingOfferModal
+import com.example.ui.screens.driver.DriverActiveTripScreen
+import com.example.ui.screens.driver.DriverEarningsScreen
+import com.example.ui.screens.driver.DriverProfileScreen
 import kotlinx.coroutines.delay
 import com.example.ui.screens.RiderVerificationScreen
 import com.example.ui.screens.RidesScreen
@@ -153,7 +162,8 @@ fun VoltAppRoot(
 
     // Handle back button across all active flows and modal sheets
     BackHandler(
-        enabled = uiState.isChatOpen ||
+        enabled = uiState.userRole == UserRole.DRIVER ||
+            uiState.isChatOpen ||
             uiState.isSafetyOpen ||
             uiState.isShareOpen ||
             uiState.isSearchDestinationActive ||
@@ -161,7 +171,15 @@ fun VoltAppRoot(
             uiState.isRiderVerificationActive ||
             uiState.isDriverOnboardingActive
     ) {
-        if (uiState.isChatOpen) {
+        if (uiState.userRole == UserRole.DRIVER) {
+            if (uiState.driverStatus == DriverStatus.OFFER_RECEIVED) {
+                viewModel.declineTripOffer()
+            } else if (uiState.driverTab != DriverScreenTab.CONSOLE) {
+                viewModel.selectDriverTab(DriverScreenTab.CONSOLE)
+            } else {
+                viewModel.switchUserRole(UserRole.RIDER)
+            }
+        } else if (uiState.isChatOpen) {
             viewModel.closeChat()
         } else if (uiState.isSafetyOpen) {
             viewModel.closeSafetyCenter()
@@ -201,14 +219,24 @@ fun VoltAppRoot(
         Box(modifier = Modifier.fillMaxSize()) {
             // Sign Up / Login Screen with direct pathways to Rider & Driver onboarding
             AuthScreen(
-                onSignInSuccess = { emailOrPhone -> viewModel.login(emailOrPhone) },
+                onSignInSuccess = { emailOrPhone ->
+                    viewModel.switchUserRole(UserRole.RIDER)
+                    viewModel.login(emailOrPhone)
+                },
+                onSignInAsDriver = { emailOrPhone ->
+                    viewModel.switchUserRole(UserRole.DRIVER)
+                    viewModel.login(emailOrPhone, displayName = "Thulane J. Sigasa")
+                },
                 onStartRiderSignUp = { name, email, phone ->
                     viewModel.startRiderSignUpFromAuth(name, email, phone)
                 },
                 onStartDriverSignUp = { name, phone ->
                     viewModel.startDriverSignUpFromAuth(name, phone)
                 },
-                onContinueAsGuest = { viewModel.continueAsGuest() }
+                onContinueAsGuest = {
+                    viewModel.switchUserRole(UserRole.RIDER)
+                    viewModel.continueAsGuest()
+                }
             )
 
             // App Update Available Floating Banner on Auth Screen
@@ -276,6 +304,109 @@ fun VoltAppRoot(
                 viewModel.selectDestination(destination, pickup)
             }
         )
+    } else if (uiState.userRole == UserRole.DRIVER) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(VoltSurface)
+        ) {
+            // Driver Screen tabs
+            when (uiState.driverTab) {
+                DriverScreenTab.CONSOLE -> {
+                    DriverDashboardScreen(
+                        state = uiState,
+                        onToggleOnline = { viewModel.toggleDriverOnline() },
+                        onSimulateOffer = { viewModel.simulateIncomingRideOffer() },
+                        onNavigateToTrip = { viewModel.selectDriverTab(DriverScreenTab.ACTIVE_TRIP) },
+                        onNavigateToEarnings = { viewModel.selectDriverTab(DriverScreenTab.EARNINGS) }
+                    )
+                }
+                DriverScreenTab.ACTIVE_TRIP -> {
+                    DriverActiveTripScreen(
+                        state = uiState,
+                        onArrivedAtPickup = { viewModel.driverArrivedAtPickup() },
+                        onStartTrip = { pin -> viewModel.verifyRiderPinAndStart(pin) },
+                        onCompleteTrip = { viewModel.driverCompleteTrip() },
+                        onFinishSummary = { rating -> viewModel.driverFinishTripSummary(rating) },
+                        onCallRider = { viewModel.showToast("Calling passenger (+27 82 491 8204)...") },
+                        onChatRider = { viewModel.showToast("Opening chat with passenger...") }
+                    )
+                }
+                DriverScreenTab.EARNINGS -> {
+                    DriverEarningsScreen(
+                        state = uiState,
+                        onCashOut = { bank -> viewModel.cashOutDriverEarnings(bank) }
+                    )
+                }
+                DriverScreenTab.PROFILE -> {
+                    DriverProfileScreen(
+                        state = uiState,
+                        onSwitchToRider = { viewModel.switchUserRole(UserRole.RIDER) },
+                        onSignOut = { viewModel.signOut() }
+                    )
+                }
+            }
+
+            // Driver Incoming Offer Modal
+            AnimatedVisibility(
+                visible = uiState.driverStatus == DriverStatus.OFFER_RECEIVED && uiState.currentTripOffer != null,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                uiState.currentTripOffer?.let { offer ->
+                    DriverIncomingOfferModal(
+                        offer = offer,
+                        onAccept = { viewModel.acceptTripOffer() },
+                        onDecline = { viewModel.declineTripOffer() }
+                    )
+                }
+            }
+
+            // Driver Bottom Navigation Bar
+            DriverBottomNav(
+                currentTab = uiState.driverTab,
+                onTabSelected = { viewModel.selectDriverTab(it) },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+
+            // Kinetic Toast Banner Overlay for Driver
+            AnimatedVisibility(
+                visible = uiState.toastMessage != null,
+                enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(100)) + fadeIn(animationSpec = tween(100)),
+                exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(100)) + fadeOut(animationSpec = tween(100)),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 88.dp)
+                    .navigationBarsPadding()
+            ) {
+                uiState.toastMessage?.let { msg ->
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .shadow(12.dp, spotColor = VoltPrimaryContainer)
+                            .background(VoltPrimaryContainer)
+                            .padding(horizontal = 18.dp, vertical = 10.dp)
+                            .testTag("kinetic_toast_driver"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.CheckCircle,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = "  $msg",
+                                color = Color.White,
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        }
     } else {
         Scaffold(
             modifier = Modifier
@@ -499,7 +630,7 @@ fun VoltAppRoot(
                         VoltScreenTab.ACCOUNT -> {
                             AccountScreen(
                                 onActionClick = { action -> viewModel.showToast(action) },
-                                onSwitchToDriverClick = { viewModel.openDriverOnboarding() },
+                                onSwitchToDriverClick = { viewModel.switchUserRole(UserRole.DRIVER) },
                                 isRiderVerified = uiState.riderState.isVerified,
                                 onVerifyRiderClick = { viewModel.openRiderVerification() },
                                 onSignOutClick = { viewModel.signOut() }
@@ -508,7 +639,7 @@ fun VoltAppRoot(
 
                         VoltScreenTab.DRIVER -> {
                             LaunchedEffect(Unit) {
-                                viewModel.selectTab(VoltScreenTab.EXPLORE)
+                                viewModel.switchUserRole(UserRole.DRIVER)
                             }
                         }
                     }

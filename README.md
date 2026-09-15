@@ -92,10 +92,11 @@ ride-go/
 │   │   │   │       │   ├── SlideToConfirm.kt     # Interactive physics-based booking confirmation slider
 │   │   │   │       │   ├── VehicleSilhouette.kt  # Vector vehicle graphics with Deep Navy shadow
 │   │   │   │       │   ├── VoltBottomNav.kt      # Floating stadium pill bottom nav with 4 core tabs (Hub, Rides, Activity, Account) & sliding active dot
+│   │   │   │       │   ├── DriverBottomNav.kt    # Dedicated stadium pill bottom nav for drivers (Console, Trip, Earnings, Profile)
 │   │   │   │       │   └── VoltTopBar.kt         # Sticky header with official Ride GO brand mark and telemetry
 │   │   │   │       └── screens/
 │   │   │   │           ├── SplashScreen.kt       # Static centered Ride Go brand logo presentation
-│   │   │   │           ├── AuthScreen.kt         # Direct Rider & Driver sign-up and authentication
+│   │   │   │           ├── AuthScreen.kt         # Direct Rider & Driver sign-up, role selector and authentication
 │   │   │   │           ├── DestinationSearchScreen.kt # Real-time South African place search & dual route console
 │   │   │   │           ├── ExploreScreen.kt      # Vector map anchored to current location with quick destination launch
 │   │   │   │           ├── RidesScreen.kt        # Dynamic route polyline, locked pickup & destination pins, tier picker
@@ -108,7 +109,13 @@ ride-go/
 │   │   │   │           ├── ActivityScreen.kt     # Multi-tab activity hub: Past Trips, Upcoming reservations & Business expensing
 │   │   │   │           ├── AccountScreen.kt      # User profile, wallet, security, South Africa SOS
 │   │   │   │           ├── RiderVerificationScreen.kt # Biometric selfie & SA Smart ID card scan
-│   │   │   │           └── DriverOnboardingScreen.kt  # Driver PDP, license, vehicle inspection & streamlined progress
+│   │   │   │           ├── DriverOnboardingScreen.kt  # Driver PDP, license, vehicle inspection & streamlined progress
+│   │   │   │           └── driver/
+│   │   │   │               ├── DriverDashboardScreen.kt   # Go Online/Offline console, live driver location map, and surge hotspots
+│   │   │   │               ├── DriverIncomingOfferModal.kt # 15s countdown acceptance modal with passenger metrics and net payout
+│   │   │   │               ├── DriverActiveTripScreen.kt  # En route to pickup, 4-digit PIN verification, navigation, and summary
+│   │   │   │               ├── DriverEarningsScreen.kt    # South African instant cashout, weekly breakdown chart, and statement
+│   │   │   │               └── DriverProfileScreen.kt     # Driver PrDP credentials, vehicle specs, and switch to Rider mode
 │   │   │   └── res/
 │   │   │       ├── xml/
 │   │   │       │   └── file_paths.xml            # FileProvider cache paths for secure APK installation
@@ -201,6 +208,18 @@ ride-go/
     - **Safety Center Hub (`SafetyCenterScreen`)**: Immediate 24/7 SAPS 10111 emergency hotline activation, live GPS location sharing toggle, security PIN display, and trusted emergency contact management.
     - **Live Trip Status Sharing (`ShareRideScreen`)**: Instant shareable tracking link with clipboard copy, system share sheet (WhatsApp, Messages), and direct SMS link dispatch to trusted contacts.
     - **Trip Completion & Rating Console (`TripCompletedScreen`)**: Arrival hero presentation, interactive 5-star driver rating component, and itemized South African Rand cost breakdown (Base Fare, Distance, Platform Fee, Promo Discount, Total Paid).
+23. **Comprehensive Driver Partner Mode & Dispatch Console**:
+    - **Direct Role Selection & Seamless Mode Switching**: Dedicated "RIDER ACCOUNT" vs "DRIVER PARTNER" toggle on the authentication screen, and instant one-tap switching between Rider and Driver modes from Account settings.
+    - **Driver Console (`DriverDashboardScreen`)**: Live OpenStreetMap canvas, Go Online / Go Offline master toggle with dynamic telemetry, real-time South African surge demand hotspots (Sandton, O.R. Tambo Airport, Rosebank), and today's performance bento (earnings, online hours, completed trips, acceptance rate).
+    - **Incoming Ride Offer Modal (`DriverIncomingOfferModal`)**: 15-second physics-animated circular countdown ring, net earnings in ZAR, pickup and destination addresses with estimated trip duration, and instant one-tap Accept/Decline dispatch controls.
+    - **Active Trip Dispatch Suite (`DriverActiveTripScreen`)**: 4-phase dispatch execution:
+      1. *En-Route to Pickup*: Turn-by-turn navigation with live ETA and direct rider call/chat communication.
+      2. *At Pickup Waiting*: "I HAVE ARRIVED" notification trigger and 4-digit security PIN keypad verification to prevent unauthorized boardings.
+      3. *In-Transit*: Turn-by-turn routing to destination address with progress telemetry.
+      4. *Trip Completion*: Net payout summary, trip distance breakdown, and 5-star passenger rating component.
+    - **Driver Earnings & Instant Cashout Hub (`DriverEarningsScreen`)**: Available balance display, instant cashout integration to South African bank accounts (Capitec Bank, FNB, Standard Bank), weekly interactive earnings bar chart, and itemized trip payout history.
+    - **Driver Partner Profile & Compliance Console (`DriverProfileScreen`)**: Verified vehicle registration (`Toyota Corolla Quest - TJS 001 GP`), active compliance cards (PrDP clearance, DEKRA roadworthiness certificate, SAPS criminal background check), driver rating telemetry, and quick switch to Rider mode.
+    - **Driver Stadium Floating Bottom Navigation (`DriverBottomNav`)**: Dedicated 4-destination navigation pill (Console, Active Trip, Earnings, Profile) with smooth sliding indicator and 100% transparent footer.
 
 ---
 

@@ -201,3 +201,46 @@ data class TrustedContact(
     val phone: String,
     val relation: String
 )
+
+enum class UserRole {
+    RIDER,
+    DRIVER
+}
+
+enum class DriverStatus {
+    OFFLINE,
+    ONLINE_SEARCHING,
+    OFFER_RECEIVED,
+    EN_ROUTE_PICKUP,
+    WAITING_AT_PICKUP,
+    IN_TRANSIT,
+    TRIP_SUMMARY
+}
+
+enum class DriverScreenTab(val label: String) {
+    CONSOLE("Console"),
+    ACTIVE_TRIP("Trip"),
+    EARNINGS("Earnings"),
+    PROFILE("Profile")
+}
+
+data class DriverTripOffer(
+    val id: String = "REQ-SA-9102",
+    val riderName: String = "Lerato M.",
+    val riderRating: String = "4.92",
+    val tier: RideTierType = RideTierType.COMFORT,
+    val pickupAddress: String = "Sandton City (Rivonia Rd Entrance)",
+    val destinationAddress: String = "O.R. Tambo Int'l Airport (Terminal A)",
+    val distanceKm: Double = 24.0,
+    val estimatedMinutes: Int = 28,
+    val driverPayout: Int = 128,
+    val pickupDistanceKm: Double = 1.2,
+    val pickupEtaMinutes: Int = 4,
+    val securityPin: String = "4819"
+)
+
+data class DriverDailyEarning(
+    val dayLabel: String,
+    val amountRands: Int,
+    val tripsCount: Int
+)

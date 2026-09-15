@@ -105,6 +105,7 @@ enum class SignUpRole {
 @Composable
 fun AuthScreen(
     onSignInSuccess: (emailOrPhone: String) -> Unit,
+    onSignInAsDriver: (emailOrPhone: String) -> Unit = {},
     onStartRiderSignUp: (name: String, email: String, phone: String) -> Unit,
     onStartDriverSignUp: (name: String, phone: String) -> Unit,
     onContinueAsGuest: () -> Unit,
@@ -118,6 +119,7 @@ fun AuthScreen(
     var loginPassword by remember { mutableStateOf("••••••••") }
     var loginPasswordVisible by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(true) }
+    var isDriverLogin by remember { mutableStateOf(false) }
 
     // Validation state
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -244,8 +246,51 @@ fun AuthScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-                    // Mobile or Email field
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            // Role Selector Tab (Rider vs Driver Partner)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(VoltSurfaceContainer)
+                    .border(1.dp, VoltSurfaceContainerHighest, RoundedCornerShape(12.dp))
+                    .padding(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(38.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(if (!isDriverLogin) VoltPrimaryContainer else Color.Transparent)
+                        .clickable { isDriverLogin = false },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Rider Account",
+                        color = if (!isDriverLogin) Color.White else VoltSecondary,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(38.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(if (isDriverLogin) VoltPrimaryContainer else Color.Transparent)
+                        .clickable { isDriverLogin = true },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Driver Partner",
+                        color = if (isDriverLogin) Color.White else VoltSecondary,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            // Mobile or Email field
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(
                             text = "MOBILE NUMBER OR EMAIL",
                             color = VoltOnSurfaceVariant,
@@ -391,16 +436,20 @@ fun AuthScreen(
                                 if (loginIdentifier.isBlank()) {
                                     errorMessage = "Please enter your mobile number or email"
                                 } else {
-                                    onSignInSuccess(loginIdentifier)
+                                    if (isDriverLogin) {
+                                        onSignInAsDriver(loginIdentifier)
+                                    } else {
+                                        onSignInSuccess(loginIdentifier)
+                                    }
                                 }
                             }
                             .testTag("submit_sign_in_btn"),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "SIGN IN",
+                            text = if (isDriverLogin) "SIGN IN AS DRIVER" else "SIGN IN AS RIDER",
                             color = VoltOnPrimaryFixed,
-                            fontSize = 15.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Black,
                             letterSpacing = 0.5.sp
                         )
