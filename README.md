@@ -258,3 +258,12 @@ For lightweight development machines or rapid on-device testing without running 
 3. Allow Gradle to synchronize dependencies.
 4. Copy `.env.example` to `.env` and provide your optional `GEMINI_API_KEY`.
 5. Select an Android Emulator or physical device (API 26+) and click **Run**.
+
+---
+
+## License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-0E2454?style=for-the-badge&logo=opensourceinitiative&logoColor=7DD3FC&labelColor=000000)](file:///c:/Users/thulanesigasa/Documents/ride-go/LICENSE)
+
+Distributed under the MIT License. Copyright (c) 2026 Ride Go Dev Community. See [LICENSE](file:///c:/Users/thulanesigasa/Documents/ride-go/LICENSE) for more details.
+
