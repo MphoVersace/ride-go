@@ -102,6 +102,7 @@ import com.example.ui.theme.VoltSurfaceContainerHighest
 import com.example.ui.theme.VoltSurfaceContainerLow
 import com.example.ui.theme.VoltSurfaceContainerLowest
 import com.example.ui.theme.VoltSurfaceVariant
+import com.example.model.RidePhase
 import com.example.viewmodel.VoltUiState
 
 private const val RIDER_AVATAR =
@@ -120,6 +121,8 @@ fun LiveTrackingScreen(
     onMessageDriver: () -> Unit = {},
     onShareRide: () -> Unit = {},
     onSafetyCenterClick: () -> Unit = {},
+    onStartRide: () -> Unit = {},
+    onCompleteTripNow: () -> Unit = {},
     onTripDetailsClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -203,7 +206,7 @@ fun LiveTrackingScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 IconButton(
-                    onClick = { showSafetyDialog = true },
+                    onClick = onSafetyCenterClick,
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
@@ -249,58 +252,88 @@ fun LiveTrackingScreen(
                     .height(340.dp)
                     .background(VoltSurfaceContainerLowest)
             ) {
-                // Real OSM map: route from Woodmead Retail to pickup location
+                // Real OSM map: route calculation based on RidePhase
+                val isEnRouteToDestination = state.ridePhase == RidePhase.IN_PROGRESS
                 var trackingRoutePoints by remember { mutableStateOf(emptyList<GeoPoint>()) }
                 val pickupGeoPoint = remember(state.pickupLocation) {
                     val (lat, lon) = RouteRepository.resolveCoordinates(state.pickupLocation,
                         defaultLat = -26.1076, defaultLon = 28.0567)
                     GeoPoint(lat, lon)
                 }
-                LaunchedEffect(state.pickupLocation) {
+                val destinationGeoPoint = remember(state.destinationLocation) {
+                    val (lat, lon) = RouteRepository.resolveCoordinates(state.destinationLocation,
+                        defaultLat = -26.1367, defaultLon = 28.2411)
+                    GeoPoint(lat, lon)
+                }
+
+                LaunchedEffect(state.pickupLocation, state.destinationLocation, isEnRouteToDestination) {
                     val pts = withContext(Dispatchers.IO) {
-                        RouteRepository.fetchRoute(
-                            WOODMEAD_LAT, WOODMEAD_LON,
-                            pickupGeoPoint.latitude, pickupGeoPoint.longitude
-                        )
+                        if (isEnRouteToDestination) {
+                            RouteRepository.fetchRoute(
+                                pickupGeoPoint.latitude, pickupGeoPoint.longitude,
+                                destinationGeoPoint.latitude, destinationGeoPoint.longitude
+                            )
+                        } else {
+                            RouteRepository.fetchRoute(
+                                WOODMEAD_LAT, WOODMEAD_LON,
+                                pickupGeoPoint.latitude, pickupGeoPoint.longitude
+                            )
+                        }
                     }
                     trackingRoutePoints = pts
                 }
 
+                val effectiveProgress = when (state.ridePhase) {
+                    RidePhase.APPROACHING -> carProgress
+                    RidePhase.ARRIVED -> 1.0f
+                    RidePhase.IN_PROGRESS -> carProgress
+                    RidePhase.COMPLETED -> 1.0f
+                }
+
+                val targetDestinationPoint = if (isEnRouteToDestination) destinationGeoPoint else pickupGeoPoint
+
                 // Interpolate driver vehicle coordinate & road heading in real time
-                val (currentDriverPoint, driverBearing) = remember(trackingRoutePoints, carProgress) {
+                val (currentDriverPoint, driverBearing) = remember(trackingRoutePoints, effectiveProgress, isEnRouteToDestination) {
                     if (trackingRoutePoints.size >= 2) {
-                        RouteRepository.interpolateAlongRoute(trackingRoutePoints, carProgress)
+                        RouteRepository.interpolateAlongRoute(trackingRoutePoints, effectiveProgress)
                     } else {
-                        val woodmead = GeoPoint(WOODMEAD_LAT, WOODMEAD_LON)
-                        val bearing = RouteRepository.calculateBearing(woodmead, pickupGeoPoint)
-                        val lat = WOODMEAD_LAT + (pickupGeoPoint.latitude - WOODMEAD_LAT) * carProgress
-                        val lon = WOODMEAD_LON + (pickupGeoPoint.longitude - WOODMEAD_LON) * carProgress
+                        val origin = if (isEnRouteToDestination) pickupGeoPoint else GeoPoint(WOODMEAD_LAT, WOODMEAD_LON)
+                        val bearing = RouteRepository.calculateBearing(origin, targetDestinationPoint)
+                        val lat = origin.latitude + (targetDestinationPoint.latitude - origin.latitude) * effectiveProgress
+                        val lon = origin.longitude + (targetDestinationPoint.longitude - origin.longitude) * effectiveProgress
                         GeoPoint(lat, lon) to bearing
                     }
                 }
 
-                val remainingRoutePoints = remember(trackingRoutePoints, carProgress) {
+                val remainingRoutePoints = remember(trackingRoutePoints, effectiveProgress, isEnRouteToDestination) {
                     if (trackingRoutePoints.size >= 2) {
-                        RouteRepository.getRemainingRoutePoints(trackingRoutePoints, carProgress)
+                        RouteRepository.getRemainingRoutePoints(trackingRoutePoints, effectiveProgress)
                     } else {
-                        listOf(currentDriverPoint, pickupGeoPoint)
+                        listOf(currentDriverPoint, targetDestinationPoint)
                     }
                 }
 
                 OsmMapView(
-                    latitude = pickupGeoPoint.latitude,
-                    longitude = pickupGeoPoint.longitude,
+                    latitude = targetDestinationPoint.latitude,
+                    longitude = targetDestinationPoint.longitude,
                     modifier = Modifier.fillMaxSize(),
                     zoomLevel = 13.0,
                     isDarkMode = true,
                     showUserLocationMarker = true,
-                    destinationPoint = pickupGeoPoint,
+                    destinationPoint = targetDestinationPoint,
                     routePoints = remainingRoutePoints,
                     driverPoint = currentDriverPoint,
                     driverHeading = (driverBearing - 90f)
                 )
 
                 // Floating Top Live Distance & ETA Pill (no redundant heading signs)
+                val pillText = when (state.ridePhase) {
+                    RidePhase.APPROACHING -> "${String.format(java.util.Locale.US, "%.1f km", liveDistanceRemainingKm)} • $liveEtaMinutes min away"
+                    RidePhase.ARRIVED -> "Driver has arrived • Waiting at pickup"
+                    RidePhase.IN_PROGRESS -> "On the way • ${state.tripDurationMinutes} min to destination"
+                    RidePhase.COMPLETED -> "Arrived at destination"
+                }
+
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -321,7 +354,7 @@ fun LiveTrackingScreen(
                                 .background(Color.White)
                         )
                         Text(
-                            text = "${String.format(java.util.Locale.US, "%.1f km", liveDistanceRemainingKm)} • $liveEtaMinutes min away",
+                            text = pillText,
                             color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
@@ -393,6 +426,120 @@ fun LiveTrackingScreen(
                             .clip(CircleShape)
                             .background(VoltSurfaceContainerHighest)
                     )
+                }
+
+                // Driver Arrived Announcement & Action Banner
+                if (state.ridePhase == RidePhase.ARRIVED) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(VoltPrimaryContainer)
+                            .border(1.dp, Color.White.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.White),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.DirectionsCar,
+                                    contentDescription = null,
+                                    tint = VoltSurface,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "Driver Has Arrived!",
+                                    color = Color.White,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = "${state.matchedDriverName.split(" ").firstOrNull() ?: "Driver"} is waiting outside in the ${state.matchedVehicle}.",
+                                    color = VoltSecondary,
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(Color.White)
+                                .clickable(onClick = onStartRide)
+                                .padding(vertical = 14.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.DirectionsCar,
+                                    contentDescription = null,
+                                    tint = VoltSurface,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "START RIDE & HEAD TO DESTINATION",
+                                    color = VoltSurface,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 0.5.sp
+                                )
+                            }
+                        }
+                    }
+                } else if (state.ridePhase == RidePhase.IN_PROGRESS) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(VoltSurfaceContainerLow)
+                            .border(1.dp, VoltSurfaceContainerHighest, RoundedCornerShape(16.dp))
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "En Route to Destination",
+                                color = VoltOnSurface,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "ETA: ${state.tripDurationMinutes} mins to ${state.destinationLocation}",
+                                color = VoltSecondary,
+                                fontSize = 12.sp
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(VoltPrimaryContainer)
+                                .clickable(onClick = onCompleteTripNow)
+                                .padding(horizontal = 14.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "Arrive Now",
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
 
                 // Safety Code PIN Banner
@@ -823,20 +970,38 @@ fun LiveTrackingScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(VoltSurfaceContainerLow)
-                            .border(1.dp, VoltSurfaceContainerHighest, CircleShape)
-                            .clickable { showCancelDialog = true }
-                            .padding(horizontal = 16.dp, vertical = 10.dp)
-                    ) {
-                        Text(
-                            text = "Cancel Ride",
-                            color = Color.White,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                    if (state.ridePhase != RidePhase.IN_PROGRESS) {
+                        Box(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(VoltSurfaceContainerLow)
+                                .border(1.dp, VoltSurfaceContainerHighest, CircleShape)
+                                .clickable { showCancelDialog = true }
+                                .padding(horizontal = 16.dp, vertical = 10.dp)
+                        ) {
+                            Text(
+                                text = "Cancel Ride",
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    } else {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.DirectionsCar,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "Trip in progress",
+                                color = VoltSecondary,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
 
                     Row(

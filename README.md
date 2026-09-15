@@ -101,6 +101,10 @@ ride-go/
 │   │   │   │           ├── RidesScreen.kt        # Dynamic route polyline, locked pickup & destination pins, tier picker
 │   │   │   │           ├── DispatchScreen.kt     # Live driver radar search & dispatch status
 │   │   │   │           ├── LiveTrackingScreen.kt # Real-time trip tracking with driver marker, ETA & security PIN
+│   │   │   │           ├── ChatScreen.kt         # In-app rider-driver messaging thread with auto-replies
+│   │   │   │           ├── SafetyCenterScreen.kt # 24/7 SOS emergency assistance, live share & SAPS protocols
+│   │   │   │           ├── ShareRideScreen.kt    # Real-time trip link copy, system share & trusted contacts
+│   │   │   │           ├── TripCompletedScreen.kt # End of trip arrival, 5-star rating & itemized fare breakdown
 │   │   │   │           ├── ActivityScreen.kt     # Multi-tab activity hub: Past Trips, Upcoming reservations & Business expensing
 │   │   │   │           ├── AccountScreen.kt      # User profile, wallet, security, South Africa SOS
 │   │   │   │           ├── RiderVerificationScreen.kt # Biometric selfie & SA Smart ID card scan
@@ -189,6 +193,14 @@ ride-go/
     - Removed redundant duplicate "heading your way" status overlays in favor of a single floating distance & ETA status pill. Aligned driver historical trip cards in the Activity hub to use Thulane's verified profile avatar.
 21. **Crisp Pure White Typography & Iconography Across Dispatch & Radar Telemetry**:
     - Converted all labels, fares, ETA metrics, subheadings, radar vehicle pins, compass controls, and waypoint badges across `DispatchScreen` and `RadarViewport` to crisp pure white (`#FFFFFF`), maximizing visual contrast, clarity, and readability on AMOLED screens in strict accordance with the 60-30-10 design system.
+22. **Ride Lifecycle State Machine, Dedicated Action Sheets & Trip Completion Console**:
+    - **End-to-End State Machine**: Full `APPROACHING` -> `ARRIVED` -> `IN_PROGRESS` -> `COMPLETED` lifecycle coordinating map views, live telemetry, and screen transitions.
+    - **Driver Arrival Notification & Ride Launch**: Driver arrival announcement card and prominent 'START RIDE & DRIVE TO DESTINATION' button when the driver reaches the pickup spot.
+    - **En-Route Destination Trajectory**: Dynamically reroutes OpenStreetMap polyline towards the destination address with real-time ETA countdown, safeguarding against mid-transit cancellation.
+    - **In-App Rider-Driver Chat (`ChatScreen`)**: High-contrast messaging interface with driver specs, message history, and automated driver replies.
+    - **Safety Center Hub (`SafetyCenterScreen`)**: Immediate 24/7 SAPS 10111 emergency hotline activation, live GPS location sharing toggle, security PIN display, and trusted emergency contact management.
+    - **Live Trip Status Sharing (`ShareRideScreen`)**: Instant shareable tracking link with clipboard copy, system share sheet (WhatsApp, Messages), and direct SMS link dispatch to trusted contacts.
+    - **Trip Completion & Rating Console (`TripCompletedScreen`)**: Arrival hero presentation, interactive 5-star driver rating component, and itemized South African Rand cost breakdown (Base Fare, Distance, Platform Fee, Promo Discount, Total Paid).
 
 ---
 

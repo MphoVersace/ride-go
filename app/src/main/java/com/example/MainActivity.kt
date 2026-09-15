@@ -57,6 +57,12 @@ import com.example.ui.screens.DispatchScreen
 import com.example.ui.screens.DriverOnboardingScreen
 import com.example.ui.screens.ExploreScreen
 import com.example.ui.screens.LiveTrackingScreen
+import com.example.ui.screens.ChatScreen
+import com.example.ui.screens.SafetyCenterScreen
+import com.example.ui.screens.ShareRideScreen
+import com.example.ui.screens.TripCompletedScreen
+import com.example.model.RidePhase
+import kotlinx.coroutines.delay
 import com.example.ui.screens.RiderVerificationScreen
 import com.example.ui.screens.RidesScreen
 import com.example.ui.screens.SplashScreen
@@ -137,17 +143,40 @@ fun VoltAppRoot(
     }
 
 
-    // Handle back button when in Destination Search, Dispatch screen, Rider Verification, or Driver Onboarding
+    // Auto-transition driver from approaching to arrived after 12 seconds in live demo
+    LaunchedEffect(uiState.isDriverMatched, uiState.ridePhase) {
+        if (uiState.isDriverMatched && uiState.ridePhase == RidePhase.APPROACHING) {
+            delay(12000L)
+            viewModel.driverArrived()
+        }
+    }
+
+    // Handle back button across all active flows and modal sheets
     BackHandler(
-        enabled = uiState.isSearchDestinationActive ||
+        enabled = uiState.isChatOpen ||
+            uiState.isSafetyOpen ||
+            uiState.isShareOpen ||
+            uiState.isSearchDestinationActive ||
             uiState.isDispatchActive ||
             uiState.isRiderVerificationActive ||
             uiState.isDriverOnboardingActive
     ) {
-        if (uiState.isSearchDestinationActive) {
+        if (uiState.isChatOpen) {
+            viewModel.closeChat()
+        } else if (uiState.isSafetyOpen) {
+            viewModel.closeSafetyCenter()
+        } else if (uiState.isShareOpen) {
+            viewModel.closeShareRide()
+        } else if (uiState.isSearchDestinationActive) {
             viewModel.closeDestinationSearch()
         } else if (uiState.isDispatchActive) {
-            viewModel.cancelDispatch()
+            if (uiState.ridePhase == RidePhase.IN_PROGRESS) {
+                viewModel.showToast("Trip in progress. Please wait until arrival.")
+            } else if (uiState.ridePhase == RidePhase.COMPLETED) {
+                viewModel.skipRating()
+            } else {
+                viewModel.cancelDispatch()
+            }
         } else if (uiState.isRiderVerificationActive) {
             if (uiState.riderState.currentStep > 1) {
                 viewModel.setRiderStep(uiState.riderState.currentStep - 1)
@@ -293,16 +322,32 @@ fun VoltAppRoot(
             // Main Screen content switcher
             if (uiState.isDispatchActive) {
                 if (uiState.isDriverMatched) {
-                    LiveTrackingScreen(
-                        state = uiState,
-                        onBack = { viewModel.cancelDispatch() },
-                        onCancelRide = { viewModel.cancelDispatch() },
-                        onCallDriver = { viewModel.showToast("Calling Thulane J. Sigasa (+27 71 839 2041)...") },
-                        onMessageDriver = { viewModel.showToast("Opening in-app chat with Thulane J. Sigasa...") },
-                        onShareRide = { viewModel.showToast("Live trip tracking link copied to clipboard!") },
-                        onSafetyCenterClick = { viewModel.showToast("Ride Go Safety Hotline: 0800 000 000") },
-                        onTripDetailsClick = { viewModel.showToast("Trip Ref: #RG-LIVE-9920 • Fixed Fare R145.00") }
-                    )
+                    if (uiState.ridePhase == RidePhase.COMPLETED) {
+                        TripCompletedScreen(
+                            state = uiState,
+                            onSubmitRating = { rating -> viewModel.submitRating(rating) },
+                            onSkip = { viewModel.skipRating() }
+                        )
+                    } else {
+                        LiveTrackingScreen(
+                            state = uiState,
+                            onBack = {
+                                if (uiState.ridePhase == RidePhase.IN_PROGRESS) {
+                                    viewModel.showToast("Trip in progress. Please wait until arrival.")
+                                } else {
+                                    viewModel.cancelDispatch()
+                                }
+                            },
+                            onCancelRide = { viewModel.cancelDispatch() },
+                            onCallDriver = { viewModel.showToast("Calling ${uiState.matchedDriverName} (+27 71 839 2041)...") },
+                            onMessageDriver = { viewModel.openChat() },
+                            onShareRide = { viewModel.openShareRide() },
+                            onSafetyCenterClick = { viewModel.openSafetyCenter() },
+                            onStartRide = { viewModel.startRide() },
+                            onCompleteTripNow = { viewModel.completeTrip() },
+                            onTripDetailsClick = { viewModel.showToast("Trip Ref: #RG-LIVE-9920 • Fixed Fare R${uiState.tripFareTotal}.00") }
+                        )
+                    }
                 } else {
                     DispatchScreen(
                         state = uiState,
@@ -524,6 +569,51 @@ fun VoltAppRoot(
                         }
                     }
                 }
+            }
+
+            // In-app Rider-Driver Chat Overlay
+            AnimatedVisibility(
+                visible = uiState.isChatOpen,
+                enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+                exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+            ) {
+                ChatScreen(
+                    state = uiState,
+                    onBack = { viewModel.closeChat() },
+                    onSendMessage = { text -> viewModel.sendChatMessage(text) },
+                    onCallDriver = { viewModel.showToast("Calling ${uiState.matchedDriverName} (+27 71 839 2041)...") }
+                )
+            }
+
+            // Safety Center Overlay
+            AnimatedVisibility(
+                visible = uiState.isSafetyOpen,
+                enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+                exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+            ) {
+                SafetyCenterScreen(
+                    state = uiState,
+                    onBack = { viewModel.closeSafetyCenter() },
+                    onTriggerSOS = { viewModel.triggerSOS() },
+                    onToggleLiveShare = { viewModel.toggleLiveShare() },
+                    onShareToContact = { contact -> viewModel.shareRideToContact(contact) }
+                )
+            }
+
+            // Share Ride Overlay
+            AnimatedVisibility(
+                visible = uiState.isShareOpen,
+                enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+                exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+            ) {
+                ShareRideScreen(
+                    state = uiState,
+                    onBack = { viewModel.closeShareRide() },
+                    onCopyLink = { viewModel.copyTripLink() },
+                    onShareViaSystem = { viewModel.shareRideViaSystem() },
+                    onShareToContact = { contact -> viewModel.shareRideToContact(contact) },
+                    onToggleLiveShare = { viewModel.toggleLiveShare() }
+                )
             }
 
             // Floating Stadium Pill Bottom Navigation Bar (Overlaid directly with 100% transparent footer)
