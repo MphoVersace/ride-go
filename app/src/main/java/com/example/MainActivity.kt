@@ -84,7 +84,7 @@ import com.example.ui.theme.VoltPrimaryContainer
 import com.example.ui.theme.VoltSurface
 import com.example.viewmodel.VoltViewModel
 import androidx.compose.ui.graphics.Color
-import kotlinx.coroutines.delay
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,13 +136,6 @@ fun VoltAppRoot(
         viewModel.checkForAppUpdates()
     }
 
-    // Auto-dismiss popup toast messages within 150ms
-    LaunchedEffect(uiState.toastMessage) {
-        if (uiState.toastMessage != null) {
-            delay(150)
-            viewModel.clearToast()
-        }
-    }
 
     // Handle back button when in Destination Search, Dispatch screen, Rider Verification, or Driver Onboarding
     BackHandler(
