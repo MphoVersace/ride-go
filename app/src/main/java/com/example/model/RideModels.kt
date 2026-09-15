@@ -1,5 +1,12 @@
 package com.example.model
 
+enum class RidePhase {
+    APPROACHING,  // Driver heading to rider's pickup location
+    ARRIVED,      // Driver at pickup — waiting for rider to tap Start Ride
+    IN_PROGRESS,  // Car driving towards destination
+    COMPLETED     // Trip finished — show rating + cost breakdown
+}
+
 enum class RideTierType(
     val id: String,
     val title: String,
@@ -182,3 +189,15 @@ data class RiderVerificationState(
     val isVerified: Boolean = false
 )
 
+data class ChatMessage(
+    val id: String,
+    val text: String,
+    val isFromRider: Boolean,
+    val timestamp: String
+)
+
+data class TrustedContact(
+    val name: String,
+    val phone: String,
+    val relation: String
+)

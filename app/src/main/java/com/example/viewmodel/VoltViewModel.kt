@@ -1,13 +1,19 @@
 package com.example.viewmodel
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.model.ChatMessage
 import com.example.model.DriverOnboardingState
+import com.example.model.RidePhase
 import com.example.model.RideTierType
 import com.example.model.RiderIdDocType
 import com.example.model.RiderVerificationState
 import com.example.model.TripHistoryItem
+import com.example.model.TrustedContact
 import com.example.model.VoltScreenTab
 import com.example.util.AppReleaseInfo
 import com.example.util.LocationRepository
@@ -72,7 +78,29 @@ data class VoltUiState(
     val appUpdateAvailable: Boolean = false,
     val latestReleaseInfo: AppReleaseInfo? = null,
     val isDownloadingUpdate: Boolean = false,
-    val updateDownloadProgress: Float = 0f
+    val updateDownloadProgress: Float = 0f,
+    // -- Ride Action Screens --
+    val isChatOpen: Boolean = false,
+    val isSafetyOpen: Boolean = false,
+    val isShareOpen: Boolean = false,
+    val chatMessages: List<ChatMessage> = emptyList(),
+    val liveShareEnabled: Boolean = false,
+    val safetyTriggerActive: Boolean = false,
+    val trustedContacts: List<TrustedContact> = listOf(
+        TrustedContact(name = "Mpho Sithole", phone = "+27 82 491 8204", relation = "Sister"),
+        TrustedContact(name = "Sipho Dlamini", phone = "+27 71 234 5678", relation = "Friend"),
+        TrustedContact(name = "Naledi Khumalo", phone = "+27 63 987 6543", relation = "Mom")
+    ),
+    // -- Ride Phase State Machine --
+    val ridePhase: RidePhase = RidePhase.APPROACHING,
+    val tripDistanceKm: Double = 24.0,
+    val tripDurationMinutes: Int = 28,
+    val tripFareBase: Int = 45,
+    val tripFareDistanceRands: Int = 91,
+    val tripFarePlatformFee: Int = 9,
+    val tripFarePromoDiscount: Int = 0,
+    val tripFareTotal: Int = 145,
+    val submittedRating: Int? = null
 )
 
 class VoltViewModel : ViewModel() {
@@ -318,7 +346,7 @@ class VoltViewModel : ViewModel() {
     fun showToast(msg: String) {
         _uiState.update { it.copy(toastMessage = msg) }
         viewModelScope.launch {
-            delay(150)
+            delay(2500)
             _uiState.update { if (it.toastMessage == msg) it.copy(toastMessage = null) else it }
         }
     }
@@ -811,5 +839,212 @@ class VoltViewModel : ViewModel() {
         }
         showToast("Signed out successfully")
     }
-}
 
+    // ==========================================
+    // Ride Action Screens — Chat, Safety, Share
+    // ==========================================
+
+    fun openChat() {
+        val seed = if (_uiState.value.chatMessages.isEmpty()) {
+            val driverFirst = _uiState.value.matchedDriverName.split(" ").firstOrNull() ?: "Driver"
+            listOf(
+                ChatMessage(
+                    id = "seed-1",
+                    text = "Hey! I'm on my way. I'll be there in about ${_uiState.value.driverEtaMinutes} minutes.",
+                    isFromRider = false,
+                    timestamp = formatChatTime()
+                ),
+                ChatMessage(
+                    id = "seed-2",
+                    text = "I'm in the ${_uiState.value.matchedVehicle}. Look for plate ${_uiState.value.driverLicensePlate}.",
+                    isFromRider = false,
+                    timestamp = formatChatTime()
+                )
+            )
+        } else _uiState.value.chatMessages
+        _uiState.update { it.copy(isChatOpen = true, chatMessages = seed) }
+    }
+
+    fun closeChat() {
+        _uiState.update { it.copy(isChatOpen = false) }
+    }
+
+    fun sendChatMessage(text: String) {
+        if (text.isBlank()) return
+        val newMsg = ChatMessage(
+            id = "msg-${System.currentTimeMillis()}",
+            text = text.trim(),
+            isFromRider = true,
+            timestamp = formatChatTime()
+        )
+        _uiState.update { it.copy(chatMessages = it.chatMessages + newMsg) }
+        // Simulate driver reply after 3 seconds
+        viewModelScope.launch {
+            delay(3000)
+            val replies = listOf(
+                "Got it, thanks!",
+                "No problem, see you shortly!",
+                "Understood, on my way!",
+                "Sure, I'll be right there!",
+                "Okay, noted."
+            )
+            val reply = ChatMessage(
+                id = "reply-${System.currentTimeMillis()}",
+                text = replies.random(),
+                isFromRider = false,
+                timestamp = formatChatTime()
+            )
+            _uiState.update { it.copy(chatMessages = it.chatMessages + reply) }
+        }
+    }
+
+    fun openSafetyCenter() {
+        _uiState.update { it.copy(isSafetyOpen = true) }
+    }
+
+    fun closeSafetyCenter() {
+        _uiState.update { it.copy(isSafetyOpen = false, safetyTriggerActive = false) }
+    }
+
+    fun triggerSOS() {
+        _uiState.update { it.copy(safetyTriggerActive = true) }
+        showToast("SOS Alert Sent • SA Emergency: 10111 | Ride Go Hotline: 0800 000 000")
+        viewModelScope.launch {
+            delay(5000)
+            _uiState.update { it.copy(safetyTriggerActive = false) }
+        }
+    }
+
+    fun openShareRide() {
+        _uiState.update { it.copy(isShareOpen = true) }
+    }
+
+    fun closeShareRide() {
+        _uiState.update { it.copy(isShareOpen = false) }
+    }
+
+    fun toggleLiveShare() {
+        val next = !_uiState.value.liveShareEnabled
+        _uiState.update { it.copy(liveShareEnabled = next) }
+        showToast(if (next) "Live GPS share activated" else "Live GPS share paused")
+    }
+
+    fun copyTripLink(context: Context) {
+        val link = "https://ridego.co.za/track/${_uiState.value.rideSecurityPin}"
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(ClipData.newPlainText("Ride Go Trip Link", link))
+        showToast("Trip tracking link copied to clipboard")
+    }
+
+    fun shareRideViaSystem(context: Context) {
+        val plate = _uiState.value.driverLicensePlate
+        val driver = _uiState.value.matchedDriverName
+        val eta = _uiState.value.driverEtaMinutes
+        val pin = _uiState.value.rideSecurityPin
+        val link = "https://ridego.co.za/track/$pin"
+        val text = "I'm in a Ride Go with $driver ($plate). ETA: $eta mins. Track me live: $link"
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        context.startActivity(Intent.createChooser(intent, "Share your ride"))
+    }
+
+    fun shareRideToContact(context: Context, contact: TrustedContact) {
+        val plate = _uiState.value.driverLicensePlate
+        val driver = _uiState.value.matchedDriverName
+        val eta = _uiState.value.driverEtaMinutes
+        val pin = _uiState.value.rideSecurityPin
+        val link = "https://ridego.co.za/track/$pin"
+        val text = "I'm in a Ride Go with $driver ($plate). ETA: $eta mins. Track me live: $link"
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        context.startActivity(Intent.createChooser(intent, "Share with ${contact.name}"))
+        showToast("Shared with ${contact.name}")
+    }
+
+    // ==========================================
+    // Ride Phase State Machine Actions
+    // ==========================================
+
+    fun driverArrived() {
+        if (_uiState.value.ridePhase != RidePhase.APPROACHING) return
+        val driverFirst = _uiState.value.matchedDriverName.split(" ").firstOrNull() ?: "Driver"
+        _uiState.update { it.copy(ridePhase = RidePhase.ARRIVED) }
+        showToast("$driverFirst has arrived! Tap Start Ride when ready.")
+    }
+
+    fun startRide() {
+        if (_uiState.value.ridePhase != RidePhase.ARRIVED) return
+        _uiState.update { it.copy(ridePhase = RidePhase.IN_PROGRESS) }
+        showToast("Trip started — enjoy your ride!")
+        viewModelScope.launch {
+            delay(20000L) // 20-second demo trip to destination
+            completeTrip()
+        }
+    }
+
+    fun completeTrip() {
+        val st = _uiState.value
+        val distKm = st.tripDistanceKm
+        val durationMins = st.tripDurationMinutes
+        val base = 45
+        val distFare = (distKm * 3.8).roundToInt()
+        val platform = 9
+        val promo = if (st.riderPromoApplied) 20 else 0
+        val total = base + distFare + platform - promo
+        _uiState.update {
+            it.copy(
+                ridePhase = RidePhase.COMPLETED,
+                tripFareBase = base,
+                tripFareDistanceRands = distFare,
+                tripFarePlatformFee = platform,
+                tripFarePromoDiscount = promo,
+                tripFareTotal = total
+            )
+        }
+    }
+
+    fun submitRating(stars: Int) {
+        _uiState.update { it.copy(submittedRating = stars) }
+        val msg = when (stars) {
+            5 -> "5 stars — Excellent! Thank you!"
+            4 -> "4 stars — Great trip! Thank you!"
+            3 -> "3 stars — Thanks for your feedback."
+            else -> "Thanks for your feedback."
+        }
+        showToast(msg)
+        viewModelScope.launch {
+            delay(1200)
+            finishTrip()
+        }
+    }
+
+    fun skipRating() {
+        finishTrip()
+    }
+
+    private fun finishTrip() {
+        _uiState.update {
+            it.copy(
+                isDispatchActive = false,
+                isDriverMatched = false,
+                ridePhase = RidePhase.APPROACHING,
+                submittedRating = null,
+                isChatOpen = false,
+                isSafetyOpen = false,
+                isShareOpen = false,
+                chatMessages = emptyList(),
+                liveShareEnabled = false,
+                currentTab = VoltScreenTab.EXPLORE
+            )
+        }
+    }
+
+    private fun formatChatTime(): String {
+        val sdf = java.text.SimpleDateFormat("h:mm a", java.util.Locale.US)
+        return sdf.format(java.util.Date())
+    }
+}
