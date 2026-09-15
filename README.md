@@ -76,7 +76,8 @@ ride-go/
 │   │   │   │   ├── model/
 │   │   │   │   │   └── RideModels.kt             # Data classes, tiers, states, ride telemetry
 │   │   │   │   ├── util/
-│   │   │   │   │   ├── RouteRepository.kt        # OSRM road route geometry, SA location geocoder & curved polyline generator
+│   │   │   │   │   ├── LocationRepository.kt     # Live OpenStreetMap Nominatim geocoding & reverse-geocoding engine
+│   │   │   │   │   ├── RouteRepository.kt        # OSRM road route geometry, geocoded coordinate resolution & polyline generator
 │   │   │   │   │   └── UpdateManager.kt          # GitHub Releases API consumer, APK downloader & package installer
 │   │   │   │   ├── viewmodel/
 │   │   │   │   │   └── VoltViewModel.kt          # UI state, destination search, payment methods & update manager
@@ -97,7 +98,7 @@ ride-go/
 │   │   │   │       └── screens/
 │   │   │   │           ├── SplashScreen.kt       # Static centered Ride Go brand logo presentation
 │   │   │   │           ├── AuthScreen.kt         # Direct Rider & Driver sign-up, role selector and authentication
-│   │   │   │           ├── DestinationSearchScreen.kt # Real-time South African place search & dual route console
+│   │   │   │           ├── DestinationSearchScreen.kt # Live OpenStreetMap Nominatim address search & dual route console
 │   │   │   │           ├── ExploreScreen.kt      # Vector map anchored to current location with quick destination launch
 │   │   │   │           ├── RidesScreen.kt        # Dynamic route polyline, locked pickup & destination pins, tier picker
 │   │   │   │           ├── DispatchScreen.kt     # Live driver radar search & dispatch status
@@ -152,10 +153,11 @@ ride-go/
    - **Custom Executive Dark Mode**: Embedded `ColorMatrixColorFilter` inverts light OSM tiles into deep obsidian (`#000000` / `#050811`) and deep navy (`#0B1938`) roads to strictly adhere to the 60-30-10 design system.
    - **Dynamic South African GPS Geofencing**: Automatically anchors coordinates to user's pickup spot (Sandton, Cape Town, Durban, Pretoria, O.R. Tambo Airport) with smooth camera animation upon tapping the recenter FAB.
    - **Real-Time Fleet HUD & Vignette Fade**: Live floating vehicle count, pickup location anchor pin, and top/bottom atmospheric vignette gradients seamlessly layered over live vector tiles.
-3. **South African Destination & Dual Route Search Screen**:
+3. **South African & Global Destination Search with Live OpenStreetMap Geocoding**:
    - Full-screen search console with dual text inputs for editing pickup and destination.
-   - Real-time instant filtering across South African international airports (O.R. Tambo, CPT, King Shaka), business hubs (Sandton, Rosebank, Foreshore), and shopping landmarks (Mall of Africa, Canal Walk, Menlyn Maine, Gateway Theatre of Shopping).
-   - Direct one-tap transition into the Rides screen with route metrics pre-loaded.
+   - Real-time debounced OpenStreetMap Nominatim geocoding engine with instant suggestions across any address, business, or landmark worldwide, prioritizing South African results (`countrycodes=za`).
+   - Retains instant quick shortcuts for major airports (O.R. Tambo, CPT, King Shaka), key hubs (Sandton, Rosebank), and curated recommendations when the search bar is idle.
+   - Exact precision coordinates stored and dynamically forwarded to routing maps upon suggestion selection.
 4. **Dynamic Route Metrics & Interactive Location Editing in Rides Tab**:
    - Contextual distance and duration calculation (e.g. `24.0 km • 28 mins`) between current location and destination.
    - Conceals route metrics until destination is explicitly configured.
@@ -220,6 +222,11 @@ ride-go/
     - **Driver Earnings & Instant Cashout Hub (`DriverEarningsScreen`)**: Available balance display, instant cashout integration to South African bank accounts (Capitec Bank, FNB, Standard Bank), weekly interactive earnings bar chart, and itemized trip payout history.
     - **Driver Partner Profile & Compliance Console (`DriverProfileScreen`)**: Verified vehicle registration (`Toyota Corolla Quest - TJS 001 GP`), active compliance cards (PrDP clearance, DEKRA roadworthiness certificate, SAPS criminal background check), driver rating telemetry, and quick switch to Rider mode.
     - **Driver Stadium Floating Bottom Navigation (`DriverBottomNav`)**: Dedicated 4-destination navigation pill (Console, Active Trip, Earnings, Profile) with smooth sliding indicator and 100% transparent footer.
+24. **Live OpenStreetMap Nominatim Geocoding & Dynamic Address Autocomplete**:
+    - **Global & South Africa-First Real-Time Geocoding**: Replaced static 15-location list in `DestinationSearchScreen` with live OpenStreetMap Nominatim API querying, allowing passengers to search and route to any address or point of interest worldwide with automatic South Africa prioritization (`countrycodes=za`) and seamless international fallback.
+    - **Sub-Second Debounced Search (400ms)**: Coroutine-driven debouncing via `VoltViewModel.searchAddresses` preventing API spam while providing instantaneous, reactive search suggestions as the user types.
+    - **Exact Lat/Lon Coordinate Storage & Routing**: User selections capture real precision latitude and longitude coordinates in `VoltUiState` (`destinationLat`, `destinationLon`), dynamically wiring into `RouteRepository.resolveCoordinatesPreferring` so `RidesScreen` and `LiveTrackingScreen` draw exact real-road trajectory lines rather than keyword estimations.
+    - **Adaptive Category Telemetry & High-Contrast UI**: Categorizes search results dynamically (Airport, Station, Shopping, Hotel, Commercial, Street, City) with tailored SVG-based icons, inline animated loading spinners, empty-state guidance, and OpenStreetMap attribution footer compliant with the 60-30-10 palette.
 
 ---
 
