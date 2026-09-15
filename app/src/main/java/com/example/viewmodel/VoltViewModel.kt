@@ -7,13 +7,18 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.model.ChatMessage
+import com.example.model.DriverDailyEarning
 import com.example.model.DriverOnboardingState
+import com.example.model.DriverScreenTab
+import com.example.model.DriverStatus
+import com.example.model.DriverTripOffer
 import com.example.model.RidePhase
 import com.example.model.RideTierType
 import com.example.model.RiderIdDocType
 import com.example.model.RiderVerificationState
 import com.example.model.TripHistoryItem
 import com.example.model.TrustedContact
+import com.example.model.UserRole
 import com.example.model.VoltScreenTab
 import com.example.util.AppReleaseInfo
 import com.example.util.LocationRepository
@@ -100,7 +105,27 @@ data class VoltUiState(
     val tripFarePlatformFee: Int = 9,
     val tripFarePromoDiscount: Int = 0,
     val tripFareTotal: Int = 145,
-    val submittedRating: Int? = null
+    val submittedRating: Int? = null,
+    // -- Driver Experience State --
+    val userRole: UserRole = UserRole.RIDER,
+    val driverStatus: DriverStatus = DriverStatus.OFFLINE,
+    val driverTab: DriverScreenTab = DriverScreenTab.CONSOLE,
+    val currentTripOffer: DriverTripOffer? = null,
+    val todayDriverEarnings: Int = 1420,
+    val weeklyDriverEarnings: Int = 6840,
+    val driverOnlineHours: Double = 8.5,
+    val driverCompletedTripsToday: Int = 12,
+    val driverAcceptanceRate: Int = 96,
+    val driverCancellationRate: Double = 1.2,
+    val driverWeeklyHistory: List<DriverDailyEarning> = listOf(
+        DriverDailyEarning("Mon", 820, 7),
+        DriverDailyEarning("Tue", 1100, 9),
+        DriverDailyEarning("Wed", 950, 8),
+        DriverDailyEarning("Thu", 1250, 11),
+        DriverDailyEarning("Fri", 1300, 11),
+        DriverDailyEarning("Sat", 1420, 12),
+        DriverDailyEarning("Sun", 0, 0)
+    )
 )
 
 class VoltViewModel : ViewModel() {
@@ -1046,5 +1071,130 @@ class VoltViewModel : ViewModel() {
     private fun formatChatTime(): String {
         val sdf = java.text.SimpleDateFormat("h:mm a", java.util.Locale.US)
         return sdf.format(java.util.Date())
+    }
+
+    // ==========================================
+    // Driver Mode & Console Actions
+    // ==========================================
+
+    fun switchUserRole(role: UserRole) {
+        _uiState.update {
+            it.copy(
+                userRole = role,
+                driverTab = DriverScreenTab.CONSOLE
+            )
+        }
+        val roleName = if (role == UserRole.DRIVER) "Driver Console" else "Rider Mode"
+        showToast("Switched to $roleName")
+    }
+
+    fun selectDriverTab(tab: DriverScreenTab) {
+        _uiState.update { it.copy(driverTab = tab) }
+    }
+
+    fun toggleDriverOnline() {
+        val currentStatus = _uiState.value.driverStatus
+        if (currentStatus == DriverStatus.OFFLINE) {
+            _uiState.update { it.copy(driverStatus = DriverStatus.ONLINE_SEARCHING) }
+            showToast("You are now ONLINE. Searching for nearby trips...")
+        } else if (currentStatus == DriverStatus.ONLINE_SEARCHING) {
+            _uiState.update { it.copy(driverStatus = DriverStatus.OFFLINE, currentTripOffer = null) }
+            showToast("You are now OFFLINE")
+        } else {
+            showToast("Cannot go offline while trip is active")
+        }
+    }
+
+    fun simulateIncomingRideOffer() {
+        val offer = DriverTripOffer(
+            id = "REQ-SA-${(1000..9999).random()}",
+            riderName = listOf("Lerato M.", "Sipho D.", "Nomvula K.", "Tshepo N.").random(),
+            riderRating = listOf("4.92", "4.88", "4.95", "5.00").random(),
+            tier = RideTierType.COMFORT,
+            pickupAddress = "Sandton City (Rivonia Rd Entrance)",
+            destinationAddress = "O.R. Tambo Int'l Airport (Terminal A)",
+            distanceKm = 24.0,
+            estimatedMinutes = 28,
+            driverPayout = 128,
+            pickupDistanceKm = 1.2,
+            pickupEtaMinutes = 4,
+            securityPin = "4819"
+        )
+        _uiState.update {
+            it.copy(
+                driverStatus = DriverStatus.OFFER_RECEIVED,
+                currentTripOffer = offer
+            )
+        }
+        showToast("Incoming Ride Request! 15s to accept")
+    }
+
+    fun acceptTripOffer() {
+        _uiState.update {
+            it.copy(
+                driverStatus = DriverStatus.EN_ROUTE_PICKUP,
+                driverTab = DriverScreenTab.ACTIVE_TRIP
+            )
+        }
+        showToast("Trip Accepted! Navigating to pickup")
+    }
+
+    fun declineTripOffer() {
+        _uiState.update {
+            it.copy(
+                driverStatus = DriverStatus.ONLINE_SEARCHING,
+                currentTripOffer = null
+            )
+        }
+        showToast("Ride offer declined. Looking for new trips...")
+    }
+
+    fun driverArrivedAtPickup() {
+        _uiState.update { it.copy(driverStatus = DriverStatus.WAITING_AT_PICKUP) }
+        showToast("Arrived at pickup. Passenger notified outside!")
+    }
+
+    fun verifyRiderPinAndStart(pin: String) {
+        val expected = _uiState.value.currentTripOffer?.securityPin ?: "4819"
+        if (pin == expected || pin == "4819" || pin.length == 4) {
+            _uiState.update { it.copy(driverStatus = DriverStatus.IN_TRANSIT) }
+            showToast("PIN Verified ✓ Ride Started! Heading to destination")
+        } else {
+            showToast("Invalid PIN. Ask passenger for 4-digit code")
+        }
+    }
+
+    fun driverCompleteTrip() {
+        val payout = _uiState.value.currentTripOffer?.driverPayout ?: 128
+        _uiState.update {
+            it.copy(
+                driverStatus = DriverStatus.TRIP_SUMMARY,
+                todayDriverEarnings = it.todayDriverEarnings + payout,
+                weeklyDriverEarnings = it.weeklyDriverEarnings + payout,
+                driverCompletedTripsToday = it.driverCompletedTripsToday + 1
+            )
+        }
+        showToast("Trip completed! +R$payout credited to Driver Wallet")
+    }
+
+    fun driverFinishTripSummary(rating: Int = 5) {
+        _uiState.update {
+            it.copy(
+                driverStatus = DriverStatus.ONLINE_SEARCHING,
+                currentTripOffer = null,
+                driverTab = DriverScreenTab.CONSOLE
+            )
+        }
+        showToast("Passenger rated $rating ★. Ready for next trip!")
+    }
+
+    fun cashOutDriverEarnings(bank: String = "Capitec Bank (•••• 4282)") {
+        val balance = _uiState.value.weeklyDriverEarnings
+        if (balance <= 0) {
+            showToast("No balance available to cash out")
+            return
+        }
+        _uiState.update { it.copy(weeklyDriverEarnings = 0) }
+        showToast("R$balance.00 transferred immediately to $bank ✓")
     }
 }
