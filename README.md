@@ -261,9 +261,15 @@ For lightweight development machines or rapid on-device testing without running 
 
 ---
 
-## License
+## License & Intellectual Property
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-0E2454?style=for-the-badge&logo=opensourceinitiative&logoColor=7DD3FC&labelColor=000000)](file:///c:/Users/thulanesigasa/Documents/ride-go/LICENSE)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary%20%2F%20Confidential-0E2454?style=for-the-badge&logo=shield&logoColor=7DD3FC&labelColor=000000)](file:///c:/Users/thulanesigasa/Documents/ride-go/LICENSE)
+[![Confidentiality](https://img.shields.io/badge/Property-Ride_Go_Dev_Community-0B1938?style=for-the-badge&logo=security&logoColor=7DD3FC&labelColor=000000)](file:///c:/Users/thulanesigasa/Documents/ride-go/LICENSE)
 
-Distributed under the MIT License. Copyright (c) 2026 Ride Go Dev Community. See [LICENSE](file:///c:/Users/thulanesigasa/Documents/ride-go/LICENSE) for more details.
+**CONFIDENTIAL AND PROPRIETARY PROPERTY**
+
+Copyright (c) 2026 Ride Go Dev Community. All Rights Reserved.
+
+This software is strictly company confidential and proprietary to the Ride Go Dev Community. It is **not** free or open-source software. Unauthorized reproduction, modification, decompilation, distribution, or disclosure of this codebase, in whole or in part, is strictly prohibited. See [LICENSE](file:///c:/Users/thulanesigasa/Documents/ride-go/LICENSE) for complete terms.
+
 
