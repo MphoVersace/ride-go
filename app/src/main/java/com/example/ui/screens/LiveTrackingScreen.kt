@@ -255,14 +255,24 @@ fun LiveTrackingScreen(
                 // Real OSM map: route calculation based on RidePhase
                 val isEnRouteToDestination = state.ridePhase == RidePhase.IN_PROGRESS
                 var trackingRoutePoints by remember { mutableStateOf(emptyList<GeoPoint>()) }
-                val pickupGeoPoint = remember(state.pickupLocation) {
-                    val (lat, lon) = RouteRepository.resolveCoordinates(state.pickupLocation,
-                        defaultLat = -26.1076, defaultLon = 28.0567)
-                    GeoPoint(lat, lon)
+                val pickupGeoPoint = remember(state.pickupLocation, state.userLat, state.userLon) {
+                    if (state.userLat != null && state.userLon != null) {
+                        GeoPoint(state.userLat, state.userLon)
+                    } else {
+                        val (lat, lon) = RouteRepository.resolveCoordinates(state.pickupLocation,
+                            defaultLat = -26.1076, defaultLon = 28.0567)
+                        GeoPoint(lat, lon)
+                    }
                 }
-                val destinationGeoPoint = remember(state.destinationLocation) {
-                    val (lat, lon) = RouteRepository.resolveCoordinates(state.destinationLocation,
-                        defaultLat = -26.1367, defaultLon = 28.2411)
+                // Prefer real Nominatim geocoded destination coordinates when available
+                val destinationGeoPoint = remember(state.destinationLocation, state.destinationLat, state.destinationLon) {
+                    val (lat, lon) = RouteRepository.resolveCoordinatesPreferring(
+                        lat = state.destinationLat,
+                        lon = state.destinationLon,
+                        address = state.destinationLocation,
+                        defaultLat = -26.1367,
+                        defaultLon = 28.2411
+                    )
                     GeoPoint(lat, lon)
                 }
 

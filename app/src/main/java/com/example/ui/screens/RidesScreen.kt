@@ -193,12 +193,19 @@ fun RidesScreen(
         }
     }
 
-    // Resolve destination GeoPoint
-    val destinationGeoPoint = remember(state.destinationLocation, mapLat, mapLon) {
+    // Resolve destination GeoPoint — prefers real Nominatim coordinates when present
+    val destinationGeoPoint = remember(state.destinationLocation, state.destinationLat, state.destinationLon, mapLat, mapLon) {
         if (state.destinationLocation.isNotBlank()) {
-            RouteRepository.resolveDestinationGeoPoint(state.destinationLocation, mapLat, mapLon)
+            RouteRepository.resolveDestinationGeoPointPreferring(
+                destLat = state.destinationLat,
+                destLon = state.destinationLon,
+                destinationAddress = state.destinationLocation,
+                originLat = mapLat,
+                originLon = mapLon
+            )
         } else null
     }
+
 
     // Real road route points from OSRM, fetched whenever pickup or destination changes
     var routePoints by remember { mutableStateOf<List<GeoPoint>>(emptyList()) }

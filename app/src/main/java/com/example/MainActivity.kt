@@ -296,9 +296,10 @@ fun VoltAppRoot(
             }
         }
     } else if (uiState.isSearchDestinationActive) {
-        // Destination Search screen with current location and South Africa place filtering
+        // Destination Search screen — live Nominatim address autocomplete
         DestinationSearchScreen(
             state = uiState,
+            viewModel = viewModel,
             onBack = { viewModel.closeDestinationSearch() },
             onSelectDestination = { destination, pickup ->
                 viewModel.selectDestination(destination, pickup)

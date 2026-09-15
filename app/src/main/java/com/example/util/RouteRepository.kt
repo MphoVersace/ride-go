@@ -72,6 +72,52 @@ object RouteRepository {
     }
 
     /**
+     * Preferred coordinate resolver that uses real geocoded lat/lon when available,
+     * falling back to the keyword mapping only when real coordinates are absent.
+     *
+     * Use this in all map rendering code instead of [resolveCoordinates] to ensure
+     * routes drawn to Nominatim-searched destinations land on the actual geocoded point.
+     *
+     * @param lat        Real geocoded latitude from [NominatimSuggestion.lat], or null.
+     * @param lon        Real geocoded longitude from [NominatimSuggestion.lon], or null.
+     * @param address    Address string used as fallback when lat/lon are null.
+     * @param defaultLat Default latitude if both real coords and keyword map fail.
+     * @param defaultLon Default longitude if both real coords and keyword map fail.
+     */
+    fun resolveCoordinatesPreferring(
+        lat: Double?,
+        lon: Double?,
+        address: String,
+        defaultLat: Double = -26.1076,
+        defaultLon: Double = 28.0567
+    ): Pair<Double, Double> {
+        if (lat != null && lon != null && lat != 0.0 && lon != 0.0) {
+            return lat to lon
+        }
+        return resolveCoordinates(address, defaultLat, defaultLon)
+    }
+
+    /**
+     * Resolves GeoPoint preferring real coordinates, with smart proximity fallback.
+     */
+    fun resolveDestinationGeoPointPreferring(
+        destLat: Double?,
+        destLon: Double?,
+        destinationAddress: String,
+        originLat: Double,
+        originLon: Double
+    ): GeoPoint {
+        val (lat, lon) = resolveCoordinatesPreferring(
+            lat = destLat,
+            lon = destLon,
+            address = destinationAddress,
+            defaultLat = originLat + 0.045,
+            defaultLon = originLon + 0.055
+        )
+        return GeoPoint(lat, lon)
+    }
+
+    /**
      * Fetches a road-accurate route between [fromLat]/[fromLon] and [toLat]/[toLon].
      * Uses OSRM public demo server (car profile, full geometry overview).
      * If the network is unavailable or OSRM times out, generates a smooth curved

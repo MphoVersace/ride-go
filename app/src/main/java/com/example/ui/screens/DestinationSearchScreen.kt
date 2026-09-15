@@ -1,8 +1,11 @@
 package com.example.ui.screens
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,12 +38,12 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material.icons.filled.PinDrop
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material.icons.filled.Train
 import androidx.compose.material.icons.filled.Work
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -64,11 +67,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.model.NominatimSuggestion
 import com.example.ui.theme.IceBlue
-import com.example.ui.theme.MediumBlue
 import com.example.ui.theme.VoltGreen
 import com.example.ui.theme.VoltOnPrimaryFixed
 import com.example.ui.theme.VoltOnSurface
@@ -79,156 +83,89 @@ import com.example.ui.theme.VoltSurfaceContainer
 import com.example.ui.theme.VoltSurfaceContainerHigh
 import com.example.ui.theme.VoltSurfaceContainerHighest
 import com.example.viewmodel.VoltUiState
+import com.example.viewmodel.VoltViewModel
 
-data class PlaceSearchResult(
-    val id: String,
-    val title: String,
-    val subtitle: String,
-    val distance: String,
-    val eta: String,
-    val icon: ImageVector,
-    val category: String = "Popular"
+// ---------------------------------------------------------------------------
+// Static quick-destination shortcuts (shown when search box is blank)
+// ---------------------------------------------------------------------------
+private data class QuickDestination(
+    val label: String,
+    val address: String,
+    val icon: ImageVector
 )
 
-private val SOUTH_AFRICA_PLACES = listOf(
-    // Major Airports
-    PlaceSearchResult(
-        id = "or_tambo",
-        title = "O.R. Tambo Int'l Airport (Terminal A)",
-        subtitle = "1 Jones Rd, Kempton Park, Johannesburg",
-        distance = "24 km",
-        eta = "28 min",
-        icon = Icons.Filled.Flight,
-        category = "Airports"
-    ),
-    PlaceSearchResult(
-        id = "cpt_airport",
-        title = "Cape Town International Airport (CPT)",
-        subtitle = "Matroosfontein, Cape Town, 7490",
-        distance = "21 km",
-        eta = "24 min",
-        icon = Icons.Filled.Flight,
-        category = "Airports"
-    ),
-    PlaceSearchResult(
-        id = "dur_airport",
-        title = "King Shaka International Airport (DUR)",
-        subtitle = "King Shaka Dr, La Mercy, KwaZulu-Natal",
-        distance = "32 km",
-        eta = "26 min",
-        icon = Icons.Filled.Flight,
-        category = "Airports"
-    ),
+private val QUICK_DESTINATIONS = listOf(
+    QuickDestination("Home", "Home (Kloof St, Gardens, Cape Town)", Icons.Filled.Home),
+    QuickDestination("Work", "Sandton Financial Hub (West St)", Icons.Filled.Work),
+    QuickDestination("Airport", "O.R. Tambo Int'l Airport (Terminal A)", Icons.Filled.Flight)
+)
 
-    // Shopping & Commercial Hubs
-    PlaceSearchResult(
-        id = "sandton_city",
-        title = "Sandton City & Nelson Mandela Square",
-        subtitle = "83 Rivonia Rd, Sandton, Johannesburg",
-        distance = "0.8 km",
-        eta = "4 min",
-        icon = Icons.Filled.Storefront,
-        category = "Shopping"
-    ),
-    PlaceSearchResult(
-        id = "rosebank_mall",
-        title = "Rosebank Mall & The Zone",
-        subtitle = "50 Bath Ave, Rosebank, Johannesburg",
-        distance = "6.2 km",
-        eta = "12 min",
-        icon = Icons.Filled.Storefront,
-        category = "Shopping"
-    ),
-    PlaceSearchResult(
-        id = "va_waterfront",
-        title = "V&A Waterfront & Victoria Wharf",
-        subtitle = "19 Breakwater Blvd, Cape Town",
-        distance = "5.8 km",
-        eta = "14 min",
-        icon = Icons.Filled.Storefront,
-        category = "Shopping"
-    ),
-    PlaceSearchResult(
-        id = "mall_of_africa",
-        title = "Mall of Africa",
-        subtitle = "Magwa Cres, Waterfall City, Midrand",
-        distance = "16.5 km",
-        eta = "18 min",
-        icon = Icons.Filled.Storefront,
-        category = "Shopping"
-    ),
-    PlaceSearchResult(
-        id = "canal_walk",
-        title = "Canal Walk Shopping Centre",
-        subtitle = "Century Blvd, Century City, Cape Town",
-        distance = "14.2 km",
-        eta = "18 min",
-        icon = Icons.Filled.Storefront,
-        category = "Shopping"
-    ),
-    PlaceSearchResult(
-        id = "gateway_mall",
-        title = "Gateway Theatre of Shopping",
-        subtitle = "1 Palm Blvd, Umhlanga Ridge, Durban",
-        distance = "18.0 km",
-        eta = "16 min",
-        icon = Icons.Filled.Storefront,
-        category = "Shopping"
-    ),
+// Suggested highlights shown below quick-actions when blank
+private data class SuggestedPlace(
+    val title: String,
+    val subtitle: String,
+    val icon: ImageVector,
+    val address: String
+)
 
-    // Transit Stations
-    PlaceSearchResult(
-        id = "sandton_gautrain",
-        title = "Sandton Gautrain Station",
-        subtitle = "West St, Sandhurst, Sandton",
-        distance = "1.2 km",
-        eta = "5 min",
-        icon = Icons.Filled.Train,
-        category = "Transit"
+private val SUGGESTED_PLACES = listOf(
+    SuggestedPlace(
+        "O.R. Tambo Int'l Airport",
+        "Jones Rd, Kempton Park, Johannesburg",
+        Icons.Filled.Flight,
+        "O.R. Tambo International Airport, Kempton Park"
     ),
-    PlaceSearchResult(
-        id = "rosebank_gautrain",
-        title = "Rosebank Gautrain Station",
-        subtitle = "Oxford Rd, Rosebank, Johannesburg",
-        distance = "6.0 km",
-        eta = "11 min",
-        icon = Icons.Filled.Train,
-        category = "Transit"
+    SuggestedPlace(
+        "Sandton City",
+        "83 Rivonia Rd, Sandton, Johannesburg",
+        Icons.Filled.Storefront,
+        "Sandton City, Rivonia Road, Sandton"
     ),
-
-    // Landmarks & Coastal Attractions
-    PlaceSearchResult(
-        id = "camps_bay",
-        title = "Camps Bay Beach",
-        subtitle = "Victoria Rd Promenade, Camps Bay, Cape Town",
-        distance = "8.4 km",
-        eta = "15 min",
-        icon = Icons.Filled.BeachAccess,
-        category = "Landmarks"
+    SuggestedPlace(
+        "V&A Waterfront",
+        "Breakwater Blvd, Cape Town",
+        Icons.Filled.Storefront,
+        "V&A Waterfront, Breakwater Boulevard, Cape Town"
     ),
-    PlaceSearchResult(
-        id = "table_mountain",
-        title = "Table Mountain Aerial Cableway",
-        subtitle = "Tafelberg Rd, Gardens, Cape Town",
-        distance = "7.1 km",
-        eta = "16 min",
-        icon = Icons.Filled.LocationOn,
-        category = "Landmarks"
+    SuggestedPlace(
+        "Sandton Gautrain Station",
+        "West St, Sandhurst, Sandton",
+        Icons.Filled.Train,
+        "Sandton Gautrain Station, West Street, Sandton"
     ),
-    PlaceSearchResult(
-        id = "menlyn_maine",
-        title = "Menlyn Maine Central Square",
-        subtitle = "Amarand Ave, Waterkloof Glen, Pretoria",
-        distance = "42 km",
-        eta = "38 min",
-        icon = Icons.Filled.Storefront,
-        category = "Shopping"
+    SuggestedPlace(
+        "Camps Bay Beach",
+        "Victoria Rd Promenade, Cape Town",
+        Icons.Filled.BeachAccess,
+        "Camps Bay Beach, Victoria Road, Cape Town"
+    ),
+    SuggestedPlace(
+        "Mall of Africa",
+        "Magwa Cres, Waterfall City, Midrand",
+        Icons.Filled.Storefront,
+        "Mall of Africa, Waterfall City, Midrand"
+    ),
+    SuggestedPlace(
+        "Table Mountain Cableway",
+        "Tafelberg Rd, Gardens, Cape Town",
+        Icons.Filled.LocationOn,
+        "Table Mountain Aerial Cableway, Cape Town"
+    ),
+    SuggestedPlace(
+        "King Shaka Int'l Airport",
+        "King Shaka Dr, La Mercy, KwaZulu-Natal",
+        Icons.Filled.Flight,
+        "King Shaka International Airport, La Mercy"
     )
 )
 
+// ---------------------------------------------------------------------------
+// Main Composable
+// ---------------------------------------------------------------------------
 @Composable
 fun DestinationSearchScreen(
     state: VoltUiState,
+    viewModel: VoltViewModel,
     onBack: () -> Unit,
     onSelectDestination: (destination: String, pickup: String) -> Unit,
     modifier: Modifier = Modifier
@@ -238,25 +175,10 @@ fun DestinationSearchScreen(
 
     var pickupText by remember { mutableStateOf(state.pickupLocation) }
     var destinationText by remember { mutableStateOf("") }
-    var isEditingPickup by remember { mutableStateOf(false) }
 
-    // Auto-focus the destination search input on first render
+    // Auto-focus destination field on first render
     LaunchedEffect(Unit) {
         destinationFocusRequester.requestFocus()
-    }
-
-    // Filter results based on search query
-    val filteredResults = remember(destinationText) {
-        if (destinationText.isBlank()) {
-            SOUTH_AFRICA_PLACES
-        } else {
-            val query = destinationText.trim().lowercase()
-            SOUTH_AFRICA_PLACES.filter {
-                it.title.lowercase().contains(query) ||
-                    it.subtitle.lowercase().contains(query) ||
-                    it.category.lowercase().contains(query)
-            }
-        }
     }
 
     Column(
@@ -268,9 +190,9 @@ fun DestinationSearchScreen(
             .imePadding()
             .testTag("destination_search_screen")
     ) {
-        // ==========================================
-        // Top Bar Header with Back Button
-        // ==========================================
+        // ========================================================
+        // Top Bar
+        // ========================================================
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -301,13 +223,12 @@ fun DestinationSearchScreen(
                 fontWeight = FontWeight.Bold
             )
 
-            // Balance spacer
             Spacer(modifier = Modifier.size(38.dp))
         }
 
-        // ==========================================
-        // Dual Route Input Card (Pickup & Destination)
-        // ==========================================
+        // ========================================================
+        // Dual Route Input Card
+        // ========================================================
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -321,28 +242,23 @@ fun DestinationSearchScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Route Visual Connector Track (Dots + Line)
+                // Route visual connector (dots + line)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(top = 14.dp, bottom = 14.dp, end = 12.dp)
                 ) {
-                    // Origin Green Beacon Dot
                     Box(
                         modifier = Modifier
                             .size(10.dp)
                             .clip(CircleShape)
                             .background(VoltGreen)
                     )
-
-                    // Connecting vertical track line
                     Box(
                         modifier = Modifier
                             .width(2.dp)
                             .height(46.dp)
                             .background(VoltSurfaceContainerHighest)
                     )
-
-                    // Destination Deep Navy / Ice Blue Pin
                     Box(
                         modifier = Modifier
                             .size(10.dp)
@@ -351,24 +267,22 @@ fun DestinationSearchScreen(
                     )
                 }
 
-                // Input Fields Column
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    // 1. Current Location (Pickup)
+                    // Pickup row
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
                             .background(VoltSurfaceContainer)
-                            .clickable { isEditingPickup = !isEditingPickup }
                             .padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "CURRENT LOCATION (PICKUP)",
+                                text = "PICKUP",
                                 color = VoltOnSurfaceVariant,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold,
@@ -384,12 +298,8 @@ fun DestinationSearchScreen(
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
-
-                        // Re-center on GPS Current Location
                         IconButton(
-                            onClick = {
-                                pickupText = "Sandton City (Rivonia Rd Entrance)"
-                            },
+                            onClick = { pickupText = state.pickupLocation },
                             modifier = Modifier.size(28.dp)
                         ) {
                             Icon(
@@ -401,13 +311,16 @@ fun DestinationSearchScreen(
                         }
                     }
 
-                    // 2. Destination Search Input ("Where to?")
+                    // Destination search field
                     OutlinedTextField(
                         value = destinationText,
-                        onValueChange = { destinationText = it },
+                        onValueChange = { query ->
+                            destinationText = query
+                            viewModel.searchAddresses(query)
+                        },
                         placeholder = {
                             Text(
-                                text = "Where to? (e.g. Airport, Camps Bay, Mall)",
+                                text = "Search any address, suburb or place...",
                                 color = VoltOnSurfaceVariant,
                                 fontSize = 14.sp
                             )
@@ -421,14 +334,26 @@ fun DestinationSearchScreen(
                             )
                         },
                         trailingIcon = {
-                            if (destinationText.isNotBlank()) {
-                                IconButton(onClick = { destinationText = "" }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Clear,
-                                        contentDescription = "Clear",
-                                        tint = Color.White,
-                                        modifier = Modifier.size(18.dp)
+                            when {
+                                state.isSuggestionsLoading -> {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(18.dp),
+                                        color = IceBlue,
+                                        strokeWidth = 2.dp
                                     )
+                                }
+                                destinationText.isNotBlank() -> {
+                                    IconButton(onClick = {
+                                        destinationText = ""
+                                        viewModel.clearAddressSuggestions()
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Clear,
+                                            contentDescription = "Clear",
+                                            tint = Color.White,
+                                            modifier = Modifier.size(18.dp)
+                                        )
+                                    }
                                 }
                             }
                         },
@@ -463,45 +388,9 @@ fun DestinationSearchScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // ==========================================
-        // Quick Actions Row (Home / Work / Saved)
-        // ==========================================
-        if (destinationText.isBlank()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                QuickShortcutPill(
-                    icon = Icons.Filled.Home,
-                    label = "Home",
-                    onClick = {
-                        onSelectDestination("Home (Kloof St, Gardens, Cape Town)", pickupText)
-                    }
-                )
-                QuickShortcutPill(
-                    icon = Icons.Filled.Work,
-                    label = "Work",
-                    onClick = {
-                        onSelectDestination("Sandton Financial Hub (West St)", pickupText)
-                    }
-                )
-                QuickShortcutPill(
-                    icon = Icons.Filled.History,
-                    label = "O.R. Tambo",
-                    onClick = {
-                        onSelectDestination("O.R. Tambo Int'l Airport (Terminal A)", pickupText)
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-
-        // ==========================================
-        // Categorized Place Results List
-        // ==========================================
+        // ========================================================
+        // Content: Quick Pills + Suggestions OR Live Results
+        // ========================================================
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -509,84 +398,164 @@ fun DestinationSearchScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Direct option to use exact typed query
-            if (destinationText.isNotBlank()) {
+            val isBlankQuery = destinationText.isBlank()
+            val hasLiveResults = state.addressSuggestions.isNotEmpty()
+            val isLoading = state.isSuggestionsLoading
+            val hasNoResults = !isBlankQuery && !isLoading && state.addressSuggestions.isEmpty()
+
+            // ---- Blank query: Quick shortcut pills + suggested places ----
+            if (isBlankQuery) {
                 item {
-                    Box(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(VoltPrimaryContainer.copy(alpha = 0.18f))
-                            .border(1.dp, VoltPrimaryContainer.copy(alpha = 0.4f), RoundedCornerShape(14.dp))
-                            .clickable {
-                                onSelectDestination(destinationText.trim(), pickupText)
-                            }
-                            .padding(14.dp)
-                            .testTag("use_typed_destination_btn")
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        QUICK_DESTINATIONS.forEach { dest ->
+                            QuickShortcutPill(
+                                icon = dest.icon,
+                                label = dest.label,
+                                onClick = { onSelectDestination(dest.address, pickupText) }
+                            )
+                        }
+                    }
+                }
+
+                item { Spacer(modifier = Modifier.height(8.dp)) }
+
+                item {
+                    Text(
+                        text = "SUGGESTED DESTINATIONS",
+                        color = VoltOnSurfaceVariant,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+
+                items(SUGGESTED_PLACES, key = { it.title }) { place ->
+                    SuggestedPlaceCard(
+                        title = place.title,
+                        subtitle = place.subtitle,
+                        icon = place.icon,
+                        onClick = { onSelectDestination(place.address, pickupText) }
+                    )
+                }
+            } else {
+                // ---- Non-blank query: Direct confirm card ----
+                item {
+                    DirectConfirmCard(
+                        query = destinationText,
+                        onClick = {
+                            focusManager.clearFocus()
+                            onSelectDestination(destinationText.trim(), pickupText)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                // ---- Section header ----
+                item {
+                    AnimatedContent(
+                        targetState = when {
+                            isLoading -> "Searching..."
+                            hasLiveResults -> "LIVE RESULTS FROM OPENSTREETMAP"
+                            hasNoResults -> "NO RESULTS FOUND"
+                            else -> "MATCHING PLACES"
+                        },
+                        transitionSpec = {
+                            fadeIn(tween(200)) togetherWith fadeOut(tween(150))
+                        },
+                        label = "search_header"
+                    ) { label ->
+                        Text(
+                            text = label,
+                            color = VoltOnSurfaceVariant,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.5.sp,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
+                }
+
+                // ---- No results empty state ----
+                if (hasNoResults) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .clip(CircleShape)
-                                    .background(VoltPrimaryContainer),
-                                contentAlignment = Alignment.Center
-                            ) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(
-                                    imageVector = Icons.Filled.PinDrop,
+                                    imageVector = Icons.Filled.LocationOn,
                                     contentDescription = null,
-                                    tint = VoltOnPrimaryFixed,
-                                    modifier = Modifier.size(18.dp)
+                                    tint = VoltOnSurfaceVariant,
+                                    modifier = Modifier.size(40.dp)
                                 )
-                            }
-                            Column {
+                                Spacer(modifier = Modifier.height(12.dp))
                                 Text(
-                                    text = "Use typed destination:",
+                                    text = "No places found for",
                                     color = VoltOnSurfaceVariant,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold
+                                    fontSize = 14.sp
                                 )
                                 Text(
-                                    text = destinationText,
+                                    text = "\"$destinationText\"",
                                     color = VoltOnSurface,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Try a street name, suburb, city or landmark.",
+                                    color = VoltOnSurfaceVariant,
+                                    fontSize = 12.sp,
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                // ---- Live Nominatim result cards ----
+                if (hasLiveResults) {
+                    items(state.addressSuggestions, key = { it.placeId }) { suggestion ->
+                        LiveResultCard(
+                            suggestion = suggestion,
+                            onClick = {
+                                focusManager.clearFocus()
+                                viewModel.selectSuggestion(suggestion, pickup = pickupText)
+                            }
+                        )
+                    }
                 }
             }
 
-            // Results Section Title
+            // OSM attribution footer (required by Nominatim usage policy)
             item {
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = if (destinationText.isBlank()) "SUGGESTED DESTINATIONS" else "MATCHING PLACES",
-                    color = VoltOnSurfaceVariant,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-            }
-
-            // List of matching locations
-            items(filteredResults, key = { it.id }) { place ->
-                PlaceResultCard(
-                    place = place,
-                    onClick = {
-                        onSelectDestination(place.title, pickupText)
-                    }
+                    text = "Address data © OpenStreetMap contributors",
+                    color = VoltOnSurfaceVariant.copy(alpha = 0.55f),
+                    fontSize = 10.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                 )
             }
         }
     }
 }
 
+// ---------------------------------------------------------------------------
+// Quick shortcut pill
+// ---------------------------------------------------------------------------
 @Composable
 private fun QuickShortcutPill(
     icon: ImageVector,
@@ -620,9 +589,14 @@ private fun QuickShortcutPill(
     }
 }
 
+// ---------------------------------------------------------------------------
+// Static suggested place card (shown when query is blank)
+// ---------------------------------------------------------------------------
 @Composable
-private fun PlaceResultCard(
-    place: PlaceSearchResult,
+private fun SuggestedPlaceCard(
+    title: String,
+    subtitle: String,
+    icon: ImageVector,
     onClick: () -> Unit
 ) {
     Box(
@@ -632,14 +606,12 @@ private fun PlaceResultCard(
             .background(VoltSurfaceContainer)
             .clickable(onClick = onClick)
             .padding(12.dp)
-            .testTag("place_item_${place.id}")
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Place Icon Box
             Box(
                 modifier = Modifier
                     .size(42.dp)
@@ -648,17 +620,15 @@ private fun PlaceResultCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = place.icon,
+                    imageVector = icon,
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
             }
-
-            // Place Details
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = place.title,
+                    text = title,
                     color = VoltOnSurface,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -667,26 +637,159 @@ private fun PlaceResultCard(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = place.subtitle,
+                    text = subtitle,
                     color = VoltOnSurfaceVariant,
                     fontSize = 12.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            Icon(
+                imageVector = Icons.Filled.History,
+                contentDescription = null,
+                tint = VoltOnSurfaceVariant,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+    }
+}
 
-            // Distance and ETA Pill
-            Column(horizontalAlignment = Alignment.End) {
+// ---------------------------------------------------------------------------
+// Direct confirm card (use exactly what was typed)
+// ---------------------------------------------------------------------------
+@Composable
+private fun DirectConfirmCard(
+    query: String,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(VoltPrimaryContainer.copy(alpha = 0.18f))
+            .border(1.dp, VoltPrimaryContainer.copy(alpha = 0.4f), RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick)
+            .padding(14.dp)
+            .testTag("use_typed_destination_btn")
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(VoltPrimaryContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.PinDrop,
+                    contentDescription = null,
+                    tint = VoltOnPrimaryFixed,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+            Column {
                 Text(
-                    text = place.distance,
-                    color = VoltPrimaryContainer,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
+                    text = "GO TO THIS ADDRESS",
+                    color = VoltOnSurfaceVariant,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.5.sp
                 )
                 Text(
-                    text = place.eta,
-                    color = VoltOnSurfaceVariant,
-                    fontSize = 11.sp
+                    text = query,
+                    color = VoltOnSurface,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Live Nominatim result card
+// ---------------------------------------------------------------------------
+@Composable
+private fun LiveResultCard(
+    suggestion: NominatimSuggestion,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(VoltSurfaceContainer)
+            .clickable(onClick = onClick)
+            .padding(12.dp)
+            .testTag("live_result_${suggestion.placeId}")
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Pin icon box
+            Box(
+                modifier = Modifier
+                    .size(42.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(VoltSurfaceContainerHigh),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = when (suggestion.type) {
+                        "aerodrome", "airport" -> Icons.Filled.Flight
+                        "station", "halt", "tram_stop" -> Icons.Filled.Train
+                        "beach" -> Icons.Filled.BeachAccess
+                        "mall", "supermarket", "shop", "marketplace" -> Icons.Filled.Storefront
+                        else -> Icons.Filled.LocationOn
+                    },
+                    contentDescription = null,
+                    tint = IceBlue,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            // Address details
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = suggestion.shortLabel.ifBlank { suggestion.displayName.take(50) },
+                    color = VoltOnSurface,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                if (suggestion.subLabel.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = suggestion.subLabel,
+                        color = VoltOnSurfaceVariant,
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+
+            // OSM verified marker
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(VoltSurfaceContainerHigh)
+                    .padding(horizontal = 6.dp, vertical = 3.dp)
+            ) {
+                Text(
+                    text = "OSM",
+                    color = IceBlue,
+                    fontSize = 9.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.5.sp
                 )
             }
         }
