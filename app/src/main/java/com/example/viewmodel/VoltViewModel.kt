@@ -12,6 +12,7 @@ import com.example.model.DriverOnboardingState
 import com.example.model.DriverScreenTab
 import com.example.model.DriverStatus
 import com.example.model.DriverTripOffer
+import com.example.model.NominatimSuggestion
 import com.example.model.RidePhase
 import com.example.model.RideTierType
 import com.example.model.RiderIdDocType
@@ -70,6 +71,12 @@ data class VoltUiState(
     val isLocating: Boolean = false,
     val pickupLocation: String = "Locating...",
     val destinationLocation: String = "O.R. Tambo Int'l Airport (Terminal A)",
+    // Real geocoded destination coordinates (null = not yet resolved or uses keyword fallback)
+    val destinationLat: Double? = null,
+    val destinationLon: Double? = null,
+    // Live Nominatim address search state
+    val addressSuggestions: List<NominatimSuggestion> = emptyList(),
+    val isSuggestionsLoading: Boolean = false,
     val trips: List<TripHistoryItem> = emptyList(),
     val isDriverOnboardingActive: Boolean = false,
     val driverState: DriverOnboardingState = DriverOnboardingState(),
@@ -395,18 +402,78 @@ class VoltViewModel : ViewModel() {
         _uiState.update {
             it.copy(
                 destinationLocation = destination,
+                // Clear geocoded coords when setting via string — they'll be resolved on next search
+                destinationLat = null,
+                destinationLon = null,
                 pickupLocation = if (!pickup.isNullOrBlank()) pickup else it.pickupLocation,
                 isSearchDestinationActive = false,
+                addressSuggestions = emptyList(),
+                isSuggestionsLoading = false,
                 currentTab = VoltScreenTab.RIDES
             )
         }
         showToast("Route updated: $destination")
     }
 
+    /**
+     * Selects a Nominatim geocoded suggestion as the confirmed destination.
+     * Stores both the display address string and the real lat/lon coordinates so
+     * the map can draw the route to the exact geocoded position.
+     */
+    fun selectSuggestion(suggestion: NominatimSuggestion, pickup: String? = null) {
+        _uiState.update {
+            it.copy(
+                destinationLocation = suggestion.shortLabel.ifBlank { suggestion.displayName },
+                destinationLat = suggestion.lat,
+                destinationLon = suggestion.lon,
+                pickupLocation = if (!pickup.isNullOrBlank()) pickup else it.pickupLocation,
+                isSearchDestinationActive = false,
+                addressSuggestions = emptyList(),
+                isSuggestionsLoading = false,
+                currentTab = VoltScreenTab.RIDES
+            )
+        }
+        showToast("Route set: ${suggestion.shortLabel}")
+    }
+
+    /** Debounce job for address search to avoid flooding Nominatim */
+    private var searchJob: Job? = null
+
+    /**
+     * Triggers a debounced live Nominatim address search.
+     * Cancels any in-flight search before launching a new one after 400ms.
+     * Clears suggestions immediately if [query] is blank.
+     */
+    fun searchAddresses(query: String) {
+        searchJob?.cancel()
+        if (query.isBlank()) {
+            _uiState.update { it.copy(addressSuggestions = emptyList(), isSuggestionsLoading = false) }
+            return
+        }
+        _uiState.update { it.copy(isSuggestionsLoading = true) }
+        searchJob = viewModelScope.launch {
+            delay(400L) // debounce
+            val results = LocationRepository.searchAddresses(query, limit = 7, globalFallback = true)
+            _uiState.update {
+                it.copy(
+                    addressSuggestions = results,
+                    isSuggestionsLoading = false
+                )
+            }
+        }
+    }
+
+    /** Clears the live suggestion list without changing the selected destination. */
+    fun clearAddressSuggestions() {
+        searchJob?.cancel()
+        _uiState.update { it.copy(addressSuggestions = emptyList(), isSuggestionsLoading = false) }
+    }
+
     fun updatePickupLocation(pickup: String) {
         _uiState.update { it.copy(pickupLocation = pickup) }
         showToast("Pickup updated: $pickup")
     }
+
 
     fun selectPaymentMethod(method: String) {
         _uiState.update { it.copy(selectedPaymentMethod = method) }

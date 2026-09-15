@@ -244,3 +244,25 @@ data class DriverDailyEarning(
     val amountRands: Int,
     val tripsCount: Int
 )
+
+/**
+ * A single address suggestion returned by the Nominatim OpenStreetMap geocoding API.
+ *
+ * @param placeId   Nominatim internal place identifier (unique per result).
+ * @param displayName Full formatted address string from Nominatim.
+ * @param shortLabel Condensed 1-line label suitable for showing in search results (road + suburb or city).
+ * @param subLabel   Secondary line detail (city / region).
+ * @param lat        Latitude of the geocoded location.
+ * @param lon        Longitude of the geocoded location.
+ * @param type       Place category (e.g. "amenity", "highway", "suburb").
+ */
+data class NominatimSuggestion(
+    val placeId: Long,
+    val displayName: String,
+    val shortLabel: String,
+    val subLabel: String,
+    val lat: Double,
+    val lon: Double,
+    val type: String = ""
+)
+
