@@ -9,17 +9,30 @@ import {
   View,
 } from "react-native";
 
-export default function DriverNavigationScreen({ navigation }) {
+export default function DriverActiveTripScreen({ navigation }) {
   const handleCall = () => {
     Alert.alert("Call Rider", "Calling the rider will be connected later.");
   };
 
-  const handleMessage = () => {
-    Alert.alert("Message Rider", "Messaging will be connected later.");
+  const handleSafety = () => {
+    Alert.alert("Safety Centre", "Safety tools will be connected later.");
   };
 
-  const handleArrived = () => {
-    navigation.navigate("DriverActiveTrip");
+  const handleCompleteTrip = () => {
+    Alert.alert(
+      "Complete Trip",
+      "This is a visual prototype. Trip completion will be connected later.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Continue",
+          onPress: () => navigation.navigate("DriverTripCompleted"),
+        },
+      ],
+    );
   };
 
   return (
@@ -35,28 +48,28 @@ export default function DriverNavigationScreen({ navigation }) {
           {/* Header */}
           <View style={styles.header}>
             <View>
-              <Text style={styles.headerLabel}>ON THE WAY</Text>
-              <Text style={styles.headerTitle}>Pick up Naledi</Text>
+              <Text style={styles.headerLabel}>ACTIVE TRIP</Text>
+              <Text style={styles.headerTitle}>Driving to Sandton</Text>
             </View>
 
-            <View style={styles.statusBadge}>
-              <View style={styles.statusDot} />
-              <Text style={styles.statusBadgeText}>EN ROUTE</Text>
+            <View style={styles.tripBadge}>
+              <View style={styles.tripBadgeDot} />
+              <Text style={styles.tripBadgeText}>IN TRIP</Text>
             </View>
           </View>
 
-          {/* ETA Card */}
+          {/* ETA */}
           <View style={styles.etaCard}>
             <View style={styles.etaMain}>
-              <Text style={styles.etaValue}>6 min</Text>
+              <Text style={styles.etaValue}>12 min</Text>
               <Text style={styles.etaLabel}>Estimated arrival</Text>
             </View>
 
             <View style={styles.etaDivider} />
 
             <View style={styles.etaSecondary}>
-              <Text style={styles.etaDistance}>2.1 km</Text>
-              <Text style={styles.etaLabel}>To pickup</Text>
+              <Text style={styles.distanceValue}>5.8 km</Text>
+              <Text style={styles.etaLabel}>Remaining</Text>
             </View>
           </View>
 
@@ -71,31 +84,47 @@ export default function DriverNavigationScreen({ navigation }) {
             <View style={styles.mapCircleTwo} />
             <View style={styles.mapCircleThree} />
 
-            <View style={styles.routeLineOne} />
-            <View style={styles.routeLineTwo} />
+            <View style={styles.routeSegmentOne} />
+            <View style={styles.routeSegmentTwo} />
+            <View style={styles.routeSegmentThree} />
 
             <View style={styles.driverLocation}>
-              <View style={styles.driverLocationArrow}>
-                <Text style={styles.driverLocationArrowText}>▲</Text>
+              <View style={styles.driverArrow}>
+                <Text style={styles.driverArrowText}>▲</Text>
               </View>
             </View>
 
-            <View style={styles.pickupPin}>
-              <Text style={styles.pickupPinText}>P</Text>
+            <View style={styles.destinationPin}>
+              <Text style={styles.destinationPinText}>D</Text>
             </View>
 
             <View style={styles.mapLabel}>
-              <Text style={styles.mapLabelText}>Pickup route</Text>
+              <Text style={styles.mapLabelText}>Trip in progress</Text>
             </View>
 
-            <View style={styles.navigationButton}>
-              <Text style={styles.navigationIcon}>↗</Text>
-            </View>
+            <TouchableOpacity
+              style={styles.recenterButton}
+              activeOpacity={0.85}
+              onPress={() =>
+                Alert.alert(
+                  "Recenter Map",
+                  "Map controls will be connected later.",
+                )
+              }
+            >
+              <Text style={styles.recenterIcon}>⌖</Text>
+            </TouchableOpacity>
           </View>
 
-          {/* Rider Card */}
+          {/* Rider */}
           <View style={styles.card}>
-            <Text style={styles.sectionLabel}>RIDER</Text>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionLabel}>RIDER</Text>
+
+              <View style={styles.verifiedBadge}>
+                <Text style={styles.verifiedText}>✓ VERIFIED</Text>
+              </View>
+            </View>
 
             <View style={styles.riderRow}>
               <View style={styles.avatar}>
@@ -112,93 +141,102 @@ export default function DriverNavigationScreen({ navigation }) {
                 </View>
               </View>
 
-              <View style={styles.riderActions}>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  activeOpacity={0.85}
-                  onPress={handleCall}
-                >
-                  <Text style={styles.actionIcon}>☎</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  activeOpacity={0.85}
-                  onPress={handleMessage}
-                >
-                  <Text style={styles.actionIcon}>✉</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={styles.callButton}
+                activeOpacity={0.85}
+                onPress={handleCall}
+              >
+                <Text style={styles.callIcon}>☎</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
-          {/* Pickup Location */}
+          {/* Destination */}
           <View style={styles.card}>
-            <Text style={styles.sectionLabel}>PICKUP LOCATION</Text>
+            <Text style={styles.sectionLabel}>DESTINATION</Text>
 
-            <View style={styles.locationRow}>
-              <View style={styles.locationPin}>
-                <Text style={styles.locationPinText}>P</Text>
+            <View style={styles.destinationRow}>
+              <View style={styles.destinationIcon}>
+                <Text style={styles.destinationIconText}>D</Text>
               </View>
 
-              <View style={styles.locationDetails}>
-                <Text style={styles.locationName}>Rosebank Mall</Text>
-                <Text style={styles.locationAddress}>
-                  15A Cradock Avenue, Rosebank
+              <View style={styles.destinationDetails}>
+                <Text style={styles.destinationName}>Sandton City</Text>
+                <Text style={styles.destinationAddress}>
+                  83 Rivonia Road, Sandton
                 </Text>
               </View>
             </View>
 
-            <View style={styles.locationDivider} />
+            <View style={styles.destinationDivider} />
 
-            <View style={styles.instructionRow}>
-              <Text style={styles.instructionIcon}>ⓘ</Text>
+            <View style={styles.routeStatusRow}>
+              <View style={styles.routeStatusIcon}>
+                <Text style={styles.routeStatusIconText}>→</Text>
+              </View>
 
-              <Text style={styles.instructionText}>
-                Look out for your rider near the main entrance.
-              </Text>
+              <View style={styles.routeStatusContent}>
+                <Text style={styles.routeStatusTitle}>
+                  Heading to destination
+                </Text>
+                <Text style={styles.routeStatusText}>
+                  Continue following the route to complete the trip.
+                </Text>
+              </View>
             </View>
           </View>
 
-          {/* Trip Information */}
-          <View style={styles.tripInfoRow}>
-            <View style={styles.tripInfoCard}>
-              <Text style={styles.tripInfoIcon}>💰</Text>
-              <Text style={styles.tripInfoValue}>R125</Text>
-              <Text style={styles.tripInfoLabel}>Estimated fare</Text>
+          {/* Trip Summary */}
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryCard}>
+              <Text style={styles.summaryIcon}>💰</Text>
+              <Text style={styles.summaryValue}>R125</Text>
+              <Text style={styles.summaryLabel}>Estimated fare</Text>
             </View>
 
-            <View style={styles.tripInfoCard}>
-              <Text style={styles.tripInfoIcon}>📍</Text>
-              <Text style={styles.tripInfoValue}>Sandton</Text>
-              <Text style={styles.tripInfoLabel}>Destination</Text>
+            <View style={styles.summaryCard}>
+              <Text style={styles.summaryIcon}>📏</Text>
+              <Text style={styles.summaryValue}>8.4 km</Text>
+              <Text style={styles.summaryLabel}>Total distance</Text>
+            </View>
+
+            <View style={styles.summaryCard}>
+              <Text style={styles.summaryIcon}>⏱️</Text>
+              <Text style={styles.summaryValue}>18 min</Text>
+              <Text style={styles.summaryLabel}>Trip estimate</Text>
             </View>
           </View>
 
-          {/* Safety Notice */}
-          <View style={styles.safetyCard}>
+          {/* Safety */}
+          <TouchableOpacity
+            style={styles.safetyCard}
+            activeOpacity={0.85}
+            onPress={handleSafety}
+          >
             <View style={styles.safetyIcon}>
-              <Text style={styles.safetyIconText}>✓</Text>
+              <Text style={styles.safetyIconText}>🛡</Text>
             </View>
 
             <View style={styles.safetyContent}>
-              <Text style={styles.safetyTitle}>Drive safely</Text>
+              <Text style={styles.safetyTitle}>Safety Centre</Text>
               <Text style={styles.safetyText}>
-                Follow the road rules and never use your phone while driving.
+                Access safety tools and support during your trip.
               </Text>
             </View>
-          </View>
+
+            <Text style={styles.safetyArrow}>→</Text>
+          </TouchableOpacity>
         </ScrollView>
 
         {/* Bottom Action */}
         <View style={styles.bottomAction}>
           <TouchableOpacity
-            style={styles.arrivedButton}
+            style={styles.completeButton}
             activeOpacity={0.85}
-            onPress={handleArrived}
+            onPress={handleCompleteTrip}
           >
-            <Text style={styles.arrivedButtonText}>I’ve Arrived at Pickup</Text>
-            <Text style={styles.arrivedButtonArrow}>→</Text>
+            <Text style={styles.completeButtonText}>Complete Trip</Text>
+            <Text style={styles.completeButtonArrow}>→</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -248,7 +286,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
 
-  statusBadge: {
+  tripBadge: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
@@ -259,7 +297,7 @@ const styles = StyleSheet.create({
     borderColor: "#1D4775",
   },
 
-  statusDot: {
+  tripBadgeDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
@@ -267,7 +305,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
 
-  statusBadgeText: {
+  tripBadgeText: {
     fontSize: 9,
     fontWeight: "800",
     color: "#5BC0FF",
@@ -296,7 +334,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
 
-  etaDistance: {
+  distanceValue: {
     fontSize: 18,
     fontWeight: "800",
     color: "#FFFFFF",
@@ -321,7 +359,7 @@ const styles = StyleSheet.create({
 
   mapContainer: {
     width: "100%",
-    height: 250,
+    height: 260,
     backgroundColor: "#102A52",
     borderRadius: 20,
     overflow: "hidden",
@@ -333,22 +371,22 @@ const styles = StyleSheet.create({
 
   mapRoadOne: {
     position: "absolute",
-    width: "130%",
+    width: "135%",
     height: 22,
     backgroundColor: "#1D4775",
-    top: 78,
-    left: -35,
-    transform: [{ rotate: "9deg" }],
+    top: 83,
+    left: -40,
+    transform: [{ rotate: "8deg" }],
   },
 
   mapRoadTwo: {
     position: "absolute",
     width: 19,
-    height: "130%",
+    height: "135%",
     backgroundColor: "#1D4775",
-    left: 132,
-    top: -25,
-    transform: [{ rotate: "21deg" }],
+    left: 128,
+    top: -30,
+    transform: [{ rotate: "20deg" }],
   },
 
   mapRoadThree: {
@@ -356,81 +394,91 @@ const styles = StyleSheet.create({
     width: "125%",
     height: 13,
     backgroundColor: "#173C68",
-    top: 155,
-    left: -35,
-    transform: [{ rotate: "-19deg" }],
+    top: 165,
+    left: -25,
+    transform: [{ rotate: "-21deg" }],
   },
 
   mapRoadFour: {
     position: "absolute",
-    width: "100%",
+    width: "105%",
     height: 12,
     backgroundColor: "#173C68",
-    bottom: 38,
-    left: 25,
-    transform: [{ rotate: "27deg" }],
+    bottom: 37,
+    left: 15,
+    transform: [{ rotate: "28deg" }],
   },
 
   mapCircleOne: {
     position: "absolute",
-    width: 75,
-    height: 75,
-    borderRadius: 38,
+    width: 78,
+    height: 78,
+    borderRadius: 39,
     borderWidth: 11,
     borderColor: "#173C68",
-    top: 14,
-    left: 25,
+    top: 13,
+    left: 23,
   },
 
   mapCircleTwo: {
     position: "absolute",
-    width: 88,
-    height: 88,
-    borderRadius: 44,
+    width: 92,
+    height: 92,
+    borderRadius: 46,
     borderWidth: 13,
     borderColor: "#173C68",
     bottom: -35,
-    right: 8,
+    right: 7,
   },
 
   mapCircleThree: {
     position: "absolute",
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 54,
+    height: 54,
+    borderRadius: 27,
     borderWidth: 8,
     borderColor: "#173C68",
-    top: 112,
-    right: 25,
+    top: 116,
+    right: 22,
   },
 
-  routeLineOne: {
+  routeSegmentOne: {
     position: "absolute",
-    width: 118,
+    width: 92,
     height: 4,
     backgroundColor: "#5BC0FF",
-    left: 74,
-    top: 117,
-    transform: [{ rotate: "25deg" }],
+    left: 67,
+    top: 119,
+    transform: [{ rotate: "24deg" }],
   },
 
-  routeLineTwo: {
+  routeSegmentTwo: {
     position: "absolute",
-    width: 72,
+    width: 95,
     height: 4,
     backgroundColor: "#5BC0FF",
-    left: 157,
-    top: 153,
-    transform: [{ rotate: "-34deg" }],
+    left: 125,
+    top: 157,
+    transform: [{ rotate: "-24deg" }],
+  },
+
+  routeSegmentThree: {
+    position: "absolute",
+    width: 66,
+    height: 4,
+    backgroundColor: "#5BC0FF",
+    left: 200,
+    top: 120,
+    transform: [{ rotate: "38deg" }],
   },
 
   driverLocation: {
     position: "absolute",
-    left: 54,
-    top: 100,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    left: 48,
+    top: 93,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     backgroundColor: "#071A3D",
     borderWidth: 2,
     borderColor: "#5BC0FF",
@@ -438,36 +486,36 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  driverLocationArrow: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+  driverArrow: {
+    width: 31,
+    height: 31,
+    borderRadius: 16,
     backgroundColor: "#5BC0FF",
     alignItems: "center",
     justifyContent: "center",
   },
 
-  driverLocationArrowText: {
+  driverArrowText: {
     fontSize: 13,
     color: "#071A3D",
     marginLeft: 1,
   },
 
-  pickupPin: {
+  destinationPin: {
     position: "absolute",
-    right: 52,
-    bottom: 50,
+    right: 48,
+    bottom: 49,
     width: 42,
     height: 42,
     borderRadius: 21,
     backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center",
     borderWidth: 3,
     borderColor: "#5BC0FF",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
-  pickupPinText: {
+  destinationPinText: {
     fontSize: 14,
     fontWeight: "800",
     color: "#071A3D",
@@ -488,7 +536,7 @@ const styles = StyleSheet.create({
     color: "#C9D6E8",
   },
 
-  navigationButton: {
+  recenterButton: {
     position: "absolute",
     right: 12,
     top: 12,
@@ -496,15 +544,14 @@ const styles = StyleSheet.create({
     height: 42,
     borderRadius: 14,
     backgroundColor: "#071A3D",
-    alignItems: "center",
-    justifyContent: "center",
     borderWidth: 1,
     borderColor: "#1D4775",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
-  navigationIcon: {
-    fontSize: 21,
-    fontWeight: "800",
+  recenterIcon: {
+    fontSize: 22,
     color: "#5BC0FF",
   },
 
@@ -518,12 +565,34 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
 
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 13,
+  },
+
   sectionLabel: {
     fontSize: 10,
     fontWeight: "800",
     color: "#8FA5C1",
     letterSpacing: 0.8,
-    marginBottom: 13,
+  },
+
+  verifiedBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 8,
+    backgroundColor: "#071A3D",
+    borderWidth: 1,
+    borderColor: "#1D4775",
+  },
+
+  verifiedText: {
+    fontSize: 8,
+    fontWeight: "800",
+    color: "#5BC0FF",
+    letterSpacing: 0.4,
   },
 
   riderRow: {
@@ -581,12 +650,7 @@ const styles = StyleSheet.create({
     color: "#8FA5C1",
   },
 
-  riderActions: {
-    flexDirection: "row",
-    gap: 8,
-  },
-
-  actionButton: {
+  callButton: {
     width: 42,
     height: 42,
     borderRadius: 13,
@@ -597,17 +661,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  actionIcon: {
+  callIcon: {
     fontSize: 17,
     color: "#5BC0FF",
   },
 
-  locationRow: {
+  destinationRow: {
     flexDirection: "row",
     alignItems: "center",
   },
 
-  locationPin: {
+  destinationIcon: {
     width: 42,
     height: 42,
     borderRadius: 14,
@@ -617,83 +681,105 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
 
-  locationPinText: {
+  destinationIconText: {
     fontSize: 14,
     fontWeight: "800",
     color: "#071A3D",
   },
 
-  locationDetails: {
+  destinationDetails: {
     flex: 1,
   },
 
-  locationName: {
+  destinationName: {
     fontSize: 15,
     fontWeight: "800",
     color: "#FFFFFF",
     marginBottom: 4,
   },
 
-  locationAddress: {
+  destinationAddress: {
     fontSize: 11,
     lineHeight: 16,
     color: "#8FA5C1",
   },
 
-  locationDivider: {
+  destinationDivider: {
     height: 1,
     backgroundColor: "#1D4775",
     marginVertical: 14,
   },
 
-  instructionRow: {
+  routeStatusRow: {
     flexDirection: "row",
     alignItems: "flex-start",
   },
 
-  instructionIcon: {
-    fontSize: 15,
-    color: "#5BC0FF",
-    marginRight: 9,
+  routeStatusIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "#071A3D",
+    borderWidth: 1,
+    borderColor: "#1D4775",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
   },
 
-  instructionText: {
+  routeStatusIconText: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#5BC0FF",
+  },
+
+  routeStatusContent: {
     flex: 1,
+  },
+
+  routeStatusTitle: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: "#FFFFFF",
+    marginBottom: 4,
+  },
+
+  routeStatusText: {
     fontSize: 11,
-    lineHeight: 17,
+    lineHeight: 16,
     color: "#8FA5C1",
   },
 
-  tripInfoRow: {
+  summaryRow: {
     flexDirection: "row",
-    gap: 10,
+    gap: 9,
     marginBottom: 14,
   },
 
-  tripInfoCard: {
+  summaryCard: {
     flex: 1,
-    minHeight: 100,
+    minHeight: 104,
     backgroundColor: "#102A52",
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "#1D4775",
-    padding: 12,
+    padding: 11,
     justifyContent: "center",
   },
 
-  tripInfoIcon: {
+  summaryIcon: {
     fontSize: 16,
     marginBottom: 7,
   },
 
-  tripInfoValue: {
+  summaryValue: {
     fontSize: 14,
     fontWeight: "800",
     color: "#FFFFFF",
     marginBottom: 3,
   },
 
-  tripInfoLabel: {
+  summaryLabel: {
     fontSize: 10,
     color: "#8FA5C1",
   },
@@ -701,6 +787,7 @@ const styles = StyleSheet.create({
   safetyCard: {
     width: "100%",
     flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#0A2147",
     borderRadius: 16,
     borderWidth: 1,
@@ -709,19 +796,19 @@ const styles = StyleSheet.create({
   },
 
   safetyIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#5BC0FF",
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#071A3D",
+    borderWidth: 1,
+    borderColor: "#1D4775",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
   },
 
   safetyIconText: {
-    fontSize: 15,
-    fontWeight: "800",
-    color: "#071A3D",
+    fontSize: 16,
   },
 
   safetyContent: {
@@ -741,6 +828,13 @@ const styles = StyleSheet.create({
     color: "#8FA5C1",
   },
 
+  safetyArrow: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#5BC0FF",
+    marginLeft: 8,
+  },
+
   bottomAction: {
     position: "absolute",
     left: 0,
@@ -754,7 +848,7 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
   },
 
-  arrivedButton: {
+  completeButton: {
     height: 54,
     borderRadius: 16,
     backgroundColor: "#5BC0FF",
@@ -763,13 +857,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  arrivedButtonText: {
+  completeButtonText: {
     fontSize: 15,
     fontWeight: "800",
     color: "#071A3D",
   },
 
-  arrivedButtonArrow: {
+  completeButtonArrow: {
     fontSize: 20,
     fontWeight: "800",
     color: "#071A3D",
