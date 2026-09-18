@@ -133,7 +133,10 @@ export default function DriverHomeScreen({ navigation }) {
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Recent activity</Text>
 
-              <TouchableOpacity activeOpacity={0.8}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate("DriverTrips")}
+              >
                 <Text style={styles.viewAllText}>View all</Text>
               </TouchableOpacity>
             </View>
@@ -173,7 +176,11 @@ export default function DriverHomeScreen({ navigation }) {
             <Text style={styles.navTextActive}>Home</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={styles.navItem}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("DriverTrips")}
+          >
             <Text style={styles.navIcon}>◷</Text>
             <Text style={styles.navText}>Trips</Text>
           </TouchableOpacity>
