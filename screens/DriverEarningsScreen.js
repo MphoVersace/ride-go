@@ -33,6 +33,11 @@ export default function DriverEarningsScreen({ navigation }) {
       route: "Rosebank Mall → Sandton City",
       time: "Today • 14:25",
       amount: "R125",
+      netAmount: "R104",
+      rideEarnings: "R125",
+      rideGoFee: "-R21",
+      distance: "8.4 km",
+      duration: "18 min",
       status: "Completed",
     },
     {
@@ -40,6 +45,11 @@ export default function DriverEarningsScreen({ navigation }) {
       route: "Melrose Arch → Rosebank",
       time: "Today • 12:10",
       amount: "R98",
+      netAmount: "R81",
+      rideEarnings: "R98",
+      rideGoFee: "-R17",
+      distance: "6.1 km",
+      duration: "15 min",
       status: "Completed",
     },
     {
@@ -47,6 +57,11 @@ export default function DriverEarningsScreen({ navigation }) {
       route: "Sandton City → Midrand",
       time: "Yesterday • 18:40",
       amount: "R164",
+      netAmount: "R136",
+      rideEarnings: "R164",
+      rideGoFee: "-R28",
+      distance: "12.7 km",
+      duration: "26 min",
       status: "Completed",
     },
     {
@@ -54,9 +69,33 @@ export default function DriverEarningsScreen({ navigation }) {
       route: "Fourways Mall → Bryanston",
       time: "Yesterday • 16:15",
       amount: "R112",
+      netAmount: "R93",
+      rideEarnings: "R112",
+      rideGoFee: "-R19",
+      distance: "7.8 km",
+      duration: "19 min",
       status: "Completed",
     },
   ];
+
+  const handleEarningPress = (item) => {
+    navigation.navigate("DriverEarningsDetails", {
+      earning: {
+        rider: item.rider,
+        pickup: item.route.split(" → ")[0],
+        destination: item.route.split(" → ")[1],
+        date: item.time.split(" • ")[0],
+        time: item.time.split(" • ")[1],
+        fare: item.amount,
+        distance: item.distance,
+        duration: item.duration,
+        rideEarnings: item.rideEarnings,
+        rideGoFee: item.rideGoFee,
+        netEarnings: item.netAmount,
+        status: item.status,
+      },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
@@ -201,21 +240,7 @@ export default function DriverEarningsScreen({ navigation }) {
                   <TouchableOpacity
                     style={styles.activityRow}
                     activeOpacity={0.8}
-                    onPress={() =>
-                      navigation.navigate("DriverTripDetails", {
-                        trip: {
-                          rider: item.rider,
-                          pickup: item.route.split(" → ")[0],
-                          destination: item.route.split(" → ")[1],
-                          date: item.time.split(" • ")[0],
-                          time: item.time.split(" • ")[1],
-                          fare: item.amount,
-                          distance: "8.4 km",
-                          duration: "18 min",
-                          status: item.status,
-                        },
-                      })
-                    }
+                    onPress={() => handleEarningPress(item)}
                   >
                     <View style={styles.activityIcon}>
                       <Text style={styles.activityIconText}>✓</Text>
