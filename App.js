@@ -50,6 +50,7 @@ import DriverEditProfileScreen from "./screens/DriverEditProfileScreen";
 import DriverVehicleScreen from "./screens/DriverVehicleScreen";
 import DriverDocumentsScreen from "./screens/DriverDocumentsScreen";
 import DriverNotificationsScreen from "./screens/DriverNotificationsScreen";
+import DriverSafetyScreen from "./screens/DriverSafetyScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -312,6 +313,8 @@ export default function App() {
           name="DriverNotifications"
           component={DriverNotificationsScreen}
         />
+
+        <Stack.Screen name="DriverSafety" component={DriverSafetyScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
