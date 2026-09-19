@@ -51,8 +51,8 @@ import DriverVehicleScreen from "./screens/DriverVehicleScreen";
 import DriverDocumentsScreen from "./screens/DriverDocumentsScreen";
 import DriverNotificationsScreen from "./screens/DriverNotificationsScreen";
 import DriverSafetyScreen from "./screens/DriverSafetyScreen";
-
-const Stack = createNativeStackNavigator();
+import DriverHelpScreen from "./screens/DriverHelpScreen";
+import DriverSettingsScreen from "./screens/DriverSettingsScreen";const Stack = createNativeStackNavigator();
 
 function SplashOnboardingScreen({ navigation }) {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -315,6 +315,10 @@ export default function App() {
         />
 
         <Stack.Screen name="DriverSafety" component={DriverSafetyScreen} />
+
+        <Stack.Screen name="DriverHelp" component={DriverHelpScreen} />
+        
+        <Stack.Screen name="DriverSettings" component={DriverSettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
