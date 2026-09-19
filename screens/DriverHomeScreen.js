@@ -185,7 +185,11 @@ export default function DriverHomeScreen({ navigation }) {
             <Text style={styles.navText}>Trips</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={styles.navItem}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("DriverEarnings")}
+          >
             <Text style={styles.navIcon}>R</Text>
             <Text style={styles.navText}>Earnings</Text>
           </TouchableOpacity>

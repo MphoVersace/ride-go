@@ -43,6 +43,7 @@ import DriverActiveTripScreen from "./screens/DriverActiveTripScreen";
 import DriverTripCompletedScreen from "./screens/DriverTripCompletedScreen";
 import DriverTripsScreen from "./screens/DriverTripsScreen";
 import DriverTripDetailsScreen from "./screens/DriverTripDetailsScreen";
+import DriverEarningsScreen from "./screens/DriverEarningsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -279,6 +280,8 @@ export default function App() {
           name="DriverTripDetails"
           component={DriverTripDetailsScreen}
         />
+
+        <Stack.Screen name="DriverEarnings" component={DriverEarningsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
