@@ -45,7 +45,10 @@ import DriverTripsScreen from "./screens/DriverTripsScreen";
 import DriverTripDetailsScreen from "./screens/DriverTripDetailsScreen";
 import DriverEarningsScreen from "./screens/DriverEarningsScreen";
 import DriverEarningsDetailsScreen from "./screens/DriverEarningsDetailsScreen";
-
+import DriverProfileScreen from "./screens/DriverProfileScreen";
+import DriverEditProfileScreen from "./screens/DriverEditProfileScreen";
+import DriverVehicleScreen from "./screens/DriverVehicleScreen";
+import DriverDocumentsScreen from "./screens/DriverDocumentsScreen";
 const Stack = createNativeStackNavigator();
 
 function SplashOnboardingScreen({ navigation }) {
@@ -289,7 +292,19 @@ export default function App() {
           component={DriverEarningsDetailsScreen}
         />
 
-        
+        <Stack.Screen name="DriverProfile" component={DriverProfileScreen} />
+
+        <Stack.Screen
+          name="DriverEditProfile"
+          component={DriverEditProfileScreen}
+        />
+
+        <Stack.Screen name="DriverVehicle" component={DriverVehicleScreen} />
+
+        <Stack.Screen
+          name="DriverDocuments"
+          component={DriverDocumentsScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
