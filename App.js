@@ -49,6 +49,8 @@ import DriverProfileScreen from "./screens/DriverProfileScreen";
 import DriverEditProfileScreen from "./screens/DriverEditProfileScreen";
 import DriverVehicleScreen from "./screens/DriverVehicleScreen";
 import DriverDocumentsScreen from "./screens/DriverDocumentsScreen";
+import DriverNotificationsScreen from "./screens/DriverNotificationsScreen";
+
 const Stack = createNativeStackNavigator();
 
 function SplashOnboardingScreen({ navigation }) {
@@ -304,6 +306,11 @@ export default function App() {
         <Stack.Screen
           name="DriverDocuments"
           component={DriverDocumentsScreen}
+        />
+
+        <Stack.Screen
+          name="DriverNotifications"
+          component={DriverNotificationsScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
