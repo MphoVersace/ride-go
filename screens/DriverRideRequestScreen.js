@@ -1,4 +1,6 @@
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   SafeAreaView,
   ScrollView,
@@ -10,6 +12,16 @@ import {
 } from "react-native";
 
 export default function DriverRideRequestScreen({ navigation }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadingTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 900);
+
+    return () => clearTimeout(loadingTimer);
+  }, []);
+
   const handleDecline = () => {
     Alert.alert(
       "Ride Declined",
@@ -20,6 +32,32 @@ export default function DriverRideRequestScreen({ navigation }) {
   const handleAccept = () => {
     navigation.navigate("DriverNavigation");
   };
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.loadingSafeArea}>
+        <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+
+        <View style={styles.loadingContainer}>
+          <View style={styles.loadingLogoCircle}>
+            <Text style={styles.loadingLogoText}>R</Text>
+          </View>
+
+          <Text style={styles.loadingTitle}>RideGo</Text>
+
+          <Text style={styles.loadingSubtitle}>
+            Preparing your ride request...
+          </Text>
+
+          <ActivityIndicator
+            size="small"
+            color="#5BC0FF"
+            style={styles.loadingIndicator}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -191,6 +229,52 @@ export default function DriverRideRequestScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  loadingSafeArea: {
+    flex: 1,
+    backgroundColor: "#071A3D",
+  },
+
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#071A3D",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 24,
+  },
+
+  loadingLogoCircle: {
+    width: 74,
+    height: 74,
+    borderRadius: 37,
+    backgroundColor: "#5BC0FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 18,
+  },
+
+  loadingLogoText: {
+    fontSize: 34,
+    fontWeight: "900",
+    color: "#071A3D",
+  },
+
+  loadingTitle: {
+    fontSize: 25,
+    fontWeight: "800",
+    color: "#FFFFFF",
+    marginBottom: 6,
+  },
+
+  loadingSubtitle: {
+    fontSize: 13,
+    color: "#8FA5C1",
+    textAlign: "center",
+  },
+
+  loadingIndicator: {
+    marginTop: 18,
+  },
+
   safeArea: {
     flex: 1,
     backgroundColor: "#071A3D",

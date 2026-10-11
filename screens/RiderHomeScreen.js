@@ -1,4 +1,6 @@
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,6 +11,41 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RiderHomeScreen({ navigation }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadingTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 900);
+
+    return () => clearTimeout(loadingTimer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={["top"]}>
+        <View style={styles.loadingContainer}>
+          <StatusBar style="light" />
+
+          <View style={styles.loadingLogoCircle}>
+            <Text style={styles.loadingLogoText}>R</Text>
+          </View>
+
+          <Text style={styles.loadingTitle}>RideGo</Text>
+          <Text style={styles.loadingSubtitle}>
+            Preparing your ride experience...
+          </Text>
+
+          <ActivityIndicator
+            size="small"
+            color="#5BC0FF"
+            style={styles.loadingIndicator}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <View style={styles.container}>
@@ -138,6 +175,47 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#071A3D",
+  },
+
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#071A3D",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 30,
+  },
+
+  loadingLogoCircle: {
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    backgroundColor: "#5BC0FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 18,
+  },
+
+  loadingLogoText: {
+    fontSize: 36,
+    fontWeight: "bold",
+    color: "#071A3D",
+  },
+
+  loadingTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginBottom: 6,
+  },
+
+  loadingSubtitle: {
+    fontSize: 14,
+    color: "#8FA5C1",
+    textAlign: "center",
+  },
+
+  loadingIndicator: {
+    marginTop: 24,
   },
 
   scrollView: {
