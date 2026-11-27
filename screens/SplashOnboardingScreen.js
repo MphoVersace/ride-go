@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Action, Wordmark } from '../ui/AuthLayout';
-import RouteArtwork from '../ui/RouteArtwork';
+import OnboardingCarArtwork from '../ui/OnboardingCarArtwork';
 import { colors } from '../ui/theme';
 
 const slides = [
@@ -46,7 +46,7 @@ export default function SplashOnboardingScreen({ navigation }) {
               <Text style={styles.description}>{description}</Text>
             </>
           )}
-          <RouteArtwork key={loading ? 'startup' : 'intro'} variant={index} animate fast={loading} />
+          <OnboardingCarArtwork slide={index} />
         </View>
         {!loading && (
           <View style={styles.footer}>
