@@ -1,3 +1,4 @@
+import Icon from "../ui/Icon";
 import React from "react";
 import {
   SafeAreaView,
@@ -69,7 +70,7 @@ const DriverEarningsDetailsScreen = ({ navigation, route }) => {
               </View>
 
               <View style={styles.ratingBadge}>
-                <Text style={styles.ratingStar}>★</Text>
+                <Icon name="star" style={styles.ratingStar} />
                 <Text style={styles.ratingText}>4.9</Text>
               </View>
             </View>
@@ -155,7 +156,7 @@ const DriverEarningsDetailsScreen = ({ navigation, route }) => {
 
           <View style={styles.dateCard}>
             <View style={styles.dateIcon}>
-              <Text style={styles.dateIconText}>▣</Text>
+              <Icon name="work" style={styles.dateIconText} />
             </View>
 
             <View>

@@ -1,8 +1,14 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { usePreviewAccount } from '../auth/PreviewAccount';
+import { enterApp } from '../navigation/routes';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DriverDocumentsSetupScreen({ navigation }) {
+  const { updateProfile } = usePreviewAccount();
+
   const handleUpload = (documentName) => {
     Alert.alert(
       "Upload document",
@@ -11,22 +17,14 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
   };
 
   const handleFinish = () => {
-    Alert.alert(
-      "Driver profile submitted",
-      "Your driver profile has been submitted for review.",
-      [
-        {
-          text: "Continue",
-          onPress: () => navigation.navigate("DriverHome"),
-        },
-      ]
-    );
+    updateProfile({ driverSetupComplete: true });
+    enterApp(navigation, "driver");
   };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
 
         <ScrollView
           style={styles.scrollView}
@@ -42,7 +40,7 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
               <Text style={styles.backButtonText}>‹</Text>
             </TouchableOpacity>
 
-            <Text style={styles.stepText}>Step 3 of 3</Text>
+            <Text style={styles.stepText}>Driver setup · Step 2 of 2</Text>
 
             <View style={styles.topBarSpacer} />
           </View>
@@ -56,17 +54,16 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
           </View>
 
           <View style={styles.heroSection}>
-            <Text style={styles.title}>Verify your documents</Text>
+            <Text style={styles.title}>Review document requirements</Text>
 
             <Text style={styles.subtitle}>
-              Upload the required documents so we can review your driver
-              profile before you start accepting rides.
+              These are the documents you’ll need to drive. Uploads and verification will be available when driver services are connected.
             </Text>
           </View>
 
           <View style={styles.verificationCard}>
             <View style={styles.verificationIcon}>
-              <Text style={styles.verificationEmoji}>🛡️</Text>
+              <Icon name="shield" style={styles.verificationGlyph} />
             </View>
 
             <View style={styles.verificationContent}>
@@ -96,7 +93,7 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
               onPress={() => handleUpload("Driver's licence")}
             >
               <View style={styles.documentIconContainer}>
-                <Text style={styles.documentIcon}>🪪</Text>
+                <Icon name="id" style={styles.documentIcon} />
               </View>
 
               <View style={styles.documentContent}>
@@ -119,7 +116,7 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
               onPress={() => handleUpload("Vehicle registration")}
             >
               <View style={styles.documentIconContainer}>
-                <Text style={styles.documentIcon}>📄</Text>
+                <Icon name="document" style={styles.documentIcon} />
               </View>
 
               <View style={styles.documentContent}>
@@ -144,7 +141,7 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
               onPress={() => handleUpload("Vehicle inspection")}
             >
               <View style={styles.documentIconContainer}>
-                <Text style={styles.documentIcon}>🔍</Text>
+                <Icon name="search" style={styles.documentIcon} />
               </View>
 
               <View style={styles.documentContent}>
@@ -179,7 +176,7 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
               onPress={() => handleUpload("Profile photo")}
             >
               <View style={styles.documentIconContainer}>
-                <Text style={styles.documentIcon}>📷</Text>
+                <Icon name="camera" style={styles.documentIcon} />
               </View>
 
               <View style={styles.documentContent}>
@@ -199,11 +196,11 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
 
           <View style={styles.infoCard}>
             <View style={styles.infoIconContainer}>
-              <Text style={styles.infoIcon}>ℹ️</Text>
+              <Icon name="info" style={styles.infoIcon} />
             </View>
 
             <View style={styles.infoContent}>
-              <Text style={styles.infoTitle}>Almost ready to drive</Text>
+              <Text style={styles.infoTitle}>Next step after verification</Text>
 
               <Text style={styles.infoText}>
                 Once your documents are reviewed and approved, you'll be able
@@ -222,12 +219,12 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
             onPress={handleFinish}
           >
             <Text style={styles.finishButtonText}>
-              Submit for Review →
+              Finish demo setup
             </Text>
           </TouchableOpacity>
 
           <Text style={styles.footerText}>
-            You can update your documents later.
+            Continue to the driver dashboard with sample trip data.
           </Text>
         </View>
       </View>
@@ -238,12 +235,12 @@ export default function DriverDocumentsSetupScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -267,13 +264,13 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: "#102A56",
+    backgroundColor: colors.blueTint,
     justifyContent: "center",
     alignItems: "center",
   },
 
   backButtonText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 30,
     lineHeight: 32,
     fontWeight: "300",
@@ -281,7 +278,7 @@ const styles = StyleSheet.create({
   },
 
   stepText: {
-    color: "#AFC2E8",
+    color: colors.muted,
     fontSize: 13,
     fontWeight: "700",
     letterSpacing: 0.4,
@@ -294,7 +291,7 @@ const styles = StyleSheet.create({
   progressTrack: {
     height: 5,
     borderRadius: 10,
-    backgroundColor: "#18335F",
+    backgroundColor: colors.blueLine,
     overflow: "hidden",
     marginBottom: 26,
   },
@@ -302,7 +299,7 @@ const styles = StyleSheet.create({
   progressFill: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     borderRadius: 10,
   },
 
@@ -312,7 +309,7 @@ const styles = StyleSheet.create({
   },
 
   logoText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 27,
     fontWeight: "900",
     letterSpacing: -1,
@@ -323,7 +320,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 30,
     fontWeight: "900",
     letterSpacing: -0.8,
@@ -331,7 +328,7 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    color: "#AFC2E8",
+    color: colors.muted,
     fontSize: 15,
     lineHeight: 23,
     maxWidth: 350,
@@ -339,11 +336,11 @@ const styles = StyleSheet.create({
 
   verificationCard: {
     flexDirection: "row",
-    backgroundColor: "#0D2853",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#1D3B6D",
+    borderColor: colors.blueLine,
     marginBottom: 28,
   },
 
@@ -351,13 +348,13 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#123563",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
   },
 
-  verificationEmoji: {
+  verificationGlyph: {
     fontSize: 21,
   },
 
@@ -366,14 +363,14 @@ const styles = StyleSheet.create({
   },
 
   verificationTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "800",
     marginBottom: 5,
   },
 
   verificationText: {
-    color: "#91A8D1",
+    color: colors.muted,
     fontSize: 12,
     lineHeight: 18,
   },
@@ -394,7 +391,7 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 18,
     fontWeight: "800",
   },
@@ -403,11 +400,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9,
     paddingVertical: 5,
     borderRadius: 10,
-    backgroundColor: "#183967",
+    backgroundColor: colors.blueLine,
   },
 
   requiredBadgeText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 9,
     fontWeight: "900",
     letterSpacing: 0.6,
@@ -417,11 +414,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9,
     paddingVertical: 5,
     borderRadius: 10,
-    backgroundColor: "#102A56",
+    backgroundColor: colors.blueTint,
   },
 
   optionalBadgeText: {
-    color: "#91A8D1",
+    color: colors.muted,
     fontSize: 9,
     fontWeight: "900",
     letterSpacing: 0.6,
@@ -429,11 +426,11 @@ const styles = StyleSheet.create({
 
   documentCard: {
     flexDirection: "row",
-    backgroundColor: "#0D2853",
+    backgroundColor: colors.blueTint,
     borderRadius: 19,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#1D3B6D",
+    borderColor: colors.blueLine,
     marginBottom: 12,
   },
 
@@ -441,7 +438,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 15,
-    backgroundColor: "#123563",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 13,
@@ -456,14 +453,14 @@ const styles = StyleSheet.create({
   },
 
   documentTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 15,
     fontWeight: "800",
     marginBottom: 5,
   },
 
   documentSubtitle: {
-    color: "#91A8D1",
+    color: colors.muted,
     fontSize: 12,
     lineHeight: 18,
     marginBottom: 9,
@@ -475,13 +472,13 @@ const styles = StyleSheet.create({
   },
 
   uploadText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 12,
     fontWeight: "800",
   },
 
   uploadArrow: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 15,
     fontWeight: "900",
     marginLeft: 6,
@@ -489,18 +486,18 @@ const styles = StyleSheet.create({
 
   infoCard: {
     flexDirection: "row",
-    backgroundColor: "#102A56",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#1D3B6D",
+    borderColor: colors.blueLine,
   },
 
   infoIconContainer: {
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: "#183967",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -515,14 +512,14 @@ const styles = StyleSheet.create({
   },
 
   infoTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "800",
     marginBottom: 5,
   },
 
   infoText: {
-    color: "#91A8D1",
+    color: colors.muted,
     fontSize: 12,
     lineHeight: 18,
   },
@@ -535,7 +532,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 10,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderTopWidth: 1,
     borderTopColor: "#102A56",
   },
@@ -543,7 +540,7 @@ const styles = StyleSheet.create({
   finishButton: {
     height: 56,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000000",
@@ -557,14 +554,14 @@ const styles = StyleSheet.create({
   },
 
   finishButtonText: {
-    color: "#071A3D",
+    color: colors.navy,
     fontSize: 16,
     fontWeight: "900",
     letterSpacing: 0.2,
   },
 
   footerText: {
-    color: "#71809F",
+    color: colors.muted,
     fontSize: 11,
     textAlign: "center",
     marginTop: 8,

@@ -1,3 +1,7 @@
+import { colors } from "../ui/theme";
+import { usePreviewAccount } from "../auth/PreviewAccount";
+import { leaveApp } from "../navigation/routes";
+import Icon from "../ui/Icon";
 import React, { useState } from "react";
 import {
   View,
@@ -16,19 +20,19 @@ const settingSections = [
     items: [
       {
         id: "profile",
-        icon: "👤",
+        icon: "user",
         title: "Personal Information",
         subtitle: "Manage your name, phone and email",
       },
       {
         id: "vehicle",
-        icon: "🚗",
+        icon: "car",
         title: "Vehicle",
         subtitle: "Manage your vehicle information",
       },
       {
         id: "documents",
-        icon: "📄",
+        icon: "document",
         title: "Documents",
         subtitle: "View your driver documents",
       },
@@ -39,13 +43,13 @@ const settingSections = [
     items: [
       {
         id: "rideRequests",
-        icon: "🔔",
+        icon: "bell",
         title: "Ride Requests",
         subtitle: "Choose how you receive ride requests",
       },
       {
         id: "navigation",
-        icon: "🧭",
+        icon: "compass",
         title: "Navigation",
         subtitle: "Manage your navigation preferences",
       },
@@ -56,13 +60,13 @@ const settingSections = [
     items: [
       {
         id: "notifications",
-        icon: "🔔",
+        icon: "bell",
         title: "Notifications",
         subtitle: "Manage your notification preferences",
       },
       {
         id: "appearance",
-        icon: "🎨",
+        icon: "palette",
         title: "Appearance",
         subtitle: "Light mode",
       },
@@ -71,6 +75,7 @@ const settingSections = [
 ];
 
 export default function DriverSettingsScreen({ navigation }) {
+  const { signOut } = usePreviewAccount();
   const [rideRequestsEnabled, setRideRequestsEnabled] = useState(true);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
@@ -136,22 +141,8 @@ export default function DriverSettingsScreen({ navigation }) {
   };
 
   const handleLogout = () => {
-    Alert.alert("Log out", "Are you sure you want to log out?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Log out",
-        style: "destructive",
-        onPress: () => {
-          Alert.alert(
-            "Logged out",
-            "Logout functionality will be connected later.",
-          );
-        },
-      },
-    ]);
+    signOut();
+    leaveApp(navigation);
   };
 
   return (
@@ -180,7 +171,7 @@ export default function DriverSettingsScreen({ navigation }) {
         >
           <View style={styles.introCard}>
             <View style={styles.introIconCircle}>
-              <Text style={styles.introIcon}>⚙️</Text>
+              <Icon name="settings" style={styles.introIcon} />
             </View>
 
             <View style={styles.introTextContainer}>
@@ -208,7 +199,7 @@ export default function DriverSettingsScreen({ navigation }) {
                     activeOpacity={0.75}
                   >
                     <View style={styles.settingIconCircle}>
-                      <Text style={styles.settingIcon}>{item.icon}</Text>
+                      <Icon name={item.icon} style={styles.settingIcon} />
                     </View>
 
                     <View style={styles.settingTextContainer}>
@@ -218,7 +209,7 @@ export default function DriverSettingsScreen({ navigation }) {
                       </Text>
                     </View>
 
-                    <Text style={styles.chevron}>›</Text>
+                    <Icon name="right" size={18} color={colors.muted} />
                   </TouchableOpacity>
                 ))}
               </View>
@@ -231,7 +222,7 @@ export default function DriverSettingsScreen({ navigation }) {
             <View style={styles.card}>
               <View style={styles.toggleRow}>
                 <View style={styles.settingIconCircle}>
-                  <Text style={styles.settingIcon}>🔔</Text>
+                  <Icon name="bell" style={styles.settingIcon} />
                 </View>
 
                 <View style={styles.settingTextContainer}>
@@ -251,7 +242,7 @@ export default function DriverSettingsScreen({ navigation }) {
 
               <View style={styles.toggleRow}>
                 <View style={styles.settingIconCircle}>
-                  <Text style={styles.settingIcon}>📱</Text>
+                  <Icon name="mobile" style={styles.settingIcon} />
                 </View>
 
                 <View style={styles.settingTextContainer}>
@@ -279,7 +270,7 @@ export default function DriverSettingsScreen({ navigation }) {
                 activeOpacity={0.75}
               >
                 <View style={styles.settingIconCircle}>
-                  <Text style={styles.settingIcon}>🔒</Text>
+                  <Icon name="lock" style={styles.settingIcon} />
                 </View>
 
                 <View style={styles.settingTextContainer}>
@@ -289,7 +280,7 @@ export default function DriverSettingsScreen({ navigation }) {
                   </Text>
                 </View>
 
-                <Text style={styles.chevron}>›</Text>
+                <Icon name="right" size={18} color={colors.muted} />
               </TouchableOpacity>
 
               <View style={styles.divider} />
@@ -300,7 +291,7 @@ export default function DriverSettingsScreen({ navigation }) {
                 activeOpacity={0.75}
               >
                 <View style={styles.settingIconCircle}>
-                  <Text style={styles.settingIcon}>ℹ️</Text>
+                  <Icon name="info" style={styles.settingIcon} />
                 </View>
 
                 <View style={styles.settingTextContainer}>
@@ -308,7 +299,7 @@ export default function DriverSettingsScreen({ navigation }) {
                   <Text style={styles.settingSubtitle}>Version 1.0.0</Text>
                 </View>
 
-                <Text style={styles.chevron}>›</Text>
+                <Icon name="right" size={18} color={colors.muted} />
               </TouchableOpacity>
             </View>
           </View>
@@ -331,7 +322,7 @@ export default function DriverSettingsScreen({ navigation }) {
             onPress={handleLogout}
             activeOpacity={0.85}
           >
-            <Text style={styles.logoutIcon}>↪</Text>
+            <Icon name="logout" style={styles.logoutIcon} />
             <Text style={styles.logoutText}>Log Out</Text>
           </TouchableOpacity>
 
@@ -344,7 +335,7 @@ export default function DriverSettingsScreen({ navigation }) {
           </TouchableOpacity>
 
           <View style={styles.infoCard}>
-            <Text style={styles.infoIcon}>ℹ️</Text>
+            <Icon name="info" style={styles.infoIcon} />
 
             <Text style={styles.infoText}>
               Settings shown here are currently part of the RideGo UI
@@ -361,12 +352,12 @@ export default function DriverSettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F7FAFC",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#F7FAFC",
+    backgroundColor: colors.white,
   },
 
   header: {
@@ -504,13 +495,13 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#EFF6FF",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 13,
   },
 
   settingIcon: {
+    color: colors.blueInk,
     fontSize: 19,
   },
 

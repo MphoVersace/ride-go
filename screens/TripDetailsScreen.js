@@ -1,3 +1,5 @@
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import {
   ScrollView,
   StatusBar,
@@ -61,7 +63,7 @@ export default function TripDetailsScreen({ navigation, route }) {
         <View style={styles.tripCard}>
           <View style={styles.tripHeader}>
             <View style={styles.tripIcon}>
-              <Text style={styles.tripIconText}>↗</Text>
+              <Icon name="external" style={styles.tripIconText} />
             </View>
 
             <View style={styles.tripHeaderText}>
@@ -111,7 +113,10 @@ export default function TripDetailsScreen({ navigation, route }) {
 
             <View style={styles.driverInfo}>
               <Text style={styles.driverName}>Thabo M.</Text>
-              <Text style={styles.driverMeta}>★ 4.9 • 1,240 trips</Text>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                <Icon name="star" size={13} style={styles.driverMeta} />
+                <Text style={styles.driverMeta}>4.9 • 1,240 trips</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -121,7 +126,7 @@ export default function TripDetailsScreen({ navigation, route }) {
 
           <View style={styles.vehicleRow}>
             <View style={styles.vehicleIcon}>
-              <Text style={styles.vehicleIconText}>🚗</Text>
+              <Icon name="car" style={styles.vehicleIconText} />
             </View>
 
             <View style={styles.vehicleInfo}>
@@ -182,7 +187,7 @@ export default function TripDetailsScreen({ navigation, route }) {
                 name: ride.rideType,
                 description: "RideGo trip",
                 price: ride.fare,
-                icon: "🚗",
+                icon: "car",
               },
             })
           }
@@ -193,7 +198,7 @@ export default function TripDetailsScreen({ navigation, route }) {
         <TouchableOpacity
           style={styles.homeButton}
           activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => openScreen(navigation, "RiderHome")}
         >
           <Text style={styles.homeButtonText}>Back to home</Text>
         </TouchableOpacity>

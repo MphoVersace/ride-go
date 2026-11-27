@@ -1,3 +1,6 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import React, { useState } from "react";
 import {
   SafeAreaView,
@@ -13,7 +16,7 @@ const initialNotifications = [
   {
     id: "1",
     type: "ride",
-    icon: "🚗",
+    icon: "car",
     title: "Driver found",
     message: "Your RideGo driver is on the way to your pickup location.",
     time: "5 min ago",
@@ -22,7 +25,7 @@ const initialNotifications = [
   {
     id: "2",
     type: "safety",
-    icon: "🛡️",
+    icon: "shield",
     title: "Ride safely",
     message: "Remember to confirm your driver's details before getting in.",
     time: "1 hour ago",
@@ -31,7 +34,7 @@ const initialNotifications = [
   {
     id: "3",
     type: "promotion",
-    icon: "🎁",
+    icon: "gift",
     title: "RideGo reward",
     message: "You have a new RideGo promotion available for your next trip.",
     time: "Yesterday",
@@ -40,7 +43,7 @@ const initialNotifications = [
   {
     id: "4",
     type: "account",
-    icon: "👤",
+    icon: "user",
     title: "Profile updated",
     message: "Your RideGo profile information was successfully updated.",
     time: "2 days ago",
@@ -49,7 +52,7 @@ const initialNotifications = [
   {
     id: "5",
     type: "ride",
-    icon: "⭐",
+    icon: "star",
     title: "How was your ride?",
     message: "Your recent trip is complete. Share your experience with us.",
     time: "3 days ago",
@@ -88,7 +91,7 @@ export default function NotificationsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <ScrollView
         contentContainerStyle={styles.container}
@@ -119,7 +122,7 @@ export default function NotificationsScreen({ navigation }) {
 
         <View style={styles.heroCard}>
           <View style={styles.heroIcon}>
-            <Text style={styles.heroIconText}>🔔</Text>
+            <Icon name="bell" style={styles.heroIconText} />
           </View>
 
           <View style={styles.heroTextContainer}>
@@ -170,9 +173,7 @@ export default function NotificationsScreen({ navigation }) {
                   notification.unread && styles.notificationIconUnread,
                 ]}
               >
-                <Text style={styles.notificationIconText}>
-                  {notification.icon}
-                </Text>
+                <Icon name={notification.icon} style={styles.notificationIconText} />
               </View>
 
               <View style={styles.notificationContent}>
@@ -202,7 +203,7 @@ export default function NotificationsScreen({ navigation }) {
 
         <View style={styles.infoCard}>
           <View style={styles.infoIcon}>
-            <Text style={styles.infoIconText}>🔔</Text>
+            <Icon name="bell" style={styles.infoIconText} />
           </View>
 
           <View style={styles.infoTextContainer}>
@@ -217,7 +218,7 @@ export default function NotificationsScreen({ navigation }) {
         <TouchableOpacity
           style={styles.homeButton}
           activeOpacity={0.85}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => openScreen(navigation, "RiderHome")}
         >
           <Text style={styles.homeButtonText}>Back to Home</Text>
         </TouchableOpacity>
@@ -233,7 +234,7 @@ export default function NotificationsScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
@@ -252,14 +253,14 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 14,
-    backgroundColor: "#102957",
+    backgroundColor: colors.blueTint,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
   },
 
   backButtonText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 34,
     lineHeight: 36,
     fontWeight: "300",
@@ -271,14 +272,14 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 25,
     fontWeight: "800",
     letterSpacing: -0.5,
   },
 
   headerSubtitle: {
-    color: "#9FB4D8",
+    color: colors.muted,
     fontSize: 13,
     marginTop: 4,
   },
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     minWidth: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 8,
@@ -301,21 +302,21 @@ const styles = StyleSheet.create({
   },
 
   heroCard: {
-    backgroundColor: "#102957",
+    backgroundColor: colors.blueTint,
     borderRadius: 24,
     padding: 20,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 28,
     borderWidth: 1,
-    borderColor: "#1D3A70",
+    borderColor: colors.blueLine,
   },
 
   heroIcon: {
     width: 58,
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#17366B",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 15,
@@ -330,14 +331,14 @@ const styles = StyleSheet.create({
   },
 
   heroTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 18,
     fontWeight: "800",
     marginBottom: 5,
   },
 
   heroDescription: {
-    color: "#AFC1DE",
+    color: colors.muted,
     fontSize: 13,
     lineHeight: 19,
   },
@@ -350,19 +351,19 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 16,
     fontWeight: "800",
   },
 
   sectionSubtitle: {
-    color: "#7894BD",
+    color: colors.muted,
     fontSize: 11,
     marginTop: 3,
   },
 
   markAllButton: {
-    backgroundColor: "#17366B",
+    backgroundColor: colors.blueLine,
     paddingHorizontal: 11,
     paddingVertical: 8,
     borderRadius: 11,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   },
 
   markAllText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 10,
     fontWeight: "800",
   },
@@ -380,33 +381,33 @@ const styles = StyleSheet.create({
   },
 
   notificationCard: {
-    backgroundColor: "#102957",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     padding: 16,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 11,
     borderWidth: 1,
-    borderColor: "#1D3A70",
+    borderColor: colors.blueLine,
   },
 
   notificationCardUnread: {
-    backgroundColor: "#112F5F",
-    borderColor: "#31578D",
+    backgroundColor: colors.blueTint,
+    borderColor: colors.blueLine,
   },
 
   notificationIcon: {
     width: 50,
     height: 50,
     borderRadius: 16,
-    backgroundColor: "#17366B",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 13,
   },
 
   notificationIconUnread: {
-    backgroundColor: "#1C467E",
+    backgroundColor: colors.blueLine,
   },
 
   notificationIconText: {
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
   },
 
   notificationTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "800",
     flexShrink: 1,
@@ -434,12 +435,12 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     marginLeft: 7,
   },
 
   notificationMessage: {
-    color: "#AFC1DE",
+    color: colors.muted,
     fontSize: 11,
     lineHeight: 17,
     marginBottom: 6,
@@ -452,19 +453,19 @@ const styles = StyleSheet.create({
   },
 
   notificationArrow: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 25,
     fontWeight: "300",
     marginLeft: 8,
   },
 
   infoCard: {
-    backgroundColor: "#0D2248",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     padding: 16,
     flexDirection: "row",
     borderWidth: 1,
-    borderColor: "#193765",
+    borderColor: colors.blueLine,
     marginBottom: 20,
   },
 
@@ -472,7 +473,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 13,
-    backgroundColor: "#17366B",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -487,14 +488,14 @@ const styles = StyleSheet.create({
   },
 
   infoTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 13,
     fontWeight: "800",
     marginBottom: 4,
   },
 
   infoDescription: {
-    color: "#8FA8CE",
+    color: colors.muted,
     fontSize: 11,
     lineHeight: 17,
   },
@@ -502,7 +503,7 @@ const styles = StyleSheet.create({
   homeButton: {
     height: 54,
     borderRadius: 17,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 18,

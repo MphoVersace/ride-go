@@ -1,3 +1,6 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import {
   Alert,
   SafeAreaView,
@@ -19,12 +22,12 @@ export default function DriverTripCompletedScreen({ navigation }) {
   };
 
   const handleDone = () => {
-    navigation.navigate("DriverHome");
+    openScreen(navigation, "DriverHome");
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <View style={styles.container}>
         <ScrollView
@@ -97,19 +100,19 @@ export default function DriverTripCompletedScreen({ navigation }) {
           {/* Trip Details */}
           <View style={styles.detailsRow}>
             <View style={styles.detailCard}>
-              <Text style={styles.detailIcon}>📏</Text>
+              <Icon name="ruler" style={styles.detailIcon} />
               <Text style={styles.detailValue}>8.4 km</Text>
               <Text style={styles.detailLabel}>Distance</Text>
             </View>
 
             <View style={styles.detailCard}>
-              <Text style={styles.detailIcon}>⏱️</Text>
+              <Icon name="timer" style={styles.detailIcon} />
               <Text style={styles.detailValue}>18 min</Text>
               <Text style={styles.detailLabel}>Duration</Text>
             </View>
 
             <View style={styles.detailCard}>
-              <Text style={styles.detailIcon}>💰</Text>
+              <Icon name="wallet" style={styles.detailIcon} />
               <Text style={styles.detailValue}>R125</Text>
               <Text style={styles.detailLabel}>Fare</Text>
             </View>
@@ -134,7 +137,7 @@ export default function DriverTripCompletedScreen({ navigation }) {
                 <Text style={styles.riderName}>Naledi M.</Text>
 
                 <View style={styles.ratingRow}>
-                  <Text style={styles.star}>★</Text>
+                  <Icon name="star" style={styles.star} />
                   <Text style={styles.rating}>4.9</Text>
                   <Text style={styles.ratingCount}>• 42 rides</Text>
                 </View>
@@ -187,12 +190,12 @@ export default function DriverTripCompletedScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -214,7 +217,7 @@ const styles = StyleSheet.create({
     width: 74,
     height: 74,
     borderRadius: 37,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 14,
@@ -229,7 +232,7 @@ const styles = StyleSheet.create({
   successLabel: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 1,
     marginBottom: 6,
   },
@@ -237,7 +240,7 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 26,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 7,
   },
 
@@ -246,15 +249,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     textAlign: "center",
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   earningsCard: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 20,
     alignItems: "center",
     marginBottom: 14,
@@ -263,7 +266,7 @@ const styles = StyleSheet.create({
   earningsLabel: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     letterSpacing: 0.8,
     marginBottom: 7,
   },
@@ -271,13 +274,13 @@ const styles = StyleSheet.create({
   earningsValue: {
     fontSize: 34,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   earningsSubtext: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 16,
   },
 
@@ -285,9 +288,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 44,
     borderRadius: 13,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -296,22 +299,22 @@ const styles = StyleSheet.create({
   earningsButtonText: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   earningsButtonArrow: {
     fontSize: 17,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 8,
   },
 
   card: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
     marginBottom: 14,
   },
@@ -319,7 +322,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     letterSpacing: 0.8,
   },
 
@@ -338,13 +341,13 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   routeLine: {
     width: 2,
     height: 62,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginVertical: 5,
   },
 
@@ -369,7 +372,7 @@ const styles = StyleSheet.create({
   locationLabel: {
     fontSize: 8,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 0.6,
     marginBottom: 4,
   },
@@ -377,14 +380,14 @@ const styles = StyleSheet.create({
   locationName: {
     fontSize: 14,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   locationAddress: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   detailsRow: {
@@ -396,10 +399,10 @@ const styles = StyleSheet.create({
   detailCard: {
     flex: 1,
     minHeight: 96,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 11,
     justifyContent: "center",
   },
@@ -412,13 +415,13 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 14,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   detailLabel: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   sectionHeader: {
@@ -432,15 +435,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
   },
 
   completedBadgeText: {
     fontSize: 8,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 0.4,
   },
 
@@ -453,7 +456,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -472,7 +475,7 @@ const styles = StyleSheet.create({
   riderName: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 5,
   },
 
@@ -490,21 +493,21 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.black,
     marginRight: 5,
   },
 
   ratingCount: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   rateButton: {
     height: 44,
     borderRadius: 13,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -514,13 +517,13 @@ const styles = StyleSheet.create({
   rateButtonText: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   rateButtonArrow: {
     fontSize: 17,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 8,
   },
 
@@ -528,10 +531,10 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#0A2147",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 13,
   },
 
@@ -539,9 +542,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -550,7 +553,7 @@ const styles = StyleSheet.create({
   infoIconText: {
     fontSize: 17,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   infoContent: {
@@ -560,14 +563,14 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   infoText: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   bottomAction: {
@@ -575,9 +578,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "#0A2147",
+    backgroundColor: colors.blueTint,
     borderTopWidth: 1,
-    borderTopColor: "#1D4775",
+    borderTopColor: colors.blueLine,
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 14,
@@ -586,7 +589,7 @@ const styles = StyleSheet.create({
   doneButton: {
     height: 54,
     borderRadius: 16,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

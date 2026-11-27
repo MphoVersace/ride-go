@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { usePreviewAccount } from '../auth/PreviewAccount';
+import React from "react";
 import {
-  ActivityIndicator,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,45 +13,12 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DriverHomeScreen({ navigation }) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadingTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 900);
-
-    return () => clearTimeout(loadingTimer);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.safeArea} edges={["top"]}>
-        <View style={styles.loadingContainer}>
-          <StatusBar style="light" />
-
-          <View style={styles.loadingLogoCircle}>
-            <Text style={styles.loadingLogoText}>R</Text>
-          </View>
-
-          <Text style={styles.loadingTitle}>RideGo</Text>
-          <Text style={styles.loadingSubtitle}>
-            Preparing your driver experience...
-          </Text>
-
-          <ActivityIndicator
-            size="small"
-            color="#5BC0FF"
-            style={styles.loadingIndicator}
-          />
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const { profile } = usePreviewAccount();
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
 
         <ScrollView
           style={styles.scrollView}
@@ -59,7 +28,7 @@ export default function DriverHomeScreen({ navigation }) {
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerText}>
-              <Text style={styles.greeting}>Good day, Thabo 👋</Text>
+              <Text style={styles.greeting}>Good day, {profile?.firstName ?? "Thabo"}</Text>
               <Text style={styles.subtitle}>Ready for your next trip?</Text>
             </View>
 
@@ -68,7 +37,7 @@ export default function DriverHomeScreen({ navigation }) {
               activeOpacity={0.8}
               onPress={() => navigation.navigate("DriverProfile")}
             >
-              <Text style={styles.profileIcon}>👤</Text>
+              <Icon name="user" style={styles.profileIcon} />
             </TouchableOpacity>
           </View>
 
@@ -113,7 +82,7 @@ export default function DriverHomeScreen({ navigation }) {
             <View style={styles.mapCircleThree} />
 
             <View style={styles.mapPin}>
-              <Text style={styles.mapPinText}>🚗</Text>
+              <Icon name="car" style={styles.mapPinText} />
             </View>
 
             <View style={styles.mapLabel}>
@@ -138,7 +107,7 @@ export default function DriverHomeScreen({ navigation }) {
             <View style={styles.overviewRow}>
               <View style={styles.overviewCard}>
                 <View style={styles.overviewIconCircle}>
-                  <Text style={styles.overviewIcon}>💰</Text>
+                  <Icon name="wallet" style={styles.overviewIcon} />
                 </View>
 
                 <Text style={styles.overviewValue}>R850</Text>
@@ -147,7 +116,7 @@ export default function DriverHomeScreen({ navigation }) {
 
               <View style={styles.overviewCard}>
                 <View style={styles.overviewIconCircle}>
-                  <Text style={styles.overviewIcon}>🚗</Text>
+                  <Icon name="car" style={styles.overviewIcon} />
                 </View>
 
                 <Text style={styles.overviewValue}>8</Text>
@@ -156,7 +125,7 @@ export default function DriverHomeScreen({ navigation }) {
 
               <View style={styles.overviewCard}>
                 <View style={styles.overviewIconCircle}>
-                  <Text style={styles.overviewIcon}>⭐</Text>
+                  <Icon name="star" style={styles.overviewIcon} />
                 </View>
 
                 <Text style={styles.overviewValue}>4.9</Text>
@@ -180,7 +149,7 @@ export default function DriverHomeScreen({ navigation }) {
 
             <View style={styles.activityCard}>
               <View style={styles.activityIconCircle}>
-                <Text style={styles.activityIcon}>🚗</Text>
+                <Icon name="car" style={styles.activityIcon} />
               </View>
 
               <View style={styles.activityDetails}>
@@ -193,7 +162,7 @@ export default function DriverHomeScreen({ navigation }) {
 
             <View style={styles.activityCard}>
               <View style={styles.activityIconCircle}>
-                <Text style={styles.activityIcon}>🚗</Text>
+                <Icon name="car" style={styles.activityIcon} />
               </View>
 
               <View style={styles.activityDetails}>
@@ -206,40 +175,6 @@ export default function DriverHomeScreen({ navigation }) {
           </View>
         </ScrollView>
 
-        {/* Bottom Navigation */}
-        <View style={styles.bottomNavigation}>
-          <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
-            <Text style={styles.navIconActive}>⌂</Text>
-            <Text style={styles.navTextActive}>Home</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("DriverTrips")}
-          >
-            <Text style={styles.navIcon}>◷</Text>
-            <Text style={styles.navText}>Trips</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("DriverEarnings")}
-          >
-            <Text style={styles.navIcon}>R</Text>
-            <Text style={styles.navText}>Earnings</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("DriverProfile")}
-          >
-            <Text style={styles.navIcon}>👤</Text>
-            <Text style={styles.navText}>Profile</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -248,53 +183,12 @@ export default function DriverHomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
-  },
-
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: "#071A3D",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 30,
-  },
-
-  loadingLogoCircle: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 18,
-  },
-
-  loadingLogoText: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#071A3D",
-  },
-
-  loadingTitle: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 6,
-  },
-
-  loadingSubtitle: {
-    fontSize: 14,
-    color: "#8FA5C1",
-    textAlign: "center",
-  },
-
-  loadingIndicator: {
-    marginTop: 24,
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -304,7 +198,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 20,
     paddingTop: 18,
-    paddingBottom: 112,
+    paddingBottom: 24,
   },
 
   header: {
@@ -322,23 +216,23 @@ const styles = StyleSheet.create({
 
   greeting: {
     fontSize: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 5,
   },
 
   subtitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   profileButton: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -349,10 +243,10 @@ const styles = StyleSheet.create({
 
   statusCard: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
     marginBottom: 18,
   },
@@ -378,34 +272,34 @@ const styles = StyleSheet.create({
 
   statusLabel: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 3,
   },
 
   statusValue: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   offlineBadge: {
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   offlineBadgeText: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     letterSpacing: 0.5,
   },
 
   statusDescription: {
     fontSize: 13,
     lineHeight: 19,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginTop: 14,
     marginBottom: 14,
   },
@@ -413,7 +307,7 @@ const styles = StyleSheet.create({
   goOnlineButton: {
     height: 52,
     borderRadius: 16,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -421,18 +315,18 @@ const styles = StyleSheet.create({
   goOnlineButtonText: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#071A3D",
+    color: colors.navy,
   },
 
   mapContainer: {
     width: "100%",
     height: 210,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 22,
     overflow: "hidden",
     position: "relative",
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     marginBottom: 22,
   },
 
@@ -440,7 +334,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "120%",
     height: 24,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     top: 82,
     left: -20,
     transform: [{ rotate: "8deg" }],
@@ -450,7 +344,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 22,
     height: "130%",
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     left: 125,
     top: -20,
     transform: [{ rotate: "18deg" }],
@@ -460,7 +354,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "120%",
     height: 14,
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     top: 125,
     left: -15,
     transform: [{ rotate: "-25deg" }],
@@ -472,7 +366,7 @@ const styles = StyleSheet.create({
     height: 55,
     borderRadius: 28,
     borderWidth: 10,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     top: 15,
     left: 25,
   },
@@ -483,7 +377,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 35,
     borderWidth: 12,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     bottom: -25,
     right: 20,
   },
@@ -494,7 +388,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 8,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     top: 20,
     right: 35,
   },
@@ -508,7 +402,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -521,7 +415,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 12,
     left: 12,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
@@ -529,7 +423,7 @@ const styles = StyleSheet.create({
 
   mapLabelText: {
     fontSize: 11,
-    color: "#C9D6E8",
+    color: colors.muted,
   },
 
   mapOverlay: {
@@ -537,7 +431,7 @@ const styles = StyleSheet.create({
     right: 12,
     top: 12,
     maxWidth: 175,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 12,
@@ -546,14 +440,14 @@ const styles = StyleSheet.create({
   mapOverlayTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   mapOverlayText: {
     fontSize: 10,
     lineHeight: 14,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   section: {
@@ -571,18 +465,18 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   sectionDate: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   viewAllText: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   overviewRow: {
@@ -593,10 +487,10 @@ const styles = StyleSheet.create({
   overviewCard: {
     flex: 1,
     minHeight: 118,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 12,
   },
 
@@ -604,7 +498,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 8,
@@ -617,22 +511,22 @@ const styles = StyleSheet.create({
   overviewValue: {
     fontSize: 18,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 2,
   },
 
   overviewLabel: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   activityCard: {
     width: "100%",
     minHeight: 70,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
@@ -643,7 +537,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 11,
@@ -660,62 +554,20 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: 13,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   activitySubtitle: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   activityAmount: {
     fontSize: 13,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 8,
   },
 
-  bottomNavigation: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 78,
-    backgroundColor: "#0A2147",
-    borderTopWidth: 1,
-    borderTopColor: "#1D4775",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-
-  navItem: {
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 60,
-  },
-
-  navIconActive: {
-    fontSize: 24,
-    color: "#5BC0FF",
-    marginBottom: 3,
-  },
-
-  navIcon: {
-    fontSize: 20,
-    color: "#8FA5C1",
-    marginBottom: 4,
-  },
-
-  navTextActive: {
-    fontSize: 11,
-    fontWeight: "bold",
-    color: "#5BC0FF",
-  },
-
-  navText: {
-    fontSize: 11,
-    color: "#8FA5C1",
-  },
 });

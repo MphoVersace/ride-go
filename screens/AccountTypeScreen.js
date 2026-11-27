@@ -1,168 +1,39 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { AuthLayout } from '../ui/AuthLayout';
+import Icon from '../ui/Icon';
+import { colors } from '../ui/theme';
+
+const options = [
+  { title: 'I want to ride', description: 'Book a ride, track your trip and save your favourite places.', icon: 'car', screen: 'RiderRegistration' },
+  { title: 'I want to drive', description: 'Set up your vehicle and accept trips on your schedule.', icon: 'compass', screen: 'DriverWelcome' },
+];
 
 export default function AccountTypeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-
-      <Text style={styles.logo}>RideGo</Text>
-
-      <View style={styles.content}>
-        <Text style={styles.heading}>How will you use RideGo?</Text>
-
-        <Text style={styles.description}>
-          Choose the option that best describes how you want to use RideGo.
-        </Text>
-
-        <View style={styles.options}>
-          <TouchableOpacity
-            style={styles.optionCard}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate("RiderRegistration")}
-          >
-            <View style={styles.iconCircle}>
-              <Text style={styles.icon}>🚗</Text>
-            </View>
-
-            <View style={styles.optionText}>
-              <Text style={styles.optionTitle}>I want to ride</Text>
-
-              <Text style={styles.optionDescription}>
-                Book safe and reliable rides wherever you need to go.
-              </Text>
-            </View>
-
-            <Text style={styles.arrow}>›</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.optionCard}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate("DriverWelcome")}
-          >
-            <View style={styles.iconCircle}>
-              <Text style={styles.icon}>🚘</Text>
-            </View>
-
-            <View style={styles.optionText}>
-              <Text style={styles.optionTitle}>I want to drive</Text>
-
-              <Text style={styles.optionDescription}>
-                Drive with RideGo and earn money on your own schedule.
-              </Text>
-            </View>
-
-            <Text style={styles.arrow}>›</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Text style={styles.footer}>
-        You can change your account type later.
-      </Text>
-    </View>
+    <AuthLayout back={() => navigation.goBack()} title="How will you use RideGo?" description="Choose an account type to get started.">
+      {options.map(({ title, description, icon, screen }) => (
+        <Pressable
+          key={screen}
+          accessibilityRole="button"
+          onPress={() => navigation.navigate(screen)}
+          style={({ pressed }) => [styles.option, pressed && styles.pressed]}
+        >
+          <Icon name={icon} size={28} color={colors.blueInk} />
+          <View style={styles.optionCopy}>
+            <Text style={styles.optionTitle}>{title}</Text>
+            <Text style={styles.description}>{description}</Text>
+          </View>
+          <Icon name="right" size={20} />
+        </Pressable>
+      ))}
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#071A3D",
-    alignItems: "center",
-    paddingHorizontal: 25,
-  },
-
-  logo: {
-    fontSize: 34,
-    fontWeight: "bold",
-    color: "#5BC0FF",
-    marginTop: 70,
-  },
-
-  content: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-  },
-
-  heading: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    textAlign: "center",
-    marginBottom: 12,
-  },
-
-  description: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#C9D6E8",
-    textAlign: "center",
-    marginBottom: 40,
-    paddingHorizontal: 10,
-  },
-
-  options: {
-    width: "100%",
-  },
-
-  optionCard: {
-    width: "100%",
-    minHeight: 120,
-    backgroundColor: "#102A52",
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#1D4775",
-  },
-
-  iconCircle: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 16,
-  },
-
-  icon: {
-    fontSize: 28,
-  },
-
-  optionText: {
-    flex: 1,
-    paddingRight: 8,
-  },
-
-  optionTitle: {
-    fontSize: 19,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 6,
-  },
-
-  optionDescription: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: "#C9D6E8",
-  },
-
-  arrow: {
-    fontSize: 32,
-    color: "#5BC0FF",
-    marginLeft: 4,
-  },
-
-  footer: {
-    fontSize: 12,
-    color: "#8FA5C1",
-    textAlign: "center",
-    marginBottom: 35,
-  },
+  option: { backgroundColor: colors.blueTint, flexDirection: 'row', alignItems: 'center', gap: 15, borderRadius: 19, padding: 18, borderWidth: 1, borderColor: colors.blueLine },
+  optionCopy: { flex: 1, gap: 5 },
+  optionTitle: { color: colors.black, fontSize: 18, fontWeight: '800' },
+  description: { color: colors.muted, fontSize: 14, lineHeight: 20 },
+  pressed: { opacity: 0.65 },
 });
-

@@ -1,3 +1,4 @@
+import Icon from "../ui/Icon";
 import {
   ScrollView,
   StatusBar,
@@ -86,7 +87,7 @@ export default function RideHistoryScreen({ navigation }) {
 
         <View style={styles.summaryCard}>
           <View style={styles.summaryIcon}>
-            <Text style={styles.summaryIconText}>↗</Text>
+            <Icon name="external" style={styles.summaryIconText} />
           </View>
 
           <View style={styles.summaryTextContainer}>
@@ -118,9 +119,7 @@ export default function RideHistoryScreen({ navigation }) {
           >
             <View style={styles.rideTopRow}>
               <View style={styles.rideIcon}>
-                <Text style={styles.rideIconText}>
-                  {ride.statusType === "cancelled" ? "×" : "↗"}
-                </Text>
+                <Icon name={ride.statusType === "cancelled" ? "close" : "external"} style={styles.rideIconText} />
               </View>
 
               <View style={styles.rideMainInfo}>
@@ -203,14 +202,6 @@ export default function RideHistoryScreen({ navigation }) {
             </Text>
           </View>
         </View>
-
-        <TouchableOpacity
-          style={styles.homeButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderHome")}
-        >
-          <Text style={styles.homeButtonText}>Back to home</Text>
-        </TouchableOpacity>
 
         <Text style={styles.footerText}>
           RideGo • Your journey, your history
@@ -595,28 +586,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: "#718096",
-  },
-
-  homeButton: {
-    height: 54,
-    borderRadius: 18,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-
-  homeButtonText: {
-    fontSize: 15,
-    fontWeight: "800",
-    color: "#071A3D",
   },
 
   footerText: {

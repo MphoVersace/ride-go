@@ -1,6 +1,7 @@
+import Icon from "../ui/Icon";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   StatusBar,
@@ -12,7 +13,7 @@ import {
 const safetyFeatures = [
   {
     id: "emergency",
-    icon: "🚨",
+    icon: "siren",
     title: "Emergency assistance",
     description:
       "Quickly access emergency support if you ever feel unsafe during a ride.",
@@ -20,7 +21,7 @@ const safetyFeatures = [
   },
   {
     id: "share",
-    icon: "📍",
+    icon: "pin",
     title: "Share your trip",
     description:
       "Let someone you trust know where you are and keep them updated during your ride.",
@@ -28,7 +29,7 @@ const safetyFeatures = [
   },
   {
     id: "contacts",
-    icon: "👥",
+    icon: "users",
     title: "Trusted contacts",
     description:
       "Choose people you trust who can be notified when you need extra support.",
@@ -36,7 +37,7 @@ const safetyFeatures = [
   },
   {
     id: "support",
-    icon: "💬",
+    icon: "message",
     title: "Safety support",
     description:
       "Get help with a safety concern or report something that happened during a ride.",
@@ -53,7 +54,7 @@ const safetyTips = [
 
 export default function SafetyCentreScreen({ navigation }) {
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" />
 
       <ScrollView
@@ -82,7 +83,7 @@ export default function SafetyCentreScreen({ navigation }) {
         {/* Safety Hero */}
         <View style={styles.heroCard}>
           <View style={styles.heroIconCircle}>
-            <Text style={styles.heroIcon}>🛡️</Text>
+            <Icon name="shield" style={styles.heroIcon} />
           </View>
 
           <View style={styles.heroTextContainer}>
@@ -101,7 +102,7 @@ export default function SafetyCentreScreen({ navigation }) {
           activeOpacity={0.85}
         >
           <View style={styles.emergencyIconCircle}>
-            <Text style={styles.emergencyIcon}>🚨</Text>
+            <Icon name="siren" style={styles.emergencyIcon} />
           </View>
 
           <View style={styles.emergencyTextContainer}>
@@ -128,7 +129,7 @@ export default function SafetyCentreScreen({ navigation }) {
             activeOpacity={0.82}
           >
             <View style={styles.featureIconCircle}>
-              <Text style={styles.featureIcon}>{feature.icon}</Text>
+              <Icon name={feature.icon} style={styles.featureIcon} />
             </View>
 
             <View style={styles.featureContent}>
@@ -172,7 +173,7 @@ export default function SafetyCentreScreen({ navigation }) {
         {/* Prototype Information */}
         <View style={styles.infoCard}>
           <View style={styles.infoIconCircle}>
-            <Text style={styles.infoIcon}>ℹ️</Text>
+            <Icon name="info" style={styles.infoIcon} />
           </View>
 
           <View style={styles.infoContent}>
@@ -188,13 +189,6 @@ export default function SafetyCentreScreen({ navigation }) {
         </View>
 
         {/* Back Home */}
-        <TouchableOpacity
-          style={styles.homeButton}
-          activeOpacity={0.82}
-          onPress={() => navigation.navigate("RiderHome")}
-        >
-          <Text style={styles.homeButtonText}>Back to Home</Text>
-        </TouchableOpacity>
 
         <Text style={styles.footer}>RideGo • Fast. Safe. Reliable.</Text>
       </ScrollView>
@@ -513,21 +507,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: "#56718E",
-  },
-
-  homeButton: {
-    height: 54,
-    borderRadius: 18,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 18,
-  },
-
-  homeButtonText: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: "#071A3D",
   },
 
   footer: {

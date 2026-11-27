@@ -1,3 +1,6 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import React from "react";
 import {
   ScrollView,
@@ -15,12 +18,12 @@ export default function DriverFoundScreen({ navigation, route }) {
     description: "Affordable everyday rides",
     eta: "3–5 min",
     price: "R45",
-    icon: "🚗",
+    icon: "car",
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -45,7 +48,7 @@ export default function DriverFoundScreen({ navigation, route }) {
           </View>
 
           <View style={styles.driverMarker}>
-            <Text style={styles.driverMarkerText}>🚗</Text>
+            <Icon name="car" style={styles.driverMarkerText} />
           </View>
 
           <View style={styles.destinationPin}>
@@ -77,7 +80,10 @@ export default function DriverFoundScreen({ navigation, route }) {
             <View style={styles.driverInfo}>
               <Text style={styles.driverName}>Thabo M.</Text>
 
-              <Text style={styles.driverRating}>★ 4.9 • 1,240 trips</Text>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                <Icon name="star" size={13} style={styles.driverRating} />
+                <Text style={styles.driverRating}>4.9 • 1,240 trips</Text>
+              </View>
             </View>
 
             <View style={styles.rideBadge}>
@@ -142,12 +148,12 @@ export default function DriverFoundScreen({ navigation, route }) {
         {/* Action Buttons */}
         <View style={styles.actionsRow}>
           <TouchableOpacity style={styles.actionButton} activeOpacity={0.8}>
-            <Text style={styles.actionIcon}>☎</Text>
+            <Icon name="phone" style={styles.actionIcon} />
             <Text style={styles.actionText}>Call</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.actionButton} activeOpacity={0.8}>
-            <Text style={styles.actionIcon}>💬</Text>
+            <Icon name="message" style={styles.actionIcon} />
             <Text style={styles.actionText}>Message</Text>
           </TouchableOpacity>
         </View>
@@ -166,7 +172,7 @@ export default function DriverFoundScreen({ navigation, route }) {
 
         <TouchableOpacity
           style={styles.cancelButton}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => openScreen(navigation, "RiderHome")}
           activeOpacity={0.8}
         >
           <Text style={styles.cancelButtonText}>Cancel ride</Text>
@@ -179,7 +185,7 @@ export default function DriverFoundScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollContent: {
@@ -189,14 +195,14 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 8,
   },
 
   subtitle: {
-    color: "#AEBBD4",
+    color: colors.muted,
     fontSize: 15,
     lineHeight: 22,
     marginBottom: 24,
@@ -245,7 +251,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 155,
     height: 4,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     transform: [{ rotate: "-24deg" }],
     top: 125,
     left: 72,
@@ -257,7 +263,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     justifyContent: "center",
     alignItems: "center",
     left: 52,
@@ -268,7 +274,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   driverMarker: {
@@ -276,7 +282,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     left: 126,
@@ -305,21 +311,21 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   etaBubble: {
     position: "absolute",
     top: 22,
     left: 22,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 14,
   },
 
   etaText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 12,
     fontWeight: "700",
   },
@@ -338,7 +344,7 @@ const styles = StyleSheet.create({
   },
 
   arrivalCard: {
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     borderRadius: 18,
     paddingVertical: 18,
     alignItems: "center",
@@ -360,7 +366,7 @@ const styles = StyleSheet.create({
   },
 
   driverCard: {
-    backgroundColor: "#102A55",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     padding: 20,
     marginBottom: 16,
@@ -375,7 +381,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 14,
@@ -392,33 +398,33 @@ const styles = StyleSheet.create({
   },
 
   driverName: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 17,
     fontWeight: "700",
     marginBottom: 4,
   },
 
   driverRating: {
-    color: "#AEBBD4",
+    color: colors.muted,
     fontSize: 12,
   },
 
   rideBadge: {
-    backgroundColor: "#18396B",
+    backgroundColor: colors.blueLine,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
   },
 
   rideBadgeText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 11,
     fontWeight: "700",
   },
 
   vehicleDivider: {
     height: 1,
-    backgroundColor: "#29446E",
+    backgroundColor: colors.blueLine,
     marginVertical: 18,
   },
 
@@ -440,7 +446,7 @@ const styles = StyleSheet.create({
   },
 
   vehicleText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -462,7 +468,7 @@ const styles = StyleSheet.create({
   },
 
   tripCard: {
-    backgroundColor: "#102A55",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     padding: 20,
     marginBottom: 16,
@@ -481,7 +487,7 @@ const styles = StyleSheet.create({
   },
 
   pickupDot: {
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   destinationDot: {
@@ -501,7 +507,7 @@ const styles = StyleSheet.create({
   },
 
   locationText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 15,
     fontWeight: "600",
   },
@@ -509,7 +515,7 @@ const styles = StyleSheet.create({
   routeConnector: {
     width: 1,
     height: 24,
-    backgroundColor: "#415779",
+    backgroundColor: colors.blueLine,
     marginLeft: 5.5,
     marginVertical: 4,
   },
@@ -518,7 +524,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingTop: 18,
     borderTopWidth: 1,
-    borderTopColor: "#29446E",
+    borderTopColor: colors.blueLine,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -536,7 +542,7 @@ const styles = StyleSheet.create({
   },
 
   tripSummaryValue: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 15,
     fontWeight: "700",
   },
@@ -551,7 +557,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 54,
     borderRadius: 16,
-    backgroundColor: "#102A55",
+    backgroundColor: colors.blueTint,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
@@ -560,11 +566,11 @@ const styles = StyleSheet.create({
 
   actionIcon: {
     fontSize: 17,
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   actionText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -573,14 +579,14 @@ const styles = StyleSheet.create({
     height: 54,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#415779",
+    borderColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
   },
   startRideButton: {
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 4,
@@ -603,7 +609,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButtonText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 15,
     fontWeight: "600",
   },

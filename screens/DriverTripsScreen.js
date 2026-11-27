@@ -1,5 +1,6 @@
+import { colors } from "../ui/theme";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -79,8 +80,8 @@ export default function DriverTripsScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <View style={styles.container}>
         <ScrollView
@@ -230,40 +231,6 @@ export default function DriverTripsScreen({ navigation }) {
           </View>
         </ScrollView>
 
-        {/* Bottom Navigation */}
-        <View style={styles.bottomNavigation}>
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate("DriverHome")}
-          >
-            <Text style={styles.navIcon}>⌂</Text>
-            <Text style={styles.navLabel}>Home</Text>
-          </TouchableOpacity>
-
-          <View style={[styles.navItem, styles.activeNavItem]}>
-            <Text style={[styles.navIcon, styles.activeNavIcon]}>▣</Text>
-            <Text style={[styles.navLabel, styles.activeNavLabel]}>Trips</Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate("DriverEarnings")}
-          >
-            <Text style={styles.navIcon}>R</Text>
-            <Text style={styles.navLabel}>Earnings</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate("DriverProfile")}
-          >
-            <Text style={styles.navIcon}>●</Text>
-            <Text style={styles.navLabel}>Profile</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -272,12 +239,12 @@ export default function DriverTripsScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -287,7 +254,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 20,
     paddingTop: 18,
-    paddingBottom: 105,
+    paddingBottom: 24,
   },
 
   header: {
@@ -300,7 +267,7 @@ const styles = StyleSheet.create({
   headerLabel: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 1,
     marginBottom: 5,
   },
@@ -308,7 +275,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 25,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   totalBadge: {
@@ -318,30 +285,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 12,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
   },
 
   totalBadgeValue: {
     fontSize: 18,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   totalBadgeLabel: {
     fontSize: 9,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginTop: 1,
   },
 
   overviewCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
     marginBottom: 22,
   },
@@ -354,19 +321,19 @@ const styles = StyleSheet.create({
   overviewValue: {
     fontSize: 19,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   overviewLabel: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   overviewDivider: {
     width: 1,
     height: 34,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
   },
 
   sectionHeader: {
@@ -379,31 +346,31 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   filterBadge: {
     paddingHorizontal: 9,
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
   },
 
   filterBadgeText: {
     fontSize: 8,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 0.5,
   },
 
   tripCard: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 15,
     marginBottom: 12,
   },
@@ -423,36 +390,36 @@ const styles = StyleSheet.create({
   tripDate: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginRight: 7,
   },
 
   tripTime: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
   },
 
   cancelledBadge: {
-    borderColor: "#394B63",
+    borderColor: colors.blueLine,
   },
 
   statusText: {
     fontSize: 8,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   cancelledStatusText: {
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   tripMainRow: {
@@ -469,13 +436,13 @@ const styles = StyleSheet.create({
     width: 9,
     height: 9,
     borderRadius: 5,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   tripLine: {
     width: 2,
     height: 44,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginVertical: 4,
   },
 
@@ -500,7 +467,7 @@ const styles = StyleSheet.create({
   locationLabel: {
     fontSize: 8,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     letterSpacing: 0.6,
     marginBottom: 3,
   },
@@ -508,12 +475,12 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 13,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   tripDivider: {
     height: 1,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginVertical: 13,
   },
 
@@ -533,7 +500,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 9,
@@ -548,13 +515,13 @@ const styles = StyleSheet.create({
   riderName: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   tripMeta: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   fareGroup: {
@@ -564,13 +531,13 @@ const styles = StyleSheet.create({
   fare: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 2,
   },
 
   fareLabel: {
     fontSize: 9,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   viewDetailsRow: {
@@ -580,19 +547,19 @@ const styles = StyleSheet.create({
     marginTop: 13,
     paddingTop: 11,
     borderTopWidth: 1,
-    borderTopColor: "#1D4775",
+    borderTopColor: colors.blueLine,
   },
 
   viewDetailsText: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   viewDetailsArrow: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 6,
   },
 
@@ -600,10 +567,10 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#0A2147",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 13,
     marginTop: 2,
   },
@@ -612,9 +579,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -623,7 +590,7 @@ const styles = StyleSheet.create({
   infoIconText: {
     fontSize: 17,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   infoContent: {
@@ -633,60 +600,14 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   infoText: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
-  bottomNavigation: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 78,
-    backgroundColor: "#0A2147",
-    borderTopWidth: 1,
-    borderTopColor: "#1D4775",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 8,
-  },
-
-  navItem: {
-    flex: 1,
-    height: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 13,
-  },
-
-  activeNavItem: {
-    backgroundColor: "#102A52",
-  },
-
-  navIcon: {
-    fontSize: 18,
-    color: "#6F86A3",
-    marginBottom: 4,
-  },
-
-  activeNavIcon: {
-    color: "#5BC0FF",
-  },
-
-  navLabel: {
-    fontSize: 9,
-    fontWeight: "700",
-    color: "#6F86A3",
-  },
-
-  activeNavLabel: {
-    color: "#5BC0FF",
-  },
 });

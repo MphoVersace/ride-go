@@ -1,3 +1,4 @@
+import Icon from "../ui/Icon";
 import {
   ScrollView,
   StatusBar,
@@ -12,21 +13,21 @@ const savedPlaces = [
     id: "1",
     name: "Home",
     address: "Your saved home address",
-    icon: "⌂",
+    icon: "home",
     accent: "home",
   },
   {
     id: "2",
     name: "Work",
     address: "Your saved work address",
-    icon: "▣",
+    icon: "work",
     accent: "work",
   },
   {
     id: "3",
     name: "Favourite",
     address: "Your favourite saved destination",
-    icon: "★",
+    icon: "star",
     accent: "favourite",
   },
 ];
@@ -93,16 +94,12 @@ export default function SavedPlacesScreen({ navigation }) {
                 place.accent === "favourite" && styles.favouriteIcon,
               ]}
             >
-              <Text
-                style={[
+              <Icon name={place.icon} style={[
                   styles.placeIconText,
                   place.accent === "home" && styles.homeIconText,
                   place.accent === "work" && styles.workIconText,
                   place.accent === "favourite" && styles.favouriteIconText,
-                ]}
-              >
-                {place.icon}
-              </Text>
+                ]} />
             </View>
 
             <View style={styles.placeInfo}>
@@ -144,14 +141,6 @@ export default function SavedPlacesScreen({ navigation }) {
             </Text>
           </View>
         </View>
-
-        <TouchableOpacity
-          style={styles.homeButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderHome")}
-        >
-          <Text style={styles.homeButtonText}>Back to home</Text>
-        </TouchableOpacity>
 
         <Text style={styles.footerText}>
           RideGo • Your favourite destinations
@@ -470,28 +459,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: "#718096",
-  },
-
-  homeButton: {
-    height: 54,
-    borderRadius: 18,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-
-  homeButtonText: {
-    fontSize: 15,
-    fontWeight: "800",
-    color: "#071A3D",
   },
 
   footerText: {

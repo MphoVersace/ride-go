@@ -1,3 +1,5 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -36,7 +38,7 @@ export default function DriverRideRequestScreen({ navigation }) {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.loadingSafeArea}>
-        <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+        <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
         <View style={styles.loadingContainer}>
           <View style={styles.loadingLogoCircle}>
@@ -61,7 +63,7 @@ export default function DriverRideRequestScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <View style={styles.container}>
         <ScrollView
@@ -109,7 +111,7 @@ export default function DriverRideRequestScreen({ navigation }) {
                 <Text style={styles.riderName}>Naledi M.</Text>
 
                 <View style={styles.ratingRow}>
-                  <Text style={styles.star}>★</Text>
+                  <Icon name="star" style={styles.star} />
                   <Text style={styles.rating}>4.9</Text>
                   <Text style={styles.ratingCount}>• 42 rides</Text>
                 </View>
@@ -149,19 +151,19 @@ export default function DriverRideRequestScreen({ navigation }) {
           {/* Trip Summary */}
           <View style={styles.summaryRow}>
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryIcon}>📏</Text>
+              <Icon name="ruler" style={styles.summaryIcon} />
               <Text style={styles.summaryValue}>8.4 km</Text>
               <Text style={styles.summaryLabel}>Distance</Text>
             </View>
 
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryIcon}>⏱️</Text>
+              <Icon name="timer" style={styles.summaryIcon} />
               <Text style={styles.summaryValue}>18 min</Text>
               <Text style={styles.summaryLabel}>Estimated time</Text>
             </View>
 
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryIcon}>💰</Text>
+              <Icon name="wallet" style={styles.summaryIcon} />
               <Text style={styles.summaryValue}>R125</Text>
               <Text style={styles.summaryLabel}>Estimated fare</Text>
             </View>
@@ -193,7 +195,7 @@ export default function DriverRideRequestScreen({ navigation }) {
 
           {/* Information */}
           <View style={styles.infoCard}>
-            <Text style={styles.infoIcon}>ℹ️</Text>
+            <Icon name="info" style={styles.infoIcon} />
 
             <View style={styles.infoContent}>
               <Text style={styles.infoTitle}>Before you accept</Text>
@@ -231,12 +233,12 @@ export default function DriverRideRequestScreen({ navigation }) {
 const styles = StyleSheet.create({
   loadingSafeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   loadingContainer: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 24,
@@ -246,7 +248,7 @@ const styles = StyleSheet.create({
     width: 74,
     height: 74,
     borderRadius: 37,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 18,
@@ -261,13 +263,13 @@ const styles = StyleSheet.create({
   loadingTitle: {
     fontSize: 25,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 6,
   },
 
   loadingSubtitle: {
     fontSize: 13,
-    color: "#8FA5C1",
+    color: colors.muted,
     textAlign: "center",
   },
 
@@ -277,12 +279,12 @@ const styles = StyleSheet.create({
 
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -305,7 +307,7 @@ const styles = StyleSheet.create({
   headerLabel: {
     fontSize: 11,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 1,
     marginBottom: 5,
   },
@@ -313,22 +315,22 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 23,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   requestBadge: {
     paddingHorizontal: 11,
     paddingVertical: 7,
     borderRadius: 10,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
   },
 
   requestBadgeText: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 0.6,
   },
 
@@ -336,10 +338,10 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
     marginBottom: 16,
   },
@@ -348,7 +350,7 @@ const styles = StyleSheet.create({
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 4,
     borderColor: "#5BC0FF",
     alignItems: "center",
@@ -359,13 +361,13 @@ const styles = StyleSheet.create({
   countdownNumber: {
     fontSize: 21,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   countdownSeconds: {
     fontSize: 8,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     marginTop: -1,
   },
 
@@ -376,22 +378,22 @@ const styles = StyleSheet.create({
   countdownTitle: {
     fontSize: 15,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   countdownText: {
     fontSize: 12,
     lineHeight: 18,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   card: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
     marginBottom: 14,
   },
@@ -399,7 +401,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     letterSpacing: 0.8,
     marginBottom: 13,
   },
@@ -413,7 +415,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -432,7 +434,7 @@ const styles = StyleSheet.create({
   riderName: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 5,
   },
 
@@ -450,13 +452,13 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.black,
     marginRight: 5,
   },
 
   ratingCount: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   routeContainer: {
@@ -473,13 +475,13 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   routeConnector: {
     width: 2,
     height: 38,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginVertical: 3,
   },
 
@@ -504,7 +506,7 @@ const styles = StyleSheet.create({
   locationType: {
     fontSize: 9,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     letterSpacing: 0.7,
     marginBottom: 3,
   },
@@ -512,13 +514,13 @@ const styles = StyleSheet.create({
   locationName: {
     fontSize: 14,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 2,
   },
 
   locationAddress: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   summaryRow: {
@@ -530,10 +532,10 @@ const styles = StyleSheet.create({
   summaryCard: {
     flex: 1,
     minHeight: 106,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 11,
     justifyContent: "center",
   },
@@ -546,24 +548,24 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 14,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   summaryLabel: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   mapContainer: {
     width: "100%",
     height: 190,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     overflow: "hidden",
     position: "relative",
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     marginBottom: 14,
   },
 
@@ -571,7 +573,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "120%",
     height: 22,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     top: 75,
     left: -20,
     transform: [{ rotate: "7deg" }],
@@ -581,7 +583,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 20,
     height: "130%",
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     left: 125,
     top: -20,
     transform: [{ rotate: "18deg" }],
@@ -591,7 +593,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "120%",
     height: 13,
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     top: 122,
     left: -15,
     transform: [{ rotate: "-25deg" }],
@@ -603,7 +605,7 @@ const styles = StyleSheet.create({
     height: 65,
     borderRadius: 33,
     borderWidth: 10,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     top: 10,
     left: 22,
   },
@@ -614,7 +616,7 @@ const styles = StyleSheet.create({
     height: 75,
     borderRadius: 38,
     borderWidth: 12,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     bottom: -28,
     right: 18,
   },
@@ -626,7 +628,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -653,7 +655,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 145,
     height: 3,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     left: 90,
     top: 112,
     transform: [{ rotate: "24deg" }],
@@ -663,7 +665,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 11,
     bottom: 11,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 9,
@@ -671,16 +673,16 @@ const styles = StyleSheet.create({
 
   mapLabelText: {
     fontSize: 10,
-    color: "#C9D6E8",
+    color: colors.muted,
   },
 
   infoCard: {
     width: "100%",
     flexDirection: "row",
-    backgroundColor: "#0A2147",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 13,
   },
 
@@ -696,14 +698,14 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   infoText: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   bottomActions: {
@@ -714,9 +716,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: "#0A2147",
+    backgroundColor: colors.blueTint,
     borderTopWidth: 1,
-    borderTopColor: "#1D4775",
+    borderTopColor: colors.blueLine,
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 14,
@@ -726,9 +728,9 @@ const styles = StyleSheet.create({
     flex: 0.85,
     height: 52,
     borderRadius: 16,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -736,14 +738,14 @@ const styles = StyleSheet.create({
   declineButtonText: {
     fontSize: 15,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   acceptButton: {
     flex: 1.15,
     height: 52,
     borderRadius: 16,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },

@@ -1,40 +1,38 @@
-import React, { useState } from "react";
+import { usePreviewAccount } from "../auth/PreviewAccount";
+import { isEmail, normalizeEmail, normalizePhone } from "../auth/validation";
+import { KeyboardField, KeyboardFormScroll } from "../ui/KeyboardForm";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
-  TextInput,
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const DriverEditProfileScreen = ({ navigation }) => {
-  const [firstName, setFirstName] = useState("Thabo");
-  const [lastName, setLastName] = useState("Mokoena");
-  const [phone, setPhone] = useState("+27 71 234 5678");
-  const [email, setEmail] = useState("thabo.mokoena@example.com");
+  const { profile, updateProfile } = usePreviewAccount();
+  const [firstName, setFirstName] = useState(profile?.firstName ?? "Thabo");
+  const [lastName, setLastName] = useState(profile?.lastName ?? "Mokoena");
+  const [phone, setPhone] = useState(profile?.phone ?? "+27 71 234 5678");
+  const [email, setEmail] = useState(profile?.email ?? "thabo.mokoena@example.com");
+  const firstNameField = useRef(null);
+  const lastNameField = useRef(null);
+  const phoneField = useRef(null);
+  const emailField = useRef(null);
 
   const handleSave = () => {
-    if (!firstName.trim() || !lastName.trim() || !phone.trim()) {
-      Alert.alert(
-        "Missing information",
-        "Please complete your first name, last name and phone number.",
-      );
+    const mobile = normalizePhone(phone);
+    if (!firstName.trim() || !lastName.trim() || !mobile || !isEmail(email)) {
+      Alert.alert("Check your details", "Enter a first name, surname, valid mobile number and email address.");
       return;
     }
-
-    Alert.alert(
-      "Profile updated",
-      "Your profile changes have been saved successfully.",
-      [
-        {
-          text: "OK",
-          onPress: () => navigation.goBack(),
-        },
-      ],
-    );
+    if (updateProfile({ firstName: firstName.trim(), lastName: lastName.trim(), phone: mobile, email: normalizeEmail(email) }) === false) {
+      Alert.alert("Email in use", "This email already has a demo account.");
+      return;
+    }
+    navigation.goBack();
   };
 
   return (
@@ -57,10 +55,9 @@ const DriverEditProfileScreen = ({ navigation }) => {
           <View style={styles.headerSpacer} />
         </View>
 
-        <ScrollView
+        <KeyboardFormScroll
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.avatarSection}>
             <View style={styles.avatar}>
@@ -95,7 +92,9 @@ const DriverEditProfileScreen = ({ navigation }) => {
               <View style={styles.field}>
                 <Text style={styles.label}>First name</Text>
 
-                <TextInput
+                <KeyboardField
+                  ref={firstNameField}
+                  nextRef={lastNameField}
                   value={firstName}
                   onChangeText={setFirstName}
                   placeholder="Enter first name"
@@ -110,7 +109,9 @@ const DriverEditProfileScreen = ({ navigation }) => {
               <View style={styles.field}>
                 <Text style={styles.label}>Last name</Text>
 
-                <TextInput
+                <KeyboardField
+                  ref={lastNameField}
+                  nextRef={phoneField}
                   value={lastName}
                   onChangeText={setLastName}
                   placeholder="Enter last name"
@@ -125,7 +126,9 @@ const DriverEditProfileScreen = ({ navigation }) => {
               <View style={styles.field}>
                 <Text style={styles.label}>Phone number</Text>
 
-                <TextInput
+                <KeyboardField
+                  ref={phoneField}
+                  nextRef={emailField}
                   value={phone}
                   onChangeText={setPhone}
                   placeholder="+27 00 000 0000"
@@ -144,7 +147,9 @@ const DriverEditProfileScreen = ({ navigation }) => {
               <View style={styles.field}>
                 <Text style={styles.label}>Email address</Text>
 
-                <TextInput
+                <KeyboardField
+                  ref={emailField}
+                  onSubmitEditing={handleSave}
                   value={email}
                   onChangeText={setEmail}
                   placeholder="you@example.com"
@@ -193,7 +198,7 @@ const DriverEditProfileScreen = ({ navigation }) => {
           >
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
-        </ScrollView>
+        </KeyboardFormScroll>
       </View>
     </SafeAreaView>
   );

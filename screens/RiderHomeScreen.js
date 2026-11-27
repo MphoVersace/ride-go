@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { usePreviewAccount } from '../auth/PreviewAccount';
+import React from "react";
 import {
-  ActivityIndicator,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,45 +13,12 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RiderHomeScreen({ navigation }) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadingTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 900);
-
-    return () => clearTimeout(loadingTimer);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.safeArea} edges={["top"]}>
-        <View style={styles.loadingContainer}>
-          <StatusBar style="light" />
-
-          <View style={styles.loadingLogoCircle}>
-            <Text style={styles.loadingLogoText}>R</Text>
-          </View>
-
-          <Text style={styles.loadingTitle}>RideGo</Text>
-          <Text style={styles.loadingSubtitle}>
-            Preparing your ride experience...
-          </Text>
-
-          <ActivityIndicator
-            size="small"
-            color="#5BC0FF"
-            style={styles.loadingIndicator}
-          />
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const { profile } = usePreviewAccount();
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
 
         <ScrollView
           style={styles.scrollView}
@@ -57,9 +26,9 @@ export default function RiderHomeScreen({ navigation }) {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.header}>
-            <View>
-              <Text style={styles.greeting}>Good day 👋</Text>
-              <Text style={styles.subtitle}>Where are you going?</Text>
+            <View style={styles.headerCopy}>
+              <Text style={styles.greeting}>Good day{profile?.firstName ? `, ${profile.firstName}` : ""}</Text>
+              <Text style={styles.subtitle}>Book your next ride</Text>
             </View>
 
             <TouchableOpacity
@@ -67,13 +36,13 @@ export default function RiderHomeScreen({ navigation }) {
               activeOpacity={0.8}
               onPress={() => navigation.navigate("RiderProfile")}
             >
-              <Text style={styles.profileIcon}>👤</Text>
+              <Icon name="user" style={styles.profileIcon} />
             </TouchableOpacity>
           </View>
 
           <View style={styles.locationCard}>
             <View style={styles.locationIconContainer}>
-              <Text style={styles.locationIcon}>📍</Text>
+              <Icon name="pin" style={styles.locationIcon} />
             </View>
 
             <View style={styles.locationText}>
@@ -81,7 +50,7 @@ export default function RiderHomeScreen({ navigation }) {
               <Text style={styles.locationValue}>Your current location</Text>
             </View>
 
-            <Text style={styles.locationArrow}>›</Text>
+            <Icon name="right" style={styles.locationArrow} />
           </View>
 
           <TouchableOpacity
@@ -90,12 +59,12 @@ export default function RiderHomeScreen({ navigation }) {
             onPress={() => navigation.navigate("DestinationSearch")}
           >
             <View style={styles.searchIconContainer}>
-              <Text style={styles.searchIcon}>⌕</Text>
+              <Icon name="search" style={styles.searchIcon} />
             </View>
 
-            <Text style={styles.destinationText}>Where do you want to go?</Text>
+            <Text style={styles.destinationText}>Where to?</Text>
 
-            <Text style={styles.destinationArrow}>›</Text>
+            <Icon name="right" style={styles.destinationArrow} />
           </TouchableOpacity>
 
           <View style={styles.mapContainer}>
@@ -108,7 +77,7 @@ export default function RiderHomeScreen({ navigation }) {
             <View style={styles.mapCircleThree} />
 
             <View style={styles.mapPin}>
-              <Text style={styles.mapPinText}>📍</Text>
+              <Icon name="pin" style={styles.mapPinText} />
             </View>
 
             <View style={styles.mapLabel}>
@@ -120,18 +89,18 @@ export default function RiderHomeScreen({ navigation }) {
             <Text style={styles.sectionTitle}>Quick actions</Text>
 
             <View style={styles.quickActions}>
-              <TouchableOpacity style={styles.quickCard} activeOpacity={0.85}>
+              <TouchableOpacity style={styles.quickCard} activeOpacity={0.85} onPress={() => navigation.navigate("SavedPlaces")}>
                 <View style={styles.quickIconCircle}>
-                  <Text style={styles.quickIcon}>🏠</Text>
+                  <Icon name="home" style={styles.quickIcon} />
                 </View>
 
                 <Text style={styles.quickTitle}>Home</Text>
                 <Text style={styles.quickSubtitle}>Add location</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickCard} activeOpacity={0.85}>
+              <TouchableOpacity style={styles.quickCard} activeOpacity={0.85} onPress={() => navigation.navigate("SavedPlaces")}>
                 <View style={styles.quickIconCircle}>
-                  <Text style={styles.quickIcon}>💼</Text>
+                  <Icon name="work" style={styles.quickIcon} />
                 </View>
 
                 <Text style={styles.quickTitle}>Work</Text>
@@ -141,26 +110,6 @@ export default function RiderHomeScreen({ navigation }) {
           </View>
         </ScrollView>
 
-        <View style={styles.bottomNavigation}>
-          <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
-            <Text style={styles.navIconActive}>⌂</Text>
-            <Text style={styles.navTextActive}>Home</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.navItem} activeOpacity={0.8}>
-            <Text style={styles.navIcon}>◷</Text>
-            <Text style={styles.navText}>Activity</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("RiderProfile")}
-          >
-            <Text style={styles.navIcon}>👤</Text>
-            <Text style={styles.navText}>Profile</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -169,53 +118,12 @@ export default function RiderHomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
-  },
-
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: "#071A3D",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 30,
-  },
-
-  loadingLogoCircle: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 18,
-  },
-
-  loadingLogoText: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#071A3D",
-  },
-
-  loadingTitle: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 6,
-  },
-
-  loadingSubtitle: {
-    fontSize: 14,
-    color: "#8FA5C1",
-    textAlign: "center",
-  },
-
-  loadingIndicator: {
-    marginTop: 24,
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -225,8 +133,10 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 20,
     paddingTop: 18,
-    paddingBottom: 112,
+    paddingBottom: 24,
   },
+
+  headerCopy: { flex: 1, paddingRight: 12 },
 
   header: {
     width: "100%",
@@ -238,23 +148,23 @@ const styles = StyleSheet.create({
 
   greeting: {
     fontSize: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 5,
   },
 
   subtitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   profileButton: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -266,10 +176,10 @@ const styles = StyleSheet.create({
   locationCard: {
     width: "100%",
     minHeight: 66,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
@@ -280,7 +190,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -296,26 +206,26 @@ const styles = StyleSheet.create({
 
   locationLabel: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 3,
   },
 
   locationValue: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   locationArrow: {
     fontSize: 30,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 8,
   },
 
   destinationCard: {
     width: "100%",
     height: 62,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     borderRadius: 18,
     flexDirection: "row",
     alignItems: "center",
@@ -327,7 +237,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -335,7 +245,7 @@ const styles = StyleSheet.create({
 
   searchIcon: {
     fontSize: 26,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginTop: -3,
   },
 
@@ -343,23 +253,23 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: "bold",
-    color: "#071A3D",
+    color: colors.navy,
   },
 
   destinationArrow: {
     fontSize: 30,
-    color: "#071A3D",
+    color: colors.navy,
   },
 
   mapContainer: {
     width: "100%",
     height: 180,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 22,
     overflow: "hidden",
     position: "relative",
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     marginBottom: 18,
   },
 
@@ -367,7 +277,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "120%",
     height: 24,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     top: 75,
     left: -20,
     transform: [{ rotate: "8deg" }],
@@ -377,7 +287,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 22,
     height: "130%",
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     left: 125,
     top: -20,
     transform: [{ rotate: "18deg" }],
@@ -387,7 +297,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "120%",
     height: 14,
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     top: 115,
     left: -15,
     transform: [{ rotate: "-25deg" }],
@@ -399,7 +309,7 @@ const styles = StyleSheet.create({
     height: 55,
     borderRadius: 28,
     borderWidth: 10,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     top: 15,
     left: 25,
   },
@@ -410,7 +320,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 35,
     borderWidth: 12,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     bottom: -25,
     right: 20,
   },
@@ -421,7 +331,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 8,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     top: 20,
     right: 35,
   },
@@ -435,7 +345,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -448,7 +358,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 12,
     left: 12,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
@@ -456,7 +366,7 @@ const styles = StyleSheet.create({
 
   mapLabelText: {
     fontSize: 11,
-    color: "#C9D6E8",
+    color: colors.muted,
   },
 
   quickSection: {
@@ -466,7 +376,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 10,
   },
 
@@ -479,10 +389,10 @@ const styles = StyleSheet.create({
   quickCard: {
     flex: 1,
     minHeight: 95,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 12,
   },
 
@@ -490,7 +400,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 7,
@@ -503,55 +413,13 @@ const styles = StyleSheet.create({
   quickTitle: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 2,
   },
 
   quickSubtitle: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
-  bottomNavigation: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 78,
-    backgroundColor: "#0A2147",
-    borderTopWidth: 1,
-    borderTopColor: "#1D4775",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-
-  navItem: {
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 70,
-  },
-
-  navIconActive: {
-    fontSize: 24,
-    color: "#5BC0FF",
-    marginBottom: 3,
-  },
-
-  navIcon: {
-    fontSize: 22,
-    color: "#8FA5C1",
-    marginBottom: 4,
-  },
-
-  navTextActive: {
-    fontSize: 11,
-    fontWeight: "bold",
-    color: "#5BC0FF",
-  },
-
-  navText: {
-    fontSize: 11,
-    color: "#8FA5C1",
-  },
 });

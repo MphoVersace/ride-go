@@ -1,3 +1,5 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
 import { useState } from "react";
 import {
   ScrollView,
@@ -11,7 +13,7 @@ import { StatusBar } from "expo-status-bar";
 const rideOptions = [
   {
     id: "economy",
-    icon: "🚗",
+    icon: "car",
     name: "Economy",
     description: "Affordable everyday rides",
     eta: "3–5 min",
@@ -19,7 +21,7 @@ const rideOptions = [
   },
   {
     id: "comfort",
-    icon: "🚘",
+    icon: "car",
     name: "Comfort",
     description: "A more comfortable ride",
     eta: "4–6 min",
@@ -27,7 +29,7 @@ const rideOptions = [
   },
   {
     id: "business",
-    icon: "💼",
+    icon: "work",
     name: "Business",
     description: "Professional rides for work and meetings",
     eta: "5–7 min",
@@ -35,7 +37,7 @@ const rideOptions = [
   },
   {
     id: "luxury",
-    icon: "✨",
+    icon: "sparkle",
     name: "Luxury",
     description: "Premium vehicles and an elevated experience",
     eta: "6–8 min",
@@ -43,7 +45,7 @@ const rideOptions = [
   },
   {
     id: "xl",
-    icon: "🚙",
+    icon: "car",
     name: "XL",
     description: "More space for groups and luggage",
     eta: "5–7 min",
@@ -59,7 +61,7 @@ export default function RideOptionsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -114,7 +116,7 @@ export default function RideOptionsScreen({ navigation }) {
           </View>
 
           <View style={styles.destinationPin}>
-            <Text style={styles.pinText}>📍</Text>
+            <Icon name="pin" style={styles.pinText} />
           </View>
 
           <View style={styles.routeLine} />
@@ -139,7 +141,7 @@ export default function RideOptionsScreen({ navigation }) {
                     isSelected && styles.selectedRideIconCircle,
                   ]}
                 >
-                  <Text style={styles.rideIcon}>{ride.icon}</Text>
+                  <Icon name={ride.icon} style={styles.rideIcon} />
                 </View>
 
                 <View style={styles.rideInfo}>
@@ -214,7 +216,7 @@ export default function RideOptionsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   header: {
@@ -231,23 +233,23 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
 
   backIcon: {
     fontSize: 34,
-    color: "#FFFFFF",
+    color: colors.black,
     marginTop: -4,
   },
 
   headerTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   headerSpacer: {
@@ -265,9 +267,9 @@ const styles = StyleSheet.create({
 
   tripCard: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 18,
     padding: 16,
     marginBottom: 14,
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     marginHorizontal: 4,
     marginRight: 14,
   },
@@ -304,20 +306,20 @@ const styles = StyleSheet.create({
 
   tripLabel: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 3,
   },
 
   tripValue: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   tripLine: {
     width: 2,
     height: 18,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginLeft: 9,
     marginVertical: 2,
   },
@@ -325,9 +327,9 @@ const styles = StyleSheet.create({
   mapPreview: {
     width: "100%",
     height: 150,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 20,
     overflow: "hidden",
     position: "relative",
@@ -338,7 +340,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "130%",
     height: 25,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     top: 60,
     left: -30,
     transform: [{ rotate: "12deg" }],
@@ -348,7 +350,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 22,
     height: "140%",
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     left: 130,
     top: -25,
     transform: [{ rotate: "-18deg" }],
@@ -358,7 +360,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "120%",
     height: 13,
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     top: 112,
     left: -15,
     transform: [{ rotate: "-20deg" }],
@@ -371,7 +373,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 3,
@@ -380,7 +382,7 @@ const styles = StyleSheet.create({
 
   pinText: {
     fontSize: 10,
-    color: "#071A3D",
+    color: colors.navy,
   },
 
   destinationPin: {
@@ -390,7 +392,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 3,
@@ -401,7 +403,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 120,
     height: 3,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     left: "30%",
     top: "48%",
     transform: [{ rotate: "-25deg" }],
@@ -410,7 +412,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 12,
   },
 
@@ -421,9 +423,9 @@ const styles = StyleSheet.create({
   rideCard: {
     width: "100%",
     minHeight: 94,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 18,
     padding: 13,
     marginBottom: 10,
@@ -442,14 +444,14 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
   },
 
   selectedRideIconCircle: {
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   rideIcon: {
@@ -471,11 +473,11 @@ const styles = StyleSheet.create({
   rideName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   recommendedBadge: {
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     borderRadius: 8,
     paddingHorizontal: 7,
     paddingVertical: 3,
@@ -485,19 +487,19 @@ const styles = StyleSheet.create({
   recommendedText: {
     fontSize: 9,
     fontWeight: "bold",
-    color: "#071A3D",
+    color: colors.navy,
   },
 
   rideDescription: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#C9D6E8",
+    color: colors.muted,
     marginBottom: 3,
   },
 
   rideEta: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   priceContainer: {
@@ -509,13 +511,13 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 2,
   },
 
   priceLabel: {
     fontSize: 9,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   selectedCheck: {
@@ -525,7 +527,7 @@ const styles = StyleSheet.create({
     width: 21,
     height: 21,
     borderRadius: 11,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -533,7 +535,7 @@ const styles = StyleSheet.create({
   selectedCheckText: {
     fontSize: 13,
     fontWeight: "bold",
-    color: "#071A3D",
+    color: colors.navy,
     marginTop: -1,
   },
 
@@ -553,7 +555,7 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: "#0A2147",
     borderTopWidth: 1,
-    borderTopColor: "#1D4775",
+    borderTopColor: colors.blueLine,
     paddingHorizontal: 20,
     paddingTop: 14,
     paddingBottom: 25,
@@ -569,14 +571,14 @@ const styles = StyleSheet.create({
 
   selectedLabel: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 3,
   },
 
   selectedRide: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   selectedPriceContainer: {
@@ -586,18 +588,18 @@ const styles = StyleSheet.create({
   selectedPrice: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   selectedEstimated: {
     fontSize: 9,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   confirmButton: {
     width: "100%",
     height: 55,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
@@ -606,6 +608,6 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#071A3D",
+    color: colors.navy,
   },
 });

@@ -1,15 +1,18 @@
+import { usePreviewAccount } from "../auth/PreviewAccount";
+import { leaveApp } from "../navigation/routes";
+import Icon from "../ui/Icon";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 
 const DriverProfileScreen = ({ navigation }) => {
+  const { profile, signOut } = usePreviewAccount();
   const driver = {
     firstName: "Thabo",
     lastName: "Mokoena",
@@ -22,6 +25,8 @@ const DriverProfileScreen = ({ navigation }) => {
     vehicleYear: "2022",
     vehicleColor: "White",
     licensePlate: "GP 123 456",
+    ...profile,
+    ...(profile?.vehicleMake && { vehicle: `${profile.vehicleMake} ${profile.vehicleModel}` }),
   };
 
   const handleEditProfile = () => {
@@ -53,7 +58,7 @@ const DriverProfileScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <View style={styles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -93,7 +98,7 @@ const DriverProfileScreen = ({ navigation }) => {
               <Text style={styles.profileRole}>RideGo Driver</Text>
 
               <View style={styles.ratingRow}>
-                <Text style={styles.ratingStar}>★</Text>
+                <Icon name="star" style={styles.ratingStar} />
                 <Text style={styles.ratingValue}>{driver.rating}</Text>
                 <Text style={styles.ratingDivider}>•</Text>
                 <Text style={styles.ratingTrips}>{driver.trips} trips</Text>
@@ -124,7 +129,7 @@ const DriverProfileScreen = ({ navigation }) => {
             <View style={styles.infoCard}>
               <View style={styles.infoRow}>
                 <View style={styles.iconBox}>
-                  <Text style={styles.iconText}>👤</Text>
+                  <Icon name="user" style={styles.iconText} />
                 </View>
 
                 <View style={styles.infoContent}>
@@ -139,7 +144,7 @@ const DriverProfileScreen = ({ navigation }) => {
 
               <View style={styles.infoRow}>
                 <View style={styles.iconBox}>
-                  <Text style={styles.iconText}>📱</Text>
+                  <Icon name="mobile" style={styles.iconText} />
                 </View>
 
                 <View style={styles.infoContent}>
@@ -152,7 +157,7 @@ const DriverProfileScreen = ({ navigation }) => {
 
               <View style={styles.infoRow}>
                 <View style={styles.iconBox}>
-                  <Text style={styles.iconText}>✉️</Text>
+                  <Icon name="mail" style={styles.iconText} />
                 </View>
 
                 <View style={styles.infoContent}>
@@ -165,7 +170,7 @@ const DriverProfileScreen = ({ navigation }) => {
 
               <View style={styles.infoRow}>
                 <View style={styles.iconBox}>
-                  <Text style={styles.iconText}>📅</Text>
+                  <Icon name="calendar" style={styles.iconText} />
                 </View>
 
                 <View style={styles.infoContent}>
@@ -185,7 +190,7 @@ const DriverProfileScreen = ({ navigation }) => {
               activeOpacity={0.85}
             >
               <View style={styles.menuIcon}>
-                <Text style={styles.menuIconText}>🚗</Text>
+                <Icon name="car" style={styles.menuIconText} />
               </View>
 
               <View style={styles.menuContent}>
@@ -210,7 +215,7 @@ const DriverProfileScreen = ({ navigation }) => {
               activeOpacity={0.85}
             >
               <View style={styles.menuIcon}>
-                <Text style={styles.menuIconText}>📄</Text>
+                <Icon name="document" style={styles.menuIconText} />
               </View>
 
               <View style={styles.menuContent}>
@@ -237,7 +242,7 @@ const DriverProfileScreen = ({ navigation }) => {
               activeOpacity={0.85}
             >
               <View style={styles.menuIcon}>
-                <Text style={styles.menuIconText}>🔔</Text>
+                <Icon name="bell" style={styles.menuIconText} />
               </View>
 
               <View style={styles.menuContent}>
@@ -256,7 +261,7 @@ const DriverProfileScreen = ({ navigation }) => {
               activeOpacity={0.85}
             >
               <View style={styles.menuIcon}>
-                <Text style={styles.menuIconText}>🛡️</Text>
+                <Icon name="shield" style={styles.menuIconText} />
               </View>
 
               <View style={styles.menuContent}>
@@ -275,7 +280,7 @@ const DriverProfileScreen = ({ navigation }) => {
               activeOpacity={0.85}
             >
               <View style={styles.menuIcon}>
-                <Text style={styles.menuIconText}>❓</Text>
+                <Icon name="help" style={styles.menuIconText} />
               </View>
 
               <View style={styles.menuContent}>
@@ -294,7 +299,7 @@ const DriverProfileScreen = ({ navigation }) => {
               activeOpacity={0.85}
             >
               <View style={styles.menuIcon}>
-                <Text style={styles.menuIconText}>⚙️</Text>
+                <Icon name="settings" style={styles.menuIconText} />
               </View>
 
               <View style={styles.menuContent}>
@@ -326,59 +331,16 @@ const DriverProfileScreen = ({ navigation }) => {
 
           <TouchableOpacity
             style={styles.logoutButton}
-            onPress={() =>
-              Alert.alert(
-                "Log out",
-                "Log out functionality will be connected later.",
-              )
-            }
+            onPress={() => { signOut(); leaveApp(navigation); }}
             activeOpacity={0.85}
           >
+            <Icon name="logout" size={18} color="#B42318" />
             <Text style={styles.logoutText}>Log out</Text>
           </TouchableOpacity>
 
           <Text style={styles.versionText}>RideGo Driver • Version 1.0.0</Text>
         </ScrollView>
 
-        <View style={styles.bottomNav}>
-          <TouchableOpacity
-            style={styles.navItem}
-            onPress={() => navigation.navigate("DriverHome")}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.navIcon}>⌂</Text>
-            <Text style={styles.navLabel}>Home</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            onPress={() => navigation.navigate("DriverTrips")}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.navIcon}>▣</Text>
-            <Text style={styles.navLabel}>Trips</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            onPress={() => navigation.navigate("DriverEarnings")}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.navIcon}>R</Text>
-            <Text style={styles.navLabel}>Earnings</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.navItem, styles.activeNavItem]}
-            onPress={() => navigation.navigate("DriverProfile")}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.navIcon, styles.activeNavIcon]}>●</Text>
-            <Text style={[styles.navLabel, styles.activeNavLabel]}>
-              Profile
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -395,7 +357,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 120,
+    paddingBottom: 24,
   },
   header: {
     flexDirection: "row",
@@ -687,44 +649,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#94A3B8",
     marginBottom: 8,
-  },
-  bottomNav: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 78,
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderTopColor: "#E2E8F0",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    paddingBottom: 7,
-  },
-  navItem: {
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 60,
-  },
-  activeNavItem: {
-    transform: [{ translateY: -1 }],
-  },
-  navIcon: {
-    fontSize: 20,
-    color: "#94A3B8",
-    marginBottom: 4,
-  },
-  navLabel: {
-    fontSize: 10,
-    fontWeight: "700",
-    color: "#94A3B8",
-  },
-  activeNavIcon: {
-    color: "#2563EB",
-  },
-  activeNavLabel: {
-    color: "#2563EB",
   },
 });
 
