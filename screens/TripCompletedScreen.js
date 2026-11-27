@@ -12,7 +12,8 @@ import {
 } from "react-native";
 
 export default function TripCompletedScreen({ navigation, route }) {
-  const selectedRide = route?.params?.selectedRide || {
+  const trip = route.params;
+  const selectedRide = trip?.selectedRide || {
     id: "economy",
     name: "Economy",
     description: "Affordable everyday rides",
@@ -74,7 +75,7 @@ export default function TripCompletedScreen({ navigation, route }) {
 
             <View style={styles.locationContent}>
               <Text style={styles.locationLabel}>PICKUP</Text>
-              <Text style={styles.locationText}>Your current location</Text>
+              <Text style={styles.locationText}>{trip?.pickup?.label || "Pickup unavailable"}</Text>
             </View>
           </View>
 
@@ -85,7 +86,7 @@ export default function TripCompletedScreen({ navigation, route }) {
 
             <View style={styles.locationContent}>
               <Text style={styles.locationLabel}>DESTINATION</Text>
-              <Text style={styles.locationText}>Rosebank Mall</Text>
+              <Text style={styles.locationText}>{trip?.destination?.label || "Destination unavailable"}</Text>
             </View>
           </View>
         </View>
@@ -99,18 +100,18 @@ export default function TripCompletedScreen({ navigation, route }) {
 
           <View style={styles.fareDetails}>
             <Text style={styles.fareDetailText}>Estimated fare</Text>
-            <Text style={styles.fareDetailText}>12 min trip</Text>
+            <Text style={styles.fareDetailText}>{trip?.road ? trip.road.minutes + " min estimated" : "Demo trip"}</Text>
           </View>
         </View>
 
         {/* Driver */}
         <View style={styles.driverCard}>
           <View style={styles.driverAvatar}>
-            <Text style={styles.driverAvatarText}>TM</Text>
+            <Text style={styles.driverAvatarText}>{trip?.driver?.initials || "TM"}</Text>
           </View>
 
           <View style={styles.driverInfo}>
-            <Text style={styles.driverName}>Thabo M.</Text>
+            <Text style={styles.driverName}>{trip?.driver?.name || "Thabo M."}</Text>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
               <Icon name="star" size={13} style={styles.driverRating} />
               <Text style={styles.driverRating}>4.9 • 1,240 trips</Text>
@@ -179,7 +180,8 @@ export default function TripCompletedScreen({ navigation, route }) {
           style={styles.receiptButton}
           onPress={() =>
             navigation.navigate("TripReceipt", {
-              selectedRide: selectedRide,
+              ...trip,
+              selectedRide,
             })
           }
           activeOpacity={0.8}

@@ -44,7 +44,7 @@ flowchart TD
 
     AccountType -->|I want to ride| RiderReg["RiderRegistrationScreen"]
     RiderReg --> RiderHome["RiderHomeScreen"]
-    RiderHome --> Booking["Booking Flow: DestinationSearch -> DestinationResults -> RideOptions -> RideSearching -> DriverFound -> RideInProgress -> TripCompleted -> TripReceipt"]
+    RiderHome --> Booking["Booking Flow: DestinationSearch -> RideOptions -> RideSearching -> DriverFound -> RideInProgress -> TripCompleted -> TripReceipt"]
     RiderHome --> RiderProfile["Rider Profile & Account: EditProfile, RideHistory, TripDetails, SavedPlaces, PaymentMethods, Notifications, SafetyCentre, HelpSupport, Settings"]
 
     AccountType -->|I want to drive| DriverWelcome["DriverWelcomeScreen"]
@@ -69,7 +69,7 @@ flowchart TD
 ### 2. Rider Experience
 - **Rider Dashboard (`RiderHomeScreen`)**: Initial loading state, current location card, destination search trigger, and profile shortcut.
 - **Destination & Ride Selection**:
-  - `DestinationSearchScreen` & `DestinationResultsScreen` for picking destinations and saved places.
+  - `DestinationSearchScreen` for choosing pickup and destination.
   - `RideOptionsScreen` offering 5 ride tiers (**Economy**, **Comfort**, **Business**, **Luxury**, **XL**) with ETA estimates and ZAR (`R`) pricing.
 - **Live Trip Lifecycle**: `RideSearchingScreen` -> `DriverFoundScreen` -> `RideInProgressScreen` -> `TripCompletedScreen` -> `TripReceiptScreen`.
 - **Rider Account & Support**:
@@ -108,7 +108,6 @@ ride-go/
 ├── screens/                           # 43 modular screen components
 │   ├── AccountScreen.js
 │   ├── AccountTypeScreen.js
-│   ├── DestinationResultsScreen.js
 │   ├── DestinationSearchScreen.js
 │   ├── DriverActiveTripScreen.js
 │   ├── DriverDocumentsScreen.js
@@ -242,7 +241,7 @@ All 44 routes are registered in `App.js` inside `Stack.Navigator` with `initialR
 | Category | Route Names |
 | :--- | :--- |
 | **Onboarding & Auth** | `SplashOnboarding`, `Account`, `AccountType`, `RiderRegistration` |
-| **Rider Core & Booking** | `RiderHome`, `DestinationSearch`, `DestinationResults`, `RideOptions`, `RideSearching`, `DriverFound`, `RideInProgress`, `TripCompleted`, `TripReceipt` |
+| **Rider Core & Booking** | `RiderHome`, `DestinationSearch`, `RideOptions`, `RideSearching`, `DriverFound`, `RideInProgress`, `TripCompleted`, `TripReceipt` |
 | **Rider Profile & Account** | `RiderProfile`, `EditProfile`, `RideHistory`, `TripDetails`, `SavedPlaces`, `PaymentMethods`, `Notifications`, `SafetyCentre`, `HelpSupport`, `Settings` |
 | **Driver Onboarding** | `DriverWelcome`, `DriverProfileSetup`, `DriverVehicleSetup`, `DriverDocumentsSetup` |
 | **Driver Trips & Operations** | `DriverHome`, `DriverRideRequest`, `DriverNavigation`, `DriverActiveTrip`, `DriverTripCompleted`, `DriverTrips`, `DriverTripDetails` |
@@ -251,6 +250,16 @@ All 44 routes are registered in `App.js` inside `Stack.Navigator` with `initialR
 ---
 
 ## Configuration
+
+### Maps and demo rides
+
+The rider flow uses OpenStreetMap tiles, foreground device location and coordinate-based trip previews.
+Driver dispatch, driver movement and payment are simulated. Demo fares do not trigger a charge.
+
+- `EXPO_PUBLIC_RIDEGO_TILE_URL` optionally replaces the OpenStreetMap tile template. Use a provider that permits your traffic and supplies OpenStreetMap-derived tiles. Keep the provider's attribution visible.
+- `EXPO_PUBLIC_RIDEGO_ROUTER_URL` accepts an OSRM base URL for road routes. Build-time values are public. The default public OSRM preview is limited to the app's Johannesburg sample locations. Other locations get a labelled direct-line preview until a router is configured.
+- `EXPO_PUBLIC_RIDEGO_GEOCODER_URL` accepts a Nominatim-compatible search endpoint. The app searches after submission. Without this setting, the browser uses the built-in sample places and mobile can also use the device's geocoder.
+
 
 Manifest settings in `app.json`:
 

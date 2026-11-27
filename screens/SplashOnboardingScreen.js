@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Easing, Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Action, Wordmark } from '../ui/AuthLayout';
-import RouteArtwork from '../ui/RouteArtwork';
+import OnboardingCarArtwork from '../ui/OnboardingCarArtwork';
 import { colors } from '../ui/theme';
+import { useReduceMotion } from '../ui/useReduceMotion';
 
 const slides = [
   { title: 'Your ride.\nYour way.', description: 'Choose where you’re going and find a ride that suits you.' },
@@ -15,15 +16,44 @@ const slides = [
 export default function SplashOnboardingScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
+  const [moving, setMoving] = useState(false);
+  const busy = useRef(false);
+  const travel = useRef(new Animated.Value(0)).current;
+  const reduceMotion = useReduceMotion();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 850);
-    return () => clearTimeout(timer);
-  }, []);
+    return () => { clearTimeout(timer); travel.stopAnimation(); };
+  }, [travel]);
 
   const { title, description } = slides[index];
   const last = index === slides.length - 1;
   const continueToAccount = () => navigation.navigate('Account');
+
+  function next() {
+    if (busy.current) return;
+    if (last) return continueToAccount();
+    if (reduceMotion) return setIndex(index + 1);
+
+    busy.current = true;
+    setMoving(true);
+    const widthToCross = Math.min(width, 560);
+    const drive = (toValue, duration, easing) => Animated.timing(travel, {
+      toValue, duration, easing, isInteraction: false, useNativeDriver: Platform.OS !== 'web',
+    });
+
+    drive(widthToCross, 240, Easing.in(Easing.quad)).start(({ finished }) => {
+      if (!finished) return;
+      travel.setValue(-widthToCross);
+      setIndex(index + 1);
+      drive(0, 380, Easing.out(Easing.cubic)).start(({ finished: arrived }) => {
+        if (!arrived) return;
+        busy.current = false;
+        setMoving(false);
+      });
+    });
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -32,7 +62,7 @@ export default function SplashOnboardingScreen({ navigation }) {
         <View style={styles.top}>
           <Wordmark />
           {!loading && (
-            <Pressable style={styles.skip} onPress={continueToAccount} accessibilityRole="button">
+            <Pressable style={styles.skip} onPress={continueToAccount} disabled={moving} accessibilityRole="button">
               <Text style={styles.skipText}>Skip</Text>
             </Pressable>
           )}
@@ -46,7 +76,7 @@ export default function SplashOnboardingScreen({ navigation }) {
               <Text style={styles.description}>{description}</Text>
             </>
           )}
-          <RouteArtwork key={loading ? 'startup' : 'intro'} variant={index} animate fast={loading} />
+          <OnboardingCarArtwork slide={index} travel={travel} />
         </View>
         {!loading && (
           <View style={styles.footer}>
@@ -55,7 +85,7 @@ export default function SplashOnboardingScreen({ navigation }) {
                 <View key={slide.title} style={[styles.dot, page === index && styles.activeDot]} />
               ))}
             </View>
-            <Action title={last ? 'Get started' : 'Next'} onPress={last ? continueToAccount : () => setIndex(index + 1)} />
+            <Action title={last ? 'Get started' : 'Next'} onPress={next} disabled={moving} />
           </View>
         )}
       </ScrollView>

@@ -61,7 +61,7 @@ export function Action({ title, onPress, secondary, disabled, icon = 'arrow' }) 
   );
 }
 
-export function Field({ label, icon, error, password, visible, toggleVisibility, ...props }) {
+export function Field({ label, icon, error, password, visible, toggleVisibility, onFocus, ...props }) {
   const [focused, setFocused] = useState(false);
 
   return (
@@ -73,7 +73,7 @@ export function Field({ label, icon, error, password, visible, toggleVisibility,
           accessibilityLabel={label}
           style={styles.input}
           placeholderTextColor={colors.muted}
-          onFocus={() => setFocused(true)}
+          onFocus={event => { setFocused(true); onFocus?.(event); }}
           onBlur={() => setFocused(false)}
           secureTextEntry={password && !visible}
           {...props}
