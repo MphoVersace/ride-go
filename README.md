@@ -1,12 +1,12 @@
 # RideGo
 
-![Expo](https://img.shields.io/badge/Expo-~57.0.20-000020?style=for-the-badge&logo=expo&logoColor=white)
-![React Native](https://img.shields.io/badge/React_Native-0.86.3-61DAFB?style=for-the-badge&logo=react&logoColor=000000)
-![React](https://img.shields.io/badge/React-19.2.3-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Expo](https://img.shields.io/badge/Expo-~58.1.0-000020?style=for-the-badge&logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-0.88.1-61DAFB?style=for-the-badge&logo=react&logoColor=000000)
+![React](https://img.shields.io/badge/React-19.3.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![React Navigation](https://img.shields.io/badge/React_Navigation-v7-6B52AE?style=for-the-badge&logo=react&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-RideGo is a cross-platform mobile ride-hailing application built with **React Native** and **Expo** (SDK 57). It provides complete end-to-end user interfaces and navigation flows for both **Riders** (searching destinations, selecting ride tiers, tracking trips, and viewing receipts) and **Drivers** (onboarding, vehicle and document setup, accepting trip requests, navigating active trips, and tracking earnings).
+RideGo is a cross-platform mobile ride-hailing application built with **React Native** and **Expo** (SDK 58). It provides complete end-to-end user interfaces and navigation flows for both **Riders** (searching destinations, selecting ride tiers, tracking trips, and viewing receipts) and **Drivers** (onboarding, vehicle and document setup, accepting trip requests, navigating active trips, and tracking earnings).
 
 ---
 
@@ -150,7 +150,8 @@ ride-go/
 │   ├── TripDetailsScreen.js
 │   └── TripReceiptScreen.js
 ├── .gitignore                         # Git ignore rules (node_modules, .expo, native dirs, .agents)
-├── AGENTS.md                          # Expo SDK v57 documentation reference
+├── .npmrc                             # npm configuration (legacy-peer-deps=true)
+├── AGENTS.md                          # Expo SDK v58 documentation reference
 ├── App.js                             # Root Stack.Navigator & SplashOnboardingScreen
 ├── CLAUDE.md                          # Points to AGENTS.md
 ├── LICENSE                            # MIT License
@@ -167,14 +168,14 @@ ride-go/
 
 | Package | Version | Purpose |
 | :--- | :--- | :--- |
-| `expo` | `~57.0.20` | Expo managed runtime and CLI toolchain |
-| `react` | `19.2.3` | Core UI library |
-| `react-native` | `0.86.3` | Native mobile UI framework |
+| `expo` | `^58.1.0` | Expo managed runtime and CLI toolchain |
+| `react` | `^19.3.0` | Core UI library |
+| `react-native` | `^0.88.1` | Native mobile UI framework |
 | `@react-navigation/native` | `^7.3.18` | Navigation container and state management |
 | `@react-navigation/native-stack` | `^7.18.10` | Native stack screen transitions |
-| `react-native-safe-area-context` | `~5.7.0` | Safe area inset handling across devices |
-| `react-native-screens` | `~4.26.0` | Native screen primitives for React Navigation |
-| `expo-status-bar` | `~57.0.1` | Cross-platform status bar control |
+| `react-native-safe-area-context` | `~5.11.1` | Safe area inset handling across devices |
+| `react-native-screens` | `~4.30.1` | Native screen primitives for React Navigation |
+| `expo-status-bar` | `~58.0.5` | Cross-platform status bar control |
 
 ---
 
@@ -220,7 +221,7 @@ Or target a specific platform directly using the scripts defined in `package.jso
 | `npm run ios` | `expo start --ios` | Opens the app in the iOS Simulator (macOS only) |
 | `npm run web` | `expo start --web` | Starts the web target (requires `react-native-web` and `react-dom` if not yet installed) |
 
-> **Note on Web Target**: `package.json` includes `react-native` and `expo` for Android and iOS out of the box (`sdkVersion: 57.0.0`). If you want to run `npm run web`, install the web dependencies first with `npx expo install react-dom react-native-web`.
+> **Note on Web Target**: `package.json` includes `react-native` and `expo` for Android and iOS out of the box (`sdkVersion: 58.0.0`). If you want to run `npm run web`, install the web dependencies first with `npx expo install react-dom react-native-web`.
 
 Useful Expo CLI flags:
 
