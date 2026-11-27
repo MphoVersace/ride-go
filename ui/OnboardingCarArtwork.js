@@ -1,34 +1,11 @@
-import { useEffect, useRef } from 'react';
-import { Animated, Easing, Platform, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 import Icon from './Icon';
 import { colors } from './theme';
-import { useReduceMotion } from './useReduceMotion';
 
 const slideIcons = ['route', 'pin', 'shield'];
 
-export default function OnboardingCarArtwork({ slide }) {
-  const reduceMotion = useReduceMotion();
-  const progress = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    if (reduceMotion) {
-      progress.setValue(1);
-      return;
-    }
-
-    progress.setValue(0);
-    const entrance = Animated.timing(progress, {
-      toValue: 1,
-      duration: 440,
-      easing: Easing.out(Easing.cubic),
-      isInteraction: false,
-      useNativeDriver: Platform.OS !== 'web',
-    });
-    entrance.start();
-    return () => entrance.stop();
-  }, [progress, reduceMotion]);
-
+export default function OnboardingCarArtwork({ slide, travel }) {
   return (
     <View style={styles.artwork} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
       <Svg width="100%" height="100%" viewBox="0 0 360 220" style={StyleSheet.absoluteFill}>
@@ -45,13 +22,7 @@ export default function OnboardingCarArtwork({ slide }) {
         source={require('../assets/onboarding-car.png')}
         resizeMode="contain"
         fadeDuration={0}
-        style={[
-          styles.car,
-          {
-            opacity: progress.interpolate({ inputRange: [0, 1], outputRange: [0.35, 1] }),
-            transform: [{ translateX: progress.interpolate({ inputRange: [0, 1], outputRange: [-16, 0] }) }],
-          },
-        ]}
+        style={[styles.car, { transform: [{ translateX: travel }] }]}
       />
     </View>
   );

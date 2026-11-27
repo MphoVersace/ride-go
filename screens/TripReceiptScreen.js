@@ -12,7 +12,8 @@ import {
 } from "react-native";
 
 export default function TripReceiptScreen({ navigation, route }) {
-  const selectedRide = route?.params?.selectedRide || {
+  const trip = route.params;
+  const selectedRide = trip?.selectedRide || {
     id: "economy",
     name: "Economy",
     description: "Affordable everyday rides",
@@ -20,6 +21,8 @@ export default function TripReceiptScreen({ navigation, route }) {
     price: "R45",
     icon: "car",
   };
+
+  const completed = trip?.completedAt ? new Date(trip.completedAt) : null;
 
   return (
     <View style={styles.container}>
@@ -76,17 +79,17 @@ export default function TripReceiptScreen({ navigation, route }) {
 
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>DATE</Text>
-            <Text style={styles.detailValue}>10 September 2026</Text>
+            <Text style={styles.detailValue}>{completed?.toLocaleDateString("en-ZA") || "—"}</Text>
           </View>
 
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>TIME</Text>
-            <Text style={styles.detailValue}>15:15</Text>
+            <Text style={styles.detailValue}>{completed?.toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" }) || "—"}</Text>
           </View>
 
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>DURATION</Text>
-            <Text style={styles.detailValue}>12 minutes</Text>
+            <Text style={styles.detailValue}>{trip?.road ? trip.road.minutes + " min estimated" : "—"}</Text>
           </View>
 
           <View style={styles.divider} />
@@ -103,12 +106,12 @@ export default function TripReceiptScreen({ navigation, route }) {
             <View style={styles.locationContent}>
               <View style={styles.locationBlock}>
                 <Text style={styles.locationLabel}>PICKUP</Text>
-                <Text style={styles.locationText}>Your current location</Text>
+                <Text style={styles.locationText}>{trip?.pickup?.label || "Pickup unavailable"}</Text>
               </View>
 
               <View style={styles.locationBlock}>
                 <Text style={styles.locationLabel}>DESTINATION</Text>
-                <Text style={styles.locationText}>Rosebank Mall</Text>
+                <Text style={styles.locationText}>{trip?.destination?.label || "Destination unavailable"}</Text>
               </View>
             </View>
           </View>
@@ -119,11 +122,11 @@ export default function TripReceiptScreen({ navigation, route }) {
 
           <View style={styles.driverRow}>
             <View style={styles.driverAvatar}>
-              <Text style={styles.driverAvatarText}>TM</Text>
+              <Text style={styles.driverAvatarText}>{trip?.driver?.initials || "TM"}</Text>
             </View>
 
             <View style={styles.driverInfo}>
-              <Text style={styles.driverName}>Thabo M.</Text>
+              <Text style={styles.driverName}>{trip?.driver?.name || "Thabo M."}</Text>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                 <Icon name="star" size={13} style={styles.driverRating} />
                 <Text style={styles.driverRating}>4.9 • 1,240 trips</Text>
@@ -139,7 +142,7 @@ export default function TripReceiptScreen({ navigation, route }) {
 
             <View style={styles.vehicleRight}>
               <Text style={styles.vehicleColor}>Silver</Text>
-              <Text style={styles.plate}>KDF 482 GP</Text>
+              <Text style={styles.plate}>{trip?.driver?.plate || "—"}</Text>
             </View>
           </View>
 
@@ -157,7 +160,7 @@ export default function TripReceiptScreen({ navigation, route }) {
 
           <View style={styles.fareRow}>
             <Text style={styles.fareLabel}>Payment status</Text>
-            <Text style={styles.paidValue}>Prototype</Text>
+            <Text style={styles.paidValue}>{trip?.paymentMethod ? trip.paymentMethod + " · No charge" : "Demo · No charge"}</Text>
           </View>
         </View>
 

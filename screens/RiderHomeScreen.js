@@ -1,7 +1,9 @@
+import { useState } from 'react';
+import RideMap from '../rides/RideMap';
+import { currentPickup } from '../rides/trip';
 import { colors } from "../ui/theme";
 import Icon from "../ui/Icon";
 import { usePreviewAccount } from '../auth/PreviewAccount';
-import React from "react";
 import {
   StyleSheet,
   Text,
@@ -14,6 +16,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RiderHomeScreen({ navigation }) {
   const { profile } = usePreviewAccount();
+  const [pickup, setPickup] = useState(null);
+  const [locating, setLocating] = useState(false);
+  const [locationMessage, setLocationMessage] = useState('');
+
+  async function locate() {
+    if (locating) return;
+    setLocating(true);
+    setLocationMessage('');
+    try {
+      setPickup(await currentPickup());
+    } catch {
+      setLocationMessage('Location unavailable. Enter your pickup in Where to?');
+    } finally {
+      setLocating(false);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
@@ -40,23 +58,26 @@ export default function RiderHomeScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.locationCard}>
+          <TouchableOpacity style={styles.locationCard} accessibilityRole="button" onPress={locate} disabled={locating}>
             <View style={styles.locationIconContainer}>
               <Icon name="pin" style={styles.locationIcon} />
             </View>
 
             <View style={styles.locationText}>
               <Text style={styles.locationLabel}>Current location</Text>
-              <Text style={styles.locationValue}>Your current location</Text>
+              <Text style={styles.locationValue}>
+                {locating ? 'Getting your location…' : pickup?.label || 'Use my location'}
+              </Text>
             </View>
 
             <Icon name="right" style={styles.locationArrow} />
-          </View>
+          </TouchableOpacity>
+          {locationMessage ? <Text accessibilityLiveRegion="polite" style={styles.locationMessage}>{locationMessage}</Text> : null}
 
           <TouchableOpacity
             style={styles.destinationCard}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate("DestinationSearch")}
+            onPress={() => navigation.navigate("DestinationSearch", { pickup })}
           >
             <View style={styles.searchIconContainer}>
               <Icon name="search" style={styles.searchIcon} />
@@ -67,23 +88,7 @@ export default function RiderHomeScreen({ navigation }) {
             <Icon name="right" style={styles.destinationArrow} />
           </TouchableOpacity>
 
-          <View style={styles.mapContainer}>
-            <View style={styles.mapRoadHorizontal} />
-            <View style={styles.mapRoadVertical} />
-            <View style={styles.mapRoadDiagonal} />
-
-            <View style={styles.mapCircleOne} />
-            <View style={styles.mapCircleTwo} />
-            <View style={styles.mapCircleThree} />
-
-            <View style={styles.mapPin}>
-              <Icon name="pin" style={styles.mapPinText} />
-            </View>
-
-            <View style={styles.mapLabel}>
-              <Text style={styles.mapLabelText}>Your location</Text>
-            </View>
-          </View>
+          <RideMap pickup={pickup?.coordinate} height={200} />
 
           <View style={styles.quickSection}>
             <Text style={styles.sectionTitle}>Quick actions</Text>
@@ -261,113 +266,7 @@ const styles = StyleSheet.create({
     color: colors.navy,
   },
 
-  mapContainer: {
-    width: "100%",
-    height: 180,
-    backgroundColor: colors.blueTint,
-    borderRadius: 22,
-    overflow: "hidden",
-    position: "relative",
-    borderWidth: 1,
-    borderColor: colors.blueLine,
-    marginBottom: 18,
-  },
-
-  mapRoadHorizontal: {
-    position: "absolute",
-    width: "120%",
-    height: 24,
-    backgroundColor: colors.blueLine,
-    top: 75,
-    left: -20,
-    transform: [{ rotate: "8deg" }],
-  },
-
-  mapRoadVertical: {
-    position: "absolute",
-    width: 22,
-    height: "130%",
-    backgroundColor: colors.blueLine,
-    left: 125,
-    top: -20,
-    transform: [{ rotate: "18deg" }],
-  },
-
-  mapRoadDiagonal: {
-    position: "absolute",
-    width: "120%",
-    height: 14,
-    backgroundColor: colors.blueLine,
-    top: 115,
-    left: -15,
-    transform: [{ rotate: "-25deg" }],
-  },
-
-  mapCircleOne: {
-    position: "absolute",
-    width: 55,
-    height: 55,
-    borderRadius: 28,
-    borderWidth: 10,
-    borderColor: colors.blueLine,
-    top: 15,
-    left: 25,
-  },
-
-  mapCircleTwo: {
-    position: "absolute",
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 12,
-    borderColor: colors.blueLine,
-    bottom: -25,
-    right: 20,
-  },
-
-  mapCircleThree: {
-    position: "absolute",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 8,
-    borderColor: colors.blueLine,
-    top: 20,
-    right: 35,
-  },
-
-  mapPin: {
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    marginLeft: -18,
-    marginTop: -18,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.blue,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  mapPinText: {
-    fontSize: 17,
-  },
-
-  mapLabel: {
-    position: "absolute",
-    bottom: 12,
-    left: 12,
-    backgroundColor: colors.white,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 10,
-  },
-
-  mapLabelText: {
-    fontSize: 11,
-    color: colors.muted,
-  },
+  locationMessage: { marginBottom: 12, color: colors.muted },
 
   quickSection: {
     width: "100%",
