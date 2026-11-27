@@ -1,3 +1,5 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
 import {
   Alert,
   SafeAreaView,
@@ -37,7 +39,7 @@ export default function DriverActiveTripScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <View style={styles.container}>
         <ScrollView
@@ -135,7 +137,7 @@ export default function DriverActiveTripScreen({ navigation }) {
                 <Text style={styles.riderName}>Naledi M.</Text>
 
                 <View style={styles.ratingRow}>
-                  <Text style={styles.star}>★</Text>
+                  <Icon name="star" style={styles.star} />
                   <Text style={styles.rating}>4.9</Text>
                   <Text style={styles.ratingCount}>• 42 rides</Text>
                 </View>
@@ -146,7 +148,7 @@ export default function DriverActiveTripScreen({ navigation }) {
                 activeOpacity={0.85}
                 onPress={handleCall}
               >
-                <Text style={styles.callIcon}>☎</Text>
+                <Icon name="phone" style={styles.callIcon} />
               </TouchableOpacity>
             </View>
           </View>
@@ -189,19 +191,19 @@ export default function DriverActiveTripScreen({ navigation }) {
           {/* Trip Summary */}
           <View style={styles.summaryRow}>
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryIcon}>💰</Text>
+              <Icon name="wallet" style={styles.summaryIcon} />
               <Text style={styles.summaryValue}>R125</Text>
               <Text style={styles.summaryLabel}>Estimated fare</Text>
             </View>
 
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryIcon}>📏</Text>
+              <Icon name="ruler" style={styles.summaryIcon} />
               <Text style={styles.summaryValue}>8.4 km</Text>
               <Text style={styles.summaryLabel}>Total distance</Text>
             </View>
 
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryIcon}>⏱️</Text>
+              <Icon name="timer" style={styles.summaryIcon} />
               <Text style={styles.summaryValue}>18 min</Text>
               <Text style={styles.summaryLabel}>Trip estimate</Text>
             </View>
@@ -214,7 +216,7 @@ export default function DriverActiveTripScreen({ navigation }) {
             onPress={handleSafety}
           >
             <View style={styles.safetyIcon}>
-              <Text style={styles.safetyIconText}>🛡</Text>
+              <Icon name="shield" style={styles.safetyIconText} />
             </View>
 
             <View style={styles.safetyContent}>
@@ -247,12 +249,12 @@ export default function DriverActiveTripScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -275,7 +277,7 @@ const styles = StyleSheet.create({
   headerLabel: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 1,
     marginBottom: 5,
   },
@@ -283,7 +285,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 23,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   tripBadge: {
@@ -292,33 +294,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 7,
     borderRadius: 10,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
   },
 
   tripBadgeDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     marginRight: 6,
   },
 
   tripBadgeText: {
     fontSize: 9,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 0.5,
   },
 
   etaCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
     marginBottom: 14,
   },
@@ -330,26 +332,26 @@ const styles = StyleSheet.create({
   etaValue: {
     fontSize: 24,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   distanceValue: {
     fontSize: 18,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   etaLabel: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   etaDivider: {
     width: 1,
     height: 42,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginHorizontal: 16,
   },
 
@@ -360,12 +362,12 @@ const styles = StyleSheet.create({
   mapContainer: {
     width: "100%",
     height: 260,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     overflow: "hidden",
     position: "relative",
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     marginBottom: 14,
   },
 
@@ -373,7 +375,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "135%",
     height: 22,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     top: 83,
     left: -40,
     transform: [{ rotate: "8deg" }],
@@ -383,7 +385,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 19,
     height: "135%",
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     left: 128,
     top: -30,
     transform: [{ rotate: "20deg" }],
@@ -393,7 +395,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "125%",
     height: 13,
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     top: 165,
     left: -25,
     transform: [{ rotate: "-21deg" }],
@@ -403,7 +405,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "105%",
     height: 12,
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     bottom: 37,
     left: 15,
     transform: [{ rotate: "28deg" }],
@@ -415,7 +417,7 @@ const styles = StyleSheet.create({
     height: 78,
     borderRadius: 39,
     borderWidth: 11,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     top: 13,
     left: 23,
   },
@@ -426,7 +428,7 @@ const styles = StyleSheet.create({
     height: 92,
     borderRadius: 46,
     borderWidth: 13,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     bottom: -35,
     right: 7,
   },
@@ -437,7 +439,7 @@ const styles = StyleSheet.create({
     height: 54,
     borderRadius: 27,
     borderWidth: 8,
-    borderColor: "#173C68",
+    borderColor: colors.blueLine,
     top: 116,
     right: 22,
   },
@@ -446,7 +448,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 92,
     height: 4,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     left: 67,
     top: 119,
     transform: [{ rotate: "24deg" }],
@@ -456,7 +458,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 95,
     height: 4,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     left: 125,
     top: 157,
     transform: [{ rotate: "-24deg" }],
@@ -466,7 +468,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 66,
     height: 4,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     left: 200,
     top: 120,
     transform: [{ rotate: "38deg" }],
@@ -479,7 +481,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 2,
     borderColor: "#5BC0FF",
     alignItems: "center",
@@ -490,7 +492,7 @@ const styles = StyleSheet.create({
     width: 31,
     height: 31,
     borderRadius: 16,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -525,7 +527,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 12,
     bottom: 12,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 9,
@@ -533,7 +535,7 @@ const styles = StyleSheet.create({
 
   mapLabelText: {
     fontSize: 10,
-    color: "#C9D6E8",
+    color: colors.muted,
   },
 
   recenterButton: {
@@ -543,24 +545,24 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
 
   recenterIcon: {
     fontSize: 22,
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   card: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
     marginBottom: 14,
   },
@@ -575,7 +577,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#8FA5C1",
+    color: colors.muted,
     letterSpacing: 0.8,
   },
 
@@ -583,15 +585,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
   },
 
   verifiedText: {
     fontSize: 8,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 0.4,
   },
 
@@ -604,7 +606,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -623,7 +625,7 @@ const styles = StyleSheet.create({
   riderName: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 5,
   },
 
@@ -641,29 +643,29 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.black,
     marginRight: 5,
   },
 
   ratingCount: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   callButton: {
     width: 42,
     height: 42,
     borderRadius: 13,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
 
   callIcon: {
     fontSize: 17,
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   destinationRow: {
@@ -675,7 +677,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -694,19 +696,19 @@ const styles = StyleSheet.create({
   destinationName: {
     fontSize: 15,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   destinationAddress: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   destinationDivider: {
     height: 1,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginVertical: 14,
   },
 
@@ -719,9 +721,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -730,7 +732,7 @@ const styles = StyleSheet.create({
   routeStatusIconText: {
     fontSize: 16,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   routeStatusContent: {
@@ -740,14 +742,14 @@ const styles = StyleSheet.create({
   routeStatusTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   routeStatusText: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   summaryRow: {
@@ -759,10 +761,10 @@ const styles = StyleSheet.create({
   summaryCard: {
     flex: 1,
     minHeight: 104,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 11,
     justifyContent: "center",
   },
@@ -775,23 +777,23 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 14,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   summaryLabel: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   safetyCard: {
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#0A2147",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 13,
   },
 
@@ -799,9 +801,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -818,20 +820,20 @@ const styles = StyleSheet.create({
   safetyTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   safetyText: {
     fontSize: 11,
     lineHeight: 16,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   safetyArrow: {
     fontSize: 20,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 8,
   },
 
@@ -840,9 +842,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "#0A2147",
+    backgroundColor: colors.blueTint,
     borderTopWidth: 1,
-    borderTopColor: "#1D4775",
+    borderTopColor: colors.blueLine,
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 14,
@@ -851,7 +853,7 @@ const styles = StyleSheet.create({
   completeButton: {
     height: 54,
     borderRadius: 16,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

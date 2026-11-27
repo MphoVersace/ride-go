@@ -1,3 +1,5 @@
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import React from "react";
 import {
   SafeAreaView,
@@ -12,28 +14,28 @@ import {
 const supportOptions = [
   {
     id: "ride-help",
-    icon: "🚗",
+    icon: "car",
     title: "Ride help",
     description: "Get help with a current or previous RideGo trip.",
     action: "Get ride help",
   },
   {
     id: "payment-help",
-    icon: "💳",
+    icon: "card",
     title: "Payments & fares",
     description: "Find help with fares, payments, refunds and charges.",
     action: "View payment help",
   },
   {
     id: "account-help",
-    icon: "👤",
+    icon: "user",
     title: "Account & profile",
     description: "Get help managing your profile and account information.",
     action: "Manage account help",
   },
   {
     id: "safety-help",
-    icon: "🛡️",
+    icon: "shield",
     title: "Safety concerns",
     description: "Report a safety concern or get support after a ride.",
     action: "Get safety support",
@@ -76,7 +78,7 @@ export default function HelpSupportScreen({ navigation }) {
         {/* Hero */}
         <View style={styles.heroCard}>
           <View style={styles.heroIconCircle}>
-            <Text style={styles.heroIcon}>💬</Text>
+            <Icon name="message" style={styles.heroIcon} />
           </View>
 
           <View style={styles.heroTextContainer}>
@@ -118,7 +120,7 @@ export default function HelpSupportScreen({ navigation }) {
             activeOpacity={0.82}
           >
             <View style={styles.supportIconCircle}>
-              <Text style={styles.supportIcon}>{option.icon}</Text>
+              <Icon name={option.icon} style={styles.supportIcon} />
             </View>
 
             <View style={styles.supportContent}>
@@ -165,7 +167,7 @@ export default function HelpSupportScreen({ navigation }) {
         {/* Contact Support */}
         <View style={styles.contactCard}>
           <View style={styles.contactIconCircle}>
-            <Text style={styles.contactIcon}>🎧</Text>
+            <Icon name="headset" style={styles.contactIcon} />
           </View>
 
           <View style={styles.contactContent}>
@@ -185,7 +187,7 @@ export default function HelpSupportScreen({ navigation }) {
         {/* Prototype Information */}
         <View style={styles.infoCard}>
           <View style={styles.infoIconCircle}>
-            <Text style={styles.infoIcon}>ℹ️</Text>
+            <Icon name="info" style={styles.infoIcon} />
           </View>
 
           <View style={styles.infoContent}>
@@ -203,7 +205,7 @@ export default function HelpSupportScreen({ navigation }) {
         <TouchableOpacity
           style={styles.homeButton}
           activeOpacity={0.82}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => openScreen(navigation, "RiderHome")}
         >
           <Text style={styles.homeButtonText}>Back to Home</Text>
         </TouchableOpacity>

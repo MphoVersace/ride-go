@@ -1,3 +1,6 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import React, { useState } from "react";
 import {
   ScrollView,
@@ -15,7 +18,7 @@ export default function TripCompletedScreen({ navigation, route }) {
     description: "Affordable everyday rides",
     eta: "3–5 min",
     price: "R45",
-    icon: "🚗",
+    icon: "car",
   };
 
   const [rating, setRating] = useState(0);
@@ -30,7 +33,7 @@ export default function TripCompletedScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -43,7 +46,7 @@ export default function TripCompletedScreen({ navigation, route }) {
 
         <Text style={styles.completedLabel}>TRIP COMPLETED</Text>
 
-        <Text style={styles.title}>You’ve arrived 🎉</Text>
+        <Text style={styles.title}>You’ve arrived</Text>
 
         <Text style={styles.subtitle}>
           Thanks for riding with RideGo. We hope you had a safe and comfortable
@@ -59,7 +62,7 @@ export default function TripCompletedScreen({ navigation, route }) {
             </View>
 
             <View style={styles.rideBadge}>
-              <Text style={styles.rideBadgeIcon}>{selectedRide.icon}</Text>
+              <Icon name={selectedRide.icon} style={styles.rideBadgeIcon} />
               <Text style={styles.rideBadgeText}>{selectedRide.name}</Text>
             </View>
           </View>
@@ -108,7 +111,10 @@ export default function TripCompletedScreen({ navigation, route }) {
 
           <View style={styles.driverInfo}>
             <Text style={styles.driverName}>Thabo M.</Text>
-            <Text style={styles.driverRating}>★ 4.9 • 1,240 trips</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+              <Icon name="star" size={13} style={styles.driverRating} />
+              <Text style={styles.driverRating}>4.9 • 1,240 trips</Text>
+            </View>
           </View>
 
           <View style={styles.completedBadge}>
@@ -132,11 +138,7 @@ export default function TripCompletedScreen({ navigation, route }) {
                 onPress={() => setRating(star)}
                 activeOpacity={0.8}
               >
-                <Text
-                  style={[styles.star, star <= rating && styles.starSelected]}
-                >
-                  ★
-                </Text>
+                <Icon name="star" style={[styles.star, star <= rating && styles.starSelected]} />
               </TouchableOpacity>
             ))}
           </View>
@@ -151,7 +153,7 @@ export default function TripCompletedScreen({ navigation, route }) {
         {/* Safety / Support */}
         <View style={styles.supportCard}>
           <View style={styles.supportIcon}>
-            <Text style={styles.supportIconText}>🛡️</Text>
+            <Icon name="shield" style={styles.supportIconText} />
           </View>
 
           <View style={styles.supportContent}>
@@ -167,7 +169,7 @@ export default function TripCompletedScreen({ navigation, route }) {
         {/* Actions */}
         <TouchableOpacity
           style={styles.doneButton}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => openScreen(navigation, "RiderHome")}
           activeOpacity={0.8}
         >
           <Text style={styles.doneButtonText}>Back to home</Text>
@@ -192,7 +194,7 @@ export default function TripCompletedScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollContent: {
@@ -205,7 +207,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
@@ -220,7 +222,7 @@ const styles = StyleSheet.create({
   },
 
   completedLabel: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 10,
     fontWeight: "800",
     letterSpacing: 1.6,
@@ -229,14 +231,14 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 30,
     fontWeight: "700",
     textAlign: "center",
   },
 
   subtitle: {
-    color: "#AEBBD4",
+    color: colors.muted,
     fontSize: 15,
     lineHeight: 22,
     textAlign: "center",
@@ -245,7 +247,7 @@ const styles = StyleSheet.create({
   },
 
   summaryCard: {
-    backgroundColor: "#102A55",
+    backgroundColor: colors.blueTint,
     borderRadius: 22,
     padding: 20,
     marginBottom: 14,
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
   },
 
   summaryLabel: {
-    color: "#7F91B2",
+    color: colors.muted,
     fontSize: 10,
     fontWeight: "800",
     letterSpacing: 1.2,
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
   },
 
   rideName: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 20,
     fontWeight: "700",
   },
@@ -274,7 +276,7 @@ const styles = StyleSheet.create({
   rideBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#173765",
+    backgroundColor: colors.blueLine,
     borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 8,
@@ -286,14 +288,14 @@ const styles = StyleSheet.create({
   },
 
   rideBadgeText: {
-    color: "#DCE7F7",
+    color: colors.muted,
     fontSize: 12,
     fontWeight: "700",
   },
 
   divider: {
     height: 1,
-    backgroundColor: "#25436B",
+    backgroundColor: colors.blueLine,
     marginVertical: 18,
   },
 
@@ -306,7 +308,7 @@ const styles = StyleSheet.create({
     width: 11,
     height: 11,
     borderRadius: 6,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     marginRight: 13,
   },
 
@@ -325,7 +327,7 @@ const styles = StyleSheet.create({
   },
 
   locationLabel: {
-    color: "#7F91B2",
+    color: colors.muted,
     fontSize: 9,
     fontWeight: "800",
     letterSpacing: 1,
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
   },
 
   locationText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -341,7 +343,7 @@ const styles = StyleSheet.create({
   routeLine: {
     width: 1,
     height: 22,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     marginLeft: 5,
     marginVertical: 4,
   },
@@ -381,7 +383,7 @@ const styles = StyleSheet.create({
   },
 
   driverCard: {
-    backgroundColor: "#102A55",
+    backgroundColor: colors.blueTint,
     borderRadius: 22,
     padding: 18,
     flexDirection: "row",
@@ -393,7 +395,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 13,
@@ -410,26 +412,26 @@ const styles = StyleSheet.create({
   },
 
   driverName: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 16,
     fontWeight: "700",
     marginBottom: 4,
   },
 
   driverRating: {
-    color: "#AEBBD4",
+    color: colors.muted,
     fontSize: 12,
   },
 
   completedBadge: {
-    backgroundColor: "#173765",
+    backgroundColor: colors.blueLine,
     borderRadius: 10,
     paddingHorizontal: 9,
     paddingVertical: 7,
   },
 
   completedBadgeText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 8,
     fontWeight: "800",
     letterSpacing: 0.8,
@@ -465,12 +467,12 @@ const styles = StyleSheet.create({
   },
 
   star: {
-    color: "#D8E0EA",
+    color: colors.muted,
     fontSize: 34,
   },
 
   starSelected: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   ratingSelectedText: {
@@ -481,7 +483,7 @@ const styles = StyleSheet.create({
   },
 
   supportCard: {
-    backgroundColor: "#102A55",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     padding: 17,
     flexDirection: "row",
@@ -492,7 +494,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#173765",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -507,14 +509,14 @@ const styles = StyleSheet.create({
   },
 
   supportTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "700",
     marginBottom: 5,
   },
 
   supportText: {
-    color: "#AEBBD4",
+    color: colors.muted,
     fontSize: 12,
     lineHeight: 18,
   },
@@ -522,7 +524,7 @@ const styles = StyleSheet.create({
   doneButton: {
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
@@ -553,7 +555,7 @@ const styles = StyleSheet.create({
   },
 
   receiptButtonText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 15,
     fontWeight: "700",
   },

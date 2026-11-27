@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { colors } from "../ui/theme";
+import { usePreviewAccount } from "../auth/PreviewAccount";
+import { KeyboardField, KeyboardFormScroll } from "../ui/KeyboardForm";
+import Icon from "../ui/Icon";
+import { useRef, useState } from "react";
 import {
   Alert,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -12,11 +14,17 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DriverVehicleSetupScreen({ navigation }) {
-  const [vehicleMake, setVehicleMake] = useState("");
-  const [vehicleModel, setVehicleModel] = useState("");
-  const [vehicleYear, setVehicleYear] = useState("");
-  const [vehicleColor, setVehicleColor] = useState("");
-  const [licensePlate, setLicensePlate] = useState("");
+  const { profile, updateProfile } = usePreviewAccount();
+  const [vehicleMake, setVehicleMake] = useState(profile?.vehicleMake ?? "");
+  const [vehicleModel, setVehicleModel] = useState(profile?.vehicleModel ?? "");
+  const [vehicleYear, setVehicleYear] = useState(profile?.vehicleYear ?? "");
+  const [vehicleColor, setVehicleColor] = useState(profile?.vehicleColor ?? "");
+  const [licensePlate, setLicensePlate] = useState(profile?.licensePlate ?? "");
+  const vehicleMakeField = useRef(null);
+  const vehicleModelField = useRef(null);
+  const vehicleYearField = useRef(null);
+  const vehicleColorField = useRef(null);
+  const licensePlateField = useRef(null);
 
   const handleContinue = () => {
     if (
@@ -33,19 +41,22 @@ export default function DriverVehicleSetupScreen({ navigation }) {
       return;
     }
 
+    updateProfile({
+      vehicleMake: vehicleMake.trim(), vehicleModel: vehicleModel.trim(), vehicleYear: vehicleYear.trim(),
+      vehicleColor: vehicleColor.trim(), licensePlate: licensePlate.trim(),
+    });
     navigation.navigate("DriverDocumentsSetup");
   };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
 
-        <ScrollView
+        <KeyboardFormScroll
           style={styles.scrollView}
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.topBar}>
             <TouchableOpacity
@@ -56,7 +67,7 @@ export default function DriverVehicleSetupScreen({ navigation }) {
               <Text style={styles.backButtonText}>‹</Text>
             </TouchableOpacity>
 
-            <Text style={styles.stepText}>Step 2 of 3</Text>
+            <Text style={styles.stepText}>Driver setup · Step 1 of 2</Text>
 
             <View style={styles.topBarSpacer} />
           </View>
@@ -79,7 +90,7 @@ export default function DriverVehicleSetupScreen({ navigation }) {
 
           <View style={styles.vehicleVisual}>
             <View style={styles.vehicleCircle}>
-              <Text style={styles.vehicleEmoji}>🚗</Text>
+              <Icon name="car" style={styles.vehicleGlyph} />
             </View>
 
             <Text style={styles.vehicleVisualTitle}>Your RideGo vehicle</Text>
@@ -95,10 +106,12 @@ export default function DriverVehicleSetupScreen({ navigation }) {
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Vehicle make</Text>
 
-              <TextInput
+              <KeyboardField
+                ref={vehicleMakeField}
+                nextRef={vehicleModelField}
                 style={styles.input}
                 placeholder="e.g. Toyota"
-                placeholderTextColor="#71809F"
+                placeholderTextColor={colors.muted}
                 value={vehicleMake}
                 onChangeText={setVehicleMake}
                 autoCapitalize="words"
@@ -108,10 +121,12 @@ export default function DriverVehicleSetupScreen({ navigation }) {
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Vehicle model</Text>
 
-              <TextInput
+              <KeyboardField
+                ref={vehicleModelField}
+                nextRef={vehicleYearField}
                 style={styles.input}
                 placeholder="e.g. Corolla"
-                placeholderTextColor="#71809F"
+                placeholderTextColor={colors.muted}
                 value={vehicleModel}
                 onChangeText={setVehicleModel}
                 autoCapitalize="words"
@@ -122,10 +137,12 @@ export default function DriverVehicleSetupScreen({ navigation }) {
               <View style={[styles.inputGroup, styles.halfInput]}>
                 <Text style={styles.inputLabel}>Year</Text>
 
-                <TextInput
+                <KeyboardField
+                  ref={vehicleYearField}
+                  nextRef={vehicleColorField}
                   style={styles.input}
                   placeholder="e.g. 2022"
-                  placeholderTextColor="#71809F"
+                  placeholderTextColor={colors.muted}
                   value={vehicleYear}
                   onChangeText={setVehicleYear}
                   keyboardType="number-pad"
@@ -136,10 +153,12 @@ export default function DriverVehicleSetupScreen({ navigation }) {
               <View style={[styles.inputGroup, styles.halfInput]}>
                 <Text style={styles.inputLabel}>Colour</Text>
 
-                <TextInput
+                <KeyboardField
+                  ref={vehicleColorField}
+                  nextRef={licensePlateField}
                   style={styles.input}
                   placeholder="e.g. Silver"
-                  placeholderTextColor="#71809F"
+                  placeholderTextColor={colors.muted}
                   value={vehicleColor}
                   onChangeText={setVehicleColor}
                   autoCapitalize="words"
@@ -150,10 +169,12 @@ export default function DriverVehicleSetupScreen({ navigation }) {
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>License plate</Text>
 
-              <TextInput
+              <KeyboardField
+                ref={licensePlateField}
+                onSubmitEditing={handleContinue}
                 style={styles.input}
                 placeholder="e.g. KDF 482 GP"
-                placeholderTextColor="#71809F"
+                placeholderTextColor={colors.muted}
                 value={licensePlate}
                 onChangeText={setLicensePlate}
                 autoCapitalize="characters"
@@ -163,7 +184,7 @@ export default function DriverVehicleSetupScreen({ navigation }) {
 
           <View style={styles.infoCard}>
             <View style={styles.infoIconContainer}>
-              <Text style={styles.infoIcon}>ℹ️</Text>
+              <Icon name="info" style={styles.infoIcon} />
             </View>
 
             <View style={styles.infoContent}>
@@ -177,21 +198,20 @@ export default function DriverVehicleSetupScreen({ navigation }) {
           </View>
 
           <View style={styles.bottomSpacing} />
-        </ScrollView>
+          <View style={styles.bottomSection}>
+            <TouchableOpacity
+              style={styles.continueButton}
+              activeOpacity={0.8}
+              onPress={handleContinue}
+            >
+              <Text style={styles.continueButtonText}>Continue →</Text>
+            </TouchableOpacity>
 
-        <View style={styles.bottomSection}>
-          <TouchableOpacity
-            style={styles.continueButton}
-            activeOpacity={0.8}
-            onPress={handleContinue}
-          >
-            <Text style={styles.continueButtonText}>Continue →</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.footerText}>
-            You can update your vehicle details later.
-          </Text>
-        </View>
+            <Text style={styles.footerText}>
+              You can update your vehicle details later.
+            </Text>
+          </View>
+        </KeyboardFormScroll>
       </View>
     </SafeAreaView>
   );
@@ -200,12 +220,12 @@ export default function DriverVehicleSetupScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -229,13 +249,13 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: "#102A56",
+    backgroundColor: colors.blueTint,
     justifyContent: "center",
     alignItems: "center",
   },
 
   backButtonText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 30,
     lineHeight: 32,
     fontWeight: "300",
@@ -243,7 +263,7 @@ const styles = StyleSheet.create({
   },
 
   stepText: {
-    color: "#AFC2E8",
+    color: colors.muted,
     fontSize: 13,
     fontWeight: "700",
     letterSpacing: 0.4,
@@ -256,15 +276,15 @@ const styles = StyleSheet.create({
   progressTrack: {
     height: 5,
     borderRadius: 10,
-    backgroundColor: "#18335F",
+    backgroundColor: colors.blueLine,
     overflow: "hidden",
     marginBottom: 26,
   },
 
   progressFill: {
-    width: "66.66%",
+    width: "50%",
     height: "100%",
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     borderRadius: 10,
   },
 
@@ -274,7 +294,7 @@ const styles = StyleSheet.create({
   },
 
   logoText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 27,
     fontWeight: "900",
     letterSpacing: -1,
@@ -285,7 +305,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 30,
     fontWeight: "900",
     letterSpacing: -0.8,
@@ -293,17 +313,17 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    color: "#AFC2E8",
+    color: colors.muted,
     fontSize: 15,
     lineHeight: 23,
     maxWidth: 340,
   },
 
   vehicleVisual: {
-    backgroundColor: "#0D2853",
+    backgroundColor: colors.blueTint,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: "#1D3B6D",
+    borderColor: colors.blueLine,
     padding: 20,
     alignItems: "center",
     marginBottom: 28,
@@ -313,25 +333,25 @@ const styles = StyleSheet.create({
     width: 74,
     height: 74,
     borderRadius: 37,
-    backgroundColor: "#123563",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
   },
 
-  vehicleEmoji: {
+  vehicleGlyph: {
     fontSize: 36,
   },
 
   vehicleVisualTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 17,
     fontWeight: "800",
     marginBottom: 6,
   },
 
   vehicleVisualSubtitle: {
-    color: "#91A8D1",
+    color: colors.muted,
     fontSize: 13,
     lineHeight: 19,
     textAlign: "center",
@@ -343,7 +363,7 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 18,
     fontWeight: "800",
     marginBottom: 16,
@@ -363,11 +383,11 @@ const styles = StyleSheet.create({
   input: {
     height: 54,
     borderRadius: 15,
-    backgroundColor: "#0D2853",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
     borderColor: "#24446F",
     paddingHorizontal: 16,
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 15,
   },
 
@@ -383,18 +403,18 @@ const styles = StyleSheet.create({
 
   infoCard: {
     flexDirection: "row",
-    backgroundColor: "#102A56",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#1D3B6D",
+    borderColor: colors.blueLine,
   },
 
   infoIconContainer: {
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: "#183967",
+    backgroundColor: colors.blueLine,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -409,14 +429,14 @@ const styles = StyleSheet.create({
   },
 
   infoTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "800",
     marginBottom: 5,
   },
 
   infoText: {
-    color: "#91A8D1",
+    color: colors.muted,
     fontSize: 12,
     lineHeight: 18,
   },
@@ -429,7 +449,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 10,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     borderTopWidth: 1,
     borderTopColor: "#102A56",
   },
@@ -437,7 +457,7 @@ const styles = StyleSheet.create({
   continueButton: {
     height: 56,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000000",
@@ -451,14 +471,14 @@ const styles = StyleSheet.create({
   },
 
   continueButtonText: {
-    color: "#071A3D",
+    color: colors.navy,
     fontSize: 16,
     fontWeight: "900",
     letterSpacing: 0.2,
   },
 
   footerText: {
-    color: "#71809F",
+    color: colors.muted,
     fontSize: 11,
     textAlign: "center",
     marginTop: 8,

@@ -1,3 +1,4 @@
+import Icon from "../ui/Icon";
 import React from "react";
 import {
   View,
@@ -18,7 +19,7 @@ const DriverNotificationsScreen = ({ navigation }) => {
       message: "You have a new ride request from Naledi M. near Rosebank Mall.",
       time: "5 min ago",
       unread: true,
-      icon: "🚗",
+      icon: "car",
     },
     {
       id: 2,
@@ -27,7 +28,7 @@ const DriverNotificationsScreen = ({ navigation }) => {
       message: "Your weekly earnings summary is ready to review.",
       time: "2 hrs ago",
       unread: true,
-      icon: "R",
+      icon: "wallet",
     },
     {
       id: 3,
@@ -37,7 +38,7 @@ const DriverNotificationsScreen = ({ navigation }) => {
         "Your driver and vehicle documents have been successfully verified.",
       time: "Yesterday",
       unread: false,
-      icon: "✓",
+      icon: "check",
     },
     {
       id: 4,
@@ -46,7 +47,7 @@ const DriverNotificationsScreen = ({ navigation }) => {
       message: "Your driver profile information was successfully updated.",
       time: "Yesterday",
       unread: false,
-      icon: "👤",
+      icon: "user",
     },
     {
       id: 5,
@@ -56,7 +57,7 @@ const DriverNotificationsScreen = ({ navigation }) => {
         "Remember to take regular breaks and keep your attention on the road.",
       time: "2 days ago",
       unread: false,
-      icon: "i",
+      icon: "info",
     },
   ];
 
@@ -141,8 +142,7 @@ const DriverNotificationsScreen = ({ navigation }) => {
                           styles.announcementIcon,
                       ]}
                     >
-                      <Text
-                        style={[
+                      <Icon name={notification.icon} style={[
                           styles.notificationIconText,
                           notification.type === "earnings" &&
                             styles.earningsIconText,
@@ -152,10 +152,7 @@ const DriverNotificationsScreen = ({ navigation }) => {
                             styles.accountIconText,
                           notification.type === "announcement" &&
                             styles.announcementIconText,
-                        ]}
-                      >
-                        {notification.icon}
-                      </Text>
+                        ]} />
                     </View>
 
                     <View style={styles.notificationContent}>

@@ -1,3 +1,4 @@
+import Icon from "../ui/Icon";
 import React from "react";
 import {
   View,
@@ -23,28 +24,28 @@ const DriverDocumentsScreen = ({ navigation }) => {
       description: "Valid driver's licence",
       status: "Verified",
       statusColor: "#15803D",
-      icon: "DL",
+      icon: "id",
     },
     {
       title: "Vehicle registration",
       description: "Vehicle registration certificate",
       status: "Verified",
       statusColor: "#15803D",
-      icon: "VR",
+      icon: "car",
     },
     {
       title: "Vehicle inspection",
       description: "Vehicle inspection certificate",
       status: "Verified",
       statusColor: "#15803D",
-      icon: "VI",
+      icon: "shield",
     },
     {
       title: "Profile photo",
       description: "Driver profile photo",
       status: "Uploaded",
       statusColor: "#0F5FA8",
-      icon: "PH",
+      icon: "camera",
     },
   ];
 
@@ -101,9 +102,7 @@ const DriverDocumentsScreen = ({ navigation }) => {
                     activeOpacity={0.8}
                   >
                     <View style={styles.documentIcon}>
-                      <Text style={styles.documentIconText}>
-                        {document.icon}
-                      </Text>
+                      <Icon name={document.icon} style={styles.documentIconText} />
                     </View>
 
                     <View style={styles.documentContent}>

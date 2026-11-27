@@ -1,3 +1,6 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import React, { useEffect } from "react";
 import {
   StyleSheet,
@@ -14,7 +17,7 @@ export default function RideSearchingScreen({ navigation, route }) {
     description: "Affordable everyday rides",
     eta: "3–5 min",
     price: "R45",
-    icon: "🚗",
+    icon: "car",
   };
 
   useEffect(() => {
@@ -74,7 +77,7 @@ export default function RideSearchingScreen({ navigation, route }) {
 
         <View style={styles.rideSummary}>
           <View style={styles.rideIconContainer}>
-            <Text style={styles.rideIcon}>{selectedRide.icon}</Text>
+            <Icon name={selectedRide.icon} style={styles.rideIcon} />
           </View>
 
           <View style={styles.rideInfo}>
@@ -88,7 +91,7 @@ export default function RideSearchingScreen({ navigation, route }) {
 
       <TouchableOpacity
         style={styles.cancelButton}
-        onPress={() => navigation.navigate("RiderHome")}
+        onPress={() => openScreen(navigation, "RiderHome")}
         activeOpacity={0.8}
       >
         <Text style={styles.cancelButtonText}>Cancel ride</Text>
@@ -100,7 +103,7 @@ export default function RideSearchingScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   content: {
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 8,
@@ -146,11 +149,11 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   searchingTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 6,
@@ -183,7 +186,7 @@ const styles = StyleSheet.create({
   },
 
   pickupDot: {
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   destinationDot: {
@@ -203,7 +206,7 @@ const styles = StyleSheet.create({
   },
 
   locationText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 15,
     fontWeight: "600",
   },
@@ -243,7 +246,7 @@ const styles = StyleSheet.create({
   },
 
   rideName: {
-    color: "#071A3D",
+    color: colors.navy,
     fontSize: 16,
     fontWeight: "700",
     marginBottom: 4,
@@ -255,7 +258,7 @@ const styles = StyleSheet.create({
   },
 
   ridePrice: {
-    color: "#071A3D",
+    color: colors.navy,
     fontSize: 17,
     fontWeight: "700",
   },
@@ -272,7 +275,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButtonText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 15,
     fontWeight: "600",
   },

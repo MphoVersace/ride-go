@@ -1,43 +1,43 @@
+import { KeyboardField, KeyboardFormScroll } from "../ui/KeyboardForm";
+import Icon from "../ui/Icon";
 import React from "react";
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Alert,
-  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const helpTopics = [
   {
     id: "rides",
-    icon: "🚗",
+    icon: "car",
     title: "Trips & Ride Requests",
     description: "Questions about accepting, completing, or cancelling trips.",
   },
   {
     id: "earnings",
-    icon: "💰",
+    icon: "wallet",
     title: "Earnings & Payments",
     description: "Get help with earnings, fees, and payout information.",
   },
   {
     id: "account",
-    icon: "👤",
+    icon: "user",
     title: "Account & Profile",
     description: "Manage your driver profile, vehicle, and account details.",
   },
   {
     id: "documents",
-    icon: "📄",
+    icon: "document",
     title: "Documents & Verification",
     description: "Get help with your driver and vehicle documents.",
   },
   {
     id: "safety",
-    icon: "🛡️",
+    icon: "shield",
     title: "Safety",
     description: "Find help with safety concerns or report an incident.",
   },
@@ -114,13 +114,13 @@ export default function DriverHelpScreen({ navigation }) {
           <View style={styles.headerSpacer} />
         </View>
 
-        <ScrollView
+        <KeyboardFormScroll
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.heroCard}>
             <View style={styles.heroIconCircle}>
-              <Text style={styles.heroIcon}>💬</Text>
+              <Icon name="message" style={styles.heroIcon} />
             </View>
 
             <View style={styles.heroContent}>
@@ -134,7 +134,7 @@ export default function DriverHelpScreen({ navigation }) {
           <View style={styles.searchContainer}>
             <Text style={styles.searchIcon}>⌕</Text>
 
-            <TextInput
+            <KeyboardField
               style={styles.searchInput}
               value={searchText}
               onChangeText={setSearchText}
@@ -164,7 +164,7 @@ export default function DriverHelpScreen({ navigation }) {
                     activeOpacity={0.75}
                   >
                     <View style={styles.topicIconCircle}>
-                      <Text style={styles.topicIcon}>{topic.icon}</Text>
+                      <Icon name={topic.icon} style={styles.topicIcon} />
                     </View>
 
                     <View style={styles.topicContent}>
@@ -179,7 +179,7 @@ export default function DriverHelpScreen({ navigation }) {
                 ))
               ) : (
                 <View style={styles.emptySearch}>
-                  <Text style={styles.emptySearchIcon}>🔎</Text>
+                  <Icon name="search" style={styles.emptySearchIcon} />
                   <Text style={styles.emptySearchTitle}>
                     No help topics found
                   </Text>
@@ -218,7 +218,7 @@ export default function DriverHelpScreen({ navigation }) {
 
           <View style={styles.supportCard}>
             <View style={styles.supportIconCircle}>
-              <Text style={styles.supportIcon}>🎧</Text>
+              <Icon name="headset" style={styles.supportIcon} />
             </View>
 
             <Text style={styles.supportTitle}>Still need help?</Text>
@@ -245,7 +245,7 @@ export default function DriverHelpScreen({ navigation }) {
             activeOpacity={0.8}
           >
             <View style={styles.reportIconCircle}>
-              <Text style={styles.reportIcon}>⚠️</Text>
+              <Icon name="warning" style={styles.reportIcon} />
             </View>
 
             <View style={styles.reportContent}>
@@ -260,7 +260,7 @@ export default function DriverHelpScreen({ navigation }) {
           </TouchableOpacity>
 
           <View style={styles.infoCard}>
-            <Text style={styles.infoIcon}>ℹ️</Text>
+            <Icon name="info" style={styles.infoIcon} />
 
             <Text style={styles.infoText}>
               Help articles, support messaging, issue reporting, and other
@@ -277,7 +277,7 @@ export default function DriverHelpScreen({ navigation }) {
           >
             <Text style={styles.backButtonBottomText}>Back to Profile</Text>
           </TouchableOpacity>
-        </ScrollView>
+        </KeyboardFormScroll>
       </View>
     </SafeAreaView>
   );

@@ -1,8 +1,9 @@
+import { colors } from "../ui/theme";
+import { KeyboardField, KeyboardFormScroll } from "../ui/KeyboardForm";
+import Icon from "../ui/Icon";
 import {
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -15,7 +16,7 @@ export default function DestinationSearchScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -31,11 +32,10 @@ export default function DestinationSearchScreen({ navigation }) {
         <View style={styles.headerSpacer} />
       </View>
 
-      <ScrollView
+      <KeyboardFormScroll
         style={styles.scrollView}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
       >
         <Text style={styles.heading}>Where are you going?</Text>
 
@@ -52,10 +52,10 @@ export default function DestinationSearchScreen({ navigation }) {
             <Text style={styles.searchIcon}>⌕</Text>
           </View>
 
-          <TextInput
+          <KeyboardField
             style={styles.searchInput}
             placeholder="Search for a place"
-            placeholderTextColor="#8FA5C1"
+            placeholderTextColor={colors.muted}
             autoCapitalize="words"
             autoCorrect={false}
             onFocus={openResults}
@@ -68,7 +68,7 @@ export default function DestinationSearchScreen({ navigation }) {
           onPress={openResults}
         >
           <View style={styles.locationIconCircle}>
-            <Text style={styles.locationIcon}>📍</Text>
+            <Icon name="pin" style={styles.locationIcon} />
           </View>
 
           <View style={styles.locationText}>
@@ -90,7 +90,7 @@ export default function DestinationSearchScreen({ navigation }) {
           onPress={openResults}
         >
           <View style={styles.placeIconCircle}>
-            <Text style={styles.placeIcon}>🏠</Text>
+            <Icon name="home" style={styles.placeIcon} />
           </View>
 
           <View style={styles.placeText}>
@@ -108,7 +108,7 @@ export default function DestinationSearchScreen({ navigation }) {
           onPress={openResults}
         >
           <View style={styles.placeIconCircle}>
-            <Text style={styles.placeIcon}>💼</Text>
+            <Icon name="work" style={styles.placeIcon} />
           </View>
 
           <View style={styles.placeText}>
@@ -123,7 +123,7 @@ export default function DestinationSearchScreen({ navigation }) {
         <Text style={styles.sectionTitle}>Recent destinations</Text>
 
         <View style={styles.emptyState}>
-          <Text style={styles.emptyIcon}>🕘</Text>
+          <Icon name="clock" style={styles.emptyIcon} />
 
           <Text style={styles.emptyTitle}>No recent destinations</Text>
 
@@ -131,7 +131,7 @@ export default function DestinationSearchScreen({ navigation }) {
             Places you visit will appear here for quick access.
           </Text>
         </View>
-      </ScrollView>
+      </KeyboardFormScroll>
     </View>
   );
 }
@@ -139,7 +139,7 @@ export default function DestinationSearchScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     paddingHorizontal: 20,
   },
 
@@ -156,23 +156,23 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
 
   backIcon: {
     fontSize: 34,
-    color: "#FFFFFF",
+    color: colors.black,
     marginTop: -4,
   },
 
   headerTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   headerSpacer: {
@@ -190,23 +190,23 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 8,
   },
 
   description: {
     fontSize: 15,
     lineHeight: 22,
-    color: "#C9D6E8",
+    color: colors.muted,
     marginBottom: 22,
   },
 
   searchContainer: {
     width: "100%",
     height: 58,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 17,
     flexDirection: "row",
     alignItems: "center",
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
 
   searchIcon: {
     fontSize: 25,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginTop: -3,
   },
 
@@ -234,15 +234,15 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     fontSize: 16,
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   currentLocationCard: {
     width: "100%",
     minHeight: 70,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 17,
     flexDirection: "row",
     alignItems: "center",
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -271,28 +271,28 @@ const styles = StyleSheet.create({
   locationTitle: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   locationSubtitle: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 10,
   },
 
   placeCard: {
     width: "100%",
     minHeight: 68,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 16,
     flexDirection: "row",
     alignItems: "center",
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -321,26 +321,26 @@ const styles = StyleSheet.create({
   placeTitle: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   placeSubtitle: {
     fontSize: 12,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   arrow: {
     fontSize: 30,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 8,
   },
 
   emptyState: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 17,
     alignItems: "center",
     justifyContent: "center",
@@ -357,14 +357,14 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 5,
   },
 
   emptyDescription: {
     fontSize: 12,
     lineHeight: 18,
-    color: "#8FA5C1",
+    color: colors.muted,
     textAlign: "center",
   },
 });

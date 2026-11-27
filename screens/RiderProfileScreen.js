@@ -1,6 +1,9 @@
+import { usePreviewAccount } from "../auth/PreviewAccount";
+import Icon from "../ui/Icon";
+import { leaveApp, openScreen } from "../navigation/routes";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -12,21 +15,21 @@ import {
 const rideOptions = [
   {
     id: "history",
-    icon: "🧾",
+    icon: "receipt",
     title: "Ride History",
     subtitle: "View your previous rides",
     route: "RideHistory",
   },
   {
     id: "saved",
-    icon: "📍",
+    icon: "pin",
     title: "Saved Places",
     subtitle: "Manage your favourite destinations",
     route: "SavedPlaces",
   },
   {
     id: "payment",
-    icon: "💳",
+    icon: "card",
     title: "Payment Methods",
     subtitle: "Manage cards and payment options",
     route: "PaymentMethods",
@@ -36,28 +39,28 @@ const rideOptions = [
 const rideGoOptions = [
   {
     id: "notifications",
-    icon: "🔔",
+    icon: "bell",
     title: "Notifications",
     subtitle: "Stay updated about your rides",
     route: "Notifications",
   },
   {
     id: "safety",
-    icon: "🛡️",
+    icon: "shield",
     title: "Safety Centre",
     subtitle: "Ride safely and get assistance",
     route: "SafetyCentre",
   },
   {
     id: "support",
-    icon: "💬",
+    icon: "message",
     title: "Help & Support",
     subtitle: "Get help with RideGo",
     route: "HelpSupport",
   },
   {
     id: "settings",
-    icon: "⚙️",
+    icon: "settings",
     title: "Settings",
     subtitle: "Manage your RideGo preferences",
     route: "Settings",
@@ -65,8 +68,10 @@ const rideGoOptions = [
 ];
 
 export default function RiderProfileScreen({ navigation }) {
+  const { profile, signOut } = usePreviewAccount();
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F6F9FC" />
 
       <ScrollView
@@ -92,13 +97,13 @@ export default function RiderProfileScreen({ navigation }) {
 
         <View style={styles.profileCard}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>M</Text>
+            <Text style={styles.avatarText}>{profile?.firstName.charAt(0)}</Text>
           </View>
 
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>Mpho</Text>
-            <Text style={styles.profilePhone}>+27 71 234 5678</Text>
-            <Text style={styles.profileEmail}>mpho@example.com</Text>
+            <Text style={styles.profileName}>{profile?.firstName} {profile?.lastName}</Text>
+            <Text style={styles.profilePhone}>{profile?.phone}</Text>
+            <Text style={styles.profileEmail}>{profile?.email}</Text>
           </View>
 
           <TouchableOpacity
@@ -125,10 +130,10 @@ export default function RiderProfileScreen({ navigation }) {
                   index === rideOptions.length - 1 && styles.optionRowLast,
                 ]}
                 activeOpacity={0.75}
-                onPress={() => navigation.navigate(option.route)}
+                onPress={() => openScreen(navigation, option.route)}
               >
                 <View style={styles.optionIconContainer}>
-                  <Text style={styles.optionIcon}>{option.icon}</Text>
+                  <Icon name={option.icon} style={styles.optionIcon} />
                 </View>
 
                 <View style={styles.optionTextContainer}>
@@ -159,10 +164,10 @@ export default function RiderProfileScreen({ navigation }) {
                   index === rideGoOptions.length - 1 && styles.optionRowLast,
                 ]}
                 activeOpacity={0.75}
-                onPress={() => navigation.navigate(option.route)}
+                onPress={() => openScreen(navigation, option.route)}
               >
                 <View style={styles.optionIconContainer}>
-                  <Text style={styles.optionIcon}>{option.icon}</Text>
+                  <Icon name={option.icon} style={styles.optionIcon} />
                 </View>
 
                 <View style={styles.optionTextContainer}>
@@ -180,14 +185,13 @@ export default function RiderProfileScreen({ navigation }) {
 
         <View style={styles.accountCard}>
           <View style={styles.accountIconContainer}>
-            <Text style={styles.accountIcon}>👤</Text>
+            <Icon name="user" style={styles.accountIcon} />
           </View>
 
           <View style={styles.accountTextContainer}>
             <Text style={styles.accountTitle}>Account actions</Text>
             <Text style={styles.accountDescription}>
-              Manage your RideGo account. Account actions are currently
-              prototype-only.
+              Sign out of this RideGo session.
             </Text>
           </View>
         </View>
@@ -195,18 +199,10 @@ export default function RiderProfileScreen({ navigation }) {
         <TouchableOpacity
           style={styles.logoutButton}
           activeOpacity={0.8}
-          onPress={() => {}}
+          onPress={() => { signOut(); leaveApp(navigation); }}
         >
-          <Text style={styles.logoutIcon}>↪</Text>
+          <Icon name="logout" style={styles.logoutIcon} />
           <Text style={styles.logoutText}>Log out</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.homeButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderHome")}
-        >
-          <Text style={styles.homeButtonText}>Back to Home</Text>
         </TouchableOpacity>
 
         <Text style={styles.footer}>RideGo • Fast. Safe. Reliable.</Text>
@@ -492,21 +488,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "800",
     color: "#C0392B",
-  },
-
-  homeButton: {
-    height: 54,
-    borderRadius: 18,
-    backgroundColor: "#5BC0FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 18,
-  },
-
-  homeButtonText: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: "#071A3D",
   },
 
   footer: {

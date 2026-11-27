@@ -1,3 +1,4 @@
+import Icon from "../ui/Icon";
 import React from "react";
 import {
   View,
@@ -12,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const safetyOptions = [
   {
     id: "emergency",
-    icon: "🚨",
+    icon: "siren",
     title: "Emergency Assistance",
     description:
       "Get help quickly if you are in immediate danger or need urgent assistance.",
@@ -20,7 +21,7 @@ const safetyOptions = [
   },
   {
     id: "share",
-    icon: "📍",
+    icon: "pin",
     title: "Share Trip",
     description:
       "Share your current trip details with a trusted contact for added peace of mind.",
@@ -28,7 +29,7 @@ const safetyOptions = [
   },
   {
     id: "contact",
-    icon: "👤",
+    icon: "user",
     title: "Trusted Contacts",
     description:
       "Manage the people you want to contact during an emergency or safety concern.",
@@ -84,7 +85,7 @@ export default function DriverSafetyScreen({ navigation }) {
         >
           <View style={styles.heroCard}>
             <View style={styles.heroIconCircle}>
-              <Text style={styles.heroIcon}>🛡️</Text>
+              <Icon name="shield" style={styles.heroIcon} />
             </View>
 
             <View style={styles.heroTextContainer}>
@@ -99,7 +100,7 @@ export default function DriverSafetyScreen({ navigation }) {
           <View style={styles.emergencyCard}>
             <View style={styles.emergencyHeader}>
               <View style={styles.emergencyIconCircle}>
-                <Text style={styles.emergencyIcon}>🚨</Text>
+                <Icon name="siren" style={styles.emergencyIcon} />
               </View>
 
               <View style={styles.emergencyTextContainer}>
@@ -140,7 +141,7 @@ export default function DriverSafetyScreen({ navigation }) {
                   activeOpacity={0.75}
                 >
                   <View style={styles.optionIconCircle}>
-                    <Text style={styles.optionIcon}>{option.icon}</Text>
+                    <Icon name={option.icon} style={styles.optionIcon} />
                   </View>
 
                   <View style={styles.optionContent}>
@@ -174,7 +175,7 @@ export default function DriverSafetyScreen({ navigation }) {
 
           <View style={styles.supportCard}>
             <View style={styles.supportIconCircle}>
-              <Text style={styles.supportIcon}>💬</Text>
+              <Icon name="message" style={styles.supportIcon} />
             </View>
 
             <View style={styles.supportContent}>
@@ -200,7 +201,7 @@ export default function DriverSafetyScreen({ navigation }) {
           </View>
 
           <View style={styles.infoCard}>
-            <Text style={styles.infoIcon}>ℹ️</Text>
+            <Icon name="info" style={styles.infoIcon} />
 
             <Text style={styles.infoText}>
               RideGo safety features are currently presented as a UI experience.

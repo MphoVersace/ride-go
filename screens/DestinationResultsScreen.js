@@ -1,16 +1,21 @@
+import { colors } from "../ui/theme";
+import { useState } from "react";
+import { KeyboardField, KeyboardFormScroll } from "../ui/KeyboardForm";
+import Icon from "../ui/Icon";
 import {
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 export default function DestinationResultsScreen({ navigation }) {
+  const [query, setQuery] = useState("Rosebank Mall");
+
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
+    <KeyboardFormScroll style={styles.container} contentContainerStyle={styles.scrollContent}>
+      <StatusBar style="dark" />
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -31,16 +36,18 @@ export default function DestinationResultsScreen({ navigation }) {
           <Text style={styles.searchIcon}>⌕</Text>
         </View>
 
-        <TextInput
+        <KeyboardField
           style={styles.searchInput}
-          value="Rosebank Mall"
+          value={query}
+          onChangeText={setQuery}
+          returnKeyType="search"
           placeholder="Search for a place"
-          placeholderTextColor="#8FA5C1"
+          placeholderTextColor={colors.muted}
           autoCapitalize="words"
           autoCorrect={false}
         />
 
-        <TouchableOpacity style={styles.clearButton} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.clearButton} activeOpacity={0.8} onPress={() => setQuery("")} accessibilityLabel="Clear search">
           <Text style={styles.clearText}>×</Text>
         </TouchableOpacity>
       </View>
@@ -54,7 +61,7 @@ export default function DestinationResultsScreen({ navigation }) {
           onPress={() => navigation.navigate("RideOptions")}
         >
           <View style={styles.resultIconCircle}>
-            <Text style={styles.resultIcon}>📍</Text>
+            <Icon name="pin" style={styles.resultIcon} />
           </View>
 
           <View style={styles.resultText}>
@@ -74,7 +81,7 @@ export default function DestinationResultsScreen({ navigation }) {
           onPress={() => navigation.navigate("RideOptions")}
         >
           <View style={styles.resultIconCircle}>
-            <Text style={styles.resultIcon}>📍</Text>
+            <Icon name="pin" style={styles.resultIcon} />
           </View>
 
           <View style={styles.resultText}>
@@ -92,7 +99,7 @@ export default function DestinationResultsScreen({ navigation }) {
           onPress={() => navigation.navigate("RideOptions")}
         >
           <View style={styles.resultIconCircle}>
-            <Text style={styles.resultIcon}>📍</Text>
+            <Icon name="pin" style={styles.resultIcon} />
           </View>
 
           <View style={styles.resultText}>
@@ -110,7 +117,7 @@ export default function DestinationResultsScreen({ navigation }) {
           onPress={() => navigation.navigate("RideOptions")}
         >
           <View style={styles.resultIconCircle}>
-            <Text style={styles.resultIcon}>📍</Text>
+            <Icon name="pin" style={styles.resultIcon} />
           </View>
 
           <View style={styles.resultText}>
@@ -132,16 +139,16 @@ export default function DestinationResultsScreen({ navigation }) {
           Can't find your destination? Try searching with a different name.
         </Text>
       </View>
-    </View>
+    </KeyboardFormScroll>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
-    paddingHorizontal: 20,
+    backgroundColor: colors.white,
   },
+  scrollContent: { paddingHorizontal: 20, paddingBottom: 20 },
 
   header: {
     width: "100%",
@@ -156,23 +163,23 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
 
   backIcon: {
     fontSize: 34,
-    color: "#FFFFFF",
+    color: colors.black,
     marginTop: -4,
   },
 
   headerTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   headerSpacer: {
@@ -182,7 +189,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     width: "100%",
     height: 58,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
     borderColor: "#5BC0FF",
     borderRadius: 17,
@@ -196,7 +203,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -204,7 +211,7 @@ const styles = StyleSheet.create({
 
   searchIcon: {
     fontSize: 25,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginTop: -3,
   },
 
@@ -212,7 +219,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     fontSize: 16,
-    color: "#FFFFFF",
+    color: colors.black,
     fontWeight: "600",
   },
 
@@ -220,21 +227,21 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
   },
 
   clearText: {
     fontSize: 22,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginTop: -2,
   },
 
   resultsTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 12,
   },
 
@@ -245,9 +252,9 @@ const styles = StyleSheet.create({
   resultCard: {
     width: "100%",
     minHeight: 76,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     borderRadius: 17,
     flexDirection: "row",
     alignItems: "center",
@@ -259,7 +266,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -277,25 +284,25 @@ const styles = StyleSheet.create({
   resultTitle: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   resultAddress: {
     fontSize: 12,
     lineHeight: 17,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   arrow: {
     fontSize: 30,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginLeft: 5,
   },
 
   bottomHint: {
     width: "100%",
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 14,
@@ -306,7 +313,7 @@ const styles = StyleSheet.create({
 
   bottomHintIcon: {
     fontSize: 22,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     marginRight: 10,
   },
 
@@ -314,6 +321,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     lineHeight: 18,
-    color: "#C9D6E8",
+    color: colors.muted,
   },
 });

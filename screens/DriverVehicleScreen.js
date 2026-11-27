@@ -1,3 +1,5 @@
+import { usePreviewAccount } from "../auth/PreviewAccount";
+import Icon from "../ui/Icon";
 import React from "react";
 import {
   View,
@@ -10,6 +12,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const DriverVehicleScreen = ({ navigation }) => {
+  const { profile } = usePreviewAccount();
+  const make = profile?.vehicleMake ?? "Toyota";
+  const model = profile?.vehicleModel ?? "Corolla";
+  const year = profile?.vehicleYear ?? "2022";
+  const color = profile?.vehicleColor ?? "White";
+  const plate = profile?.licensePlate ?? "GP 123 456";
+
   const handleEditVehicle = () => {
     Alert.alert("Edit vehicle", "Vehicle editing will be connected later.");
   };
@@ -40,16 +49,16 @@ const DriverVehicleScreen = ({ navigation }) => {
         >
           <View style={styles.vehicleHero}>
             <View style={styles.vehicleIconCircle}>
-              <Text style={styles.vehicleIcon}>🚗</Text>
+              <Icon name="car" style={styles.vehicleIcon} />
             </View>
 
             <View style={styles.vehicleHeroContent}>
-              <Text style={styles.vehicleName}>Toyota Corolla</Text>
-              <Text style={styles.vehicleSubtitle}>2022 • White</Text>
+              <Text style={styles.vehicleName}>{make} {model}</Text>
+              <Text style={styles.vehicleSubtitle}>{year} • {color}</Text>
 
               <View style={styles.verifiedBadge}>
                 <Text style={styles.verifiedIcon}>✓</Text>
-                <Text style={styles.verifiedText}>Verified</Text>
+                <Text style={styles.verifiedText}>Demo vehicle</Text>
               </View>
             </View>
           </View>
@@ -71,7 +80,7 @@ const DriverVehicleScreen = ({ navigation }) => {
 
                 <View style={styles.detailContent}>
                   <Text style={styles.detailLabel}>Make</Text>
-                  <Text style={styles.detailValue}>Toyota</Text>
+                  <Text style={styles.detailValue}>{make}</Text>
                 </View>
               </View>
 
@@ -84,7 +93,7 @@ const DriverVehicleScreen = ({ navigation }) => {
 
                 <View style={styles.detailContent}>
                   <Text style={styles.detailLabel}>Model</Text>
-                  <Text style={styles.detailValue}>Corolla</Text>
+                  <Text style={styles.detailValue}>{model}</Text>
                 </View>
               </View>
 
@@ -97,7 +106,7 @@ const DriverVehicleScreen = ({ navigation }) => {
 
                 <View style={styles.detailContent}>
                   <Text style={styles.detailLabel}>Year</Text>
-                  <Text style={styles.detailValue}>2022</Text>
+                  <Text style={styles.detailValue}>{year}</Text>
                 </View>
               </View>
 
@@ -110,7 +119,7 @@ const DriverVehicleScreen = ({ navigation }) => {
 
                 <View style={styles.detailContent}>
                   <Text style={styles.detailLabel}>Colour</Text>
-                  <Text style={styles.detailValue}>White</Text>
+                  <Text style={styles.detailValue}>{color}</Text>
                 </View>
               </View>
 
@@ -123,7 +132,7 @@ const DriverVehicleScreen = ({ navigation }) => {
 
                 <View style={styles.detailContent}>
                   <Text style={styles.detailLabel}>Registration</Text>
-                  <Text style={styles.detailValue}>GP 123 456</Text>
+                  <Text style={styles.detailValue}>{plate}</Text>
                 </View>
               </View>
             </View>
@@ -138,10 +147,10 @@ const DriverVehicleScreen = ({ navigation }) => {
               </View>
 
               <View style={styles.statusContent}>
-                <Text style={styles.statusTitle}>Vehicle verified</Text>
+                <Text style={styles.statusTitle}>Vehicle verification</Text>
 
                 <Text style={styles.statusText}>
-                  Your vehicle has been reviewed and approved for RideGo trips.
+                  Vehicle verification will be available when driver services are connected.
                 </Text>
               </View>
             </View>
@@ -162,12 +171,12 @@ const DriverVehicleScreen = ({ navigation }) => {
                 activeOpacity={0.8}
               >
                 <View style={styles.documentIcon}>
-                  <Text style={styles.documentIconText}>▣</Text>
+                  <Icon name="work" style={styles.documentIconText} />
                 </View>
 
                 <View style={styles.documentContent}>
                   <Text style={styles.documentTitle}>Vehicle registration</Text>
-                  <Text style={styles.documentStatus}>Verified</Text>
+                  <Text style={styles.documentStatus}>Demo vehicle</Text>
                 </View>
 
                 <Text style={styles.chevron}>›</Text>
@@ -191,7 +200,7 @@ const DriverVehicleScreen = ({ navigation }) => {
 
                 <View style={styles.documentContent}>
                   <Text style={styles.documentTitle}>Vehicle inspection</Text>
-                  <Text style={styles.documentStatus}>Verified</Text>
+                  <Text style={styles.documentStatus}>Demo vehicle</Text>
                 </View>
 
                 <Text style={styles.chevron}>›</Text>

@@ -1,3 +1,6 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import React from "react";
 import {
   ScrollView,
@@ -15,12 +18,12 @@ export default function TripReceiptScreen({ navigation, route }) {
     description: "Affordable everyday rides",
     eta: "3–5 min",
     price: "R45",
-    icon: "🚗",
+    icon: "car",
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#071A3D" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -53,7 +56,7 @@ export default function TripReceiptScreen({ navigation, route }) {
               <Text style={styles.sectionLabel}>RIDE TYPE</Text>
 
               <View style={styles.rideTypeRow}>
-                <Text style={styles.rideIcon}>{selectedRide.icon}</Text>
+                <Icon name={selectedRide.icon} style={styles.rideIcon} />
 
                 <View>
                   <Text style={styles.rideName}>{selectedRide.name}</Text>
@@ -121,7 +124,10 @@ export default function TripReceiptScreen({ navigation, route }) {
 
             <View style={styles.driverInfo}>
               <Text style={styles.driverName}>Thabo M.</Text>
-              <Text style={styles.driverRating}>★ 4.9 • 1,240 trips</Text>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                <Icon name="star" size={13} style={styles.driverRating} />
+                <Text style={styles.driverRating}>4.9 • 1,240 trips</Text>
+              </View>
             </View>
           </View>
 
@@ -156,7 +162,7 @@ export default function TripReceiptScreen({ navigation, route }) {
         </View>
 
         <View style={styles.infoCard}>
-          <Text style={styles.infoIcon}>🧾</Text>
+          <Icon name="receipt" style={styles.infoIcon} />
 
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>Your trip receipt</Text>
@@ -170,7 +176,7 @@ export default function TripReceiptScreen({ navigation, route }) {
 
         <TouchableOpacity
           style={styles.homeButton}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => openScreen(navigation, "RiderHome")}
           activeOpacity={0.8}
         >
           <Text style={styles.homeButtonText}>Back to home</Text>
@@ -183,7 +189,7 @@ export default function TripReceiptScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollContent: {
@@ -200,14 +206,14 @@ const styles = StyleSheet.create({
   },
 
   backButtonText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 32,
     lineHeight: 28,
     marginRight: 5,
   },
 
   backText: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "700",
   },
@@ -221,7 +227,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
@@ -234,7 +240,7 @@ const styles = StyleSheet.create({
   },
 
   headerLabel: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontSize: 10,
     fontWeight: "800",
     letterSpacing: 1.6,
@@ -242,13 +248,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 30,
     fontWeight: "700",
   },
 
   subtitle: {
-    color: "#AEBBD4",
+    color: colors.muted,
     fontSize: 14,
     marginTop: 7,
   },
@@ -351,7 +357,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
   },
 
   locationLine: {
@@ -512,7 +518,7 @@ const styles = StyleSheet.create({
   },
 
   infoCard: {
-    backgroundColor: "#102A55",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     padding: 17,
     flexDirection: "row",
@@ -529,14 +535,14 @@ const styles = StyleSheet.create({
   },
 
   infoTitle: {
-    color: "#FFFFFF",
+    color: colors.black,
     fontSize: 14,
     fontWeight: "700",
     marginBottom: 5,
   },
 
   infoText: {
-    color: "#AEBBD4",
+    color: colors.muted,
     fontSize: 11,
     lineHeight: 17,
   },
@@ -544,7 +550,7 @@ const styles = StyleSheet.create({
   homeButton: {
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000000",

@@ -1,3 +1,6 @@
+import { colors } from "../ui/theme";
+import Icon from "../ui/Icon";
+import { openScreen } from "../navigation/routes";
 import React from "react";
 import {
   SafeAreaView,
@@ -15,25 +18,26 @@ const settingsSections = [
     items: [
       {
         id: "notifications",
-        icon: "🔔",
+        icon: "bell",
         title: "Notifications",
-        subtitle: "Manage ride and account alerts",
+        subtitle: "View ride and account alerts",
+        route: "Notifications",
       },
       {
         id: "appearance",
-        icon: "🌙",
+        icon: "moon",
         title: "Appearance",
         subtitle: "Choose how RideGo looks",
       },
       {
         id: "location",
-        icon: "📍",
+        icon: "pin",
         title: "Location",
         subtitle: "Manage location preferences",
       },
       {
         id: "language",
-        icon: "🌐",
+        icon: "globe",
         title: "Language",
         subtitle: "English",
       },
@@ -44,13 +48,13 @@ const settingsSections = [
     items: [
       {
         id: "privacy",
-        icon: "🔐",
+        icon: "lock",
         title: "Privacy & Security",
         subtitle: "Manage your account privacy",
       },
       {
         id: "permissions",
-        icon: "🛡️",
+        icon: "shield",
         title: "App Permissions",
         subtitle: "Location and device permissions",
       },
@@ -61,19 +65,19 @@ const settingsSections = [
     items: [
       {
         id: "about",
-        icon: "ℹ️",
+        icon: "info",
         title: "About RideGo",
         subtitle: "Learn more about RideGo",
       },
       {
         id: "terms",
-        icon: "📄",
+        icon: "document",
         title: "Terms & Conditions",
         subtitle: "Review RideGo terms",
       },
       {
         id: "privacyPolicy",
-        icon: "📋",
+        icon: "list",
         title: "Privacy Policy",
         subtitle: "How RideGo handles your information",
       },
@@ -81,10 +85,15 @@ const settingsSections = [
   },
 ];
 
+function SettingRow({ onPress, ...props }) {
+  if (!onPress) return <View {...props} />;
+  return <TouchableOpacity accessibilityRole="button" activeOpacity={0.75} onPress={onPress} {...props} />;
+}
+
 export default function SettingsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F6F9FC" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -109,13 +118,13 @@ export default function SettingsScreen({ navigation }) {
 
         <View style={styles.heroCard}>
           <View style={styles.heroIconCircle}>
-            <Text style={styles.heroIcon}>⚙️</Text>
+            <Icon name="settings" style={styles.heroIcon} />
           </View>
 
           <View style={styles.heroTextContainer}>
-            <Text style={styles.heroTitle}>RideGo Settings</Text>
+            <Text style={styles.heroTitle}>Preferences and privacy</Text>
             <Text style={styles.heroDescription}>
-              Manage your preferences, privacy, and app experience in one place.
+              Notifications, appearance and account controls.
             </Text>
           </View>
         </View>
@@ -124,22 +133,21 @@ export default function SettingsScreen({ navigation }) {
           <View key={section.title} style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>{section.title}</Text>
-              <Text style={styles.sectionCount}>{section.items.length}</Text>
+
             </View>
 
             <View style={styles.settingsCard}>
               {section.items.map((item, index) => (
-                <TouchableOpacity
+                <SettingRow
                   key={item.id}
                   style={[
                     styles.settingRow,
                     index === section.items.length - 1 && styles.settingRowLast,
                   ]}
-                  activeOpacity={0.75}
-                  onPress={() => {}}
+                  onPress={item.route ? () => navigation.navigate(item.route) : undefined}
                 >
                   <View style={styles.settingIconContainer}>
-                    <Text style={styles.settingIcon}>{item.icon}</Text>
+                    <Icon name={item.icon} style={styles.settingIcon} />
                   </View>
 
                   <View style={styles.settingTextContainer}>
@@ -147,8 +155,8 @@ export default function SettingsScreen({ navigation }) {
                     <Text style={styles.settingSubtitle}>{item.subtitle}</Text>
                   </View>
 
-                  <Text style={styles.chevron}>›</Text>
-                </TouchableOpacity>
+                  {item.route && <Icon name="right" size={18} color={colors.muted} />}
+                </SettingRow>
               ))}
             </View>
           </View>
@@ -156,7 +164,7 @@ export default function SettingsScreen({ navigation }) {
 
         <View style={styles.infoCard}>
           <View style={styles.infoIconContainer}>
-            <Text style={styles.infoIcon}>💡</Text>
+            <Icon name="bulb" style={styles.infoIcon} />
           </View>
 
           <View style={styles.infoTextContainer}>
@@ -172,7 +180,7 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity
           style={styles.homeButton}
           activeOpacity={0.8}
-          onPress={() => navigation.navigate("RiderHome")}
+          onPress={() => openScreen(navigation, "RiderHome")}
         >
           <Text style={styles.homeButtonText}>Back to Home</Text>
         </TouchableOpacity>
@@ -186,7 +194,7 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F6F9FC",
+    backgroundColor: colors.white,
   },
 
   scrollContent: {
@@ -243,7 +251,7 @@ const styles = StyleSheet.create({
   },
 
   heroCard: {
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.blueTint,
     borderRadius: 24,
     padding: 20,
     flexDirection: "row",
@@ -272,14 +280,14 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 19,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 5,
   },
 
   heroDescription: {
     fontSize: 13,
     lineHeight: 19,
-    color: "#C9D6E8",
+    color: colors.muted,
   },
 
   section: {
@@ -298,19 +306,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "800",
     color: "#071A3D",
-  },
-
-  sectionCount: {
-    minWidth: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: "#E4F5FF",
-    color: "#1676A8",
-    textAlign: "center",
-    textAlignVertical: "center",
-    fontSize: 12,
-    fontWeight: "800",
-    paddingTop: 6,
   },
 
   settingsCard: {
@@ -343,13 +338,13 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 14,
-    backgroundColor: "#F1F7FC",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
   },
 
   settingIcon: {
+    color: colors.blueInk,
     fontSize: 20,
   },
 

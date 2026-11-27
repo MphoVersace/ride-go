@@ -1,39 +1,45 @@
-import { useState } from "react";
+import { usePreviewAccount } from "../auth/PreviewAccount";
+import { isEmail, normalizeEmail, normalizePhone } from "../auth/validation";
+import { KeyboardField, KeyboardFormScroll } from "../ui/KeyboardForm";
+import { useRef, useState } from "react";
 import {
   Alert,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 
 export default function EditProfileScreen({ navigation }) {
-  const [firstName, setFirstName] = useState("Mpho");
-  const [lastName, setLastName] = useState("Mtlomelo");
-  const [phone, setPhone] = useState("+27 71 234 5678");
-  const [email, setEmail] = useState("mpho@example.com");
+  const { profile, updateProfile } = usePreviewAccount();
+  const [firstName, setFirstName] = useState(profile?.firstName ?? "Mpho");
+  const [lastName, setLastName] = useState(profile?.lastName ?? "Mtlomelo");
+  const [phone, setPhone] = useState(profile?.phone ?? "+27 71 234 5678");
+  const [email, setEmail] = useState(profile?.email ?? "mpho@example.com");
+  const firstNameField = useRef(null);
+  const lastNameField = useRef(null);
+  const phoneField = useRef(null);
+  const emailField = useRef(null);
 
   const handleSave = () => {
-    Alert.alert(
-      "Profile Updated",
-      "Your profile changes have been saved in this prototype.",
-      [
-        {
-          text: "OK",
-          onPress: () => navigation.goBack(),
-        },
-      ],
-    );
+    const mobile = normalizePhone(phone);
+    if (!firstName.trim() || !lastName.trim() || !mobile || !isEmail(email)) {
+      Alert.alert("Check your details", "Enter a first name, surname, valid mobile number and email address.");
+      return;
+    }
+    if (updateProfile({ firstName: firstName.trim(), lastName: lastName.trim(), phone: mobile, email: normalizeEmail(email) }) === false) {
+      Alert.alert("Email in use", "This email already has a demo account.");
+      return;
+    }
+    navigation.goBack();
   };
 
   return (
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" />
 
-      <ScrollView
+      <KeyboardFormScroll
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -57,7 +63,7 @@ export default function EditProfileScreen({ navigation }) {
 
         <View style={styles.avatarSection}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>M</Text>
+            <Text style={styles.avatarText}>{firstName.charAt(0)}{lastName.charAt(0)}</Text>
           </View>
 
           <TouchableOpacity
@@ -78,7 +84,9 @@ export default function EditProfileScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>First name</Text>
 
-            <TextInput
+            <KeyboardField
+              ref={firstNameField}
+              nextRef={lastNameField}
               value={firstName}
               onChangeText={setFirstName}
               placeholder="Enter your first name"
@@ -91,7 +99,9 @@ export default function EditProfileScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>Last name</Text>
 
-            <TextInput
+            <KeyboardField
+              ref={lastNameField}
+              nextRef={phoneField}
               value={lastName}
               onChangeText={setLastName}
               placeholder="Enter your last name"
@@ -104,7 +114,9 @@ export default function EditProfileScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>Phone number</Text>
 
-            <TextInput
+            <KeyboardField
+              ref={phoneField}
+              nextRef={emailField}
               value={phone}
               onChangeText={setPhone}
               placeholder="+27 00 000 0000"
@@ -117,7 +129,9 @@ export default function EditProfileScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>Email address</Text>
 
-            <TextInput
+            <KeyboardField
+              ref={emailField}
+              onSubmitEditing={handleSave}
               value={email}
               onChangeText={setEmail}
               placeholder="you@example.com"
@@ -162,7 +176,7 @@ export default function EditProfileScreen({ navigation }) {
         </TouchableOpacity>
 
         <Text style={styles.footerText}>RideGo • Profile settings</Text>
-      </ScrollView>
+      </KeyboardFormScroll>
     </View>
   );
 }

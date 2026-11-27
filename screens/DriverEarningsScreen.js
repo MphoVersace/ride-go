@@ -1,3 +1,5 @@
+import Icon from "../ui/Icon";
+import { colors } from "../ui/theme";
 import {
   StyleSheet,
   Text,
@@ -98,9 +100,9 @@ export default function DriverEarningsScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
 
         <ScrollView
           style={styles.scrollView}
@@ -128,7 +130,7 @@ export default function DriverEarningsScreen({ navigation }) {
               </View>
 
               <View style={styles.earningsTrend}>
-                <Text style={styles.trendArrow}>↗</Text>
+                <Icon name="external" style={styles.trendArrow} />
                 <Text style={styles.trendText}>+12%</Text>
               </View>
             </View>
@@ -148,7 +150,10 @@ export default function DriverEarningsScreen({ navigation }) {
 
               <View style={styles.mainStatRight}>
                 <Text style={styles.mainStatLabel}>Rating</Text>
-                <Text style={styles.mainStatValue}>4.9 ★</Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                  <Icon name="star" size={16} style={styles.mainStatValue} />
+                  <Text style={styles.mainStatValue}>4.9</Text>
+                </View>
               </View>
             </View>
           </View>
@@ -269,7 +274,7 @@ export default function DriverEarningsScreen({ navigation }) {
           {/* Payout Card */}
           <View style={styles.payoutCard}>
             <View style={styles.payoutIconCircle}>
-              <Text style={styles.payoutIcon}>↗</Text>
+              <Icon name="external" style={styles.payoutIcon} />
             </View>
 
             <View style={styles.payoutTextContainer}>
@@ -297,40 +302,6 @@ export default function DriverEarningsScreen({ navigation }) {
           </View>
         </ScrollView>
 
-        {/* Bottom Navigation */}
-        <View style={styles.bottomNav}>
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("DriverHome")}
-          >
-            <Text style={styles.navIcon}>⌂</Text>
-            <Text style={styles.navText}>Home</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("DriverTrips")}
-          >
-            <Text style={styles.navIcon}>◷</Text>
-            <Text style={styles.navText}>Trips</Text>
-          </TouchableOpacity>
-
-          <View style={[styles.navItem, styles.activeNavItem]}>
-            <Text style={[styles.navIcon, styles.activeNavIcon]}>R</Text>
-            <Text style={[styles.navText, styles.activeNavText]}>Earnings</Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.navItem}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("DriverProfile")}
-          >
-            <Text style={styles.navIcon}>◯</Text>
-            <Text style={styles.navText}>Profile</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -339,12 +310,12 @@ export default function DriverEarningsScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
   },
 
   scrollView: {
@@ -367,7 +338,7 @@ const styles = StyleSheet.create({
   headerEyebrow: {
     fontSize: 10,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 1.2,
     marginBottom: 3,
   },
@@ -375,16 +346,16 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 26,
     fontWeight: "900",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   headerIcon: {
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -392,11 +363,11 @@ const styles = StyleSheet.create({
   headerIconText: {
     fontSize: 18,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   mainEarningsCard: {
-    backgroundColor: "#5BC0FF",
+    backgroundColor: colors.blue,
     borderRadius: 22,
     padding: 18,
     marginBottom: 24,
@@ -483,18 +454,18 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   sectionSubtitle: {
     fontSize: 11,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   viewAllText: {
     fontSize: 11,
     fontWeight: "800",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   periodCards: {
@@ -504,38 +475,38 @@ const styles = StyleSheet.create({
 
   periodCard: {
     flex: 1,
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 12,
     minHeight: 102,
   },
 
   periodLabel: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
     marginBottom: 7,
   },
 
   periodValue: {
     fontSize: 17,
     fontWeight: "900",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 4,
   },
 
   periodTrips: {
     fontSize: 9,
-    color: "#5BC0FF",
+    color: colors.blueInk,
     fontWeight: "700",
   },
 
   breakdownCard: {
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 16,
   },
 
@@ -555,7 +526,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 11,
@@ -564,25 +535,25 @@ const styles = StyleSheet.create({
   breakdownIconText: {
     fontSize: 15,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   breakdownTitle: {
     fontSize: 13,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 2,
   },
 
   breakdownDescription: {
     fontSize: 10,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   breakdownAmount: {
     fontSize: 14,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   feeAmount: {
@@ -593,7 +564,7 @@ const styles = StyleSheet.create({
 
   breakdownDivider: {
     height: 1,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
     marginVertical: 14,
   },
 
@@ -606,20 +577,20 @@ const styles = StyleSheet.create({
   breakdownTotalLabel: {
     fontSize: 13,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
   },
 
   breakdownTotalValue: {
     fontSize: 18,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   activityCard: {
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     paddingHorizontal: 14,
   },
 
@@ -633,7 +604,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -642,7 +613,7 @@ const styles = StyleSheet.create({
   activityIconText: {
     fontSize: 15,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   activityDetails: {
@@ -653,19 +624,19 @@ const styles = StyleSheet.create({
   activityRider: {
     fontSize: 13,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 2,
   },
 
   activityRoute: {
     fontSize: 9,
-    color: "#C9D6E8",
+    color: colors.muted,
     marginBottom: 3,
   },
 
   activityTime: {
     fontSize: 9,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   activityAmountContainer: {
@@ -675,27 +646,27 @@ const styles = StyleSheet.create({
   activityAmount: {
     fontSize: 14,
     fontWeight: "900",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   activityStatus: {
     fontSize: 8,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
     letterSpacing: 0.5,
   },
 
   activityDivider: {
     height: 1,
-    backgroundColor: "#1D4775",
+    backgroundColor: colors.blueLine,
   },
 
   payoutCard: {
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#24578A",
+    borderColor: colors.blueLine,
     padding: 14,
     flexDirection: "row",
     alignItems: "center",
@@ -706,7 +677,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#071A3D",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 11,
@@ -715,7 +686,7 @@ const styles = StyleSheet.create({
   payoutIcon: {
     fontSize: 17,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   payoutTextContainer: {
@@ -725,27 +696,27 @@ const styles = StyleSheet.create({
   payoutTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   payoutDescription: {
     fontSize: 9,
     lineHeight: 14,
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   payoutAmount: {
     fontSize: 16,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   infoCard: {
-    backgroundColor: "#102A52",
+    backgroundColor: colors.blueTint,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#1D4775",
+    borderColor: colors.blueLine,
     padding: 14,
     flexDirection: "row",
     alignItems: "center",
@@ -756,7 +727,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: "#173C68",
+    backgroundColor: colors.blueLine,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 11,
@@ -765,7 +736,7 @@ const styles = StyleSheet.create({
   infoIcon: {
     fontSize: 16,
     fontWeight: "900",
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 
   infoTextContainer: {
@@ -775,54 +746,17 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.black,
     marginBottom: 3,
   },
 
   infoText: {
     fontSize: 10,
     lineHeight: 15,
-    color: "#8FA5C1",
-  },
-
-  bottomNav: {
-    height: 76,
-    backgroundColor: "#0B2247",
-    borderTopWidth: 1,
-    borderTopColor: "#1D4775",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    paddingBottom: 6,
-  },
-
-  navItem: {
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 65,
-  },
-
-  activeNavItem: {
-    opacity: 1,
-  },
-
-  navIcon: {
-    fontSize: 20,
-    color: "#8FA5C1",
-    marginBottom: 3,
-  },
-
-  activeNavIcon: {
-    color: "#5BC0FF",
-  },
-
-  navText: {
-    fontSize: 9,
-    fontWeight: "700",
-    color: "#8FA5C1",
+    color: colors.muted,
   },
 
   activeNavText: {
-    color: "#5BC0FF",
+    color: colors.blueInk,
   },
 });
